@@ -63,10 +63,10 @@ function(this)
       // Ratio of averages, aggregated by node. Kept as a baked expression so
       // the ratio-of-averages semantics match the legacy query exactly.
       requestSuccessRatioByNode: {
-        name: 'Request success ratio by node',
+        name: 'Requests success ratio',
         nameShort: 'Success ratio',
         type: 'raw',
-        description: 'Ratio of average successful requests to average total requests, aggregated by node.',
+        description: 'Success ratio of requests made.',
         unit: 'percentunit',
         sources: {
           prometheus: {
@@ -76,10 +76,10 @@ function(this)
       },
       // Ratio of averages, aggregated by test.
       requestSuccessRatioByTest: {
-        name: 'Request success ratio by test',
+        name: 'Requests success ratio',
         nameShort: 'Success ratio',
         type: 'raw',
-        description: 'Ratio of average successful requests to average total requests, aggregated by test.',
+        description: 'Success ratio of requests made.',
         unit: 'percentunit',
         sources: {
           prometheus: {
@@ -91,8 +91,8 @@ function(this)
         name: 'Network connections',
         nameShort: 'Connections',
         type: 'gauge',
-        description: 'Number of network connections made.',
-        unit: 'none',
+        description: 'Number of connections made.',
+        unit: 'conn',
         sources: {
           prometheus: {
             expr: 'catchpoint_connections_count{%(queriesSelector)s}',
@@ -104,7 +104,7 @@ function(this)
         nameShort: 'Hosts',
         type: 'gauge',
         description: 'Number of hosts contacted.',
-        unit: 'none',
+        unit: 'hosts',
         sources: {
           prometheus: {
             expr: 'catchpoint_hosts_count{%(queriesSelector)s}',
@@ -112,11 +112,11 @@ function(this)
         },
       },
       cachedCount: {
-        name: 'Cached elements',
+        name: 'Cache access',
         nameShort: 'Cache hits',
         type: 'gauge',
         description: 'Number of cached elements accessed.',
-        unit: 'none',
+        unit: '',
         sources: {
           prometheus: {
             expr: 'catchpoint_cached_count{%(queriesSelector)s}',
@@ -128,7 +128,7 @@ function(this)
         nameShort: 'Redirects',
         type: 'gauge',
         description: 'Number of HTTP redirections encountered.',
-        unit: 'none',
+        unit: '',
         sources: {
           prometheus: {
             expr: 'catchpoint_redirections_count{%(queriesSelector)s}',

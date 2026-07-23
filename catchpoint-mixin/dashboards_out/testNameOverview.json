@@ -462,7 +462,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Client processing"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -492,7 +506,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{node_name}}",
-                  "refId": "Client processing time"
+                  "refId": "Client processing"
                }
             ],
             "title": "Client processing",
@@ -930,7 +944,21 @@
                      "steps": [ ]
                   },
                   "unit": "conn"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Network connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "conn"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -991,7 +1019,21 @@
                      "steps": [ ]
                   },
                   "unit": "hosts"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Hosts contacted"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "hosts"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1050,8 +1092,23 @@
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Cache access"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1081,7 +1138,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{node_name}}",
-                  "refId": "Cached elements"
+                  "refId": "Cache access"
                }
             ],
             "title": "Cache access",
@@ -1124,7 +1181,21 @@
                      "steps": [ ]
                   },
                   "unit": "percentunit"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Requests success ratio"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1154,7 +1225,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{node_name}}",
-                  "refId": "Request success ratio by node"
+                  "refId": "Requests success ratio"
                }
             ],
             "title": "Requests success ratio",
@@ -1183,8 +1254,23 @@
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Redirects"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 6,

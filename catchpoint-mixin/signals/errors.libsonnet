@@ -11,11 +11,11 @@ function(this)
     },
     signals: {
       anyError: {
-        name: 'Any error',
+        name: 'Top errors by tests',
         nameShort: 'Any error',
         type: 'gauge',
-        description: 'Indicates any error occurred during the test.',
-        unit: 'none',
+        description: 'The top number of errors encountered among all tests over the specified interval.',
+        unit: '',
         sources: {
           prometheus: {
             expr: 'catchpoint_any_error{%(queriesSelector)s}',

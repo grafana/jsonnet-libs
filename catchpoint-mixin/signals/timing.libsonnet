@@ -107,10 +107,10 @@ function(this)
         },
       },
       clientTime: {
-        name: 'Client processing time',
+        name: 'Client processing',
         nameShort: 'Client time',
         type: 'gauge',
-        description: 'Time spent on client-side processing, including script execution and rendering.',
+        description: 'Client processing time, which reflects the time spent on client-side processing, including script execution and rendering.',
         unit: 'ms',
         sources: {
           prometheus: {
