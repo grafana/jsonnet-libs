@@ -80,7 +80,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -88,7 +88,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{source_canonical_service}} -> {{destination_canonical_service}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_canonical_service}} -> {{destination_canonical_service}}",
+                  "refId": "Client service HTTP/GRPC request rate"
                }
             ],
             "title": "HTTP/GRPC requests sent",
@@ -138,7 +141,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -146,8 +149,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval:]))\n/\nclamp_min(sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval:])), 1)\n",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_canonical_service}} -> {{destination_canonical_service}}"
+                  "legendFormat": "{{source_canonical_service}} -> {{destination_canonical_service}}",
+                  "refId": "Client service HTTP/GRPC average request delay"
                }
             ],
             "title": "HTTP/GRPC request delay",
@@ -201,7 +207,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -209,7 +215,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_request_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{source_canonical_service}} -> {{destination_canonical_service}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_canonical_service}} -> {{destination_canonical_service}}",
+                  "refId": "Client service HTTP/GRPC request throughput"
                }
             ],
             "title": "HTTP/GRPC request throughput",
@@ -263,7 +272,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -271,7 +280,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_response_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}",
+                  "refId": "Client service HTTP/GRPC response throughput"
                }
             ],
             "title": "HTTP/GRPC response throughput",
@@ -312,8 +324,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (ok)"
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (ok)",
+                  "refId": "Client service HTTP OK responses"
                },
                {
                   "datasource": {
@@ -321,8 +336,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[45].+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (error)"
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (error)",
+                  "refId": "Client service HTTP error responses"
                }
             ],
             "title": "HTTP response overview",
@@ -378,7 +396,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -386,8 +404,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"1.+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (1xx)"
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (1xx)",
+                  "refId": "Client service HTTP 1xx responses"
                },
                {
                   "datasource": {
@@ -395,8 +416,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"2.+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (2xx)"
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (2xx)",
+                  "refId": "Client service HTTP 2xx responses"
                },
                {
                   "datasource": {
@@ -404,8 +428,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"3.+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (3xx)"
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (3xx)",
+                  "refId": "Client service HTTP 3xx responses"
                },
                {
                   "datasource": {
@@ -413,8 +440,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"4.+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (4xx)"
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (4xx)",
+                  "refId": "Client service HTTP 4xx responses"
                },
                {
                   "datasource": {
@@ -422,8 +452,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"5.+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (5xx)"
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (5xx)",
+                  "refId": "Client service HTTP 5xx responses"
                }
             ],
             "title": "HTTP responses / $__interval",
@@ -464,8 +497,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", grpc_response_status=\"0\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (ok)"
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (ok)",
+                  "refId": "Client service GRPC OK responses"
                },
                {
                   "datasource": {
@@ -473,8 +509,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", grpc_response_status=~\"[1-9]\\\\d*\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (error)"
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: (error)",
+                  "refId": "Client service GRPC error responses"
                }
             ],
             "title": "GRPC response overview",
@@ -530,7 +569,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -538,8 +577,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", grpc_response_status=~\"[0-9]\\\\d*\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: {{grpc_response_status}}"
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: {{grpc_response_status}}",
+                  "refId": "Client service GRPC responses"
                }
             ],
             "title": "GRPC responses / $__interval",
@@ -593,7 +635,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -601,7 +643,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{source_canonical_service}} -> {{destination_canonical_service}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_canonical_service}} -> {{destination_canonical_service}}",
+                  "refId": "Client service TCP request throughput"
                }
             ],
             "title": "TCP request throughput",
@@ -655,7 +700,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -663,7 +708,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}",
+                  "refId": "Client service TCP response throughput"
                }
             ],
             "title": "TCP response throughput",
@@ -729,7 +777,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -737,7 +785,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval]))",
-                  "legendFormat": "{{destination_canonical_service}} <- {{source_canonical_service}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_canonical_service}} <- {{source_canonical_service}}",
+                  "refId": "Server service HTTP/GRPC request rate"
                }
             ],
             "title": "HTTP/GRPC requests received",
@@ -787,7 +838,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -795,8 +846,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval:]))\n/\nclamp_min(sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval:])), 1)\n",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_canonical_service}} <- {{source_canonical_service}}"
+                  "legendFormat": "{{destination_canonical_service}} <- {{source_canonical_service}}",
+                  "refId": "Server service HTTP/GRPC average request delay"
                }
             ],
             "title": "HTTP/GRPC request delay",
@@ -850,7 +904,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -858,7 +912,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_request_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval]))",
-                  "legendFormat": "{{destination_canonical_service}} <- {{source_canonical_service}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_canonical_service}} <- {{source_canonical_service}}",
+                  "refId": "Server service HTTP/GRPC request throughput"
                }
             ],
             "title": "HTTP/GRPC request throughput",
@@ -912,7 +969,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -920,7 +977,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_response_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval]))",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}",
+                  "refId": "Server service HTTP/GRPC response throughput"
                }
             ],
             "title": "HTTP/GRPC response throughput",
@@ -961,8 +1021,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[123].+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (ok)"
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (ok)",
+                  "refId": "Server service HTTP OK responses"
                },
                {
                   "datasource": {
@@ -970,8 +1033,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[45].+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (error)"
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (error)",
+                  "refId": "Server service HTTP error responses"
                }
             ],
             "title": "HTTP response overview",
@@ -1027,7 +1093,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1035,8 +1101,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"1.+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (1xx)"
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (1xx)",
+                  "refId": "Server service HTTP 1xx responses"
                },
                {
                   "datasource": {
@@ -1044,8 +1113,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"2.+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (2xx)"
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (2xx)",
+                  "refId": "Server service HTTP 2xx responses"
                },
                {
                   "datasource": {
@@ -1053,8 +1125,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"3.+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (3xx)"
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (3xx)",
+                  "refId": "Server service HTTP 3xx responses"
                },
                {
                   "datasource": {
@@ -1062,8 +1137,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"4.+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (4xx)"
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (4xx)",
+                  "refId": "Server service HTTP 4xx responses"
                },
                {
                   "datasource": {
@@ -1071,8 +1149,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"5.+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (5xx)"
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (5xx)",
+                  "refId": "Server service HTTP 5xx responses"
                }
             ],
             "title": "HTTP responses / $__interval",
@@ -1113,8 +1194,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", grpc_response_status=\"0\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (ok)"
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (ok)",
+                  "refId": "Server service GRPC OK responses"
                },
                {
                   "datasource": {
@@ -1122,8 +1206,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", grpc_response_status=~\"[1-9]\\\\d*\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (error)"
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: (error)",
+                  "refId": "Server service GRPC error responses"
                }
             ],
             "title": "GRPC response overview",
@@ -1179,7 +1266,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1187,8 +1274,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", grpc_response_status=~\"[0-9]\\\\d*\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: {{grpc_response_status}}"
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: {{grpc_response_status}}",
+                  "refId": "Server service GRPC responses"
                }
             ],
             "title": "GRPC responses / $__interval",
@@ -1242,7 +1332,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1250,7 +1340,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval]))",
-                  "legendFormat": "{{destination_canonical_service}} <- {{source_canonical_service}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_canonical_service}} <- {{source_canonical_service}}",
+                  "refId": "Server service TCP request throughput"
                }
             ],
             "title": "TCP request throughput",
@@ -1304,7 +1397,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1312,7 +1405,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval]))",
-                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}",
+                  "refId": "Server service TCP response throughput"
                }
             ],
             "title": "TCP response throughput",
@@ -1552,7 +1648,9 @@
                   },
                   "expr": "sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\", reporter=\"source\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"source_workload\", \"(.*)\"))",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Source workload HTTP/GRPC request rate"
                },
                {
                   "datasource": {
@@ -1561,7 +1659,9 @@
                   },
                   "expr": "sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\", reporter=\"destination\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"destination_workload\", \"(.*)\"))",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Destination workload HTTP/GRPC request rate"
                },
                {
                   "datasource": {
@@ -1571,7 +1671,9 @@
                   "expr": "sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\", reporter=\"source\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"source_workload\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\", reporter=\"source\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"source_workload\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
-                  "interval": "1m"
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Source workload HTTP/GRPC request latency"
                },
                {
                   "datasource": {
@@ -1581,7 +1683,9 @@
                   "expr": "sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\", reporter=\"destination\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"destination_workload\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\", reporter=\"destination\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"destination_workload\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
-                  "interval": "1m"
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Destination workload HTTP/GRPC request latency"
                },
                {
                   "datasource": {
@@ -1591,7 +1695,9 @@
                   "expr": "100 * sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"source_workload\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\", reporter=\"source\", request_protocol=\"http\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"source_workload\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
-                  "interval": "1m"
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Source workload HTTP request success rate"
                },
                {
                   "datasource": {
@@ -1601,7 +1707,9 @@
                   "expr": "100 * sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"destination_workload\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\", reporter=\"destination\", request_protocol=\"http\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"destination_workload\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
-                  "interval": "1m"
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Destination workload HTTP request success rate"
                },
                {
                   "datasource": {
@@ -1610,7 +1718,9 @@
                   },
                   "expr": "sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\", reporter=\"source\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"source_workload\", \"(.*)\"))",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Source workload TCP request throughput"
                },
                {
                   "datasource": {
@@ -1619,7 +1729,9 @@
                   },
                   "expr": "sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\", reporter=\"destination\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"destination_workload\", \"(.*)\"))",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Destination workload TCP response throughput"
                }
             ],
             "title": "Workloads",
@@ -1637,28 +1749,28 @@
                      "includeByName": { },
                      "indexByName": {
                         "Time": 0,
-                        "Value #A": 5,
-                        "Value #B": 8,
-                        "Value #C": 6,
-                        "Value #D": 9,
-                        "Value #E": 7,
-                        "Value #F": 10,
-                        "Value #G": 11,
-                        "Value #H": 12,
+                        "Value #Destination workload HTTP request success rate": 10,
+                        "Value #Destination workload HTTP/GRPC request latency": 9,
+                        "Value #Destination workload HTTP/GRPC request rate": 8,
+                        "Value #Destination workload TCP response throughput": 12,
+                        "Value #Source workload HTTP request success rate": 7,
+                        "Value #Source workload HTTP/GRPC request latency": 6,
+                        "Value #Source workload HTTP/GRPC request rate": 5,
+                        "Value #Source workload TCP request throughput": 11,
                         "cluster": 1,
                         "job": 2,
                         "service": 3,
                         "workload": 4
                      },
                      "renameByName": {
-                        "Value #A": "HTTP/GRPC tx",
-                        "Value #B": "HTTP/GRPC rx",
-                        "Value #C": "HTTP/GRPC tx delay",
-                        "Value #D": "HTTP/GRPC rx delay",
-                        "Value #E": "HTTP tx success",
-                        "Value #F": "HTTP rx success",
-                        "Value #G": "TCP tx",
-                        "Value #H": "TCP rx",
+                        "Value #Destination workload HTTP request success rate": "HTTP rx success",
+                        "Value #Destination workload HTTP/GRPC request latency": "HTTP/GRPC rx delay",
+                        "Value #Destination workload HTTP/GRPC request rate": "HTTP/GRPC rx",
+                        "Value #Destination workload TCP response throughput": "TCP rx",
+                        "Value #Source workload HTTP request success rate": "HTTP tx success",
+                        "Value #Source workload HTTP/GRPC request latency": "HTTP/GRPC tx delay",
+                        "Value #Source workload HTTP/GRPC request rate": "HTTP/GRPC tx",
+                        "Value #Source workload TCP request throughput": "TCP tx",
                         "cluster": "Cluster",
                         "job": "Job",
                         "service": "Service",

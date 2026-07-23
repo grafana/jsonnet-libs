@@ -57,14 +57,18 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "count by(job, cluster) (istio_build{job=~\"$job\",cluster=~\"$cluster\", component=\"proxy\"})"
+                  "expr": "count by(job, cluster) (istio_build{job=~\"$job\",cluster=~\"$cluster\", component=\"proxy\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Proxy count"
                }
             ],
             "title": "Proxies",
@@ -107,14 +111,18 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"Gateway\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"Gateway\", event=\"delete\"}) or max(up * 0))"
+                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"Gateway\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"Gateway\", event=\"delete\"}) or max(up * 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Gateway count"
                }
             ],
             "title": "Gateways",
@@ -157,14 +165,18 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"VirtualService\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"VirtualService\", event=\"delete\"}) or (max(up) * 0))"
+                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"VirtualService\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"VirtualService\", event=\"delete\"}) or (max(up) * 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Virtual service count"
                }
             ],
             "title": "Virtual services",
@@ -226,14 +238,18 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"DestinationRule\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"DestinationRule\", event=\"delete\"}) or (max(up) * 0))"
+                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"DestinationRule\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"DestinationRule\", event=\"delete\"}) or (max(up) * 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Destination rule count"
                }
             ],
             "title": "Destination rules",
@@ -276,14 +292,18 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"ServiceEntry\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"ServiceEntry\", event=\"delete\"}) or (max(up) * 0))"
+                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"ServiceEntry\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"ServiceEntry\", event=\"delete\"}) or (max(up) * 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Service entry count"
                }
             ],
             "title": "Service entries",
@@ -326,14 +346,18 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"WorkloadEntry\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"WorkloadEntry\", event=\"delete\"}) or (max(up) * 0))"
+                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"WorkloadEntry\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"WorkloadEntry\", event=\"delete\"}) or (max(up) * 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Workload entry count"
                }
             ],
             "title": "Workload entries",
@@ -386,7 +410,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -394,7 +418,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (process_open_fds{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})",
-                  "legendFormat": "{{cluster}} - istiod"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod",
+                  "refId": "Istiod open file descriptors"
                },
                {
                   "datasource": {
@@ -402,7 +429,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_process_open_fds{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"})",
-                  "legendFormat": "{{cluster}} - gateway"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway",
+                  "refId": "Gateway open file descriptors"
                },
                {
                   "datasource": {
@@ -410,7 +440,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_process_open_fds{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"})",
-                  "legendFormat": "{{cluster}} - proxy"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy",
+                  "refId": "Proxy open file descriptors"
                }
             ],
             "title": "Open file descriptors",
@@ -464,7 +497,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -472,7 +505,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by (job, cluster) (rate(process_cpu_seconds_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__rate_interval]))",
-                  "legendFormat": "{{cluster}} - istiod"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod",
+                  "refId": "Istiod CPU usage"
                },
                {
                   "datasource": {
@@ -480,7 +516,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (rate(istio_agent_process_cpu_seconds_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"}[$__rate_interval]))",
-                  "legendFormat": "{{cluster}} - gateway"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway",
+                  "refId": "Gateway CPU usage"
                },
                {
                   "datasource": {
@@ -488,7 +527,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (rate(istio_agent_process_cpu_seconds_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"}[$__rate_interval]))",
-                  "legendFormat": "{{cluster}} - proxy"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy",
+                  "refId": "Proxy CPU usage"
                }
             ],
             "title": "vCPU usage",
@@ -573,7 +615,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -581,7 +623,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (go_memstats_heap_alloc_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})",
-                  "legendFormat": "{{cluster}} - istiod - alloc"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod - alloc",
+                  "refId": "Istiod heap allocated"
                },
                {
                   "datasource": {
@@ -589,7 +634,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (go_memstats_heap_inuse_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})",
-                  "legendFormat": "{{cluster}} - istiod - inuse"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod - inuse",
+                  "refId": "Istiod heap in use"
                },
                {
                   "datasource": {
@@ -597,7 +645,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (go_memstats_heap_sys_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})",
-                  "legendFormat": "{{cluster}} - istiod - sys"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod - sys",
+                  "refId": "Istiod heap system"
                },
                {
                   "datasource": {
@@ -605,7 +656,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_go_memstats_heap_alloc_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"})",
-                  "legendFormat": "{{cluster}} - gateway - alloc"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway - alloc",
+                  "refId": "Gateway heap allocated"
                },
                {
                   "datasource": {
@@ -613,7 +667,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_go_memstats_heap_inuse_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"})",
-                  "legendFormat": "{{cluster}} - gateway - inuse"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway - inuse",
+                  "refId": "Gateway heap in use"
                },
                {
                   "datasource": {
@@ -621,7 +678,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_go_memstats_heap_sys_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"})",
-                  "legendFormat": "{{cluster}} - gateway - sys"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway - sys",
+                  "refId": "Gateway heap system"
                },
                {
                   "datasource": {
@@ -629,7 +689,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_go_memstats_heap_alloc_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"})",
-                  "legendFormat": "{{cluster}} - proxy - alloc"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy - alloc",
+                  "refId": "Proxy heap allocated"
                },
                {
                   "datasource": {
@@ -637,7 +700,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_go_memstats_heap_inuse_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"})",
-                  "legendFormat": "{{cluster}} - proxy - inuse"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy - inuse",
+                  "refId": "Proxy heap in use"
                },
                {
                   "datasource": {
@@ -645,7 +711,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_go_memstats_heap_sys_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"})",
-                  "legendFormat": "{{cluster}} - proxy - sys"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy - sys",
+                  "refId": "Proxy heap system"
                }
             ],
             "title": "Heap memory",
@@ -731,7 +800,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -739,7 +808,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (process_virtual_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})",
-                  "legendFormat": "{{cluster}} - istiod - virtual"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod - virtual",
+                  "refId": "Istiod virtual memory"
                },
                {
                   "datasource": {
@@ -747,7 +819,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (process_resident_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})",
-                  "legendFormat": "{{cluster}} - istiod - resident"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod - resident",
+                  "refId": "Istiod resident memory"
                },
                {
                   "datasource": {
@@ -755,7 +830,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_process_virtual_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"})",
-                  "legendFormat": "{{cluster}} - gateway - virtual"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway - virtual",
+                  "refId": "Gateway virtual memory"
                },
                {
                   "datasource": {
@@ -763,7 +841,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_process_resident_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"})",
-                  "legendFormat": "{{cluster}} - gateway - resident"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway - resident",
+                  "refId": "Gateway resident memory"
                },
                {
                   "datasource": {
@@ -771,7 +852,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_process_virtual_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"})",
-                  "legendFormat": "{{cluster}} - proxy - virtual"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy - virtual",
+                  "refId": "Proxy virtual memory"
                },
                {
                   "datasource": {
@@ -779,7 +863,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (istio_agent_process_resident_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"})",
-                  "legendFormat": "{{cluster}} - proxy - resident"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy - resident",
+                  "refId": "Proxy resident memory"
                }
             ],
             "title": "Virtual & resident memory",
@@ -833,7 +920,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -841,7 +928,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{cluster}} - gateway"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway",
+                  "refId": "Gateway HTTP/GRPC request rate"
                },
                {
                   "datasource": {
@@ -849,7 +939,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{cluster}} - proxy"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy",
+                  "refId": "Proxy HTTP/GRPC request rate"
                }
             ],
             "title": "HTTP/GRPC requests",
@@ -890,8 +983,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - gateway - ok"
+                  "legendFormat": "{{cluster}} - gateway - ok",
+                  "refId": "Gateway HTTP OK responses"
                },
                {
                   "datasource": {
@@ -899,8 +995,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[45].+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - gateway - error"
+                  "legendFormat": "{{cluster}} - gateway - error",
+                  "refId": "Gateway HTTP error responses"
                },
                {
                   "datasource": {
@@ -908,8 +1007,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - proxy - ok"
+                  "legendFormat": "{{cluster}} - proxy - ok",
+                  "refId": "Proxy HTTP OK responses"
                },
                {
                   "datasource": {
@@ -917,8 +1019,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[45].+\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - proxy - error"
+                  "legendFormat": "{{cluster}} - proxy - error",
+                  "refId": "Proxy HTTP error responses"
                }
             ],
             "title": "HTTP response overview",
@@ -976,8 +1081,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"cds\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - CDS"
+                  "legendFormat": "{{cluster}} - CDS",
+                  "refId": "CDS xDS pushes"
                },
                {
                   "datasource": {
@@ -985,8 +1093,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"eds\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - EDS"
+                  "legendFormat": "{{cluster}} - EDS",
+                  "refId": "EDS xDS pushes"
                },
                {
                   "datasource": {
@@ -994,8 +1105,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"lds\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - LDS"
+                  "legendFormat": "{{cluster}} - LDS",
+                  "refId": "LDS xDS pushes"
                },
                {
                   "datasource": {
@@ -1003,8 +1117,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"rds\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - RDS"
+                  "legendFormat": "{{cluster}} - RDS",
+                  "refId": "RDS xDS pushes"
                },
                {
                   "datasource": {
@@ -1012,8 +1129,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"sds\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - SDS"
+                  "legendFormat": "{{cluster}} - SDS",
+                  "refId": "SDS xDS pushes"
                },
                {
                   "datasource": {
@@ -1021,8 +1141,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"nds\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - NDS"
+                  "legendFormat": "{{cluster}} - NDS",
+                  "refId": "NDS xDS pushes"
                }
             ],
             "title": "xDS pushes",
@@ -1071,7 +1194,8 @@
                   "format": "heatmap",
                   "instant": true,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}}"
+                  "legendFormat": "{{cluster}}",
+                  "refId": "xDS proxy push latency"
                }
             ],
             "title": "xDS push delay (s)",
@@ -1117,8 +1241,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster) (galley_validation_passed{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - passed"
+                  "legendFormat": "{{cluster}} - passed",
+                  "refId": "Galley validations passed"
                },
                {
                   "datasource": {
@@ -1126,8 +1253,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by(job, cluster) (galley_validation_failed{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - failed"
+                  "legendFormat": "{{cluster}} - failed",
+                  "refId": "Galley validations failed"
                }
             ],
             "title": "Galley validations",
@@ -1177,7 +1307,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1185,7 +1315,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (rate(envoy_cluster_upstream_cx_rx_bytes_total{job=~\"$job\",cluster=~\"$cluster\", cluster_name=\"xds-grpc\"}[$__rate_interval]))",
-                  "legendFormat": "{{cluster}} - sent"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - sent",
+                  "refId": "Envoy xDS bytes sent"
                },
                {
                   "datasource": {
@@ -1193,7 +1326,10 @@
                      "uid": "${datasource}"
                   },
                   "expr": "sum by(job, cluster) (rate(envoy_cluster_upstream_cx_tx_bytes_total{job=~\"$job\",cluster=~\"$cluster\", cluster_name=\"xds-grpc\"}[$__rate_interval]))",
-                  "legendFormat": "{{cluster}} - received"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - received",
+                  "refId": "Envoy xDS bytes received"
                }
             ],
             "title": "xDS envoy throughput",
@@ -1245,7 +1381,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1253,8 +1389,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_xds_cds_reject{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - CDS reject"
+                  "legendFormat": "{{cluster}} - CDS reject",
+                  "refId": "CDS xDS rejections"
                },
                {
                   "datasource": {
@@ -1262,8 +1401,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_xds_eds_reject{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - EDS reject"
+                  "legendFormat": "{{cluster}} - EDS reject",
+                  "refId": "EDS xDS rejections"
                },
                {
                   "datasource": {
@@ -1271,8 +1413,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_xds_rds_reject{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - RDS reject"
+                  "legendFormat": "{{cluster}} - RDS reject",
+                  "refId": "RDS xDS rejections"
                },
                {
                   "datasource": {
@@ -1280,8 +1425,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_xds_lds_reject{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - LDS reject"
+                  "legendFormat": "{{cluster}} - LDS reject",
+                  "refId": "LDS xDS rejections"
                },
                {
                   "datasource": {
@@ -1289,8 +1437,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_xds_write_timeout{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - write timeout"
+                  "legendFormat": "{{cluster}} - write timeout",
+                  "refId": "xDS write timeouts"
                },
                {
                   "datasource": {
@@ -1298,8 +1449,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_total_xds_internal_errors{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - internal"
+                  "legendFormat": "{{cluster}} - internal",
+                  "refId": "xDS internal errors"
                },
                {
                   "datasource": {
@@ -1307,8 +1461,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_total_xds_rejects{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - proxy rejects"
+                  "legendFormat": "{{cluster}} - proxy rejects",
+                  "refId": "xDS proxy rejects"
                },
                {
                   "datasource": {
@@ -1316,8 +1473,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_conflict_inbound_listener{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - in listener conflict"
+                  "legendFormat": "{{cluster}} - in listener conflict",
+                  "refId": "xDS inbound listener conflicts"
                },
                {
                   "datasource": {
@@ -1325,8 +1485,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (pilot_conflict_outbound_listener_tcp_over_current_tcp{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - out listener tcp conflict"
+                  "legendFormat": "{{cluster}} - out listener tcp conflict",
+                  "refId": "xDS outbound listener TCP conflicts"
                }
             ],
             "title": "xDS errors / $__interval",
@@ -1372,8 +1535,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (sidecar_injection_success_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - success"
+                  "legendFormat": "{{cluster}} - success",
+                  "refId": "Sidecar injection successes"
                },
                {
                   "datasource": {
@@ -1381,8 +1547,11 @@
                      "uid": "${datasource}"
                   },
                   "expr": "increase(sum by (job, cluster) (sidecar_injection_failure_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"})[$__interval:])",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{cluster}} - failure"
+                  "legendFormat": "{{cluster}} - failure",
+                  "refId": "Sidecar injection failures"
                }
             ],
             "title": "Sidecar injections",
@@ -1605,7 +1774,9 @@
                   },
                   "expr": "sum by(job, cluster, service) (label_replace(rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"))",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Source service HTTP/GRPC request rate"
                },
                {
                   "datasource": {
@@ -1614,7 +1785,9 @@
                   },
                   "expr": "sum by(job, cluster, service) (label_replace(rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"))",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Destination service HTTP/GRPC request rate"
                },
                {
                   "datasource": {
@@ -1624,7 +1797,9 @@
                   "expr": "sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
-                  "interval": "1m"
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Source service HTTP/GRPC request latency"
                },
                {
                   "datasource": {
@@ -1634,7 +1809,9 @@
                   "expr": "sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
-                  "interval": "1m"
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Destination service HTTP/GRPC request latency"
                },
                {
                   "datasource": {
@@ -1644,7 +1821,9 @@
                   "expr": "100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\", request_protocol=\"http\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
-                  "interval": "1m"
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Source service HTTP request success rate"
                },
                {
                   "datasource": {
@@ -1654,7 +1833,9 @@
                   "expr": "100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\", request_protocol=\"http\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
-                  "interval": "1m"
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Destination service HTTP request success rate"
                },
                {
                   "datasource": {
@@ -1663,7 +1844,9 @@
                   },
                   "expr": "sum by(job, cluster, service) (label_replace(rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"))",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Source service TCP receive rate"
                },
                {
                   "datasource": {
@@ -1672,7 +1855,9 @@
                   },
                   "expr": "sum by(job, cluster, service) (label_replace(rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"))",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Source service TCP send rate"
                }
             ],
             "title": "Services",
@@ -1690,27 +1875,27 @@
                      "includeByName": { },
                      "indexByName": {
                         "Time": 0,
-                        "Value #A": 4,
-                        "Value #B": 7,
-                        "Value #C": 5,
-                        "Value #D": 8,
-                        "Value #E": 6,
-                        "Value #F": 9,
-                        "Value #G": 10,
-                        "Value #H": 11,
+                        "Value #Destination service HTTP request success rate": 9,
+                        "Value #Destination service HTTP/GRPC request latency": 8,
+                        "Value #Destination service HTTP/GRPC request rate": 7,
+                        "Value #Source service HTTP request success rate": 6,
+                        "Value #Source service HTTP/GRPC request latency": 5,
+                        "Value #Source service HTTP/GRPC request rate": 4,
+                        "Value #Source service TCP receive rate": 10,
+                        "Value #Source service TCP send rate": 11,
                         "cluster": 1,
                         "job": 2,
                         "service": 3
                      },
                      "renameByName": {
-                        "Value #A": "HTTP/GRPC tx",
-                        "Value #B": "HTTP/GRPC rx",
-                        "Value #C": "HTTP/GRPC tx delay",
-                        "Value #D": "HTTP/GRPC rx delay",
-                        "Value #E": "HTTP tx success",
-                        "Value #F": "HTTP rx success",
-                        "Value #G": "TCP tx",
-                        "Value #H": "TCP rx",
+                        "Value #Destination service HTTP request success rate": "HTTP rx success",
+                        "Value #Destination service HTTP/GRPC request latency": "HTTP/GRPC rx delay",
+                        "Value #Destination service HTTP/GRPC request rate": "HTTP/GRPC rx",
+                        "Value #Source service HTTP request success rate": "HTTP tx success",
+                        "Value #Source service HTTP/GRPC request latency": "HTTP/GRPC tx delay",
+                        "Value #Source service HTTP/GRPC request rate": "HTTP/GRPC tx",
+                        "Value #Source service TCP receive rate": "TCP tx",
+                        "Value #Source service TCP send rate": "TCP rx",
                         "cluster": "Cluster",
                         "job": "Job",
                         "service": "Service"

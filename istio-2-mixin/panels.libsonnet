@@ -4,7 +4,8 @@ local utils = commonlib.utils;
 {
   new(this):
     {
-      local t = this.grafana.targets,
+      local signals = this.signals,
+      local prometheusQuery = g.query.prometheus,
       local alertList = g.panel.alertList,
       local stat = g.panel.stat,
       local timeSeries = g.panel.timeSeries,
@@ -20,7 +21,7 @@ local utils = commonlib.utils;
       proxies:
         commonlib.panels.generic.stat.base.new(
           'Proxies',
-          targets=[t.proxyCount],
+          targets=[signals.overview.proxyCount.asTarget()],
           description='Number of proxies in the Istio system.',
         )
         + stat.options.withGraphMode('none')
@@ -34,7 +35,7 @@ local utils = commonlib.utils;
       gateways:
         commonlib.panels.generic.stat.base.new(
           'Gateways',
-          targets=[t.gatewayCount],
+          targets=[signals.overview.gatewayCount.asTarget()],
           description='Number of gateways in the Istio system.',
         )
         + stat.options.withGraphMode('none')
@@ -48,7 +49,7 @@ local utils = commonlib.utils;
       virtualServices:
         commonlib.panels.generic.stat.base.new(
           'Virtual services',
-          targets=[t.virtualServiceCount],
+          targets=[signals.overview.virtualServiceCount.asTarget()],
           description='Number of virtual services in the Istio system.',
         )
         + stat.options.withGraphMode('none')
@@ -62,7 +63,7 @@ local utils = commonlib.utils;
       destinationRules:
         commonlib.panels.generic.stat.base.new(
           'Destination rules',
-          targets=[t.destinationRuleCount],
+          targets=[signals.overview.destinationRuleCount.asTarget()],
           description='Number of destination rules in the Istio system.',
         )
         + stat.options.withGraphMode('none')
@@ -76,7 +77,7 @@ local utils = commonlib.utils;
       serviceEntries:
         commonlib.panels.generic.stat.base.new(
           'Service entries',
-          targets=[t.serviceEntryCount],
+          targets=[signals.overview.serviceEntryCount.asTarget()],
           description='Number of service entries in the Istio system.',
         )
         + stat.options.withGraphMode('none')
@@ -90,7 +91,7 @@ local utils = commonlib.utils;
       workloadEntries:
         commonlib.panels.generic.stat.base.new(
           'Workload entries',
-          targets=[t.workloadEntryCount],
+          targets=[signals.overview.workloadEntryCount.asTarget()],
           description='Number of workload entries in the Istio system.',
         )
         + stat.options.withGraphMode('none')
@@ -106,9 +107,9 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'vCPU usage',
           targets=[
-            t.istiodCPUUsage,
-            t.gatewayCPUUsage,
-            t.proxyCPUUsage,
+            signals.overview.istiodCPUUsage.asTarget(),
+            signals.overview.gatewayCPUUsage.asTarget(),
+            signals.overview.proxyCPUUsage.asTarget(),
           ],
           description='vCPU usage for various components of the Istio system.',
         )
@@ -122,9 +123,9 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Open file descriptors',
           targets=[
-            t.istiodOpenFileDescriptors,
-            t.gatewayOpenFileDescriptors,
-            t.proxyOpenFileDescriptors,
+            signals.overview.istiodOpenFileDescriptors.asTarget(),
+            signals.overview.gatewayOpenFileDescriptors.asTarget(),
+            signals.overview.proxyOpenFileDescriptors.asTarget(),
           ],
           description='Number of open file descriptors for various components of the Istio system.',
         )
@@ -137,12 +138,12 @@ local utils = commonlib.utils;
         commonlib.panels.memory.timeSeries.usageBytes.new(
           'Virtual & resident memory',
           targets=[
-            t.istiodVirtualMemory,
-            t.istiodResidentMemory,
-            t.gatewayVirtualMemory,
-            t.gatewayResidentMemory,
-            t.proxyVirtualMemory,
-            t.proxyResidentMemory,
+            signals.overview.istiodVirtualMemory.asTarget(),
+            signals.overview.istiodResidentMemory.asTarget(),
+            signals.overview.gatewayVirtualMemory.asTarget(),
+            signals.overview.gatewayResidentMemory.asTarget(),
+            signals.overview.proxyVirtualMemory.asTarget(),
+            signals.overview.proxyResidentMemory.asTarget(),
           ],
           description='Available virtual memory compared to the resident memory for the various components of the Istio system.',
         )
@@ -156,15 +157,15 @@ local utils = commonlib.utils;
         commonlib.panels.memory.timeSeries.usageBytes.new(
           'Heap memory',
           targets=[
-            t.istiodHeapAllocated,
-            t.istiodHeapInUse,
-            t.istiodHeapSystem,
-            t.gatewayHeapAllocated,
-            t.gatewayHeapInUse,
-            t.gatewayHeapSystem,
-            t.proxyHeapAllocated,
-            t.proxyHeapInUse,
-            t.proxyHeapSystem,
+            signals.overview.istiodHeapAllocated.asTarget(),
+            signals.overview.istiodHeapInUse.asTarget(),
+            signals.overview.istiodHeapSystem.asTarget(),
+            signals.overview.gatewayHeapAllocated.asTarget(),
+            signals.overview.gatewayHeapInUse.asTarget(),
+            signals.overview.gatewayHeapSystem.asTarget(),
+            signals.overview.proxyHeapAllocated.asTarget(),
+            signals.overview.proxyHeapInUse.asTarget(),
+            signals.overview.proxyHeapSystem.asTarget(),
           ],
           description='Heap memory information for the various components of the Istio system.',
         )
@@ -175,8 +176,8 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC requests',
           targets=[
-            t.gatewayHTTPGRPCRequestRate,
-            t.proxyHTTPGRPCRequestRate,
+            signals.overview.gatewayHTTPGRPCRequestRate.asTarget(),
+            signals.overview.proxyHTTPGRPCRequestRate.asTarget(),
           ],
           description='HTTP/GRPC request rate for the components of the Istio system.',
         )
@@ -190,8 +191,8 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'xDS envoy throughput',
           targets=[
-            t.envoyxDSBytesSendRate,
-            t.envoyxDSBytesReceiveRate,
+            signals.controlplane.envoyxDSBytesSendRate.asTarget(),
+            signals.controlplane.envoyxDSBytesReceiveRate.asTarget(),
           ],
           description='The send and receive data rates from all envoy proxies in the Istio system.',
         )
@@ -201,15 +202,15 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'xDS errors / $__interval',
           targets=[
-            t.pilotCDSxDSRejections,
-            t.pilotEDSxDSRejections,
-            t.pilotRDSxDSRejections,
-            t.pilotLDSxDSRejections,
-            t.pilotxDSWriteTimeouts,
-            t.pilotxDSInternalErrors,
-            t.pilotxDSProxyRejects,
-            t.pilotxDSInboundListenerConflicts,
-            t.pilotxDSOutboundListenerTCPConflicts,
+            signals.controlplane.pilotCDSxDSRejections.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.controlplane.pilotEDSxDSRejections.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.controlplane.pilotRDSxDSRejections.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.controlplane.pilotLDSxDSRejections.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.controlplane.pilotxDSWriteTimeouts.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.controlplane.pilotxDSInternalErrors.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.controlplane.pilotxDSProxyRejects.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.controlplane.pilotxDSInboundListenerConflicts.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.controlplane.pilotxDSOutboundListenerTCPConflicts.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='The xDS related errors across the Istio system.'
         )
@@ -219,7 +220,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC requests sent',
           targets=[
-            t.clientServiceHTTPGRPCRequestRate,
+            signals.services.clientServiceHTTPGRPCRequestRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC requests sent from this service to server services in the Istio system.',
         )
@@ -233,7 +234,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC request delay',
           targets=[
-            t.clientServiceHTTPGRPCAvgRequestDelay,
+            signals.services.clientServiceHTTPGRPCAvgRequestDelay.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='Average latency of HTTP/GRPC requests sent from this service to server services in the Istio system.',
         )
@@ -243,7 +244,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC request throughput',
           targets=[
-            t.clientServiceHTTPGRPCRequestThroughputRate,
+            signals.services.clientServiceHTTPGRPCRequestThroughputRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC request data sent from this service to server services in the Istio system.',
         )
@@ -257,7 +258,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC response throughput',
           targets=[
-            t.clientServiceHTTPGRPCResponseThroughputRate,
+            signals.services.clientServiceHTTPGRPCResponseThroughputRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC response data received by this service from server services in the Istio system.',
         )
@@ -271,11 +272,11 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP responses / $__interval',
           targets=[
-            t.clientServiceHTTP1xxResponses,
-            t.clientServiceHTTP2xxResponses,
-            t.clientServiceHTTP3xxResponses,
-            t.clientServiceHTTP4xxResponses,
-            t.clientServiceHTTP5xxResponses,
+            signals.services.clientServiceHTTP1xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.services.clientServiceHTTP2xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.services.clientServiceHTTP3xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.services.clientServiceHTTP4xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.services.clientServiceHTTP5xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='The types of HTTP responses received by this service from server services in the Istio system.',
         )
@@ -289,7 +290,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'GRPC responses / $__interval',
           targets=[
-            t.clientServiceGRPCResponses,
+            signals.services.clientServiceGRPCResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='The types of GRPC responses received by this service from server services in the Istio system.'
         )
@@ -303,7 +304,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'TCP request throughput',
           targets=[
-            t.clientServiceTCPRequestThroughputRate,
+            signals.services.clientServiceTCPRequestThroughputRate.asTarget(),
           ],
           description='Rate of TCP request data sent from this service to server services in the Istio system.'
         )
@@ -317,7 +318,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'TCP response throughput',
           targets=[
-            t.clientServiceTCPResponseThroughputRate,
+            signals.services.clientServiceTCPResponseThroughputRate.asTarget(),
           ],
           description='Rate of TCP response data received by this service from server services in the Istio system.',
         )
@@ -331,7 +332,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC requests received',
           targets=[
-            t.serverServiceHTTPGRPCRequestRate,
+            signals.services.serverServiceHTTPGRPCRequestRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC requests received by this service from client services in the Istio system.',
         )
@@ -345,7 +346,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC request delay',
           targets=[
-            t.serverServiceHTTPGRPCAvgRequestDelay,
+            signals.services.serverServiceHTTPGRPCAvgRequestDelay.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='Average latency of HTTP/GRPC requests received by this service from client services in the Istio system.',
         )
@@ -355,7 +356,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC request throughput',
           targets=[
-            t.serverServiceHTTPGRPCRequestThroughputRate,
+            signals.services.serverServiceHTTPGRPCRequestThroughputRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC request data received by this service from client services in the Istio system.',
         )
@@ -369,7 +370,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC response throughput',
           targets=[
-            t.serverServiceHTTPGRPCResponseThroughputRate,
+            signals.services.serverServiceHTTPGRPCResponseThroughputRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC response data sent from this service to client services in the Istio system.',
         )
@@ -383,11 +384,11 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP responses / $__interval',
           targets=[
-            t.serverServiceHTTP1xxResponses,
-            t.serverServiceHTTP2xxResponses,
-            t.serverServiceHTTP3xxResponses,
-            t.serverServiceHTTP4xxResponses,
-            t.serverServiceHTTP5xxResponses,
+            signals.services.serverServiceHTTP1xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.services.serverServiceHTTP2xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.services.serverServiceHTTP3xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.services.serverServiceHTTP4xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.services.serverServiceHTTP5xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='The types of HTTP responses sent from this service to client services in the Istio system.',
         )
@@ -401,7 +402,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'GRPC responses / $__interval',
           targets=[
-            t.serverServiceGRPCResponses,
+            signals.services.serverServiceGRPCResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='The types of GRPC responses sent from this service to client services in the Istio system.',
         )
@@ -415,7 +416,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'TCP request throughput',
           targets=[
-            t.serverServiceTCPRequestThroughputRate,
+            signals.services.serverServiceTCPRequestThroughputRate.asTarget(),
           ],
           description='Rate of TCP request data received by this service from client services in the Istio system.',
         )
@@ -429,7 +430,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'TCP response throughput',
           targets=[
-            t.serverServiceTCPResponseThroughputRate,
+            signals.services.serverServiceTCPResponseThroughputRate.asTarget(),
           ],
           description='Rate of TCP response data sent from this service to client services in the Istio system.',
         )
@@ -443,7 +444,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC requests sent',
           targets=[
-            t.clientWorkloadHTTPGRPCRequestRate,
+            signals.workloads.clientWorkloadHTTPGRPCRequestRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC requests sent from this workload to server workloads in the Istio system.',
         )
@@ -457,7 +458,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC request delay',
           targets=[
-            t.clientWorkloadHTTPGRPCAvgRequestDelay,
+            signals.workloads.clientWorkloadHTTPGRPCAvgRequestDelay.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='Average latency of HTTP/GRPC requests sent from this workload to server workloads in the Istio system.',
         )
@@ -467,7 +468,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC request throughput',
           targets=[
-            t.clientWorkloadHTTPGRPCRequestThroughputRate,
+            signals.workloads.clientWorkloadHTTPGRPCRequestThroughputRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC request data sent from this workload to server workloads in the Istio system.',
         )
@@ -481,7 +482,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC response throughput',
           targets=[
-            t.clientWorkloadHTTPGRPCResponseThroughputRate,
+            signals.workloads.clientWorkloadHTTPGRPCResponseThroughputRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC response data received by this workload from server workloads in the Istio system.',
         )
@@ -495,11 +496,11 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP responses / $__interval',
           targets=[
-            t.clientWorkloadHTTP1xxResponses,
-            t.clientWorkloadHTTP2xxResponses,
-            t.clientWorkloadHTTP3xxResponses,
-            t.clientWorkloadHTTP4xxResponses,
-            t.clientWorkloadHTTP5xxResponses,
+            signals.workloads.clientWorkloadHTTP1xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.workloads.clientWorkloadHTTP2xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.workloads.clientWorkloadHTTP3xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.workloads.clientWorkloadHTTP4xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.workloads.clientWorkloadHTTP5xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='The types of HTTP responses received by this workload from server workloads in the Istio system.',
         )
@@ -513,7 +514,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'GRPC responses / $__interval',
           targets=[
-            t.clientWorkloadGRPCResponses,
+            signals.workloads.clientWorkloadGRPCResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='The types of GRPC responses received by this workload from server workloads in the Istio system.',
         )
@@ -527,7 +528,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'TCP request throughput',
           targets=[
-            t.clientWorkloadTCPRequestThroughputRate,
+            signals.workloads.clientWorkloadTCPRequestThroughputRate.asTarget(),
           ],
           description='Rate of TCP request data sent from this workload to server workloads in the Istio system.',
         )
@@ -541,7 +542,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'TCP response throughput',
           targets=[
-            t.clientWorkloadTCPResponseThroughputRate,
+            signals.workloads.clientWorkloadTCPResponseThroughputRate.asTarget(),
           ],
           description='Rate of TCP response data received by this workload from server workloads in the Istio system.',
         )
@@ -555,7 +556,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC requests received',
           targets=[
-            t.serverWorkloadHTTPGRPCRequestRate,
+            signals.workloads.serverWorkloadHTTPGRPCRequestRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC requests received by this workload from client workloads in the Istio system.',
         )
@@ -569,7 +570,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC request delay',
           targets=[
-            t.serverWorkloadHTTPGRPCAvgRequestDelay,
+            signals.workloads.serverWorkloadHTTPGRPCAvgRequestDelay.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='Average latency of HTTP/GRPC requests received by this workload from client workloads in the Istio system.',
         )
@@ -579,7 +580,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC request throughput',
           targets=[
-            t.serverWorkloadHTTPGRPCRequestThroughputRate,
+            signals.workloads.serverWorkloadHTTPGRPCRequestThroughputRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC request data received by this workload from client workloads in the Istio system.',
         )
@@ -593,7 +594,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC response throughput',
           targets=[
-            t.serverWorkloadHTTPGRPCResponseThroughputRate,
+            signals.workloads.serverWorkloadHTTPGRPCResponseThroughputRate.asTarget(),
           ],
           description='Rate of HTTP/GRPC response data sent from this workload to client workloads in the Istio system.',
         )
@@ -607,11 +608,11 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP responses / $__interval',
           targets=[
-            t.serverWorkloadHTTP1xxResponses,
-            t.serverWorkloadHTTP2xxResponses,
-            t.serverWorkloadHTTP3xxResponses,
-            t.serverWorkloadHTTP4xxResponses,
-            t.serverWorkloadHTTP5xxResponses,
+            signals.workloads.serverWorkloadHTTP1xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.workloads.serverWorkloadHTTP2xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.workloads.serverWorkloadHTTP3xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.workloads.serverWorkloadHTTP4xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.workloads.serverWorkloadHTTP5xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='The types of HTTP responses sent from this workload to client workloads in the Istio system.',
         )
@@ -625,7 +626,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'GRPC responses / $__interval',
           targets=[
-            t.serverWorkloadGRPCResponses,
+            signals.workloads.serverWorkloadGRPCResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
           ],
           description='The types of GRPC responses sent from this workload to client workloads in the Istio system.',
         )
@@ -639,7 +640,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'TCP request throughput',
           targets=[
-            t.serverWorkloadTCPRequestThroughputRate,
+            signals.workloads.serverWorkloadTCPRequestThroughputRate.asTarget(),
           ],
           description='Rate of TCP request data received by this workload from client workloads in the Istio system.',
         )
@@ -653,7 +654,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'TCP response throughput',
           targets=[
-            t.serverWorkloadTCPResponseThroughputRate,
+            signals.workloads.serverWorkloadTCPResponseThroughputRate.asTarget(),
           ],
           description='Rate of TCP response data sent from this workload to client workloads in the Istio system.',
         )
@@ -667,10 +668,10 @@ local utils = commonlib.utils;
       httpResponseOverview:
         pieChart.new(title='HTTP response overview')
         + pieChart.queryOptions.withTargets([
-          t.gatewayHTTPOKResponses,
-          t.gatewayHTTPErrorResponses,
-          t.proxyHTTPOKResponses,
-          t.proxyHTTPErrorResponses,
+          signals.overview.gatewayHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.overview.gatewayHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.overview.proxyHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.overview.proxyHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + pieChart.options.legend.withPlacement('right')
         + pieChart.options.reduceOptions.withCalcs(['sum'])
@@ -683,8 +684,8 @@ local utils = commonlib.utils;
       clientServiceHTTPResponseOverview:
         pieChart.new(title='HTTP response overview')
         + pieChart.queryOptions.withTargets([
-          t.clientServiceHTTPOKResponses,
-          t.clientServiceHTTPErrorResponses,
+          signals.services.clientServiceHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.services.clientServiceHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + pieChart.options.legend.withPlacement('right')
         + pieChart.options.reduceOptions.withCalcs(['sum'])
@@ -697,8 +698,8 @@ local utils = commonlib.utils;
       clientServiceGRPCResponseOverview:
         pieChart.new(title='GRPC response overview')
         + pieChart.queryOptions.withTargets([
-          t.clientServiceGRPCOKResponses,
-          t.clientServiceGRPCErrorResponses,
+          signals.services.clientServiceGRPCOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.services.clientServiceGRPCErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + pieChart.options.legend.withPlacement('right')
         + pieChart.options.reduceOptions.withCalcs(['sum'])
@@ -711,8 +712,8 @@ local utils = commonlib.utils;
       serverServiceHTTPResponseOverview:
         pieChart.new(title='HTTP response overview')
         + pieChart.queryOptions.withTargets([
-          t.serverServiceHTTPOKResponses,
-          t.serverServiceHTTPErrorResponses,
+          signals.services.serverServiceHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.services.serverServiceHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + pieChart.options.legend.withPlacement('right')
         + pieChart.options.reduceOptions.withCalcs(['sum'])
@@ -725,8 +726,8 @@ local utils = commonlib.utils;
       serverServiceGRPCResponseOverview:
         pieChart.new(title='GRPC response overview')
         + pieChart.queryOptions.withTargets([
-          t.serverServiceGRPCOKResponses,
-          t.serverServiceGRPCErrorResponses,
+          signals.services.serverServiceGRPCOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.services.serverServiceGRPCErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + pieChart.options.legend.withPlacement('right')
         + pieChart.options.reduceOptions.withCalcs(['sum'])
@@ -739,8 +740,8 @@ local utils = commonlib.utils;
       clientWorkloadHTTPResponseOverview:
         pieChart.new(title='HTTP response overview')
         + pieChart.queryOptions.withTargets([
-          t.clientWorkloadHTTPOKResponses,
-          t.clientWorkloadHTTPErrorResponses,
+          signals.workloads.clientWorkloadHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.workloads.clientWorkloadHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + pieChart.options.legend.withPlacement('right')
         + pieChart.options.reduceOptions.withCalcs(['sum'])
@@ -753,8 +754,8 @@ local utils = commonlib.utils;
       clientWorkloadGRPCResponseOverview:
         pieChart.new(title='GRPC response overview')
         + pieChart.queryOptions.withTargets([
-          t.clientWorkloadGRPCOKResponses,
-          t.clientWorkloadGRPCErrorResponses,
+          signals.workloads.clientWorkloadGRPCOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.workloads.clientWorkloadGRPCErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + pieChart.options.legend.withPlacement('right')
         + pieChart.options.reduceOptions.withCalcs(['sum'])
@@ -767,8 +768,8 @@ local utils = commonlib.utils;
       serverWorkloadHTTPResponseOverview:
         pieChart.new(title='HTTP response overview')
         + pieChart.queryOptions.withTargets([
-          t.serverWorkloadHTTPOKResponses,
-          t.serverWorkloadHTTPErrorResponses,
+          signals.workloads.serverWorkloadHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.workloads.serverWorkloadHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + pieChart.options.legend.withPlacement('right')
         + pieChart.options.reduceOptions.withCalcs(['sum'])
@@ -781,8 +782,8 @@ local utils = commonlib.utils;
       serverWorkloadGRPCResponseOverview:
         pieChart.new(title='GRPC response overview')
         + pieChart.queryOptions.withTargets([
-          t.serverWorkloadGRPCOKResponses,
-          t.serverWorkloadGRPCErrorResponses,
+          signals.workloads.serverWorkloadGRPCOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.workloads.serverWorkloadGRPCErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + pieChart.options.legend.withPlacement('right')
         + pieChart.options.reduceOptions.withCalcs(['sum'])
@@ -796,12 +797,12 @@ local utils = commonlib.utils;
       xDSPushes:
         barGauge.new(title='xDS pushes')
         + barGauge.queryOptions.withTargets([
-          t.pilotCDSxDSPushes,
-          t.pilotEDSxDSPushes,
-          t.pilotLDSxDSPushes,
-          t.pilotRDSxDSPushes,
-          t.pilotSDSxDSPushes,
-          t.pilotNDSxDSPushes,
+          signals.controlplane.pilotCDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.controlplane.pilotEDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.controlplane.pilotLDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.controlplane.pilotRDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.controlplane.pilotSDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.controlplane.pilotNDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + barGauge.queryOptions.withDatasource('prometheus', '${datasource}',)
         + barGauge.panelOptions.withDescription('Number of xDS pushes by Istiod over the entire time range for the Istio system.')
@@ -813,8 +814,8 @@ local utils = commonlib.utils;
       galleyValidations:
         barGauge.new(title='Galley validations')
         + barGauge.queryOptions.withTargets([
-          t.galleyValidationsPassed,
-          t.galleyValidationsFailed,
+          signals.controlplane.galleyValidationsPassed.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.controlplane.galleyValidationsFailed.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + barGauge.queryOptions.withDatasource('prometheus', '${datasource}')
         + barGauge.panelOptions.withDescription('Number of galley validations over the entire time range for the Istio system.')
@@ -826,8 +827,8 @@ local utils = commonlib.utils;
       sidecarInjections:
         barGauge.new(title='Sidecar injections')
         + barGauge.queryOptions.withTargets([
-          t.sidecarInjectionSuccesses,
-          t.sidecarInjectionFailures,
+          signals.controlplane.sidecarInjectionSuccesses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.controlplane.sidecarInjectionFailures.asTarget() + timeSeries.queryOptions.withInterval('1m'),
         ])
         + barGauge.queryOptions.withDatasource('prometheus', '${datasource}')
         + barGauge.panelOptions.withDescription('Number of sidecar injections over the entire time range for the Istio system.')
@@ -840,7 +841,7 @@ local utils = commonlib.utils;
       xDSPushDelay:
         histogram.new(title='xDS push delay (s)')
         + histogram.queryOptions.withTargets([
-          t.pilotxDSProxyPushLatencyBucket,
+          signals.controlplane.pilotxDSProxyPushLatencyBucket.asTarget() + timeSeries.queryOptions.withInterval('1m') + prometheusQuery.withInstant(true) + prometheusQuery.withFormat('heatmap'),
         ])
         + histogram.queryOptions.withDatasource('prometheus', '${datasource}')
         + histogram.options.legend.withPlacement('right')
@@ -855,14 +856,14 @@ local utils = commonlib.utils;
           title='Services'
         )
         + table.queryOptions.withTargets([
-          t.tableSourceServiceHTTPGRPCRequestRate,
-          t.tableDestinationServiceHTTPGRPCRequestRate,
-          t.tableSourceServiceHTTPGRPCRequestLatency,
-          t.tableDestinationServiceHTTPGRPCRequestLatency,
-          t.tableSourceServiceHTTPRequestSuccessRate,
-          t.tableDestinationServiceHTTPRequestSuccessRate,
-          t.tableSourceServiceTCPReceiveRate,
-          t.tableSourceServiceTCPSendRate,
+          signals.services.tableSourceServiceHTTPGRPCRequestRate.asTableTarget(),
+          signals.services.tableDestinationServiceHTTPGRPCRequestRate.asTableTarget(),
+          signals.services.tableSourceServiceHTTPGRPCRequestLatency.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.services.tableDestinationServiceHTTPGRPCRequestLatency.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.services.tableSourceServiceHTTPRequestSuccessRate.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.services.tableDestinationServiceHTTPRequestSuccessRate.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.services.tableSourceServiceTCPReceiveRate.asTableTarget(),
+          signals.services.tableSourceServiceTCPSendRate.asTableTarget(),
         ])
         + table.queryOptions.withDatasource('prometheus', '${datasource}')
         + table.panelOptions.withDescription('Service details for the Istio system.')
@@ -921,27 +922,27 @@ local utils = commonlib.utils;
               includeByName: {},
               indexByName: {
                 Time: 0,
-                'Value #A': 4,
-                'Value #B': 7,
-                'Value #C': 5,
-                'Value #D': 8,
-                'Value #E': 6,
-                'Value #F': 9,
-                'Value #G': 10,
-                'Value #H': 11,
+                'Value #Source service HTTP/GRPC request rate': 4,
+                'Value #Destination service HTTP/GRPC request rate': 7,
+                'Value #Source service HTTP/GRPC request latency': 5,
+                'Value #Destination service HTTP/GRPC request latency': 8,
+                'Value #Source service HTTP request success rate': 6,
+                'Value #Destination service HTTP request success rate': 9,
+                'Value #Source service TCP receive rate': 10,
+                'Value #Source service TCP send rate': 11,
                 cluster: 1,
                 job: 2,
                 service: 3,
               },
               renameByName: {
-                'Value #A': 'HTTP/GRPC tx',
-                'Value #B': 'HTTP/GRPC rx',
-                'Value #C': 'HTTP/GRPC tx delay',
-                'Value #D': 'HTTP/GRPC rx delay',
-                'Value #E': 'HTTP tx success',
-                'Value #F': 'HTTP rx success',
-                'Value #G': 'TCP tx',
-                'Value #H': 'TCP rx',
+                'Value #Source service HTTP/GRPC request rate': 'HTTP/GRPC tx',
+                'Value #Destination service HTTP/GRPC request rate': 'HTTP/GRPC rx',
+                'Value #Source service HTTP/GRPC request latency': 'HTTP/GRPC tx delay',
+                'Value #Destination service HTTP/GRPC request latency': 'HTTP/GRPC rx delay',
+                'Value #Source service HTTP request success rate': 'HTTP tx success',
+                'Value #Destination service HTTP request success rate': 'HTTP rx success',
+                'Value #Source service TCP receive rate': 'TCP tx',
+                'Value #Source service TCP send rate': 'TCP rx',
                 cluster: 'Cluster',
                 job: 'Job',
                 service: 'Service',
@@ -954,14 +955,14 @@ local utils = commonlib.utils;
           title='Workloads'
         )
         + table.queryOptions.withTargets([
-          t.tableSourceWorkloadHTTPGRPCRequestRate,
-          t.tableDestinationWorkloadHTTPGRPCRequestRate,
-          t.tableSourceWorkloadHTTPGRPCRequestLatency,
-          t.tableDestinationWorkloadHTTPGRPCRequestLatency,
-          t.tableSourceWorkloadHTTPRequestSuccessRate,
-          t.tableDestinationWorkloadHTTPRequestSuccessRate,
-          t.tableSourceWorkloadTCPRequestThroughputRate,
-          t.tableDestinationWorkloadTCPResponseThroughputRate,
+          signals.workloads.tableSourceWorkloadHTTPGRPCRequestRate.asTableTarget(),
+          signals.workloads.tableDestinationWorkloadHTTPGRPCRequestRate.asTableTarget(),
+          signals.workloads.tableSourceWorkloadHTTPGRPCRequestLatency.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.workloads.tableDestinationWorkloadHTTPGRPCRequestLatency.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.workloads.tableSourceWorkloadHTTPRequestSuccessRate.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.workloads.tableDestinationWorkloadHTTPRequestSuccessRate.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
+          signals.workloads.tableSourceWorkloadTCPRequestThroughputRate.asTableTarget(),
+          signals.workloads.tableDestinationWorkloadTCPResponseThroughputRate.asTableTarget(),
         ])
         + table.queryOptions.withDatasource('prometheus', '${datasource}')
         + table.panelOptions.withDescription('Workload details for a service in the Istio system.')
@@ -1027,28 +1028,28 @@ local utils = commonlib.utils;
               includeByName: {},
               indexByName: {
                 Time: 0,
-                'Value #A': 5,
-                'Value #B': 8,
-                'Value #C': 6,
-                'Value #D': 9,
-                'Value #E': 7,
-                'Value #F': 10,
-                'Value #G': 11,
-                'Value #H': 12,
+                'Value #Source workload HTTP/GRPC request rate': 5,
+                'Value #Destination workload HTTP/GRPC request rate': 8,
+                'Value #Source workload HTTP/GRPC request latency': 6,
+                'Value #Destination workload HTTP/GRPC request latency': 9,
+                'Value #Source workload HTTP request success rate': 7,
+                'Value #Destination workload HTTP request success rate': 10,
+                'Value #Source workload TCP request throughput': 11,
+                'Value #Destination workload TCP response throughput': 12,
                 cluster: 1,
                 job: 2,
                 service: 3,
                 workload: 4,
               },
               renameByName: {
-                'Value #A': 'HTTP/GRPC tx',
-                'Value #B': 'HTTP/GRPC rx',
-                'Value #C': 'HTTP/GRPC tx delay',
-                'Value #D': 'HTTP/GRPC rx delay',
-                'Value #E': 'HTTP tx success',
-                'Value #F': 'HTTP rx success',
-                'Value #G': 'TCP tx',
-                'Value #H': 'TCP rx',
+                'Value #Source workload HTTP/GRPC request rate': 'HTTP/GRPC tx',
+                'Value #Destination workload HTTP/GRPC request rate': 'HTTP/GRPC rx',
+                'Value #Source workload HTTP/GRPC request latency': 'HTTP/GRPC tx delay',
+                'Value #Destination workload HTTP/GRPC request latency': 'HTTP/GRPC rx delay',
+                'Value #Source workload HTTP request success rate': 'HTTP tx success',
+                'Value #Destination workload HTTP request success rate': 'HTTP rx success',
+                'Value #Source workload TCP request throughput': 'TCP tx',
+                'Value #Destination workload TCP response throughput': 'TCP rx',
                 cluster: 'Cluster',
                 job: 'Job',
                 service: 'Service',
