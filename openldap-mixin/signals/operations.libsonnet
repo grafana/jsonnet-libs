@@ -12,10 +12,10 @@ function(this)
     },
     signals: {
       pduProcessed: {
-        name: 'PDU processed',
+        name: 'PDU processed / $__interval',
         nameShort: 'PDUs',
         type: 'raw',
-        description: 'The rate of LDAP Protocol Data Units (PDUs) processed over time.',
+        description: 'The number of LDAP Protocol Data Units (PDUs) processed over time.',
         unit: 'none',
         sources: {
           prometheus: {

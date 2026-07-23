@@ -12,10 +12,10 @@ function(this)
     },
     signals: {
       connections: {
-        name: 'Connections',
+        name: 'Connections / $__interval',
         nameShort: 'Connections',
         type: 'raw',
-        description: 'The rate of new LDAP connections over time.',
+        description: 'The increase of new LDAP connections over time.',
         unit: 'none',
         sources: {
           prometheus: {
@@ -54,10 +54,10 @@ function(this)
       },
 
       networkConnectivity: {
-        name: 'Network connectivity',
+        name: 'Network connectivity / $__interval',
         nameShort: 'Dial attempts',
         type: 'raw',
-        description: 'The rate of LDAP network connection attempts over time.',
+        description: 'The LDAP network connection attempts over time.',
         unit: 'none',
         sources: {
           prometheus: {

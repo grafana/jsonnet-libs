@@ -12,10 +12,10 @@ function(this)
     },
     signals: {
       authAttempts: {
-        name: 'Authentication attempts',
+        name: 'Authentication attempts / $__interval',
         nameShort: 'Auth attempts',
         type: 'raw',
-        description: 'The rate of LDAP authentication attempts over time.',
+        description: 'The total increase of authentication attempts over time.',
         unit: 'none',
         sources: {
           prometheus: {
