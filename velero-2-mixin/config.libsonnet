@@ -1,4 +1,5 @@
 {
+  local this = self,
   filteringSelector: '',
   groupLabels: ['job', 'cluster'],
   logLabels: ['job', 'instance'],
@@ -25,4 +26,11 @@
   extraLogLabels: ['level'],
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,
+
+  // signals
+  metricsSource: ['prometheus'],
+  signals+: {
+    clusterOverview: (import './signals/clusteroverview.libsonnet')(this),
+    overview: (import './signals/overview.libsonnet')(this),
+  },
 }

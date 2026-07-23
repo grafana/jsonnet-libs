@@ -52,7 +52,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -60,7 +60,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (cluster) ((increase(velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "Backups"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Backups",
+                  "refId": "Successful backups"
                }
             ],
             "title": "Successful backups / $__interval ",
@@ -104,7 +107,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -112,7 +115,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (cluster) ((increase(velero_backup_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "Backups"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Backups",
+                  "refId": "Failed backups"
                }
             ],
             "title": "Failed backups / $__interval ",
@@ -156,7 +162,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -164,7 +170,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (cluster) ((increase(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "Restores"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Restores",
+                  "refId": "Successful restores"
                }
             ],
             "title": "Succesful restores / $__interval ",
@@ -208,7 +217,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -216,7 +225,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (cluster) ((increase(velero_restore_failed_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "Restores"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Restores",
+                  "refId": "Failed restores"
                }
             ],
             "title": "Failed restores / $__interval ",
@@ -284,7 +296,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -292,7 +304,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - success"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - success",
+                  "refId": "Top clusters by backup success"
                },
                {
                   "datasource": {
@@ -300,7 +315,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_backup_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - failure"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - failure",
+                  "refId": "Top clusters by backup failures"
                },
                {
                   "datasource": {
@@ -308,7 +326,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_backup_attempt_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - attempt"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - attempt",
+                  "refId": "Top clusters by backup attempts"
                }
             ],
             "title": "Top clusters by backups / $__interval ",
@@ -356,7 +377,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -364,7 +385,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - success"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - success",
+                  "refId": "Top clusters by restore success"
                },
                {
                   "datasource": {
@@ -372,7 +396,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_restore_failed_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - failure"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - failure",
+                  "refId": "Top clusters by restore failures"
                },
                {
                   "datasource": {
@@ -380,7 +407,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - attempt"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - attempt",
+                  "refId": "Top clusters by restore attempts"
                }
             ],
             "title": "Top clusters by restores / $__interval ",
@@ -430,7 +460,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -438,7 +468,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (velero_backup_tarball_size_bytes{job=~\"$job\",cluster=~\"$cluster\"}))",
-                  "legendFormat": "{{cluster}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}",
+                  "refId": "Top clusters by backup size"
                }
             ],
             "title": "Top clusters by backup size",
@@ -486,7 +519,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -494,7 +527,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_volume_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - success"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - success",
+                  "refId": "Top clusters by volume snapshot success"
                },
                {
                   "datasource": {
@@ -502,7 +538,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_volume_snapshot_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - failure"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - failure",
+                  "refId": "Top clusters by volume snapshot failures"
                },
                {
                   "datasource": {
@@ -510,7 +549,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_volume_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - attempt"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - attempt",
+                  "refId": "Top clusters by volume snapshot attempts"
                }
             ],
             "title": "Top clusters by volume snapshots / $__interval ",
@@ -558,7 +600,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -566,7 +608,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_csi_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - success"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - success",
+                  "refId": "Top clusters by CSI snapshot success"
                },
                {
                   "datasource": {
@@ -574,7 +619,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_csi_snapshot_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - failure"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - failure",
+                  "refId": "Top clusters by CSI snapshot failures"
                },
                {
                   "datasource": {
@@ -582,7 +630,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_csi_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - attempt"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - attempt",
+                  "refId": "Top clusters by CSI snapshot attempts"
                }
             ],
             "title": "Top clusters by CSI snapshots / $__interval ",
