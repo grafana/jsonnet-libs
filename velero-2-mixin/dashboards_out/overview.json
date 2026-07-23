@@ -128,8 +128,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Successful backups / $__interval "
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -157,7 +172,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Backups",
-                  "refId": "Successful backups"
+                  "refId": "Successful backups / $__interval "
                }
             ],
             "title": "Successful backups / $__interval ",
@@ -183,8 +198,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Failed backups / $__interval "
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -212,7 +242,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Backups",
-                  "refId": "Failed backups"
+                  "refId": "Failed backups / $__interval "
                }
             ],
             "title": "Failed backups / $__interval ",
@@ -238,8 +268,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Restore validation failure / $__interval "
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -267,7 +312,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "failure",
-                  "refId": "Restore validation failures"
+                  "refId": "Restore validation failure / $__interval "
                }
             ],
             "title": "Restore validation failure / $__interval ",
@@ -293,8 +338,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Backup validation failure / $__interval "
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -322,7 +382,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "failure",
-                  "refId": "Backup validation failures"
+                  "refId": "Backup validation failure / $__interval "
                }
             ],
             "title": "Backup validation failure / $__interval ",
@@ -448,7 +508,21 @@
                      "steps": [ ]
                   },
                   "unit": "percentunit"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Backup success rate / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -478,7 +552,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}}",
-                  "refId": "Backup success rate"
+                  "refId": "Backup success rate / $__interval"
                }
             ],
             "title": "Backup success rate / $__interval",
@@ -508,7 +582,21 @@
                      "steps": [ ]
                   },
                   "unit": "decbytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Backup size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -701,7 +789,21 @@
                      "steps": [ ]
                   },
                   "unit": "percentunit"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Restore success rate / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -731,7 +833,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}}",
-                  "refId": "Restore success rate"
+                  "refId": "Restore success rate / $__interval"
                }
             ],
             "title": "Restore success rate / $__interval",
@@ -857,7 +959,21 @@
                      "steps": [ ]
                   },
                   "unit": "percentunit"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "CSI snapshot success rate / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -887,7 +1003,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}}",
-                  "refId": "CSI snapshot success rate"
+                  "refId": "CSI snapshot success rate / $__interval"
                }
             ],
             "title": "CSI snapshot success rate / $__interval",
@@ -1013,7 +1129,21 @@
                      "steps": [ ]
                   },
                   "unit": "percentunit"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Volume snapshot success rate / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1043,7 +1173,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}}",
-                  "refId": "Volume snapshot success rate"
+                  "refId": "Volume snapshot success rate / $__interval"
                }
             ],
             "title": "Volume snapshot success rate / $__interval",

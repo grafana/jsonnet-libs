@@ -15,7 +15,7 @@ function(this)
     },
     signals: {
       succesfulBackups: {
-        name: 'Successful backups',
+        name: 'Successful backups / $__interval ',
         nameShort: 'Backups',
         type: 'raw',
         description: 'Number of successful backups across all clusters.',
@@ -27,10 +27,10 @@ function(this)
         },
       },
       failedBackups: {
-        name: 'Failed backups',
+        name: 'Failed backups / $__interval ',
         nameShort: 'Backups',
         type: 'raw',
-        description: 'Number of failed backups across all clusters.',
+        description: 'Number of failed backups across all clusters',
         sources: {
           prometheus: {
             expr: 'sum by (cluster) ((increase(velero_backup_failure_total{%(queriesSelector)s}[$__interval:])))',
@@ -39,10 +39,10 @@ function(this)
         },
       },
       succesfulRestores: {
-        name: 'Successful restores',
+        name: 'Succesful restores / $__interval ',
         nameShort: 'Restores',
         type: 'raw',
-        description: 'Number of successful restores across all clusters.',
+        description: 'Number of succesful restores across all clusters.',
         sources: {
           prometheus: {
             expr: 'sum by (cluster) ((increase(velero_restore_success_total{%(queriesSelector)s}[$__interval:])))',
@@ -51,7 +51,7 @@ function(this)
         },
       },
       failedRestores: {
-        name: 'Failed restores',
+        name: 'Failed restores / $__interval ',
         nameShort: 'Restores',
         type: 'raw',
         description: 'Number of failed restores across all clusters.',
@@ -140,7 +140,7 @@ function(this)
         nameShort: 'Backup size',
         type: 'raw',
         unit: 'decbytes',
-        description: 'Top clusters by size of backups.',
+        description: 'Top clusters by size of backups.\n',
         sources: {
           prometheus: {
             expr: 'topk by(cluster)($top_cluster_count, sum by (cluster) (velero_backup_tarball_size_bytes{%(queriesSelector)s}))',

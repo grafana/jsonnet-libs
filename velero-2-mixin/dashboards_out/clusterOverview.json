@@ -34,8 +34,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Successful backups / $__interval "
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -63,7 +78,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Backups",
-                  "refId": "Successful backups"
+                  "refId": "Successful backups / $__interval "
                }
             ],
             "title": "Successful backups / $__interval ",
@@ -89,8 +104,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Failed backups / $__interval "
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -118,7 +148,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Backups",
-                  "refId": "Failed backups"
+                  "refId": "Failed backups / $__interval "
                }
             ],
             "title": "Failed backups / $__interval ",
@@ -144,8 +174,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Succesful restores / $__interval "
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -173,7 +218,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Restores",
-                  "refId": "Successful restores"
+                  "refId": "Succesful restores / $__interval "
                }
             ],
             "title": "Succesful restores / $__interval ",
@@ -199,8 +244,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Failed restores / $__interval "
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -228,7 +288,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Restores",
-                  "refId": "Failed restores"
+                  "refId": "Failed restores / $__interval "
                }
             ],
             "title": "Failed restores / $__interval ",
@@ -440,7 +500,21 @@
                      "steps": [ ]
                   },
                   "unit": "decbytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top clusters by backup size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,

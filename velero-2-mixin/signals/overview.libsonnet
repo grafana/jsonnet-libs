@@ -15,7 +15,7 @@ function(this)
     },
     signals: {
       restoreValidationFailure: {
-        name: 'Restore validation failures',
+        name: 'Restore validation failure / $__interval ',
         nameShort: 'Restore validation failures',
         type: 'raw',
         description: 'Number of failed restore validations.',
@@ -27,7 +27,7 @@ function(this)
         },
       },
       backupValidationFailure: {
-        name: 'Backup validation failures',
+        name: 'Backup validation failure / $__interval ',
         nameShort: 'Backup validation failures',
         type: 'raw',
         description: 'Number of failed backup validations.',
@@ -39,7 +39,7 @@ function(this)
         },
       },
       succesfulBackupsStat: {
-        name: 'Successful backups',
+        name: 'Successful backups / $__interval ',
         nameShort: 'Backups',
         type: 'raw',
         description: 'Number of successful backups.',
@@ -51,7 +51,7 @@ function(this)
         },
       },
       failedBackupsStat: {
-        name: 'Failed backups',
+        name: 'Failed backups / $__interval ',
         nameShort: 'Backups',
         type: 'raw',
         description: 'Number of failed backups.',
@@ -99,11 +99,11 @@ function(this)
         },
       },
       backupSuccessRate: {
-        name: 'Backup success rate',
+        name: 'Backup success rate / $__interval',
         nameShort: 'Backup success rate',
         type: 'raw',
         unit: 'percentunit',
-        description: 'Success rate of backups.',
+        description: 'Success rate of backups.\n',
         sources: {
           prometheus: {
             expr: 'increase(label_replace(velero_backup_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]) / clamp_min(rate(label_replace(velero_backup_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]),1)',
@@ -129,7 +129,7 @@ function(this)
         nameShort: 'Backup size',
         type: 'raw',
         unit: 'decbytes',
-        description: 'Size of backups for this clusters given schedule.',
+        description: 'Size of backups for this clusters given schedule.\n',
         sources: {
           prometheus: {
             expr: 'label_replace(velero_backup_tarball_size_bytes{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
@@ -187,11 +187,11 @@ function(this)
         },
       },
       restoreSuccessRate: {
-        name: 'Restore success rate',
+        name: 'Restore success rate / $__interval',
         nameShort: 'Restore success rate',
         type: 'raw',
         unit: 'percentunit',
-        description: 'Success rate of restores.',
+        description: 'Success rate of restores.\n',
         sources: {
           prometheus: {
             expr: 'increase(label_replace(velero_restore_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]) / clamp_min(increase(label_replace(velero_restore_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]),1)',
@@ -249,11 +249,11 @@ function(this)
         },
       },
       volumeSnapshotSuccessRate: {
-        name: 'Volume snapshot success rate',
+        name: 'Volume snapshot success rate / $__interval',
         nameShort: 'Volume snapshot success rate',
         type: 'raw',
         unit: 'percentunit',
-        description: 'Success rate of volume snapshots.',
+        description: 'Success rate of volume snapshots.\n',
         sources: {
           prometheus: {
             expr: 'increase(label_replace(velero_volume_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]) / clamp_min(increase(label_replace(velero_volume_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]),1)',
@@ -299,11 +299,11 @@ function(this)
         },
       },
       csiSnapshotSuccessRate: {
-        name: 'CSI snapshot success rate',
+        name: 'CSI snapshot success rate / $__interval',
         nameShort: 'CSI snapshot success rate',
         type: 'raw',
         unit: 'percentunit',
-        description: 'Success rate of CSI snapshots.',
+        description: 'Success rate of CSI snapshots.\n',
         sources: {
           prometheus: {
             expr: 'sum by (schedule) (increase(label_replace(velero_csi_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]) / clamp_min(increase(label_replace(velero_csi_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]),1)) ',
