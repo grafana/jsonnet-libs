@@ -17,7 +17,7 @@ function(this) {
       name: 'Nova status',
       description: 'Reports the status of the Nova compute service.',
       type: 'gauge',
-      unit: 'short',
+      unit: 'string',
       sources: {
         prometheus: {
           expr: 'openstack_nova_up{%(queriesSelector)s}',
@@ -26,10 +26,10 @@ function(this) {
       },
     },
     nova_total_vms: {
-      name: 'Total VMs',
-      description: 'The current number of total virtual machines.',
+      name: 'VMs',
+      description: 'The current number of total and running virtual machines.',
       type: 'gauge',
-      unit: 'short',
+      unit: '',
       sources: {
         prometheus: {
           expr: 'openstack_nova_total_vms{%(queriesSelector)s}',

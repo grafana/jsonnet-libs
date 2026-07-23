@@ -12,12 +12,8 @@ local utils = commonlib.utils;
     local gauge = g.panel.gauge,
 
     placementStatus:
-      commonlib.panels.generic.stat.base.new(
-        'Placement status',
-        targets=[signals.placement.placement_up.asTarget()],
-        description='Reports the status of the Placement resource-scheduling service.',
-      )
-      + stat.standardOptions.withUnit('string')
+      signals.placement.placement_up.asStat()
+      + commonlib.panels.generic.stat.base.stylize()
       + stat.options.withGraphMode('none')
       + stat.standardOptions.withMappings({
         type: 'value',
@@ -36,12 +32,8 @@ local utils = commonlib.utils;
       }),
 
     keystoneStatus:
-      commonlib.panels.generic.stat.base.new(
-        'Keystone status',
-        targets=[signals.identity.identity_up.asTarget()],
-        description='Reports the status of the Keystone identity service.',
-      )
-      + stat.standardOptions.withUnit('string')
+      signals.identity.identity_up.asStat()
+      + commonlib.panels.generic.stat.base.stylize()
       + stat.options.withGraphMode('none')
       + stat.standardOptions.withMappings({
         type: 'value',
@@ -60,12 +52,8 @@ local utils = commonlib.utils;
       }),
 
     novaStatus:
-      commonlib.panels.generic.stat.base.new(
-        'Nova status',
-        targets=[signals.nova.nova_up.asTarget()],
-        description='Reports the status of the Nova compute service.',
-      )
-      + stat.standardOptions.withUnit('string')
+      signals.nova.nova_up.asStat()
+      + commonlib.panels.generic.stat.base.stylize()
       + stat.options.withGraphMode('none')
       + stat.standardOptions.withMappings({
         type: 'value',
@@ -84,12 +72,8 @@ local utils = commonlib.utils;
       }),
 
     neutronStatus:
-      commonlib.panels.generic.stat.base.new(
-        'Neutron status',
-        targets=[signals.neutron.neutron_up.asTarget()],
-        description='Reports the status of the Neutron networking service.',
-      )
-      + stat.standardOptions.withUnit('string')
+      signals.neutron.neutron_up.asStat()
+      + commonlib.panels.generic.stat.base.stylize()
       + stat.options.withGraphMode('none')
       + stat.standardOptions.withMappings({
         type: 'value',
@@ -108,12 +92,8 @@ local utils = commonlib.utils;
       }),
 
     cinderStatus:
-      commonlib.panels.generic.stat.base.new(
-        'Cinder status',
-        targets=[signals.cinder.cinder_up.asTarget()],
-        description='Reports the status of the Cinder block storage service.',
-      )
-      + stat.standardOptions.withUnit('string')
+      signals.cinder.cinder_up.asStat()
+      + commonlib.panels.generic.stat.base.stylize()
       + stat.options.withGraphMode('none')
       + stat.standardOptions.withMappings({
         type: 'value',
@@ -132,12 +112,8 @@ local utils = commonlib.utils;
       }),
 
     glanceStatus:
-      commonlib.panels.generic.stat.base.new(
-        'Glance status',
-        targets=[signals.glance.glance_up.asTarget()],
-        description='Reports the status of the Glance image service.',
-      )
-      + stat.standardOptions.withUnit('string')
+      signals.glance.glance_up.asStat()
+      + commonlib.panels.generic.stat.base.stylize()
       + stat.options.withGraphMode('none')
       + stat.standardOptions.withMappings({
         type: 'value',
@@ -335,14 +311,9 @@ local utils = commonlib.utils;
       + stat.options.withGraphMode('none'),
 
     users:
-      commonlib.panels.generic.timeSeries.base.new(
-        'Users',
-        targets=[
-          signals.identity.identity_users.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
-        ],
-        description='The number of users for the OpenStack cloud.',
-      )
+      signals.identity.identity_users.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + timeSeries.queryOptions.withInterval('1m')
       + timeSeries.standardOptions.withDecimals(0),
 
     projectDetails:
@@ -421,14 +392,9 @@ local utils = commonlib.utils;
       ]),
 
     vms:
-      commonlib.panels.generic.timeSeries.base.new(
-        'VMs',
-        targets=[
-          signals.nova.nova_total_vms.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
-        ],
-        description='The current number of total and running virtual machines.',
-      )
+      signals.nova.nova_total_vms.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + timeSeries.queryOptions.withInterval('1m')
       + timeSeries.standardOptions.withDecimals(0),
 
     instanceUsage:
@@ -546,25 +512,15 @@ local utils = commonlib.utils;
       ]),
 
     networks:
-      commonlib.panels.generic.timeSeries.base.new(
-        'Networks',
-        targets=[
-          signals.neutron.neutron_networks.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
-        ],
-        description='The number of networks managed by Neutron.',
-      )
+      signals.neutron.neutron_networks.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + timeSeries.queryOptions.withInterval('1m')
       + timeSeries.standardOptions.withDecimals(0),
 
     subnets:
-      commonlib.panels.generic.timeSeries.base.new(
-        'Subnets',
-        targets=[
-          signals.neutron.neutron_subnets.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
-        ],
-        description='The number of networks managed by Neutron.'
-      )
+      signals.neutron.neutron_subnets.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + timeSeries.queryOptions.withInterval('1m')
       + timeSeries.standardOptions.withDecimals(0),
 
     routers:
@@ -805,14 +761,9 @@ local utils = commonlib.utils;
       + timeSeries.standardOptions.withMin(0),
 
     securityGroups:
-      commonlib.panels.generic.timeSeries.base.new(
-        'Security groups',
-        targets=[
-          signals.neutron.neutron_security_groups.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
-        ],
-        description='The number of network security groups managed by Neutron.',
-      )
+      signals.neutron.neutron_security_groups.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + timeSeries.queryOptions.withInterval('1m')
       + timeSeries.standardOptions.withDecimals(0),
 
     neutronAgents:
@@ -888,14 +839,9 @@ local utils = commonlib.utils;
       ]),
 
     volumes:
-      commonlib.panels.generic.timeSeries.base.new(
-        'Volumes',
-        targets=[
-          signals.cinder.cinder_volumes.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
-        ],
-        description='The number of volumes managed by Cinder.',
-      )
+      signals.cinder.cinder_volumes.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + timeSeries.queryOptions.withInterval('1m')
       + timeSeries.standardOptions.withDecimals(0),
 
     volumeStatus:
@@ -958,14 +904,9 @@ local utils = commonlib.utils;
       + timeSeries.standardOptions.withMin(0),
 
     snapshots:
-      commonlib.panels.generic.timeSeries.base.new(
-        'Snapshots',
-        targets=[
-          signals.cinder.cinder_snapshots.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
-        ],
-        description='The number of volume snapshots in Cinder.',
-      )
+      signals.cinder.cinder_snapshots.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + timeSeries.queryOptions.withInterval('1m')
       + timeSeries.standardOptions.withDecimals(0),
 
     cinderAgents:
@@ -1043,14 +984,9 @@ local utils = commonlib.utils;
       ]),
 
     imageCount:
-      commonlib.panels.generic.timeSeries.base.new(
-        'Image count',
-        targets=[
-          signals.glance.glance_images.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
-        ],
-        description='The number of images present in Glance.',
-      )
+      signals.glance.glance_images.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + timeSeries.queryOptions.withInterval('1m')
       + timeSeries.standardOptions.withDecimals(0),
 
     images:

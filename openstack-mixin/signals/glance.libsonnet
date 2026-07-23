@@ -17,7 +17,7 @@ function(this) {
       name: 'Glance status',
       description: 'Reports the status of the Glance image service.',
       type: 'gauge',
-      unit: 'short',
+      unit: 'string',
       sources: {
         prometheus: {
           expr: 'openstack_glance_up{%(queriesSelector)s}',
@@ -29,7 +29,7 @@ function(this) {
       name: 'Image count',
       description: 'The number of images present in Glance.',
       type: 'gauge',
-      unit: 'short',
+      unit: '',
       sources: {
         prometheus: {
           expr: 'openstack_glance_images{%(queriesSelector)s}',

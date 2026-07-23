@@ -17,7 +17,7 @@ function(this) {
       name: 'Placement status',
       description: 'Reports the status of the Placement resource-scheduling service.',
       type: 'gauge',
-      unit: 'short',
+      unit: 'string',
       sources: {
         prometheus: {
           expr: 'openstack_placement_up{%(queriesSelector)s}',

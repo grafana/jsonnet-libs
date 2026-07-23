@@ -17,7 +17,7 @@ function(this) {
       name: 'Cinder status',
       description: 'Reports the status of the Cinder block storage service.',
       type: 'gauge',
-      unit: 'short',
+      unit: 'string',
       sources: {
         prometheus: {
           expr: 'openstack_cinder_up{%(queriesSelector)s}',
@@ -29,7 +29,7 @@ function(this) {
       name: 'Volumes',
       description: 'The number of volumes managed by Cinder.',
       type: 'gauge',
-      unit: 'short',
+      unit: '',
       sources: {
         prometheus: {
           expr: 'openstack_cinder_volumes{%(queriesSelector)s}',
@@ -41,7 +41,7 @@ function(this) {
       name: 'Snapshots',
       description: 'The number of volume snapshots in Cinder.',
       type: 'gauge',
-      unit: 'short',
+      unit: '',
       sources: {
         prometheus: {
           expr: 'openstack_cinder_snapshots{%(queriesSelector)s}',

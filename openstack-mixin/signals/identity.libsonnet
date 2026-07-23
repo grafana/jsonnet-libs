@@ -17,7 +17,7 @@ function(this) {
       name: 'Keystone status',
       description: 'Reports the status of the Keystone identity service.',
       type: 'gauge',
-      unit: 'short',
+      unit: 'string',
       sources: {
         prometheus: {
           expr: 'openstack_identity_up{%(queriesSelector)s}',
@@ -77,7 +77,7 @@ function(this) {
       name: 'Users',
       description: 'The number of users for the OpenStack cloud.',
       type: 'gauge',
-      unit: 'short',
+      unit: '',
       sources: {
         prometheus: {
           expr: 'openstack_identity_users{%(queriesSelector)s}',

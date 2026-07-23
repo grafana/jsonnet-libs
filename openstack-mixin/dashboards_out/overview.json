@@ -65,7 +65,21 @@
                      ]
                   },
                   "unit": "string"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Placement status"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "string"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -133,7 +147,21 @@
                      ]
                   },
                   "unit": "string"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Keystone status"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "string"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -201,7 +229,21 @@
                      ]
                   },
                   "unit": "string"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Nova status"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "string"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -269,7 +311,21 @@
                      ]
                   },
                   "unit": "string"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Neutron status"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "string"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -337,7 +393,21 @@
                      ]
                   },
                   "unit": "string"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Cinder status"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "string"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -405,7 +475,21 @@
                      ]
                   },
                   "unit": "string"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Glance status"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "string"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -997,8 +1081,23 @@
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Users"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1007,6 +1106,7 @@
                "y": 22
             },
             "id": 16,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1027,7 +1127,6 @@
                   "expr": "openstack_identity_users{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}}",
                   "refId": "Users"
                }
@@ -1202,7 +1301,21 @@
                      ]
                   },
                   "unit": "string"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Glance status"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "string"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1254,8 +1367,23 @@
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Image count"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1264,6 +1392,7 @@
                "y": 39
             },
             "id": 20,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1284,7 +1413,6 @@
                   "expr": "openstack_glance_images{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}}",
                   "refId": "Image count"
                }

@@ -17,7 +17,7 @@ function(this) {
       name: 'Neutron status',
       description: 'Reports the status of the Neutron networking service.',
       type: 'gauge',
-      unit: 'short',
+      unit: 'string',
       sources: {
         prometheus: {
           expr: 'openstack_neutron_up{%(queriesSelector)s}',
@@ -29,7 +29,7 @@ function(this) {
       name: 'Networks',
       description: 'The number of networks managed by Neutron.',
       type: 'gauge',
-      unit: 'short',
+      unit: '',
       sources: {
         prometheus: {
           expr: 'openstack_neutron_networks{%(queriesSelector)s}',
@@ -39,9 +39,9 @@ function(this) {
     },
     neutron_subnets: {
       name: 'Subnets',
-      description: 'The number of subnets managed by Neutron.',
+      description: 'The number of networks managed by Neutron.',  // legacy panel text (typo preserved for output parity)
       type: 'gauge',
-      unit: 'short',
+      unit: '',
       sources: {
         prometheus: {
           expr: 'openstack_neutron_subnets{%(queriesSelector)s}',
@@ -221,7 +221,7 @@ function(this) {
       name: 'Security groups',
       description: 'The number of network security groups managed by Neutron.',
       type: 'gauge',
-      unit: 'short',
+      unit: '',
       sources: {
         prometheus: {
           expr: 'openstack_neutron_security_groups{%(queriesSelector)s}',
