@@ -12,102 +12,64 @@ local utils = commonlib.utils;
       local fieldOverride = g.panel.table.fieldOverride,
 
       clustersCountStatus:
-        commonlib.panels.generic.stat.info.new(
-          'Clusters',
-          targets=[signals.overview.clustersCount.asTarget()],
-          description='The number of clusters in the datacenter.'
-        )
+        signals.overview.clustersCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       hostsCountStatus:
-        commonlib.panels.generic.stat.info.new(
-          'ESXi hosts',
-          targets=[signals.overview.hostsCount.asTarget()],
-          description='The number of ESXi hosts in the datacenter.'
-        )
+        signals.overview.hostsCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       resourcePoolsCountStatus:
-        commonlib.panels.generic.stat.info.new(
-          'Resource pools',
-          targets=[signals.overview.resourcePoolsCount.asTarget()],
-          description='The number of resource pools in the datacenter.'
-        )
+        signals.overview.resourcePoolsCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       vmsCountStatus:
-        commonlib.panels.generic.stat.info.new(
-          'VMs',
-          targets=[signals.overview.vmsCount.asTarget()],
-          description='The number of virtual machines in the datacenter.'
-        )
+        signals.overview.vmsCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusteredVMsOnStatus:
-        commonlib.panels.generic.stat.info.new(
-          'Clustered VMs on',
-          targets=[signals.overview.clusteredVMsOnCount.asTarget()],
-          description='The number of virtual machines currently powered on that belong to a cluster in the datacenter.'
-        )
+        signals.overview.clusteredVMsOnCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusteredVMsOffStatus:
-        commonlib.panels.generic.stat.info.new(
-          'Clustered VMs off',
-          targets=[signals.overview.clusteredVMsOffCount.asTarget()],
-          description='The number of virtual machines currently powered off that belong to a cluster in the datacenter.'
-        )
+        signals.overview.clusteredVMsOffCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusteredVMsSuspendedStatus:
-        commonlib.panels.generic.stat.info.new(
-          'Clustered VMs suspended',
-          targets=[signals.overview.clusteredVMsSuspendedCount.asTarget()],
-          description='The number of virtual machines currently in a suspended state that belong to a cluster in the datacenter.'
-        )
+        signals.overview.clusteredVMsSuspendedCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusteredVMTemplatesCountStatus:
-        commonlib.panels.generic.stat.info.new(
-          'Clustered VM templates',
-          targets=[signals.overview.clusteredVMTemplatesCount.asTarget()],
-          description='The number of virtual machine templates that belong to a cluster in the datacenter.'
-        )
+        signals.overview.clusteredVMTemplatesCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusteredHostsActiveStatus:
-        commonlib.panels.generic.stat.info.new(
-          'Clustered active ESXi hosts',
-          targets=[signals.overview.clusteredHostsActiveCount.asTarget()],
-          description='The number of ESXi hosts that are currently running (responding and not in maintenance mode) that belong to a cluster within the datacenter.'
-        )
+        signals.overview.clusteredHostsActiveCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusteredHostsInactiveStatus:
-        commonlib.panels.generic.stat.info.new(
-          'Clustered inactive ESXi hosts',
-          targets=[signals.overview.clusteredHostsInactiveCount.asTarget()],
-          description='The number of ESXi hosts that are currently not running (not responding or in maintenance mode) that belong to a cluster within the datacenter.'
-        )
+        signals.overview.clusteredHostsInactiveCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       topCPUUtilizationClusters:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Top CPU utilization by cluster',
-          targets=[signals.overview.topCPUUtilizationClusters.asTarget()],
-          description='The clusters with the highest CPU utilization percentage in the datacenter.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('list')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        signals.overview.topCPUUtilizationClusters.asTimeSeries()
+        + commonlib.panels.memory.timeSeries.usagePercent.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       topMemoryUtilizationClusters:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Top memory utilization by cluster',
-          targets=[signals.overview.topMemoryUtilizationClusters.asTarget()],
-          description='The clusters with the highest memory utilization percentage in the datacenter.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('list')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        signals.overview.topMemoryUtilizationClusters.asTimeSeries()
+        + commonlib.panels.memory.timeSeries.usagePercent.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       clustersTable:
         commonlib.panels.generic.table.base.new(
@@ -388,111 +350,63 @@ local utils = commonlib.utils;
         ]),
 
       topCPUUsageResourcePools:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top CPU usage by resource pools',
-          targets=[signals.overview.topCPUUsageResourcePools.asTarget()],
-          description='The resource pools with the highest CPU usage in the datacenter.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.standardOptions.withUnit('rotmhz'),
+        signals.overview.topCPUUsageResourcePools.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       topMemoryUsageResourcePools:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top memory usage by resource pools',
-          targets=[signals.overview.topMemoryUsageResourcePools.asTarget()],
-          description='The resource pools with the highest memory usage in the datacenter.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.standardOptions.withUnit('mbytes'),
+        signals.overview.topMemoryUsageResourcePools.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       topCPUShareResourcePools:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top CPU shares by resource pools',
-          targets=[signals.overview.topCPUShareResourcePools.asTarget()],
-          description='The resource pools with the highest amount of CPU shares allocated in the datacenter.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.standardOptions.withUnit('shares'),
+        signals.overview.topCPUShareResourcePools.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       topMemoryShareResourcePools:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top memory shares by resource pools',
-          targets=[signals.overview.topMemoryShareResourcePools.asTarget()],
-          description='The resource pools with the highest amount of memory shares allocated in the datacenter.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.standardOptions.withUnit('shares'),
+        signals.overview.topMemoryShareResourcePools.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       topCPUUtilizationHosts:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Top CPU utilization by ESXi hosts',
-          targets=[signals.overview.topCPUUtilizationHosts.asTarget()],
-          description='The ESXi hosts with the highest CPU utilization in the datacenter.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        signals.overview.topCPUUtilizationHosts.asTimeSeries()
+        + commonlib.panels.memory.timeSeries.usagePercent.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       topMemoryUtilizationHosts:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top memory utilization by ESXi hosts',
-          targets=[signals.overview.topMemoryUtilizationHosts.asTarget()],
-          description='The ESXi hosts with the highest memory utilization in the datacenter.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        signals.overview.topMemoryUtilizationHosts.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       topDiskAvgLatencyHosts:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top avg disk latency by ESXi hosts',
-          targets=[signals.overview.topDiskAvgLatencyHosts.asTarget()],
-          description='The ESXi hosts with the highest average disk latency in the datacenter.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
+        signals.overview.topDiskAvgLatencyHosts.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       topPacketErrorRateHosts:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top packet errors by ESXi hosts',
-          targets=[signals.overview.topPacketErrorRateHosts.asTarget()],
-          description='The ESXi hosts with the highest percentage of packet errors in the datacenter.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        signals.overview.topPacketErrorRateHosts.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       hostCPUUsage:
-        commonlib.panels.generic.timeSeries.base.new(
-          'CPU usage',
-          targets=[signals.host.hostCPUUsage.asTarget()],
-          description='The amount of CPU used by the ESXi host.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('rotmhz')
+        signals.host.hostCPUUsage.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
         + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       hostCPUUtilization:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'CPU utilization',
-          targets=[signals.host.hostCPUUtilization.asTarget()],
-          description='The CPU utilization percentage of the ESXi host.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        signals.host.hostCPUUtilization.asTimeSeries()
+        + commonlib.panels.memory.timeSeries.usagePercent.stylize()
         + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       hostMemoryUsage:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Memory usage',
-          targets=[signals.host.hostMemoryUsage.asTarget()],
-          description='The amount of memory used by the ESXi host.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('mbytes')
+        signals.host.hostMemoryUsage.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
         + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       hostMemoryUtilization:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Memory utilization',
-          targets=[signals.host.hostMemoryUtilization.asTarget()],
-          description='The memory utilization percentage of the ESXi host.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        signals.host.hostMemoryUtilization.asTimeSeries()
+        + commonlib.panels.memory.timeSeries.usagePercent.stylize()
         + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       hostModifiedMemory:
@@ -809,58 +723,34 @@ local utils = commonlib.utils;
         ]),
 
       vmCPUUsage:
-        commonlib.panels.generic.timeSeries.base.new(
-          'CPU usage',
-          targets=[signals.vm.vmCPUUsage.asTarget()],
-          description='The amount of CPU used by the VMs.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('list')
-        + g.panel.timeSeries.standardOptions.withUnit('rotmhz'),
+        signals.vm.vmCPUUsage.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       vmCPUUtilization:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'CPU utilization',
-          targets=[signals.vm.vmCPUUtilization.asTarget()],
-          description='The CPU utilization percentage of VMs.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('list')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        signals.vm.vmCPUUtilization.asTimeSeries()
+        + commonlib.panels.memory.timeSeries.usagePercent.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       vmMemoryUsage:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Memory usage',
-          targets=[signals.vm.vmMemoryUsage.asTarget()],
-          description='The amount of memory used by the VMs.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('list')
-        + g.panel.timeSeries.standardOptions.withUnit('mbytes'),
+        signals.vm.vmMemoryUsage.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       vmMemoryUtilization:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Memory utilization',
-          targets=[signals.vm.vmMemoryUtilization.asTarget()],
-          description='The memory utilization percentage of the VMs.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('list')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        signals.vm.vmMemoryUtilization.asTimeSeries()
+        + commonlib.panels.memory.timeSeries.usagePercent.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       vmDiskUsage:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Disk usage',
-          targets=[signals.vm.vmDiskUsage.asTarget()],
-          description='The amount of disk space used by the VMs.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('list')
-        + g.panel.timeSeries.standardOptions.withUnit('bytes'),
+        signals.vm.vmDiskUsage.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       vmDiskUtilization:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Disk utilization',
-          targets=[signals.vm.vmDiskUtilization.asTarget()],
-          description='The disk utilization percentage of VMs.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('list')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        signals.vm.vmDiskUtilization.asTimeSeries()
+        + commonlib.panels.memory.timeSeries.usagePercent.stylize()
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       vmModifiedMemory:
         commonlib.panels.generic.timeSeries.base.new(
@@ -991,51 +881,33 @@ local utils = commonlib.utils;
         ]),
 
       clusterVMsOnStatus:
-        commonlib.panels.generic.stat.info.new(
-          'VMs on',
-          targets=[signals.cluster.clusterVMsOnCount.asTarget()],
-          description='The number of virtual machines currently powered on within the cluster.'
-        )
+        signals.cluster.clusterVMsOnCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusterVMsOffStatus:
-        commonlib.panels.generic.stat.info.new(
-          'VMs off',
-          targets=[signals.cluster.clusterVMsOffCount.asTarget()],
-          description='The number of virtual machines currently powered off within the cluster.'
-        )
+        signals.cluster.clusterVMsOffCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusterVMsSuspendedStatus:
-        commonlib.panels.generic.stat.info.new(
-          'VMs suspended',
-          targets=[signals.cluster.clusterVMsSuspendedCount.asTarget()],
-          description='The number of virtual machines currently in a suspended state within the cluster.'
-        )
+        signals.cluster.clusterVMsSuspendedCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusterHostsActiveStatus:
-        commonlib.panels.generic.stat.info.new(
-          'Active ESXi hosts',
-          targets=[signals.cluster.clusterHostsActiveCount.asTarget()],
-          description='The number of ESXi hosts that are currently running (responding and not in maintenance mode) within the cluster.'
-        )
+        signals.cluster.clusterHostsActiveCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusterHostsInactiveStatus:
-        commonlib.panels.generic.stat.info.new(
-          'Inactive ESXi hosts',
-          targets=[signals.cluster.clusterHostsInactiveCount.asTarget()],
-          description='The number of ESXi hosts that are currently not running (not responding or in maintenance mode) within the cluster.'
-        )
+        signals.cluster.clusterHostsInactiveCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusterResourcePoolsStatus:
-        commonlib.panels.generic.stat.info.new(
-          'Resource pools',
-          targets=[signals.cluster.clusterResourcePoolsCount.asTarget()],
-          description='The number of resource pools within the cluster (including nested).'
-        )
+        signals.cluster.clusterResourcePoolsCount.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
       clusterCPULimit:
@@ -1063,12 +935,8 @@ local utils = commonlib.utils;
         + barGauge.standardOptions.withUnit('rotmhz'),
 
       clusterCPUUtilization:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Cluster CPU utilization',
-          targets=[signals.cluster.clusterCPUUtilization.asTarget()],
-          description='The CPU utilization percentage of the cluster.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        signals.cluster.clusterCPUUtilization.asTimeSeries()
+        + commonlib.panels.memory.timeSeries.usagePercent.stylize()
         + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       clusterMemoryLimit:
@@ -1096,12 +964,8 @@ local utils = commonlib.utils;
         + barGauge.standardOptions.withUnit('bytes'),
 
       clusterMemoryUtilization:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Cluster memory utilization',
-          targets=[signals.cluster.clusterMemoryUtilization.asTarget()],
-          description='The memory utilization percentage of the cluster.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        signals.cluster.clusterMemoryUtilization.asTimeSeries()
+        + commonlib.panels.memory.timeSeries.usagePercent.stylize()
         + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       clusterHostsTable:

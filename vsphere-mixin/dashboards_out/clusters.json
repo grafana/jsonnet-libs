@@ -49,8 +49,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "VMs on"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -104,8 +119,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "VMs off"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -159,8 +189,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "VMs suspended"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -214,8 +259,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Active ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -269,8 +329,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Inactive ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -324,8 +399,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Resource pools"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -476,7 +566,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Cluster CPU utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -629,7 +733,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Cluster memory utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,

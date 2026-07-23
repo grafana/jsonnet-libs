@@ -49,8 +49,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clusters"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -104,8 +119,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -159,8 +189,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Resource pools"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -214,8 +259,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "VMs"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -269,8 +329,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered VMs on"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -324,8 +399,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered VMs off"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -379,8 +469,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered VMs suspended"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -434,8 +539,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered VM templates"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -489,8 +609,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered active ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -544,8 +679,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered inactive ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -618,7 +768,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top CPU utilization by cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -681,7 +845,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top memory utilization by cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1178,7 +1356,21 @@
                      "steps": [ ]
                   },
                   "unit": "rotmhz"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top CPU usage by resource pools"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rotmhz"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1238,7 +1430,21 @@
                      "steps": [ ]
                   },
                   "unit": "mbytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top memory usage by resource pools"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "mbytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1298,7 +1504,21 @@
                      "steps": [ ]
                   },
                   "unit": "shares"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top CPU shares by resource pools"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "shares"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1358,7 +1578,21 @@
                      "steps": [ ]
                   },
                   "unit": "shares"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top memory shares by resource pools"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "shares"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1433,7 +1667,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top CPU utilization by ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1493,7 +1741,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top memory utilization by ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1553,7 +1815,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top avg disk latency by ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1613,7 +1889,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top packet errors by ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,

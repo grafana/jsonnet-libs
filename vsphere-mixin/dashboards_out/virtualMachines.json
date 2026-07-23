@@ -53,7 +53,21 @@
                      "steps": [ ]
                   },
                   "unit": "rotmhz"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "CPU usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rotmhz"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -116,7 +130,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "CPU utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -176,7 +204,21 @@
                      "steps": [ ]
                   },
                   "unit": "mbytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Memory usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "mbytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -239,7 +281,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Memory utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -527,7 +583,21 @@
                      "steps": [ ]
                   },
                   "unit": "bytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Disk usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -590,7 +660,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Disk utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
