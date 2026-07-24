@@ -17,9 +17,11 @@ local utils = commonlib.utils;
       local pureSel = 'test_name=~"$test_name"',
       local testSel = 'test_name=~"$test_name",node_name=~"$node_name"',
 
-      // Each helper returns the SIGNAL with the legacy call-site modifiers
-      // applied. Single-signal panels render it directly with asTimeSeries();
-      // multi-signal, pieChart and barGauge panels append .asTarget().
+      // topAvg and sumBy return the SIGNAL with the legacy call-site modifiers
+      // applied; used often enough to stay helpers. Single-signal panels render
+      // the result with asTimeSeries(); multi-signal, pieChart and barGauge
+      // panels append .asTarget(). The rarer aggregation patterns (topk-sum,
+      // bottomk-ratio, ratio-of-averages) are written inline at their panels.
 
       // Overview: topk(1, avg by (<by>) (avg_over_time(<metric>[$__interval:])))
       local topAvg(signal, by) =
@@ -30,35 +32,11 @@ local utils = commonlib.utils;
         .withTopK(1)
         .withLegendFormat('{{' + by + '}}'),
 
-      // Overview: topk(1, sum by (<by>) (sum_over_time(<metric>[$__interval:])))
-      local topSum(signal, by) =
-        signal
-        .withFilteringSelectorMixin(pureSel)
-        .withExprWrappersMixin(['sum_over_time(', '[$__interval:])'])
-        .withExprWrappersMixin(['sum by (' + by + ') (', ')'])
-        .withTopK(1)
-        .withLegendFormat('{{' + by + '}}'),
-
-      // Overview: bottomk(1, avg by (<by>) (avg_over_time(<successRatio>[$__interval:])))
-      local bottomRatio(by) =
-        signals.network.requestSuccessRatio
-        .withFilteringSelectorMixin(pureSel)
-        .withExprWrappersMixin(['avg_over_time(', '[$__interval:])'])
-        .withExprWrappersMixin(['avg by (' + by + ') (', ')'])
-        .withExprWrappersMixin(['bottomk(1, ', ')'])
-        .withLegendFormat('{{' + by + '}}'),
-
       // Performance dashboards: sum by (<by>) (<metric>{testNameSelector})
       local sumBy(signal, by, legend) =
         signal
         .withFilteringSelectorMixin(testSel)
         .withExprWrappersMixin(['sum by (' + by + ') (', ')'])
-        .withLegendFormat(legend),
-
-      // Performance dashboards: ratio-of-averages (aggregation baked in signal)
-      local ratioBy(signal, legend) =
-        signal
-        .withFilteringSelectorMixin(testSel)
         .withLegendFormat(legend),
 
       // Catchpoint Overview dashboard Panels
@@ -99,7 +77,12 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10),
 
       bottomAvgRequestRatioTestName:
-        bottomRatio('test_name')
+        signals.network.requestSuccessRatio
+        .withFilteringSelectorMixin(pureSel)
+        .withExprWrappersMixin(['avg_over_time(', '[$__interval:])'])
+        .withExprWrappersMixin(['avg by (test_name) (', ')'])
+        .withExprWrappersMixin(['bottomk(1, ', ')'])
+        .withLegendFormat('{{test_name}}')
         .withName('Bottom average success request ratio by tests')
         .asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
@@ -108,7 +91,12 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10),
 
       bottomAvgRequestSuccessRatioNodeName:
-        bottomRatio('node_name')
+        signals.network.requestSuccessRatio
+        .withFilteringSelectorMixin(pureSel)
+        .withExprWrappersMixin(['avg_over_time(', '[$__interval:])'])
+        .withExprWrappersMixin(['avg by (node_name) (', ')'])
+        .withExprWrappersMixin(['bottomk(1, ', ')'])
+        .withLegendFormat('{{node_name}}')
         .withName('Bottom average success request ratio by nodes')
         .asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
@@ -177,7 +165,12 @@ local utils = commonlib.utils;
         + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
 
       topErrorsByTestName:
-        topSum(signals.errors.anyError, 'test_name')
+        signals.errors.anyError
+        .withFilteringSelectorMixin(pureSel)
+        .withExprWrappersMixin(['sum_over_time(', '[$__interval:])'])
+        .withExprWrappersMixin(['sum by (test_name) (', ')'])
+        .withTopK(1)
+        .withLegendFormat('{{test_name}}')
         .asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
@@ -308,7 +301,9 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       requestSucessRatio:
-        ratioBy(signals.network.requestSuccessRatioByNode, '{{node_name}}')
+        signals.network.requestSuccessRatioByNode
+        .withFilteringSelectorMixin(testSel)
+        .withLegendFormat('{{node_name}}')
         .asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
@@ -497,7 +492,9 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       requestSucessRatioNodeName:
-        ratioBy(signals.network.requestSuccessRatioByTest, '{{test_name}}')
+        signals.network.requestSuccessRatioByTest
+        .withFilteringSelectorMixin(testSel)
+        .withLegendFormat('{{test_name}}')
         .asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
         + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
