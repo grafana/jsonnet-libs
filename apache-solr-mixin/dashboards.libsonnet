@@ -52,16 +52,10 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       variables
     );
 
-    // Inline row separator (no rows.libsonnet abstraction).
-    local row(title) = g.panel.row.new(title);
-    // withPanels + sequential panel ids, preserving explicit gridPos.
-    local withPanels(arr) =
-      g.dashboard.withPanels(std.mapWithIndex(function(i, p) p { id: i + 2 }, arr));
-
     {
       'apache-solr-cluster-overview.json':
         g.dashboard.new(prefix + ' cluster overview')
-        + withPanels([
+        + g.dashboard.withPanels([
           panels.liveNodes { gridPos: { h: 6, w: 6, x: 0, y: 0 } },
           panels.zookeeperStatus { gridPos: { h: 6, w: 6, x: 6, y: 0 } },
           panels.zookeeperEnsembleSize { gridPos: { h: 6, w: 6, x: 12, y: 0 } },
@@ -70,14 +64,14 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           panels.shardStatus { gridPos: { h: 6, w: 8, x: 4, y: 6 } },
           panels.replicaState { gridPos: { h: 6, w: 4, x: 12, y: 6 } },
           panels.replicaStatus { gridPos: { h: 6, w: 8, x: 16, y: 6 } },
-          row('Top metrics') { gridPos: { h: 1, w: 24, x: 0, y: 12 } },
+          g.panel.row.new('Top metrics') { gridPos: { h: 1, w: 24, x: 0, y: 12 } },
           panels.topCPULoadByNode { gridPos: { h: 6, w: 12, x: 0, y: 13 } },
           panels.topHeapMemoryUsageByNode { gridPos: { h: 6, w: 12, x: 12, y: 13 } },
           panels.topMeanQueriesByNode { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
           panels.topUpdateHandlersByNode { gridPos: { h: 6, w: 12, x: 12, y: 19 } },
           panels.topIndexSizeByNode { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
           panels.topCacheHitRatioByNode { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
-          row('Errors') { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
+          g.panel.row.new('Errors') { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
           panels.topCoreErrorsByNode { gridPos: { h: 6, w: 12, x: 0, y: 32 } },
           panels.topNodeErrors { gridPos: { h: 6, w: 12, x: 12, y: 32 } },
         ])
@@ -95,7 +89,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
 
       'apache-solr-query-performance.json':
         g.dashboard.new(prefix + ' query performance')
-        + withPanels([
+        + g.dashboard.withPanels([
           panels.updateHandlers { gridPos: { h: 6, w: 24, x: 0, y: 0 } },
           panels.coreSearchAndRetrievalQueryLoad { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
           panels.specializedQueryLoad { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
@@ -103,20 +97,20 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           panels.specialized95pQueryLatency { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
           panels.coreSearchAndRetrieval99pQueryLatency { gridPos: { h: 6, w: 12, x: 0, y: 18 } },
           panels.specialized99pQueryLatency { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
-          row('Local queries') { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
+          g.panel.row.new('Local queries') { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
           panels.coreSearchAndRetrievalLocalQueryLoad { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
           panels.specializedLocalQueryLoad { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
           panels.coreSearchAndRetrievalLocal95pQueryLatency { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
           panels.specializedLocal95pQueryLatency { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
           panels.coreSearchAndRetrievalLocal99pQueryLatency { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
           panels.specializedLocal99pQueryLatency { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
-          row('Cache metrics') { gridPos: { h: 1, w: 24, x: 0, y: 43 } },
+          g.panel.row.new('Cache metrics') { gridPos: { h: 1, w: 24, x: 0, y: 43 } },
           panels.cacheEvictions { gridPos: { h: 6, w: 12, x: 0, y: 49 } },
           panels.cacheHitRatio { gridPos: { h: 6, w: 12, x: 12, y: 49 } },
-          row('Timeouts') { gridPos: { h: 1, w: 24, x: 0, y: 55 } },
+          g.panel.row.new('Timeouts') { gridPos: { h: 1, w: 24, x: 0, y: 55 } },
           panels.coreTimeouts { gridPos: { h: 6, w: 12, x: 0, y: 61 } },
           panels.nodeTimeouts { gridPos: { h: 6, w: 12, x: 12, y: 61 } },
-          row('Errors') { gridPos: { h: 1, w: 24, x: 0, y: 66 } },
+          g.panel.row.new('Errors') { gridPos: { h: 1, w: 24, x: 0, y: 66 } },
           panels.queryErrorRate { gridPos: { h: 6, w: 12, x: 0, y: 72 } },
           panels.queryClientErrors { gridPos: { h: 6, w: 12, x: 12, y: 72 } },
         ])
@@ -133,19 +127,19 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
 
       'apache-solr-resource-monitoring.json':
         g.dashboard.new(prefix + ' resource monitoring')
-        + withPanels([
+        + g.dashboard.withPanels([
           panels.connections { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
           panels.threads { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
           panels.nodeCoreFSUsage { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
           panels.numberOfFileDescriptors { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
-          row('JVM metrics') { gridPos: { h: 1, w: 24, x: 0, y: 12 } },
+          g.panel.row.new('JVM metrics') { gridPos: { h: 1, w: 24, x: 0, y: 12 } },
           panels.garbageCollections { gridPos: { h: 6, w: 12, x: 0, y: 13 } },
           panels.garbageCollectionTime { gridPos: { h: 6, w: 12, x: 12, y: 13 } },
           panels.cpuAverageLoad { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
           panels.osMemory { gridPos: { h: 6, w: 12, x: 12, y: 19 } },
           panels.memoryUsed { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
           panels.memoryCommitted { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
-          row('Jetty metrics') { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
+          g.panel.row.new('Jetty metrics') { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
           panels.requests { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
           panels.responses { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
           panels.dispatches { gridPos: { h: 6, w: 24, x: 0, y: 43 } },
