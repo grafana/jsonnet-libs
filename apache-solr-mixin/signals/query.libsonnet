@@ -24,10 +24,10 @@ function(this)
         },
       },
       queryMeanRate: {
-        name: 'Mean queries',
+        name: 'Top cores by mean queries',
         nameShort: 'Mean queries',
         type: 'raw',
-        description: 'Average rate of query processing in the cluster.',
+        description: 'Top cores by the average rate of query processing in the cluster.',
         unit: 'reqps',
         sources: {
           prometheus: {
@@ -37,10 +37,10 @@ function(this)
         },
       },
       queryLoad5min: {
-        name: 'Core search query load',
+        name: 'Core search and retrieval query load',
         nameShort: 'Query load',
         type: 'raw',
-        description: 'Average rate of queries per second over a 5-minute period for core search and retrieval operations.',
+        description: 'Measures the average rate of queries per second over a 5-minute period for core search and retrieval operations.',
         unit: 'reqps',
         sources: {
           prometheus: {
@@ -50,10 +50,10 @@ function(this)
         },
       },
       queryP95: {
-        name: 'Core search 95p query latency',
+        name: 'Core search and retrieval 95p query latency',
         nameShort: 'Query p95',
         type: 'raw',
-        description: '95th percentile latency for core search and retrieval queries.',
+        description: 'Represents the 95th percentile latency for core search and retrieval queries.',
         unit: 'ms',
         sources: {
           prometheus: {
@@ -63,10 +63,10 @@ function(this)
         },
       },
       queryP99: {
-        name: 'Core search 99p query latency',
+        name: 'Core search and retrieval 99p query latency',
         nameShort: 'Query p99',
         type: 'raw',
-        description: '99th percentile latency for core search and retrieval queries.',
+        description: 'Represents the 99th percentile latency for core search and retrieval queries, measured in milliseconds.',
         unit: 'ms',
         sources: {
           prometheus: {
@@ -76,10 +76,10 @@ function(this)
         },
       },
       queryLocalLoad5min: {
-        name: 'Core search local query load',
+        name: 'Core search and retrieval local query load',
         nameShort: 'Local query load',
         type: 'raw',
-        description: 'Average rate of local queries per second over a 5-minute period for core search and retrieval operations.',
+        description: 'Indicates the average rate of local queries per second over a 5-minute period for core search and retrieval operations.',
         unit: 'reqps',
         sources: {
           prometheus: {
@@ -89,10 +89,10 @@ function(this)
         },
       },
       queryLocalP95: {
-        name: 'Core search local 95p query latency',
+        name: 'Core search and retrieval local p95 query latency',
         nameShort: 'Local query p95',
         type: 'raw',
-        description: '95th percentile latency for local core search and retrieval queries.',
+        description: 'Represents the 95th percentile latency for local core search and retrieval queries.',
         unit: 'ms',
         sources: {
           prometheus: {
@@ -102,10 +102,10 @@ function(this)
         },
       },
       queryLocalP99: {
-        name: 'Core search local 99p query latency',
+        name: 'Core search and retrieval 99p local query latency',
         nameShort: 'Local query p99',
         type: 'raw',
-        description: '99th percentile latency for local core search and retrieval queries.',
+        description: 'Represents the 99th percentile latency for local core search and retrieval queries.',
         unit: 'ms',
         sources: {
           prometheus: {
@@ -118,7 +118,7 @@ function(this)
         name: 'Specialized query load',
         nameShort: 'Specialized load',
         type: 'raw',
-        description: 'Average rate of specialized queries per second over a 5-minute period.',
+        description: 'Measures the average rate of specialized queries per second over a 5-minute period.',
         unit: 'reqps',
         sources: {
           prometheus: {
@@ -131,7 +131,7 @@ function(this)
         name: 'Specialized 95p query latency',
         nameShort: 'Specialized p95',
         type: 'raw',
-        description: '95th percentile latency for specialized query types.',
+        description: 'Displays the 993ith percentile latency for specialized query types.',
         unit: 'ms',
         sources: {
           prometheus: {
@@ -144,7 +144,7 @@ function(this)
         name: 'Specialized 99p query latency',
         nameShort: 'Specialized p99',
         type: 'raw',
-        description: '99th percentile latency for specialized query types.',
+        description: 'Displays the 99th percentile latency for specialized query types.',
         unit: 'ms',
         sources: {
           prometheus: {
@@ -157,7 +157,7 @@ function(this)
         name: 'Specialized local query load',
         nameShort: 'Spec local load',
         type: 'raw',
-        description: 'Average rate of local specialized queries per second over a 5-minute period.',
+        description: 'Indicates the average rate of local specialized queries per second over a 5-minute period.',
         unit: 'reqps',
         sources: {
           prometheus: {
@@ -170,7 +170,7 @@ function(this)
         name: 'Specialized local 95p query latency',
         nameShort: 'Spec local p95',
         type: 'raw',
-        description: '95th percentile latency for specialized local queries.',
+        description: 'Shows the 95th percentile latency for specialized local queries.',
         unit: 'ms',
         sources: {
           prometheus: {
@@ -183,7 +183,7 @@ function(this)
         name: 'Specialized local 99p query latency',
         nameShort: 'Spec local p99',
         type: 'raw',
-        description: '99th percentile latency for specialized local queries.',
+        description: 'Shows the 99th percentile latency for specialized local queries.',
         unit: 'ms',
         sources: {
           prometheus: {
@@ -193,10 +193,10 @@ function(this)
         },
       },
       cacheEvictions: {
-        name: 'Cache evictions',
+        name: 'Cache evictions / $__interval',
         nameShort: 'Cache evictions',
         type: 'raw',
-        description: 'Number of cache evictions.',
+        description: 'Tracks the number of cache evictions.',
         unit: 'none',
         sources: {
           prometheus: {
@@ -232,10 +232,10 @@ function(this)
         },
       },
       coreTimeouts: {
-        name: 'Core timeouts',
+        name: 'Core timeouts / $__interval',
         nameShort: 'Core timeouts',
         type: 'raw',
-        description: 'Increase in query timeouts at the core level over the specified interval.',
+        description: 'Tracks the increase in the number of query timeouts over the specified time interval.',
         unit: 'none',
         sources: {
           prometheus: {
@@ -245,10 +245,10 @@ function(this)
         },
       },
       nodeTimeouts: {
-        name: 'Node timeouts',
+        name: 'Node timeouts / $__interval',
         nameShort: 'Node timeouts',
         type: 'raw',
-        description: 'Increase in node-level query timeouts over the specified interval.',
+        description: 'Tracks the increase in node-level query timeouts over the specified interval.',
         unit: 'none',
         sources: {
           prometheus: {
@@ -261,8 +261,8 @@ function(this)
         name: 'Query error rate',
         nameShort: 'Query errors',
         type: 'raw',
-        description: 'Rate of query errors over a 1-minute period.',
-        unit: 'errors/min',
+        description: 'Measures the rate of query errors over a 1-minute period.',
+        unit: 'errors / min',
         sources: {
           prometheus: {
             expr: 'avg by(job, base_url, collection, core) (solr_metrics_core_query_errors_1minRate{%(queriesSelector)s})',
@@ -271,11 +271,11 @@ function(this)
         },
       },
       queryClientErrors: {
-        name: 'Query client error rate',
+        name: 'Query client errors',
         nameShort: 'Client errors',
         type: 'raw',
-        description: 'Rate of client errors over a 1-minute period.',
-        unit: 'errors/min',
+        description: 'This metric represents the rate of client errors over a 1-minute period.',
+        unit: 'errors / min',
         sources: {
           prometheus: {
             expr: 'avg by(job, base_url, collection, core) (solr_metrics_core_query_client_errors_1minRate{%(queriesSelector)s})',

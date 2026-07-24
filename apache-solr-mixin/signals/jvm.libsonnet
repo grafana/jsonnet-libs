@@ -11,10 +11,10 @@ function(this)
     },
     signals: {
       garbageCollections: {
-        name: 'Garbage collections',
+        name: 'Garbage collections / $__interval',
         nameShort: 'GC count',
         type: 'raw',
-        description: 'Total number of garbage collection events.',
+        description: 'Counts the total number of garbage collection events.',
         unit: 'none',
         sources: {
           prometheus: {
@@ -24,10 +24,10 @@ function(this)
         },
       },
       garbageCollectionTime: {
-        name: 'Garbage collection time',
+        name: 'Garbage collection time / $__interval',
         nameShort: 'GC time',
         type: 'raw',
-        description: 'Average time per garbage collection event.',
+        description: 'Total time spent in garbage collection.',
         unit: 's',
         sources: {
           prometheus: {
@@ -180,10 +180,10 @@ function(this)
         },
       },
       heapMemoryUsage: {
-        name: 'Heap memory usage',
+        name: 'Top nodes by heap memory usage',
         nameShort: 'Heap usage',
         type: 'raw',
-        description: 'JVM heap memory usage per node.',
+        description: 'Top nodes by the JVM heap memory usage.',
         unit: 'percent',
         sources: {
           prometheus: {

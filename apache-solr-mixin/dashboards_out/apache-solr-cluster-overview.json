@@ -42,7 +42,21 @@
                      ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Live nodes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -265,7 +279,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Zookeeper ensemble size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -376,7 +404,21 @@
                      ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Running shards"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -631,7 +673,21 @@
                      ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Running replicas"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1062,7 +1118,21 @@
                      ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top nodes by heap memory usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1092,7 +1162,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{base_url}}",
-                  "refId": "Heap memory usage"
+                  "refId": "Top nodes by heap memory usage"
                }
             ],
             "title": "Top nodes by heap memory usage",
@@ -1122,7 +1192,21 @@
                      "steps": [ ]
                   },
                   "unit": "reqps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top cores by mean queries"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "reqps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1152,7 +1236,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
-                  "refId": "Mean queries"
+                  "refId": "Top cores by mean queries"
                }
             ],
             "title": "Top cores by mean queries",
@@ -1243,7 +1327,21 @@
                      "steps": [ ]
                   },
                   "unit": "bytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top cores by index size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1273,7 +1371,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}}",
-                  "refId": "Index size"
+                  "refId": "Top cores by index size"
                }
             ],
             "title": "Top cores by index size",
@@ -1389,7 +1487,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top cores by core errors / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1398,6 +1510,7 @@
                "y": 32
             },
             "id": 17,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1418,9 +1531,8 @@
                   "expr": "topk($k,\n  avg by (job, solr_cluster, collection, core, baseurl) (increase(solr_metrics_core_errors_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:]))\n)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{collection}} - {{core}}",
-                  "refId": "Core errors"
+                  "refId": "Top cores by core errors / $__interval"
                }
             ],
             "title": "Top cores by core errors / $__interval",
@@ -1450,7 +1562,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top nodes by node errors / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1459,6 +1585,7 @@
                "y": 32
             },
             "id": 18,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1479,9 +1606,8 @@
                   "expr": "topk($k,\n  avg by (job, base_url, solr_cluster, collection) (increase(solr_metrics_node_errors_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\"}[$__interval:]))\n)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{base_url}}",
-                  "refId": "Node errors"
+                  "refId": "Top nodes by node errors / $__interval"
                }
             ],
             "title": "Top nodes by node errors / $__interval",

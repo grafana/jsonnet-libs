@@ -63,10 +63,10 @@ function(this)
         },
       },
       nodeErrors: {
-        name: 'Node errors',
+        name: 'Top nodes by node errors / $__interval',
         nameShort: 'Node errors',
         type: 'raw',
-        description: 'Solr node errors.',
+        description: 'Top nodes by Solr node errors.',
         unit: 'none',
         sources: {
           prometheus: {
@@ -76,10 +76,10 @@ function(this)
         },
       },
       coreErrors: {
-        name: 'Core errors',
+        name: 'Top cores by core errors / $__interval',
         nameShort: 'Core errors',
         type: 'raw',
-        description: 'Solr core errors.',
+        description: 'Top cores by Solr core errors.',
         unit: 'none',
         sources: {
           prometheus: {
@@ -115,10 +115,10 @@ function(this)
         },
       },
       indexSize: {
-        name: 'Index size',
+        name: 'Top cores by index size',
         nameShort: 'Index size',
         type: 'raw',
-        description: 'Solr core index size.',
+        description: 'Top cores by the Solr index size.',
         unit: 'bytes',
         sources: {
           prometheus: {

@@ -100,7 +100,21 @@
                      "steps": [ ]
                   },
                   "unit": "reqps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Core search and retrieval query load"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "reqps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -130,7 +144,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
-                  "refId": "Core search query load"
+                  "refId": "Core search and retrieval query load"
                }
             ],
             "title": "Core search and retrieval query load",
@@ -160,7 +174,21 @@
                      "steps": [ ]
                   },
                   "unit": "reqps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Specialized query load"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "reqps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -220,7 +248,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Core search and retrieval 95p query latency"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -250,7 +292,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
-                  "refId": "Core search 95p query latency"
+                  "refId": "Core search and retrieval 95p query latency"
                }
             ],
             "title": "Core search and retrieval 95p query latency",
@@ -280,7 +322,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Specialized 95p query latency"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -340,7 +396,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Core search and retrieval 99p query latency"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -370,7 +440,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
-                  "refId": "Core search 99p query latency"
+                  "refId": "Core search and retrieval 99p query latency"
                }
             ],
             "title": "Core search and retrieval 99p query latency",
@@ -400,7 +470,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Specialized 99p query latency"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -472,7 +556,21 @@
                      "steps": [ ]
                   },
                   "unit": "reqps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Core search and retrieval local query load"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "reqps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -502,7 +600,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
-                  "refId": "Core search local query load"
+                  "refId": "Core search and retrieval local query load"
                }
             ],
             "title": "Core search and retrieval local query load",
@@ -532,7 +630,21 @@
                      "steps": [ ]
                   },
                   "unit": "reqps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Specialized local query load"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "reqps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -592,7 +704,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Core search and retrieval local p95 query latency"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -622,7 +748,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
-                  "refId": "Core search local 95p query latency"
+                  "refId": "Core search and retrieval local p95 query latency"
                }
             ],
             "title": "Core search and retrieval local p95 query latency",
@@ -652,7 +778,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Specialized local 95p query latency"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -712,7 +852,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Core search and retrieval 99p local query latency"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -742,7 +896,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}} - {{searchHandler}}",
-                  "refId": "Core search local 99p query latency"
+                  "refId": "Core search and retrieval 99p local query latency"
                }
             ],
             "title": "Core search and retrieval 99p local query latency",
@@ -772,7 +926,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Specialized local 99p query latency"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -844,7 +1012,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Cache evictions / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -853,6 +1035,7 @@
                "y": 49
             },
             "id": 16,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -873,9 +1056,8 @@
                   "expr": "avg by(type, job, base_url, collection, core) (increase(solr_metrics_core_searcher_cache{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", type=~\"documentCache|filterCache|queryResultCache\", item=~\"evictions\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{collection}} - {{core}} - {{type}}",
-                  "refId": "Cache evictions"
+                  "refId": "Cache evictions / $__interval"
                }
             ],
             "title": "Cache evictions / $__interval",
@@ -987,7 +1169,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Core timeouts / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -996,6 +1192,7 @@
                "y": 61
             },
             "id": 19,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1016,9 +1213,8 @@
                   "expr": "avg by(job, base_url, collection, core) (increase(solr_metrics_core_timeouts_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{collection}} - {{core}}",
-                  "refId": "Core timeouts"
+                  "refId": "Core timeouts / $__interval"
                }
             ],
             "title": "Core timeouts / $__interval",
@@ -1048,7 +1244,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Node timeouts / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1057,6 +1267,7 @@
                "y": 61
             },
             "id": 20,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1077,9 +1288,8 @@
                   "expr": "avg by(job, base_url) (increase(solr_metrics_node_timeouts_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{base_url}}",
-                  "refId": "Node timeouts"
+                  "refId": "Node timeouts / $__interval"
                }
             ],
             "title": "Node timeouts / $__interval",
@@ -1121,7 +1331,21 @@
                      "steps": [ ]
                   },
                   "unit": "errors / min"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Query error rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "errors / min"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1181,7 +1405,21 @@
                      "steps": [ ]
                   },
                   "unit": "errors / min"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Query client errors"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "errors / min"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1211,7 +1449,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{collection}} - {{core}}",
-                  "refId": "Query client error rate"
+                  "refId": "Query client errors"
                }
             ],
             "title": "Query client errors",

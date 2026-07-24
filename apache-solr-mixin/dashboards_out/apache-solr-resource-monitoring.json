@@ -39,7 +39,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -170,7 +184,21 @@
                      "steps": [ ]
                   },
                   "unit": "bytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Node core FS usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -230,7 +258,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "File descriptors"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -302,7 +344,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Garbage collections / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -311,6 +367,7 @@
                "y": 13
             },
             "id": 6,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -331,9 +388,8 @@
                   "expr": "avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{base_url}} - {{item}}",
-                  "refId": "Garbage collections"
+                  "refId": "Garbage collections / $__interval"
                }
             ],
             "title": "Garbage collections / $__interval",
@@ -363,7 +419,21 @@
                      "steps": [ ]
                   },
                   "unit": "s"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Garbage collection time / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -372,6 +442,7 @@
                "y": 13
             },
             "id": 7,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -392,9 +463,8 @@
                   "expr": "avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_seconds_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:]) / clamp_min(increase(solr_metrics_jvm_gc_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:]), 1)) > 0",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{base_url}} - {{item}}",
-                  "refId": "Garbage collection time"
+                  "refId": "Garbage collection time / $__interval"
                }
             ],
             "title": "Garbage collection time / $__interval",
@@ -734,7 +804,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Requests  / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -743,6 +827,7 @@
                "y": 37
             },
             "id": 13,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -763,9 +848,8 @@
                   "expr": "avg by (job, solr_cluster, base_url, method) (increase(solr_metrics_jetty_requests_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{base_url}} - {{method}}",
-                  "refId": "Requests"
+                  "refId": "Requests  / $__interval"
                }
             ],
             "title": "Requests  / $__interval",
@@ -795,7 +879,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Responses  / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -804,6 +902,7 @@
                "y": 37
             },
             "id": 14,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -824,9 +923,8 @@
                   "expr": "avg by (job, solr_cluster, base_url, status) (increase(solr_metrics_jetty_response_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{base_url}} - {{status}}",
-                  "refId": "Responses"
+                  "refId": "Responses  / $__interval"
                }
             ],
             "title": "Responses  / $__interval",
@@ -856,7 +954,21 @@
                      "steps": [ ]
                   },
                   "unit": "none"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Dispatches  / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -865,6 +977,7 @@
                "y": 43
             },
             "id": 15,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -885,9 +998,8 @@
                   "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_jetty_dispatches_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{base_url}}",
-                  "refId": "Dispatches"
+                  "refId": "Dispatches  / $__interval"
                }
             ],
             "title": "Dispatches  / $__interval",

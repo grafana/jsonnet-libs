@@ -80,7 +80,7 @@ function(this)
         name: 'Running replicas',
         nameShort: 'Running replicas',
         type: 'raw',
-        description: 'Shows the total percent of running replicas in the cluster.',
+        description: 'Shows the total percent of running shards in the cluster.',
         unit: 'percent',
         sources: {
           prometheus: {
