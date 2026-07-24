@@ -142,6 +142,7 @@
                   "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_submitted_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", executor=\"updateOnlyExecutor\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{base_url}} - submitted",
                   "refId": "Threads submitted"
                },
@@ -153,6 +154,7 @@
                   "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_completed_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", executor=\"updateOnlyExecutor\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{base_url}} - completed",
                   "refId": "Threads completed"
                }
@@ -388,6 +390,7 @@
                   "expr": "avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{base_url}} - {{item}}",
                   "refId": "Garbage collections / $__interval"
                }
@@ -463,6 +466,7 @@
                   "expr": "avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_seconds_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:]) / clamp_min(increase(solr_metrics_jvm_gc_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:]), 1)) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{base_url}} - {{item}}",
                   "refId": "Garbage collection time / $__interval"
                }
@@ -848,6 +852,7 @@
                   "expr": "avg by (job, solr_cluster, base_url, method) (increase(solr_metrics_jetty_requests_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{base_url}} - {{method}}",
                   "refId": "Requests  / $__interval"
                }
@@ -923,6 +928,7 @@
                   "expr": "avg by (job, solr_cluster, base_url, status) (increase(solr_metrics_jetty_response_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{base_url}} - {{status}}",
                   "refId": "Responses  / $__interval"
                }
@@ -998,6 +1004,7 @@
                   "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_jetty_dispatches_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{base_url}}",
                   "refId": "Dispatches  / $__interval"
                }

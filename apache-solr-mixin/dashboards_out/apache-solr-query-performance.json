@@ -69,6 +69,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{collection}} - {{core}}",
                   "refId": "Update handlers"
                }
@@ -1056,6 +1057,7 @@
                   "expr": "avg by(type, job, base_url, collection, core) (increase(solr_metrics_core_searcher_cache{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\", type=~\"documentCache|filterCache|queryResultCache\", item=~\"evictions\"}[$__interval:])) > 0",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{collection}} - {{core}} - {{type}}",
                   "refId": "Cache evictions / $__interval"
                }
@@ -1213,6 +1215,7 @@
                   "expr": "avg by(job, base_url, collection, core) (increase(solr_metrics_core_timeouts_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\",collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{collection}} - {{core}}",
                   "refId": "Core timeouts / $__interval"
                }
@@ -1288,6 +1291,7 @@
                   "expr": "avg by(job, base_url) (increase(solr_metrics_node_timeouts_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:]))",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{base_url}}",
                   "refId": "Node timeouts / $__interval"
                }

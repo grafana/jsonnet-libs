@@ -1296,6 +1296,7 @@
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
+                  "intervalFactor": 2,
                   "legendFormat": "{{collection}} - {{core}}",
                   "refId": "Update handlers"
                }
@@ -1531,6 +1532,7 @@
                   "expr": "topk($k,\n  avg by (job, solr_cluster, collection, core, baseurl) (increase(solr_metrics_core_errors_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",collection=~\"$solr_collection\", core=~\"$solr_core\"}[$__interval:]))\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{collection}} - {{core}}",
                   "refId": "Top cores by core errors / $__interval"
                }
@@ -1606,6 +1608,7 @@
                   "expr": "topk($k,\n  avg by (job, base_url, solr_cluster, collection) (increase(solr_metrics_node_errors_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\"}[$__interval:]))\n)",
                   "format": "time_series",
                   "instant": false,
+                  "intervalFactor": 2,
                   "legendFormat": "{{base_url}}",
                   "refId": "Top nodes by node errors / $__interval"
                }
