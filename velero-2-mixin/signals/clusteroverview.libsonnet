@@ -14,7 +14,7 @@ function(this)
       prometheus: 'velero_backup_success_total',
     },
     signals: {
-      succesfulBackups: {
+      successfulBackups: {
         name: 'Successful backups / $__interval ',
         nameShort: 'Backups',
         type: 'raw',
@@ -38,11 +38,11 @@ function(this)
           },
         },
       },
-      succesfulRestores: {
-        name: 'Succesful restores / $__interval ',
+      successfulRestores: {
+        name: 'Successful restores / $__interval ',
         nameShort: 'Restores',
         type: 'raw',
-        description: 'Number of succesful restores across all clusters.',
+        description: 'Number of successful restores across all clusters.',
         sources: {
           prometheus: {
             expr: 'sum by (cluster) ((increase(velero_restore_success_total{%(queriesSelector)s}[$__interval:])))',

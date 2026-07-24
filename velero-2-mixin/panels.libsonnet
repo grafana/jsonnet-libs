@@ -10,7 +10,7 @@ local utils = commonlib.utils;
 
       // create stat panel using commonlib
       successfulBackupsCount:
-        signals.clusterOverview.succesfulBackups.asStat()
+        signals.clusterOverview.successfulBackups.asStat()
         + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('area'),
 
@@ -20,7 +20,7 @@ local utils = commonlib.utils;
         + stat.options.withGraphMode('area'),
 
       successfulRestores:
-        signals.clusterOverview.succesfulRestores.asStat()
+        signals.clusterOverview.successfulRestores.asStat()
         + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('area'),
       failedRestores:
@@ -139,7 +139,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       successfulBackups:
-        signals.overview.succesfulBackupsStat.asStat()
+        signals.overview.successfulBackupsStat.asStat()
         + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('area'),
       failedBackups:

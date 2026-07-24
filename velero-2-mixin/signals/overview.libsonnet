@@ -38,7 +38,7 @@ function(this)
           },
         },
       },
-      succesfulBackupsStat: {
+      successfulBackupsStat: {
         name: 'Successful backups / $__interval ',
         nameShort: 'Backups',
         type: 'raw',

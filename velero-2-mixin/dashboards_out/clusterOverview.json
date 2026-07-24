@@ -159,7 +159,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of succesful restores across all clusters.",
+            "description": "Number of successful restores across all clusters.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -181,7 +181,7 @@
                   {
                      "matcher": {
                         "id": "byFrameRefID",
-                        "options": "Succesful restores / $__interval "
+                        "options": "Successful restores / $__interval "
                      },
                      "properties": [
                         {
@@ -218,10 +218,10 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Restores",
-                  "refId": "Succesful restores / $__interval "
+                  "refId": "Successful restores / $__interval "
                }
             ],
-            "title": "Succesful restores / $__interval ",
+            "title": "Successful restores / $__interval ",
             "type": "stat"
          },
          {
