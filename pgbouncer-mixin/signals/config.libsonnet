@@ -19,7 +19,7 @@ function(this)
         name: 'Max user connections',
         description: 'Maximum number of server connections per user allowed.',
         type: 'gauge',
-        unit: 'short',
+        unit: '',
         sources: {
           prometheus: {
             expr: 'pgbouncer_config_max_user_connections{%(queriesSelector)s}',
@@ -30,7 +30,7 @@ function(this)
         name: 'Max client connections',
         description: 'Maximum number of client connections allowed.',
         type: 'gauge',
-        unit: 'short',
+        unit: '',
         sources: {
           prometheus: {
             expr: 'pgbouncer_config_max_client_connections{%(queriesSelector)s}',

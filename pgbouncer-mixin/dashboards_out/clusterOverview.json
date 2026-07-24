@@ -19,7 +19,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top databases by current number of active client connections.\n",
+            "description": "Top databases by current number of active client connections.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -38,7 +38,21 @@
                      "steps": [ ]
                   },
                   "unit": "conn"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top databases by active connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "conn"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -98,7 +112,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top databases by rate of SQL queries pooled by PgBouncer.\n",
+            "description": "Top databases by rate of SQL queries pooled by PgBouncer.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -117,7 +131,21 @@
                      "steps": [ ]
                   },
                   "unit": "ops"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top databases by queries processed"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ops"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -158,7 +186,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top databases by average duration of queries being processed by PgBouncer.\n",
+            "description": "Top databases by average duration of queries being processed by PgBouncer.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -177,7 +205,21 @@
                      "steps": [ ]
                   },
                   "unit": "s"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top databases by average query duration"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,

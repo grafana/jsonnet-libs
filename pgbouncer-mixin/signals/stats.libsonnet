@@ -28,8 +28,8 @@ function(this)
         },
       },
       stats_query_avg_duration: {
-        name: 'Average query duration',
-        description: 'Average duration of queries processed by PgBouncer per interval.',
+        name: 'Queries average duration / $__interval',
+        description: 'Average duration of queries being processed by PgBouncer.',
         type: 'raw',
         unit: 'ms',
         sources: {
@@ -43,7 +43,7 @@ function(this)
       // Transaction statistics
       stats_sql_transactions_pooled_total: {
         name: 'SQL transaction rate',
-        description: 'Rate of SQL transactions pooled by PgBouncer.',
+        description: 'Rate of SQL transactions pooled.',
         type: 'counter',
         unit: 'ops',
         sources: {
@@ -54,8 +54,8 @@ function(this)
         },
       },
       stats_transaction_avg_duration: {
-        name: 'Average transaction duration',
-        description: 'Average duration of SQL transactions pooled by PgBouncer per interval.',
+        name: 'SQL average transaction duration / $__interval',
+        description: 'Average duration of SQL transactions pooled.',
         type: 'raw',
         unit: 'ms',
         sources: {

@@ -42,8 +42,23 @@
                            "value": 20
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Client waiting connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -92,8 +107,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Active client connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -147,8 +177,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Active server connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -202,8 +247,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Max database connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -257,8 +317,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Max user connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -312,8 +387,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Max client connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -364,7 +454,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of SQL queries pooled by PgBouncer.\n",
+            "description": "Rate of SQL queries pooled by PgBouncer.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -383,7 +473,21 @@
                      "steps": [ ]
                   },
                   "unit": "ops"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Queries processed"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ops"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -424,7 +528,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Average duration of queries being processed by PgBouncer.\n",
+            "description": "Average duration of queries being processed by PgBouncer.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -443,7 +547,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Queries average duration / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -473,7 +591,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{database}}",
-                  "refId": "Average query duration"
+                  "refId": "Queries average duration / $__interval"
                }
             ],
             "title": "Queries average duration / $__interval",
@@ -582,7 +700,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Rate of SQL transactions pooled.\n",
+            "description": "Rate of SQL transactions pooled.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -601,7 +719,21 @@
                      "steps": [ ]
                   },
                   "unit": "ops"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "SQL transaction rate"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ops"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -642,7 +774,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Average duration of SQL transactions pooled.\n",
+            "description": "Average duration of SQL transactions pooled.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -661,7 +793,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "SQL average transaction duration / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -691,7 +837,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{database}}",
-                  "refId": "Average transaction duration"
+                  "refId": "SQL average transaction duration / $__interval"
                }
             ],
             "title": "SQL average transaction duration / $__interval",
@@ -820,7 +966,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Current number of active client connections.\n",
+            "description": "Current number of active client connections.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -839,7 +985,21 @@
                      "steps": [ ]
                   },
                   "unit": "conn"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Active client connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "conn"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -880,7 +1040,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Current number of client connections waiting on a server connection.\n",
+            "description": "Current number of client connections waiting on a server connection.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -899,7 +1059,21 @@
                      "steps": [ ]
                   },
                   "unit": "clients"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Waiting clients"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "clients"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -929,7 +1103,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{database}}",
-                  "refId": "Client waiting connections"
+                  "refId": "Waiting clients"
                }
             ],
             "title": "Waiting clients",
@@ -940,7 +1114,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Age of the oldest unserved client connection in seconds.\n",
+            "description": "Age of the oldest unserved client connection in seconds.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -959,7 +1133,21 @@
                      "steps": [ ]
                   },
                   "unit": "s"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Max client wait time"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,

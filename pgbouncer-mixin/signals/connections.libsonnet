@@ -19,7 +19,9 @@ function(this)
         name: 'Client waiting connections',
         description: 'Current number of client connections waiting on a server connection.',
         type: 'gauge',
-        unit: 'short',
+        // unit '' matches the legacy "Client waiting connections" stat panel (no unit).
+        // The "Waiting clients" timeSeries panel supplies its own unit at the call site.
+        unit: '',
         sources: {
           prometheus: {
             expr: 'pgbouncer_pools_client_waiting_connections{%(queriesSelector)s}',
@@ -31,7 +33,9 @@ function(this)
         name: 'Active client connections',
         description: 'Current number of active client connections.',
         type: 'gauge',
-        unit: 'short',
+        // unit '' matches the legacy "Active client connections" stat panel (no unit).
+        // The granular timeSeries panel supplies its own unit ('conn') at the call site.
+        unit: '',
         sources: {
           prometheus: {
             expr: 'pgbouncer_pools_client_active_connections{%(queriesSelector)s}',
@@ -55,9 +59,9 @@ function(this)
       // Server connection states
       pools_server_active_connections: {
         name: 'Active server connections',
-        description: 'Current number of server connections linked to a client connection.',
+        description: 'Current number of client connections that are linked to a server connection and able to process queries.',
         type: 'gauge',
-        unit: 'short',
+        unit: '',
         sources: {
           prometheus: {
             expr: 'pgbouncer_pools_server_active_connections{%(queriesSelector)s}',
@@ -116,9 +120,9 @@ function(this)
       // Per-database connection limit
       databases_max_connections: {
         name: 'Max database connections',
-        description: 'Maximum number of server connections allowed per database.',
+        description: 'Maximum number of allowed connections for database.',
         type: 'gauge',
-        unit: 'short',
+        unit: '',
         sources: {
           prometheus: {
             expr: 'pgbouncer_databases_max_connections{%(queriesSelector)s}',
