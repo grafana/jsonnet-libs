@@ -127,9 +127,10 @@ function(this)
       },
 
       clientServiceHTTPGRPCRequestRate: {
-        name: 'Client service HTTP/GRPC request rate',
+        name: 'HTTP/GRPC requests sent',
         description: 'Rate of HTTP/GRPC requests sent from this service to server services in the Istio system.',
         type: 'raw',
+        unit: 'reqps',
         sources: {
           prometheus: {
             expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
@@ -139,9 +140,10 @@ function(this)
       },
 
       clientServiceHTTPGRPCAvgRequestDelay: {
-        name: 'Client service HTTP/GRPC average request delay',
+        name: 'HTTP/GRPC request delay',
         description: 'Average latency of HTTP/GRPC requests sent from this service to server services in the Istio system.',
         type: 'raw',
+        unit: 'ms',
         sources: {
           prometheus: {
             expr: |||
@@ -155,9 +157,10 @@ function(this)
       },
 
       clientServiceHTTPGRPCRequestThroughputRate: {
-        name: 'Client service HTTP/GRPC request throughput',
+        name: 'HTTP/GRPC request throughput',
         description: 'Rate of HTTP/GRPC request data sent from this service to server services in the Istio system.',
         type: 'raw',
+        unit: 'Bps',
         sources: {
           prometheus: {
             expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_request_bytes_sum{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
@@ -167,9 +170,10 @@ function(this)
       },
 
       clientServiceHTTPGRPCResponseThroughputRate: {
-        name: 'Client service HTTP/GRPC response throughput',
+        name: 'HTTP/GRPC response throughput',
         description: 'Rate of HTTP/GRPC response data received by this service from server services in the Istio system.',
         type: 'raw',
+        unit: 'Bps',
         sources: {
           prometheus: {
             expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_response_bytes_sum{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
@@ -287,7 +291,7 @@ function(this)
       },
 
       clientServiceGRPCResponses: {
-        name: 'Client service GRPC responses',
+        name: 'GRPC responses / $__interval',
         description: 'The types of GRPC responses received by this service from server services in the Istio system.',
         type: 'raw',
         sources: {
@@ -299,9 +303,10 @@ function(this)
       },
 
       clientServiceTCPRequestThroughputRate: {
-        name: 'Client service TCP request throughput',
+        name: 'TCP request throughput',
         description: 'Rate of TCP request data sent from this service to server services in the Istio system.',
         type: 'raw',
+        unit: 'Bps',
         sources: {
           prometheus: {
             expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_received_bytes_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
@@ -311,9 +316,10 @@ function(this)
       },
 
       clientServiceTCPResponseThroughputRate: {
-        name: 'Client service TCP response throughput',
+        name: 'TCP response throughput',
         description: 'Rate of TCP response data received by this service from server services in the Istio system.',
         type: 'raw',
+        unit: 'Bps',
         sources: {
           prometheus: {
             expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_sent_bytes_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
@@ -323,9 +329,10 @@ function(this)
       },
 
       serverServiceHTTPGRPCRequestRate: {
-        name: 'Server service HTTP/GRPC request rate',
+        name: 'HTTP/GRPC requests received',
         description: 'Rate of HTTP/GRPC requests received by this service from client services in the Istio system.',
         type: 'raw',
+        unit: 'reqps',
         sources: {
           prometheus: {
             expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
@@ -335,9 +342,10 @@ function(this)
       },
 
       serverServiceHTTPGRPCAvgRequestDelay: {
-        name: 'Server service HTTP/GRPC average request delay',
+        name: 'HTTP/GRPC request delay',
         description: 'Average latency of HTTP/GRPC requests received by this service from client services in the Istio system.',
         type: 'raw',
+        unit: 'ms',
         sources: {
           prometheus: {
             expr: |||
@@ -351,9 +359,10 @@ function(this)
       },
 
       serverServiceHTTPGRPCRequestThroughputRate: {
-        name: 'Server service HTTP/GRPC request throughput',
+        name: 'HTTP/GRPC request throughput',
         description: 'Rate of HTTP/GRPC request data received by this service from client services in the Istio system.',
         type: 'raw',
+        unit: 'Bps',
         sources: {
           prometheus: {
             expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_request_bytes_sum{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
@@ -363,9 +372,10 @@ function(this)
       },
 
       serverServiceHTTPGRPCResponseThroughputRate: {
-        name: 'Server service HTTP/GRPC response throughput',
+        name: 'HTTP/GRPC response throughput',
         description: 'Rate of HTTP/GRPC response data sent from this service to client services in the Istio system.',
         type: 'raw',
+        unit: 'Bps',
         sources: {
           prometheus: {
             expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_response_bytes_sum{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
@@ -483,7 +493,7 @@ function(this)
       },
 
       serverServiceGRPCResponses: {
-        name: 'Server service GRPC responses',
+        name: 'GRPC responses / $__interval',
         description: 'The types of GRPC responses sent from this service to client services in the Istio system.',
         type: 'raw',
         sources: {
@@ -495,9 +505,10 @@ function(this)
       },
 
       serverServiceTCPRequestThroughputRate: {
-        name: 'Server service TCP request throughput',
+        name: 'TCP request throughput',
         description: 'Rate of TCP request data received by this service from client services in the Istio system.',
         type: 'raw',
+        unit: 'Bps',
         sources: {
           prometheus: {
             expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_received_bytes_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
@@ -507,9 +518,10 @@ function(this)
       },
 
       serverServiceTCPResponseThroughputRate: {
-        name: 'Server service TCP response throughput',
+        name: 'TCP response throughput',
         description: 'Rate of TCP response data sent from this service to client services in the Istio system.',
         type: 'raw',
+        unit: 'Bps',
         sources: {
           prometheus: {
             expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_sent_bytes_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,

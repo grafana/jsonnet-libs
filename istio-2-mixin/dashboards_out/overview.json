@@ -44,8 +44,23 @@
                            "value": 1
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Proxies"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -68,7 +83,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "",
-                  "refId": "Proxy count"
+                  "refId": "Proxies"
                }
             ],
             "title": "Proxies",
@@ -98,8 +113,23 @@
                            "value": 1
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Gateways"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -122,7 +152,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "",
-                  "refId": "Gateway count"
+                  "refId": "Gateways"
                }
             ],
             "title": "Gateways",
@@ -152,8 +182,23 @@
                            "value": 1
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Virtual services"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -176,7 +221,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "",
-                  "refId": "Virtual service count"
+                  "refId": "Virtual services"
                }
             ],
             "title": "Virtual services",
@@ -225,8 +270,23 @@
                            "value": 1
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Destination rules"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -249,7 +309,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "",
-                  "refId": "Destination rule count"
+                  "refId": "Destination rules"
                }
             ],
             "title": "Destination rules",
@@ -279,8 +339,23 @@
                            "value": 1
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Service entries"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -303,7 +378,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "",
-                  "refId": "Service entry count"
+                  "refId": "Service entries"
                }
             ],
             "title": "Service entries",
@@ -333,8 +408,23 @@
                            "value": 1
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Workload entries"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -357,7 +447,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "",
-                  "refId": "Workload entry count"
+                  "refId": "Workload entries"
                }
             ],
             "title": "Workload entries",

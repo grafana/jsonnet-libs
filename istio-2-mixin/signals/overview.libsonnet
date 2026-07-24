@@ -15,7 +15,7 @@ function(this)
     signals: {
 
       proxyCount: {
-        name: 'Proxy count',
+        name: 'Proxies',
         description: 'Number of proxies in the Istio system.',
         type: 'raw',
         sources: {
@@ -27,7 +27,7 @@ function(this)
       },
 
       gatewayCount: {
-        name: 'Gateway count',
+        name: 'Gateways',
         description: 'Number of gateways in the Istio system.',
         type: 'raw',
         sources: {
@@ -39,7 +39,7 @@ function(this)
       },
 
       virtualServiceCount: {
-        name: 'Virtual service count',
+        name: 'Virtual services',
         description: 'Number of virtual services in the Istio system.',
         type: 'raw',
         sources: {
@@ -51,7 +51,7 @@ function(this)
       },
 
       destinationRuleCount: {
-        name: 'Destination rule count',
+        name: 'Destination rules',
         description: 'Number of destination rules in the Istio system.',
         type: 'raw',
         sources: {
@@ -63,7 +63,7 @@ function(this)
       },
 
       serviceEntryCount: {
-        name: 'Service entry count',
+        name: 'Service entries',
         description: 'Number of service entries in the Istio system.',
         type: 'raw',
         sources: {
@@ -75,7 +75,7 @@ function(this)
       },
 
       workloadEntryCount: {
-        name: 'Workload entry count',
+        name: 'Workload entries',
         description: 'Number of workload entries in the Istio system.',
         type: 'raw',
         sources: {
