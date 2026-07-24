@@ -487,7 +487,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Success rate of backups.\n",
+            "description": "Success rate of backups.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -563,7 +563,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Size of backups for this clusters given schedule.\n",
+            "description": "Size of backups for this clusters given schedule.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -768,7 +768,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Success rate of restores.\n",
+            "description": "Success rate of restores.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -938,7 +938,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Success rate of CSI snapshots.\n",
+            "description": "Success rate of CSI snapshots.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1108,7 +1108,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Success rate of volume snapshots.\n",
+            "description": "Success rate of volume snapshots.",
             "fieldConfig": {
                "defaults": {
                   "color": {

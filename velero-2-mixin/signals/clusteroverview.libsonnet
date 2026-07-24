@@ -140,7 +140,7 @@ function(this)
         nameShort: 'Backup size',
         type: 'raw',
         unit: 'decbytes',
-        description: 'Top clusters by size of backups.\n',
+        description: 'Top clusters by size of backups.',
         sources: {
           prometheus: {
             expr: 'topk by(cluster)($top_cluster_count, sum by (cluster) (velero_backup_tarball_size_bytes{%(queriesSelector)s}))',

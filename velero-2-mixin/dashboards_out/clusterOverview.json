@@ -481,7 +481,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top clusters by size of backups.\n",
+            "description": "Top clusters by size of backups.",
             "fieldConfig": {
                "defaults": {
                   "color": {
