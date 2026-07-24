@@ -1,28 +1,17 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
             "asDropdown": false,
-            "icon": "external link",
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "apache-solr-mixin"
             ],
-            "targetBlank": false,
             "title": "Other Apache Solr dashboards",
-            "type": "dashboards",
-            "url": ""
+            "type": "dashboards"
          }
       ],
       "panels": [
@@ -58,7 +47,7 @@
                "x": 0,
                "y": 0
             },
-            "id": 2,
+            "id": 1,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -118,7 +107,7 @@
                "x": 12,
                "y": 0
             },
-            "id": 3,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -189,7 +178,7 @@
                "x": 0,
                "y": 6
             },
-            "id": 4,
+            "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -249,7 +238,7 @@
                "x": 12,
                "y": 6
             },
-            "id": 5,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -279,17 +268,13 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
                "w": 24,
                "x": 0,
                "y": 12
             },
-            "id": 6,
-            "targets": [ ],
+            "id": 5,
             "title": "JVM metrics",
             "type": "row"
          },
@@ -325,7 +310,7 @@
                "x": 0,
                "y": 13
             },
-            "id": 7,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -386,7 +371,7 @@
                "x": 12,
                "y": 13
             },
-            "id": 8,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -461,7 +446,7 @@
                "x": 0,
                "y": 19
             },
-            "id": 9,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -521,7 +506,7 @@
                "x": 12,
                "y": 19
             },
-            "id": 10,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -603,7 +588,7 @@
                "x": 0,
                "y": 25
             },
-            "id": 11,
+            "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -674,7 +659,7 @@
                "x": 12,
                "y": 25
             },
-            "id": 12,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -715,17 +700,13 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
                "w": 24,
                "x": 0,
                "y": 31
             },
-            "id": 13,
-            "targets": [ ],
+            "id": 12,
             "title": "Jetty metrics",
             "type": "row"
          },
@@ -761,7 +742,7 @@
                "x": 0,
                "y": 37
             },
-            "id": 14,
+            "id": 13,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -822,7 +803,7 @@
                "x": 12,
                "y": 37
             },
-            "id": 15,
+            "id": 14,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -883,7 +864,7 @@
                "x": 0,
                "y": 43
             },
-            "id": 16,
+            "id": 15,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -914,112 +895,71 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "apache-solr-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(solr_metrics_core_errors_total,job)",
+               "query": "label_values(solr_metrics_core_errors_total{}, job)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".*",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 2,
-               "includeAll": true,
-               "label": "Cluster",
-               "multi": true,
-               "name": "cluster",
-               "options": [ ],
-               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, cluster)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Instance",
-               "multi": true,
-               "name": "base_url",
-               "options": [ ],
-               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, base_url)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".+",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
                "includeAll": true,
                "label": "Solr cluster",
                "multi": true,
                "name": "solr_cluster",
-               "options": [ ],
                "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, solr_cluster)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "base_url",
+               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\"}, base_url)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },
@@ -1027,33 +967,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Apache Solr resource monitoring",
-      "uid": "apache-solr-resource-monitoring",
-      "version": 0
+      "uid": "apache-solr-resource-monitoring"
    }

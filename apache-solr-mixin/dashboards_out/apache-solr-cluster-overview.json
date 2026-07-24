@@ -1,28 +1,17 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
             "asDropdown": false,
-            "icon": "external link",
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "apache-solr-mixin"
             ],
-            "targetBlank": false,
             "title": "Other Apache Solr dashboards",
-            "type": "dashboards",
-            "url": ""
+            "type": "dashboards"
          }
       ],
       "panels": [
@@ -61,7 +50,7 @@
                "x": 0,
                "y": 0
             },
-            "id": 2,
+            "id": 1,
             "options": {
                "colorMode": "value",
                "graphMode": "none",
@@ -222,7 +211,7 @@
                "x": 6,
                "y": 0
             },
-            "id": 3,
+            "id": 2,
             "options": {
                "cellHeight": "sm",
                "footer": {
@@ -284,7 +273,7 @@
                "x": 12,
                "y": 0
             },
-            "id": 4,
+            "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -323,7 +312,7 @@
                "x": 18,
                "y": 0
             },
-            "id": 5,
+            "id": 4,
             "options": {
                "alertInstanceLabelFilter": "{job=~\"$job\", solr_cluster=~\"$solr_cluster\"}",
                "alertName": "",
@@ -395,7 +384,7 @@
                "x": 0,
                "y": 6
             },
-            "id": 6,
+            "id": 5,
             "options": {
                "colorMode": "value",
                "graphMode": "none",
@@ -580,7 +569,7 @@
                "x": 4,
                "y": 6
             },
-            "id": 7,
+            "id": 6,
             "options": {
                "cellHeight": "sm",
                "footer": {
@@ -650,7 +639,7 @@
                "x": 12,
                "y": 6
             },
-            "id": 8,
+            "id": 7,
             "options": {
                "colorMode": "value",
                "graphMode": "none",
@@ -919,7 +908,7 @@
                "x": 16,
                "y": 6
             },
-            "id": 9,
+            "id": 8,
             "options": {
                "cellHeight": "sm",
                "footer": {
@@ -951,17 +940,13 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
                "w": 24,
                "x": 0,
                "y": 12
             },
-            "id": 10,
-            "targets": [ ],
+            "id": 9,
             "title": "Top metrics",
             "type": "row"
          },
@@ -1011,7 +996,7 @@
                "x": 0,
                "y": 13
             },
-            "id": 11,
+            "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1085,7 +1070,7 @@
                "x": 12,
                "y": 13
             },
-            "id": 12,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1145,7 +1130,7 @@
                "x": 0,
                "y": 19
             },
-            "id": 13,
+            "id": 12,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1205,7 +1190,7 @@
                "x": 12,
                "y": 19
             },
-            "id": 14,
+            "id": 13,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1266,7 +1251,7 @@
                "x": 0,
                "y": 25
             },
-            "id": 15,
+            "id": 14,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1340,7 +1325,7 @@
                "x": 12,
                "y": 25
             },
-            "id": 16,
+            "id": 15,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1370,17 +1355,13 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
                "w": 24,
                "x": 0,
                "y": 31
             },
-            "id": 17,
-            "targets": [ ],
+            "id": 16,
             "title": "Errors",
             "type": "row"
          },
@@ -1416,7 +1397,7 @@
                "x": 0,
                "y": 32
             },
-            "id": 18,
+            "id": 17,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1477,7 +1458,7 @@
                "x": 12,
                "y": 32
             },
-            "id": 19,
+            "id": 18,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -1508,167 +1489,119 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "apache-solr-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(solr_metrics_core_errors_total,job)",
+               "query": "label_values(solr_metrics_core_errors_total{}, job)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".*",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 2,
-               "includeAll": true,
-               "label": "Cluster",
-               "multi": true,
-               "name": "cluster",
-               "options": [ ],
-               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, cluster)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Solr cluster",
                "multi": true,
                "name": "solr_cluster",
-               "options": [ ],
                "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, solr_cluster)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
-               "allValue": "",
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
                "current": {
+                  "selected": false,
                   "text": "5",
                   "value": "5"
                },
-               "hide": 0,
                "includeAll": false,
                "label": "Top node count",
                "multi": false,
                "name": "k",
                "options": [
                   {
+                     "selected": true,
                      "text": "5",
                      "value": "5"
                   },
                   {
+                     "selected": false,
                      "text": "10",
                      "value": "10"
                   },
                   {
+                     "selected": false,
                      "text": "20",
                      "value": "20"
                   },
                   {
+                     "selected": false,
                      "text": "50",
                      "value": "50"
                   }
                ],
-               "query": "5,10,20,50",
-               "refresh": 0,
+               "query": "5 : 5,10 : 10,20 : 20,50 : 50",
                "type": "custom"
             },
             {
-               "allValue": ".*",
-               "current": { },
+               "allValue": ".+",
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Collection",
                "multi": true,
                "name": "solr_collection",
-               "options": [ ],
                "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, collection)",
                "refresh": 2,
-               "regex": "",
-               "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Core",
                "multi": true,
                "name": "solr_core",
-               "options": [ ],
                "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, core)",
                "refresh": 2,
-               "regex": "",
-               "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             }
          ]
       },
@@ -1676,33 +1609,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Apache Solr cluster overview",
-      "uid": "apache-solr-cluster-overview",
-      "version": 0
+      "uid": "apache-solr-cluster-overview"
    }
