@@ -43,6 +43,17 @@
     // Allow for extra CSS to be injected.
     extra_css: '',
 
+    // Extra directives injected at the top of the nginx `http {}` block, for
+    // configuration that cannot live inside a `location {}`, e.g. `map` blocks.
+    extra_http_config: [],
+    extra_http_config_rendered:
+      local entries = [
+        std.strReplace(std.rstripChars(entry, '\n'), '\n', '\n  ')  // indent by 2 spaces
+        for entry in self.extra_http_config
+        if std.rstripChars(entry, '\n') != ''
+      ];
+      if std.length(entries) == 0 then '' else '\n  ' + std.join('\n', entries),
+
     // Description shown below the title
     description: '',
     description_html: if self.description != '' then '<p class="description">%s</p>' % self.description else '',
