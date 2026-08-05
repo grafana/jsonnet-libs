@@ -59,9 +59,9 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     processConnectionRateLimit: 'haproxy_process_limit_connection_rate{%s}' % $._config.baseMatchers,
     processSessionRateLimit: 'haproxy_process_limit_session_rate{%s}' % $._config.baseMatchers,
     processSslRateLimit: 'haproxy_process_limit_ssl_rate{%s}' % $._config.baseMatchers,
-    backendStatus: 'haproxy_backend_status{%s}' % $._config.baseMatchers,
-    frontendStatus: 'haproxy_frontend_status{%s}' % $._config.baseMatchers,
-    serverStatus: 'haproxy_server_status{%s}' % $._config.backendMatchers,
+    backendStatus: 'haproxy_backend_status{%s} == 1' % $._config.baseMatchers,
+    frontendStatus: 'haproxy_frontend_status{%s} == 1' % $._config.baseMatchers,
+    serverStatus: 'haproxy_server_status{%s} == 1' % $._config.backendMatchers,
     backendBytesInRate: 'rate(haproxy_backend_bytes_in_total{%s}[$__rate_interval])' % $._config.backendMatchers,
     backendBytesOutRate: 'rate(haproxy_backend_bytes_out_total{%s}[$__rate_interval])' % $._config.backendMatchers,
     backendHttpRequestRate: 'rate(haproxy_backend_http_requests_total{%s}[$__rate_interval])' % $._config.backendMatchers,
@@ -128,7 +128,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       },
     },
 
-    // statusUpDownMixin relabels up and down status values and colors them for easy recognition.
+    // statusUpDownMixin relabels the state label values reported by HAProxy and colors them for easy recognition.
     statusUpDownMixin: {
       fieldConfig+: {
         overrides+: [{
@@ -136,25 +136,20 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
           properties: [
             {
               id: 'mappings',
-              value: [
-                { id: 1, type: 1, text: 'Down', value: '0' },
-                { id: 2, type: 1, text: 'Up', value: '1' },
-              ],
+              value: [{
+                type: 'value',
+                options: {
+                  UP: { text: 'Up', color: 'green', index: 0 },
+                  DOWN: { text: 'Down', color: 'red', index: 1 },
+                  MAINT: { text: 'Maintenance', color: 'blue', index: 2 },
+                  DRAIN: { text: 'Drain', color: 'orange', index: 3 },
+                  NOLB: { text: 'No load balancing', color: 'orange', index: 4 },
+                },
+              }],
             },
             {
               id: 'custom.displayMode',
               value: 'color-background',
-            },
-            {
-              id: 'thresholds',
-              value: {
-                mode: 'absolute',
-                steps: [
-                  { color: 'rgba(0,0,0,0)', value: null },
-                  { color: 'red', value: 0 },
-                  { color: 'green', value: 1 },
-                ],
-              },
             },
           ],
         }],
@@ -335,13 +330,14 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
             options: {
               excludeByName: {
                 Time: true,
+                Value: true,
                 __name__: true,
               },
               renameByName: {
                 instance: 'Instance',
                 job: 'Job',
                 proxy: 'Frontend',
-                Value: 'Status',
+                state: 'Status',
               },
             },
           },
@@ -372,13 +368,14 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
             options: {
               excludeByName: {
                 Time: true,
+                Value: true,
                 __name__: true,
               },
               renameByName: {
                 instance: 'Instance',
                 job: 'Job',
                 proxy: 'Backend',
-                Value: 'Status',
+                state: 'Status',
               },
             },
           },
@@ -410,6 +407,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
             options: {
               excludeByName: {
                 Time: true,
+                Value: true,
                 __name__: true,
               },
               renameByName: {
@@ -417,7 +415,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
                 job: 'Job',
                 proxy: 'Backend',
                 server: 'Server',
-                Value: 'Status',
+                state: 'Status',
               },
             },
           },

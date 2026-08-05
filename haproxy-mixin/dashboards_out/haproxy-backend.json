@@ -40,42 +40,40 @@
                            "id": "mappings",
                            "value": [
                               {
-                                 "id": 1,
-                                 "text": "Down",
-                                 "type": 1,
-                                 "value": "0"
-                              },
-                              {
-                                 "id": 2,
-                                 "text": "Up",
-                                 "type": 1,
-                                 "value": "1"
+                                 "options": {
+                                    "DOWN": {
+                                       "color": "red",
+                                       "index": 1,
+                                       "text": "Down"
+                                    },
+                                    "DRAIN": {
+                                       "color": "orange",
+                                       "index": 3,
+                                       "text": "Drain"
+                                    },
+                                    "MAINT": {
+                                       "color": "blue",
+                                       "index": 2,
+                                       "text": "Maintenance"
+                                    },
+                                    "NOLB": {
+                                       "color": "orange",
+                                       "index": 4,
+                                       "text": "No load balancing"
+                                    },
+                                    "UP": {
+                                       "color": "green",
+                                       "index": 0,
+                                       "text": "Up"
+                                    }
+                                 },
+                                 "type": "value"
                               }
                            ]
                         },
                         {
                            "id": "custom.displayMode",
                            "value": "color-background"
-                        },
-                        {
-                           "id": "thresholds",
-                           "value": {
-                              "mode": "absolute",
-                              "steps": [
-                                 {
-                                    "color": "rgba(0,0,0,0)",
-                                    "value": null
-                                 },
-                                 {
-                                    "color": "red",
-                                    "value": 0
-                                 },
-                                 {
-                                    "color": "green",
-                                    "value": 1
-                                 }
-                              ]
-                           }
                         }
                      ]
                   }
@@ -98,7 +96,7 @@
             },
             "targets": [
                {
-                  "expr": "haproxy_server_status{instance=~\"$instance\",job=~\"$job\",proxy=~\"$backend\"}",
+                  "expr": "haproxy_server_status{instance=~\"$instance\",job=~\"$job\",proxy=~\"$backend\"} == 1",
                   "format": "table",
                   "instant": true,
                   "refID": "A"
@@ -110,14 +108,15 @@
                   "options": {
                      "excludeByName": {
                         "Time": true,
+                        "Value": true,
                         "__name__": true
                      },
                      "renameByName": {
-                        "Value": "Status",
                         "instance": "Instance",
                         "job": "Job",
                         "proxy": "Backend",
-                        "server": "Server"
+                        "server": "Server",
+                        "state": "Status"
                      }
                   }
                }
