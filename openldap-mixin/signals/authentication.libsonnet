@@ -14,12 +14,13 @@ function(this)
       authAttempts: {
         name: 'Authentication attempts / $__interval',
         nameShort: 'Auth attempts',
-        type: 'raw',
+        type: 'counter',
         description: 'The total increase of authentication attempts over time.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'increase(openldap_bind{%(queriesSelector)s}[$__interval:])',
+            expr: 'openldap_bind{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate,
           },
         },
@@ -28,12 +29,12 @@ function(this)
       authFailures: {
         name: 'Authentication failures',
         nameShort: 'Auth failures',
-        type: 'raw',
+        type: 'counter',
         description: 'The rate of LDAP authentication failures (non-ok bind results).',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'increase(openldap_bind{%(queriesSelector)s, result!="ok"}[$__rate_interval])',
+            expr: 'openldap_bind{%(queriesSelector)s, result!="ok"}',
             legendCustomTemplate: legendCustomTemplate,
           },
         },
@@ -42,12 +43,12 @@ function(this)
       dialFailures: {
         name: 'Dial failures',
         nameShort: 'Dial failures',
-        type: 'raw',
+        type: 'counter',
         description: 'The rate of LDAP dial failures (non-ok dial results).',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'increase(openldap_dial{%(queriesSelector)s, result!="ok"}[$__rate_interval])',
+            expr: 'openldap_dial{%(queriesSelector)s, result!="ok"}',
             legendCustomTemplate: legendCustomTemplate,
           },
         },

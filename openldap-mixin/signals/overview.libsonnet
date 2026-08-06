@@ -42,12 +42,13 @@ function(this)
       directoryEntries: {
         name: 'Directory entries / $__interval',
         nameShort: 'Entries',
-        type: 'raw',
+        type: 'counter',
         description: 'The total increase of new directory entries added over time.',
         unit: 'none',
         sources: {
           prometheus: {
-            expr: 'increase(openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=Entries,cn=Statistics,cn=Monitor"}[$__interval:])',
+            expr: 'openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=Entries,cn=Statistics,cn=Monitor"}',
+            rangeFunction: 'increase',
             legendCustomTemplate: legendCustomTemplate,
           },
         },
