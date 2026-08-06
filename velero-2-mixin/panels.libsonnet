@@ -35,7 +35,7 @@ local utils = commonlib.utils;
 
       topClustersByBackup:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top clusters by backups / $__interval ',
+          'Top clusters by backups / $__interval',
           targets=[
             signals.clusterOverview.topClustersByBackupSuccess.asTarget(),
             signals.clusterOverview.topClustersByBackupFailure.asTarget(),
@@ -48,7 +48,7 @@ local utils = commonlib.utils;
 
       topClustersByRestore:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top clusters by restores / $__interval ',
+          'Top clusters by restores / $__interval',
           targets=[
             signals.clusterOverview.topClustersByRestoreSuccess.asTarget(),
             signals.clusterOverview.topClustersByRestoreFailure.asTarget(),
@@ -67,7 +67,7 @@ local utils = commonlib.utils;
 
       topClustersByVolumeSnapshots:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top clusters by volume snapshots / $__interval ',
+          'Top clusters by volume snapshots / $__interval',
           targets=[
             signals.clusterOverview.topClustersByVolumeSnapshotSuccess.asTarget(),
             signals.clusterOverview.topClustersByVolumeSnapshotFailure.asTarget(),
@@ -80,7 +80,7 @@ local utils = commonlib.utils;
 
       topClustersByCSISnapshots:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top clusters by CSI snapshots / $__interval ',
+          'Top clusters by CSI snapshots / $__interval',
           targets=[
             signals.clusterOverview.topClustersByCSISnapshotSuccess.asTarget(),
             signals.clusterOverview.topClustersByCSISnapshotFailure.asTarget(),
@@ -89,31 +89,24 @@ local utils = commonlib.utils;
           description='Top clusters by number of CSI snapshots.'
         ),
 
+      // title, description and unit come from the signal
       backupSuccessRate:
-        g.panel.gauge.new('Backup success rate (1 hour)')
-        + g.panel.gauge.queryOptions.withTargets([signals.overview.backupSuccessRateGauge.asTarget()])
-        + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.gauge.panelOptions.withDescription('Success rate of backups within the instance in the past hour.')
+        signals.overview.backupSuccessRateGauge.asGauge()
         + g.panel.gauge.standardOptions.thresholds.withSteps([
           g.panel.gauge.standardOptions.threshold.step.withColor('super-light-red')
           + g.panel.gauge.standardOptions.threshold.step.withValue(0.5),
           g.panel.gauge.standardOptions.threshold.step.withColor('super-light-green')
           + g.panel.gauge.standardOptions.threshold.step.withValue(0.9),
-        ])
-        + g.panel.gauge.standardOptions.withUnit('percentunit'),
+        ]),
 
       restoreSuccessRate:
-        g.panel.gauge.new('Restore success rate (1 hour)')
-        + g.panel.gauge.queryOptions.withTargets([signals.overview.restoreSuccessRateGauge.asTarget()])
-        + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.gauge.panelOptions.withDescription('Success rate of restores within the instance in the past hour.')
+        signals.overview.restoreSuccessRateGauge.asGauge()
         + g.panel.gauge.standardOptions.thresholds.withSteps([
           g.panel.gauge.standardOptions.threshold.step.withColor('super-light-red')
           + g.panel.gauge.standardOptions.threshold.step.withValue(0.5),
           g.panel.gauge.standardOptions.threshold.step.withColor('super-light-green')
           + g.panel.gauge.standardOptions.threshold.step.withValue(0.9),
-        ])
-        + g.panel.gauge.standardOptions.withUnit('percentunit'),
+        ]),
 
       restoreValidationFailure:
         signals.overview.restoreValidationFailure.asStat()
@@ -125,7 +118,7 @@ local utils = commonlib.utils;
         + stat.options.withGraphMode('area'),
       backupCount:
         commonlib.panels.generic.timeSeries.base.new(
-          'Backup count / $__interval ',
+          'Backup count / $__interval',
           targets=[
             signals.overview.backupSuccess.asTarget(),
             signals.overview.backupFailure.asTarget(),
@@ -168,7 +161,7 @@ local utils = commonlib.utils;
 
       restoreCount:
         commonlib.panels.generic.timeSeries.base.new(
-          'Restore count / $__interval ',
+          'Restore count / $__interval',
           targets=[
             signals.overview.restoreSuccess.asTarget(),
             signals.overview.restoreFailure.asTarget(),
@@ -189,7 +182,7 @@ local utils = commonlib.utils;
 
       volumeSnapshotCount:
         commonlib.panels.generic.timeSeries.base.new(
-          'Volume snapshot count / $__interval ',
+          'Volume snapshot count / $__interval',
           targets=[
             signals.overview.volumeSnapshotSuccess.asTarget(),
             signals.overview.volumeSnapshotFailure.asTarget(),
@@ -210,7 +203,7 @@ local utils = commonlib.utils;
 
       csiSnapshotCount:
         commonlib.panels.generic.timeSeries.base.new(
-          'CSI snapshot count / $__interval ',
+          'CSI snapshot count / $__interval',
           targets=[
             signals.overview.csiSnapshotSuccess.asTarget(),
             signals.overview.csiSnapshotFailure.asTarget(),

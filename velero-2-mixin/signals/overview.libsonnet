@@ -1,6 +1,4 @@
 // Signals for the Velero overview dashboard.
-// Signals are type 'raw' with the complete legacy expressions baked in to keep
-// dashboard output identical to the pre-signals implementation.
 function(this)
   {
     filteringSelector: this.filteringSelector,
@@ -10,54 +8,60 @@ function(this)
     enableLokiLogs: this.enableLokiLogs,
     datasource: 'prometheus_datasource',
     aggLevel: 'none',
+    aggFunction: 'sum',
+    rangeFunction: 'increase',
     discoveryMetric: {
       prometheus: 'velero_backup_success_total',
     },
     signals: {
       restoreValidationFailure: {
-        name: 'Restore validation failure / $__interval ',
+        name: 'Restore validation failure / $__interval',
         nameShort: 'Restore validation failures',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of failed restore validations.',
         sources: {
           prometheus: {
-            expr: 'sum(increase(label_replace(velero_restore_validation_failed_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]))',
+            expr: 'label_replace(velero_restore_validation_failed_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
+            exprWrappers: [['sum(', ')']],
             legendCustomTemplate: 'failure',
           },
         },
       },
       backupValidationFailure: {
-        name: 'Backup validation failure / $__interval ',
+        name: 'Backup validation failure / $__interval',
         nameShort: 'Backup validation failures',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of failed backup validations.',
         sources: {
           prometheus: {
-            expr: 'sum(increase(label_replace(velero_backup_validation_failure_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]))',
+            expr: 'label_replace(velero_backup_validation_failure_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
+            exprWrappers: [['sum(', ')']],
             legendCustomTemplate: 'failure',
           },
         },
       },
       successfulBackupsStat: {
-        name: 'Successful backups / $__interval ',
+        name: 'Successful backups / $__interval',
         nameShort: 'Backups',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of successful backups.',
         sources: {
           prometheus: {
-            expr: 'sum(increase(velero_backup_success_total{%(queriesSelector)s}[$__interval:]))',
+            expr: 'velero_backup_success_total{%(queriesSelector)s}',
+            exprWrappers: [['sum(', ')']],
             legendCustomTemplate: 'Backups',
           },
         },
       },
       failedBackupsStat: {
-        name: 'Failed backups / $__interval ',
+        name: 'Failed backups / $__interval',
         nameShort: 'Backups',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of failed backups.',
         sources: {
           prometheus: {
-            expr: 'sum(increase(velero_backup_failure_total{%(queriesSelector)s}[$__interval:]))',
+            expr: 'velero_backup_failure_total{%(queriesSelector)s}',
+            exprWrappers: [['sum(', ')']],
             legendCustomTemplate: 'Backups',
           },
         },
@@ -65,11 +69,11 @@ function(this)
       backupSuccess: {
         name: 'Successful backup count',
         nameShort: 'Backup success',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of successful backups by schedule.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_backup_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:])',
+            expr: 'label_replace(velero_backup_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
             legendCustomTemplate: '{{schedule}} - success',
           },
         },
@@ -77,11 +81,11 @@ function(this)
       backupAttempt: {
         name: 'Attempted backup count',
         nameShort: 'Backup attempts',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of attempted backups by schedule.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_backup_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:])',
+            expr: 'label_replace(velero_backup_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
             legendCustomTemplate: '{{schedule}} - attempt',
           },
         },
@@ -89,11 +93,11 @@ function(this)
       backupFailure: {
         name: 'Failed backup count',
         nameShort: 'Backup failures',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of failed backups by schedule.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_backup_failure_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:])',
+            expr: 'label_replace(velero_backup_failure_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
             legendCustomTemplate: '{{schedule}} - failure',
           },
         },
@@ -127,7 +131,7 @@ function(this)
       backupSize: {
         name: 'Backup size',
         nameShort: 'Backup size',
-        type: 'raw',
+        type: 'gauge',
         unit: 'decbytes',
         description: 'Size of backups for this clusters given schedule.',
         sources: {
@@ -140,12 +144,14 @@ function(this)
       backupTime: {
         name: 'Backup time',
         nameShort: 'Backup time',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'aggKeepLabels',
         unit: 's',
         description: 'The time it took to create backups.',
         sources: {
           prometheus: {
-            expr: 'sum(increase(label_replace(velero_backup_duration_seconds_bucket{le!="+Inf", %(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:])) by (le)',
+            expr: 'label_replace(velero_backup_duration_seconds_bucket{le!="+Inf", %(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
+            aggKeepLabels: ['le'],
             legendCustomTemplate: '',
           },
         },
@@ -153,11 +159,11 @@ function(this)
       restoreSuccess: {
         name: 'Successful restore count',
         nameShort: 'Restore success',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of successful restores by schedule.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_restore_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:])',
+            expr: 'label_replace(velero_restore_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
             legendCustomTemplate: '{{schedule}} - success',
           },
         },
@@ -165,11 +171,11 @@ function(this)
       restoreFailure: {
         name: 'Failed restore count',
         nameShort: 'Restore failures',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of failed restores by schedule.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_restore_failed_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:])',
+            expr: 'label_replace(velero_restore_failed_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
             legendCustomTemplate: '{{schedule}} - failure',
           },
         },
@@ -177,11 +183,11 @@ function(this)
       restoreAttempt: {
         name: 'Attempted restore count',
         nameShort: 'Restore attempts',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of attempted restores by schedule.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_restore_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:])',
+            expr: 'label_replace(velero_restore_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
             legendCustomTemplate: '{{schedule}} - attempt',
           },
         },
@@ -194,7 +200,7 @@ function(this)
         description: 'Success rate of restores.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_restore_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]) / clamp_min(increase(label_replace(velero_restore_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]),1)',
+            expr: 'increase(label_replace(velero_restore_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:] offset -$__interval) / clamp_min(increase(label_replace(velero_restore_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:] offset -$__interval),1)',
             legendCustomTemplate: '{{schedule}}',
           },
         },
@@ -215,11 +221,11 @@ function(this)
       volumeSnapshotSuccess: {
         name: 'Successful volume snapshot count',
         nameShort: 'Volume snapshot success',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of successful volume snapshots by schedule.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_volume_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:])',
+            expr: 'label_replace(velero_volume_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
             legendCustomTemplate: '{{schedule}} - success',
           },
         },
@@ -227,11 +233,11 @@ function(this)
       volumeSnapshotFailure: {
         name: 'Failed volume snapshot count',
         nameShort: 'Volume snapshot failures',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of failed volume snapshots by schedule.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_volume_snapshot_failure_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:])',
+            expr: 'label_replace(velero_volume_snapshot_failure_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
             legendCustomTemplate: '{{schedule}} - failure',
           },
         },
@@ -239,11 +245,11 @@ function(this)
       volumeSnapshotAttempt: {
         name: 'Attempted volume snapshot count',
         nameShort: 'Volume snapshot attempts',
-        type: 'raw',
+        type: 'counter',
         description: 'Number of attempted volume snapshots by schedule.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_volume_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:])',
+            expr: 'label_replace(velero_volume_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
             legendCustomTemplate: '{{schedule}} - attempt',
           },
         },
@@ -256,7 +262,7 @@ function(this)
         description: 'Success rate of volume snapshots.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_volume_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]) / clamp_min(increase(label_replace(velero_volume_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]),1)',
+            expr: 'increase(label_replace(velero_volume_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:] offset -$__interval) / clamp_min(increase(label_replace(velero_volume_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:] offset -$__interval),1)',
             legendCustomTemplate: '{{schedule}}',
           },
         },
@@ -264,11 +270,13 @@ function(this)
       csiSnapshotSuccess: {
         name: 'Successful CSI snapshot count',
         nameShort: 'CSI snapshot success',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'aggKeepLabels',
         description: 'Number of successful CSI snapshots by schedule.',
         sources: {
           prometheus: {
-            expr: 'sum by (schedule) (increase(label_replace(velero_csi_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]))',
+            expr: 'label_replace(velero_csi_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
+            aggKeepLabels: ['schedule'],
             legendCustomTemplate: '{{schedule}} - success',
           },
         },
@@ -276,12 +284,13 @@ function(this)
       csiSnapshotFailure: {
         name: 'Failed CSI snapshot count',
         nameShort: 'CSI snapshot failures',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'aggKeepLabels',
         description: 'Number of failed CSI snapshots by schedule.',
         sources: {
           prometheus: {
-            // preserved from the legacy dashboard: queries the success metric, not failures
-            expr: 'sum by (schedule) (increase(label_replace(velero_csi_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]))',
+            expr: 'label_replace(velero_csi_snapshot_failure_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
+            aggKeepLabels: ['schedule'],
             legendCustomTemplate: '{{schedule}} - failure',
           },
         },
@@ -289,11 +298,13 @@ function(this)
       csiSnapshotAttempt: {
         name: 'Attempted CSI snapshot count',
         nameShort: 'CSI snapshot attempts',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'aggKeepLabels',
         description: 'Number of attempted CSI snapshots by schedule.',
         sources: {
           prometheus: {
-            expr: 'sum by (schedule) (increase(label_replace(velero_csi_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]))',
+            expr: 'label_replace(velero_csi_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
+            aggKeepLabels: ['schedule'],
             legendCustomTemplate: '{{schedule}} - attempt',
           },
         },
@@ -306,7 +317,8 @@ function(this)
         description: 'Success rate of CSI snapshots.',
         sources: {
           prometheus: {
-            expr: 'sum by (schedule) (increase(label_replace(velero_csi_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]) / clamp_min(increase(label_replace(velero_csi_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]),1)) ',
+            expr: 'increase(label_replace(velero_csi_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:] offset -$__interval) / clamp_min(increase(label_replace(velero_csi_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:] offset -$__interval),1)',
+            exprWrappers: [['sum by (schedule) (', ')']],
             legendCustomTemplate: '{{schedule}}',
           },
         },

@@ -35,7 +35,21 @@
                      ]
                   },
                   "unit": "percentunit"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Backup success rate (1 hour)"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -44,7 +58,7 @@
                "y": 0
             },
             "id": 1,
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -82,7 +96,21 @@
                      ]
                   },
                   "unit": "percentunit"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Restore success rate (1 hour)"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -91,7 +119,7 @@
                "y": 0
             },
             "id": 2,
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -135,7 +163,7 @@
                   {
                      "matcher": {
                         "id": "byFrameRefID",
-                        "options": "Successful backups / $__interval "
+                        "options": "Successful backups / $__interval"
                      },
                      "properties": [
                         {
@@ -168,14 +196,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__interval:]))",
+                  "expr": "sum(\n  increase(velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Backups",
-                  "refId": "Successful backups / $__interval "
+                  "refId": "Successful backups / $__interval"
                }
             ],
-            "title": "Successful backups / $__interval ",
+            "title": "Successful backups / $__interval",
             "type": "stat"
          },
          {
@@ -205,7 +233,7 @@
                   {
                      "matcher": {
                         "id": "byFrameRefID",
-                        "options": "Failed backups / $__interval "
+                        "options": "Failed backups / $__interval"
                      },
                      "properties": [
                         {
@@ -238,14 +266,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(velero_backup_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__interval:]))",
+                  "expr": "sum(\n  increase(velero_backup_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Backups",
-                  "refId": "Failed backups / $__interval "
+                  "refId": "Failed backups / $__interval"
                }
             ],
-            "title": "Failed backups / $__interval ",
+            "title": "Failed backups / $__interval",
             "type": "stat"
          },
          {
@@ -275,7 +303,7 @@
                   {
                      "matcher": {
                         "id": "byFrameRefID",
-                        "options": "Restore validation failure / $__interval "
+                        "options": "Restore validation failure / $__interval"
                      },
                      "properties": [
                         {
@@ -308,14 +336,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(label_replace(velero_restore_validation_failed_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:]))",
+                  "expr": "sum(\n  increase(label_replace(velero_restore_validation_failed_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "failure",
-                  "refId": "Restore validation failure / $__interval "
+                  "refId": "Restore validation failure / $__interval"
                }
             ],
-            "title": "Restore validation failure / $__interval ",
+            "title": "Restore validation failure / $__interval",
             "type": "stat"
          },
          {
@@ -345,7 +373,7 @@
                   {
                      "matcher": {
                         "id": "byFrameRefID",
-                        "options": "Backup validation failure / $__interval "
+                        "options": "Backup validation failure / $__interval"
                      },
                      "properties": [
                         {
@@ -378,14 +406,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(label_replace(velero_backup_validation_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:]))",
+                  "expr": "sum(\n  increase(label_replace(velero_backup_validation_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "failure",
-                  "refId": "Backup validation failure / $__interval "
+                  "refId": "Backup validation failure / $__interval"
                }
             ],
-            "title": "Backup validation failure / $__interval ",
+            "title": "Backup validation failure / $__interval",
             "type": "stat"
          },
          {
@@ -450,7 +478,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:])",
+                  "expr": "increase(label_replace(velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - success",
@@ -461,7 +489,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_backup_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:])",
+                  "expr": "increase(label_replace(velero_backup_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - failure",
@@ -472,14 +500,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_backup_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:])",
+                  "expr": "increase(label_replace(velero_backup_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - attempt",
                   "refId": "Attempted backup count"
                }
             ],
-            "title": "Backup count / $__interval ",
+            "title": "Backup count / $__interval",
             "type": "timeseries"
          },
          {
@@ -659,7 +687,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum(increase(label_replace(velero_backup_duration_seconds_bucket{le!=\"+Inf\", job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:])) by (le)",
+                  "expr": "sum by (le) (\n  increase(label_replace(velero_backup_duration_seconds_bucket{le!=\"+Inf\", job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "",
@@ -731,7 +759,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:])",
+                  "expr": "increase(label_replace(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - success",
@@ -742,7 +770,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_restore_failed_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:])",
+                  "expr": "increase(label_replace(velero_restore_failed_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - failure",
@@ -753,14 +781,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_restore_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:])",
+                  "expr": "increase(label_replace(velero_restore_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - attempt",
                   "refId": "Attempted restore count"
                }
             ],
-            "title": "Restore count / $__interval ",
+            "title": "Restore count / $__interval",
             "type": "timeseries"
          },
          {
@@ -829,7 +857,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:]) / clamp_min(increase(label_replace(velero_restore_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:]),1)",
+                  "expr": "increase(label_replace(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval) / clamp_min(increase(label_replace(velero_restore_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval),1)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}}",
@@ -901,7 +929,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (schedule) (increase(label_replace(velero_csi_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:]))",
+                  "expr": "sum by (schedule) (\n  increase(label_replace(velero_csi_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - success",
@@ -912,7 +940,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (schedule) (increase(label_replace(velero_csi_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:]))",
+                  "expr": "sum by (schedule) (\n  increase(label_replace(velero_csi_snapshot_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - failure",
@@ -923,14 +951,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (schedule) (increase(label_replace(velero_csi_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:]))",
+                  "expr": "sum by (schedule) (\n  increase(label_replace(velero_csi_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - attempt",
                   "refId": "Attempted CSI snapshot count"
                }
             ],
-            "title": "CSI snapshot count / $__interval ",
+            "title": "CSI snapshot count / $__interval",
             "type": "timeseries"
          },
          {
@@ -999,7 +1027,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (schedule) (increase(label_replace(velero_csi_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:]) / clamp_min(increase(label_replace(velero_csi_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:]),1)) ",
+                  "expr": "sum by (schedule) (\n  increase(label_replace(velero_csi_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval) / clamp_min(increase(label_replace(velero_csi_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval),1)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}}",
@@ -1071,7 +1099,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_volume_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:])",
+                  "expr": "increase(label_replace(velero_volume_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - success",
@@ -1082,7 +1110,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_volume_snapshot_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:])",
+                  "expr": "increase(label_replace(velero_volume_snapshot_failure_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - failure",
@@ -1093,14 +1121,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_volume_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:])",
+                  "expr": "increase(label_replace(velero_volume_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}} - attempt",
                   "refId": "Attempted volume snapshot count"
                }
             ],
-            "title": "Volume snapshot count / $__interval ",
+            "title": "Volume snapshot count / $__interval",
             "type": "timeseries"
          },
          {
@@ -1169,7 +1197,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_volume_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:]) / clamp_min(increase(label_replace(velero_volume_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:]),1)",
+                  "expr": "increase(label_replace(velero_volume_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval) / clamp_min(increase(label_replace(velero_volume_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval),1)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}}",
