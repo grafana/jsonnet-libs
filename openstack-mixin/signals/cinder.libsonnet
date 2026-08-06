@@ -64,11 +64,12 @@ function(this) {
     cinder_volume_error_status: {
       name: 'Volume error status',
       description: 'Count of Cinder volumes in error states.',
-      type: 'raw',
+      type: 'gauge',
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'openstack_cinder_volume_status_counter{%(queriesSelector)s, status=~"error|error_backing-up|error_deleting|error_extending|error_restoring"} > 0',
+          expr: 'openstack_cinder_volume_status_counter{%(queriesSelector)s, status=~"error|error_backing-up|error_deleting|error_extending|error_restoring"}',
+          exprWrappers: [['', ' > 0']],
           legendCustomTemplate: '{{instance}} - {{status}}',
         },
       },
@@ -76,11 +77,12 @@ function(this) {
     cinder_volume_top_statuses: {
       name: 'Top volume statuses',
       description: 'Top 5 non-error volume statuses in Cinder.',
-      type: 'raw',
+      type: 'gauge',
       unit: 'short',
       sources: {
         prometheus: {
-          expr: 'topk(5, openstack_cinder_volume_status_counter{%(queriesSelector)s, status!~"error|error_backing-up|error_deleting|error_extending|error_restoring"}) > 0',
+          expr: 'openstack_cinder_volume_status_counter{%(queriesSelector)s, status!~"error|error_backing-up|error_deleting|error_extending|error_restoring"}',
+          exprWrappers: [['topk(5, ', ') > 0']],
           legendCustomTemplate: '{{instance}} - {{status}}',
         },
       },

@@ -98,7 +98,7 @@ function(this) {
       },
     },
     placement_vcpu_usage_ratio: {
-      name: 'vCPU usage ratio',
+      name: 'vCPU used',
       description: 'Percentage of vCPU capacity in use across all placement nodes.',
       type: 'raw',
       unit: 'percent',
@@ -110,7 +110,7 @@ function(this) {
       },
     },
     placement_memory_usage_ratio: {
-      name: 'Memory usage ratio',
+      name: 'Memory used',
       description: 'Percentage of memory capacity in use across all placement nodes.',
       type: 'raw',
       unit: 'percent',

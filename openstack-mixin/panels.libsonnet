@@ -245,11 +245,7 @@ local utils = commonlib.utils;
       ]),
 
     vCPUUsedStat:
-      gauge.new(
-        'vCPU used'
-      )
-      + gauge.queryOptions.withTargetsMixin(signals.placement.placement_vcpu_usage_ratio.asTarget())
-      + gauge.standardOptions.withUnit('percent')
+      signals.placement.placement_vcpu_usage_ratio.asGauge()
       + gauge.standardOptions.withMin(0)
       + gauge.standardOptions.withMax(150)
       + gauge.standardOptions.thresholds.withSteps([
@@ -260,11 +256,7 @@ local utils = commonlib.utils;
       ]),
 
     RAMUsedStat:
-      gauge.new(
-        'Memory used'
-      )
-      + gauge.queryOptions.withTargetsMixin(signals.placement.placement_memory_usage_ratio.asTarget())
-      + gauge.standardOptions.withUnit('percent')
+      signals.placement.placement_memory_usage_ratio.asGauge()
       + gauge.standardOptions.withMin(0)
       + gauge.standardOptions.withMax(150)
       + gauge.standardOptions.thresholds.withSteps([
@@ -275,10 +267,7 @@ local utils = commonlib.utils;
       ]),
 
     freeIPsStat:
-      stat.new(
-        'Free IPs',
-      )
-      + stat.queryOptions.withTargetsMixin(signals.neutron.neutron_free_ips.asTarget())
+      signals.neutron.neutron_free_ips.asStat()
       + stat.standardOptions.thresholds.withSteps([
         stat.standardOptions.threshold.step.withValue(0) +
         stat.standardOptions.threshold.step.withColor('red'),
@@ -287,28 +276,16 @@ local utils = commonlib.utils;
       ]),
 
     domains:
-      commonlib.panels.generic.stat.info.new(
-        'Domains',
-        targets=[signals.identity.identity_domains.asTarget()],
-        description='The number of domains for the OpenStack cloud.',
-      )
-      + stat.options.withGraphMode('none'),
+      signals.identity.identity_domains.asStat()
+      + commonlib.panels.generic.stat.info.stylize(),
 
     projects:
-      commonlib.panels.generic.stat.info.new(
-        'Projects',
-        targets=[signals.identity.identity_projects.asTarget()],
-        description='The number of projects for the OpenStack cloud.',
-      )
-      + stat.options.withGraphMode('none'),
+      signals.identity.identity_projects.asStat()
+      + commonlib.panels.generic.stat.info.stylize(),
 
     regions:
-      commonlib.panels.generic.stat.info.new(
-        'Regions',
-        targets=[signals.identity.identity_regions.asTarget()],
-        description='The number of regions for the OpenStack cloud.',
-      )
-      + stat.options.withGraphMode('none'),
+      signals.identity.identity_regions.asStat()
+      + commonlib.panels.generic.stat.info.stylize(),
 
     users:
       signals.identity.identity_users.asTimeSeries()

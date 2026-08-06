@@ -196,11 +196,14 @@ function(this) {
     nova_vms_not_running: {
       name: 'VMs not running',
       description: 'Count of VMs in SHUTOFF or ERROR states per hypervisor.',
-      type: 'raw',
+      type: 'gauge',
       unit: 'short',
+      aggLevel: 'instance',
+      aggFunction: 'count',
       sources: {
         prometheus: {
-          expr: 'count by (job, instance, hypervisor_hostname, availability_zone) (openstack_nova_server_status{%(queriesSelector)s, status=~"SHUTOFF|ERROR", hypervisor_hostname!=""})',
+          expr: 'openstack_nova_server_status{%(queriesSelector)s, status=~"SHUTOFF|ERROR", hypervisor_hostname!=""}',
+          aggKeepLabels: ['hypervisor_hostname', 'availability_zone'],
           legendCustomTemplate: '{{instance}} - {{hypervisor_hostname}}',
         },
       },

@@ -742,9 +742,10 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
+            "description": "Percentage of vCPU capacity in use across all placement nodes.",
             "fieldConfig": {
                "defaults": {
                   "max": 150,
@@ -762,7 +763,21 @@
                      ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "vCPU used"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 5,
@@ -771,7 +786,7 @@
                "y": 13
             },
             "id": 9,
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -782,7 +797,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "vCPU used %",
-                  "refId": "vCPU usage ratio"
+                  "refId": "vCPU used"
                }
             ],
             "title": "vCPU used",
@@ -790,9 +805,10 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
+            "description": "Percentage of memory capacity in use across all placement nodes.",
             "fieldConfig": {
                "defaults": {
                   "max": 150,
@@ -810,7 +826,21 @@
                      ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Memory used"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 5,
@@ -819,7 +849,7 @@
                "y": 13
             },
             "id": 10,
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -830,7 +860,7 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "Memory used %",
-                  "refId": "Memory usage ratio"
+                  "refId": "Memory used"
                }
             ],
             "title": "Memory used",
@@ -838,9 +868,10 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
             },
+            "description": "The number of free IP addresses per network.",
             "fieldConfig": {
                "defaults": {
                   "thresholds": {
@@ -854,8 +885,23 @@
                            "value": 20
                         }
                      ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Free IPs"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 5,
@@ -864,7 +910,7 @@
                "y": 13
             },
             "id": 11,
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -913,8 +959,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Domains"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -968,8 +1029,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Projects"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1023,8 +1099,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Regions"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 8,

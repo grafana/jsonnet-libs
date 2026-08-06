@@ -239,7 +239,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_cinder_volume_status_counter{job=~\"$job\",instance=~\"$instance\", status=~\"error|error_backing-up|error_deleting|error_extending|error_restoring\"} > 0",
+                  "expr": "\n  openstack_cinder_volume_status_counter{job=~\"$job\",instance=~\"$instance\", status=~\"error|error_backing-up|error_deleting|error_extending|error_restoring\"}\n > 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -251,7 +251,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(5, openstack_cinder_volume_status_counter{job=~\"$job\",instance=~\"$instance\", status!~\"error|error_backing-up|error_deleting|error_extending|error_restoring\"}) > 0",
+                  "expr": "topk(5, \n  openstack_cinder_volume_status_counter{job=~\"$job\",instance=~\"$instance\", status!~\"error|error_backing-up|error_deleting|error_extending|error_restoring\"}\n) > 0",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
