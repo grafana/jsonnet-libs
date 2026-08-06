@@ -36,7 +36,7 @@ function(this)
         unit: 's',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_seconds_total{%(queriesSelector)s}[$__interval:]) / clamp_min(increase(solr_metrics_jvm_gc_total{%(queriesSelector)s}[$__interval:]), 1)) > 0',
+            expr: 'avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_seconds_total{%(queriesSelector)s}[$__interval:] offset -$__interval) / clamp_min(increase(solr_metrics_jvm_gc_total{%(queriesSelector)s}[$__interval:] offset -$__interval), 1)) > 0',
             legendCustomTemplate: '{{base_url}} - {{item}}',
           },
         },
