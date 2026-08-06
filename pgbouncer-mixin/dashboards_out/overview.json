@@ -587,7 +587,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:]), 1)",
+                  "expr": "1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:] offset -$__interval) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:] offset -$__interval), 1)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{database}}",
@@ -833,7 +833,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "1000 * increase(pgbouncer_stats_server_in_transaction_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:]) / clamp_min(increase(pgbouncer_stats_sql_transactions_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:]), 1)",
+                  "expr": "1000 * increase(pgbouncer_stats_server_in_transaction_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:] offset -$__interval) / clamp_min(increase(pgbouncer_stats_sql_transactions_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",instance=~\"$instance\",database=~\"$database\"}[$__interval:] offset -$__interval), 1)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{database}}",

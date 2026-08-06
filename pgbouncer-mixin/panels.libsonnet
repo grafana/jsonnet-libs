@@ -7,11 +7,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       local stat = g.panel.stat,
       local alertList = g.panel.alertList,
 
-      // Single-signal stat panels: signal.asStat() + generic stat stylize() reproduces
-      // the legacy commonlib.panels.generic.stat.<flavor>.new(...) styling, with title,
-      // unit and description sourced from the signal spec.
+      // Single-signal stat panels: signal.asStat() + generic stat stylize(). Title, unit,
+      // description and query all come from the signal spec; only styling lives here.
       clientsWaitingConnections:
-        signals.connections.pools_client_waiting_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asStat()
+        signals.connections.pools_client_waiting_connections_total.asStat()
         + commonlib.panels.generic.stat.base.stylize()
         + stat.options.withGraphMode('none')
         + stat.standardOptions.color.withMode('thresholds')
@@ -24,23 +23,23 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + stat.thresholdStep.withValue(20),
         ]),
       activeClientConnections:
-        signals.connections.pools_client_active_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asStat()
+        signals.connections.pools_client_active_connections_total.asStat()
         + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
       activeServerConnections:
-        signals.connections.pools_server_active_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asStat()
+        signals.connections.pools_server_active_connections.asStat()
         + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
       maxDatabaseConnections:
-        signals.connections.databases_max_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asStat()
+        signals.connections.databases_max_connections.asStat()
         + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
       maxUserConnections:
-        signals.config.config_max_user_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asStat()
+        signals.config.config_max_user_connections.asStat()
         + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
       maxClientConnections:
-        signals.config.config_max_client_connections.withExprWrappersMixin(['sum(', ')']).withLegendFormat('').asStat()
+        signals.config.config_max_client_connections.asStat()
         + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
@@ -95,16 +94,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
-      // Shares the "Active client connections" signal with the stat panel above; the
-      // granular timeSeries view supplies its own unit.
       granularActiveClientConnections:
-        signals.connections.pools_client_active_connections.withUnit('conn').asTimeSeries()
+        signals.connections.pools_client_active_connections.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize(),
 
-      // Shares the "Client waiting connections" signal; the timeSeries view uses a
-      // different title ('Waiting clients') and unit ('clients').
       clientsWaiting:
-        signals.connections.pools_client_waiting_connections.withName('Waiting clients').withUnit('clients').asTimeSeries()
+        signals.connections.pools_client_waiting_connections.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize(),
 
       maxClientWaitTime:

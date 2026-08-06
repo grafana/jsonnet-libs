@@ -78,7 +78,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"})",
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}",
@@ -171,7 +171,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval]))",
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  rate(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}",
@@ -245,7 +245,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, 1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:]), 1))",
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:] offset -$__interval) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:] offset -$__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}",
@@ -306,7 +306,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_received_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval]))",
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  rate(pgbouncer_stats_received_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - received",
@@ -317,7 +317,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_sent_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval]))",
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  rate(pgbouncer_stats_sent_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - sent",

@@ -34,7 +34,7 @@ function(this)
         unit: 'ms',
         sources: {
           prometheus: {
-            expr: '1000 * increase(pgbouncer_stats_queries_duration_seconds_total{%(queriesSelector)s}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{%(queriesSelector)s}[$__interval:]), 1)',
+            expr: '1000 * increase(pgbouncer_stats_queries_duration_seconds_total{%(queriesSelector)s}[$__interval:] offset -$__interval) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{%(queriesSelector)s}[$__interval:] offset -$__interval), 1)',
             legendCustomTemplate: '{{database}}',
           },
         },
@@ -60,7 +60,7 @@ function(this)
         unit: 'ms',
         sources: {
           prometheus: {
-            expr: '1000 * increase(pgbouncer_stats_server_in_transaction_seconds_total{%(queriesSelector)s}[$__interval:]) / clamp_min(increase(pgbouncer_stats_sql_transactions_pooled_total{%(queriesSelector)s}[$__interval:]), 1)',
+            expr: '1000 * increase(pgbouncer_stats_server_in_transaction_seconds_total{%(queriesSelector)s}[$__interval:] offset -$__interval) / clamp_min(increase(pgbouncer_stats_sql_transactions_pooled_total{%(queriesSelector)s}[$__interval:] offset -$__interval), 1)',
             legendCustomTemplate: '{{database}}',
           },
         },

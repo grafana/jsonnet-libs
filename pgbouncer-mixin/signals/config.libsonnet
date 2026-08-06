@@ -1,7 +1,9 @@
 // Per-instance configuration limit signals for PgBouncer.
 // These are instance-scoped settings (not per-database), so instanceLabels is
-// pureInstanceLabels (['instance']) -> selector job, pgbouncer_cluster, instance,
-// reproducing the legacy instanceQueriesSelector. aggLevel 'none'; panels supply sum().
+// pureInstanceLabels (['instance']) -> selector job, pgbouncer_cluster, instance.
+// Both signals feed a stat panel showing one total across the selection, so they carry
+// a bare sum() (no by-clause, which the agg template cannot express) via exprWrappers
+// and an empty legend.
 function(this)
   {
     filteringSelector: this.filteringSelector,
@@ -23,6 +25,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pgbouncer_config_max_user_connections{%(queriesSelector)s}',
+            exprWrappers: [['sum(', ')']],
+            legendCustomTemplate: '',
           },
         },
       },
@@ -34,6 +38,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pgbouncer_config_max_client_connections{%(queriesSelector)s}',
+            exprWrappers: [['sum(', ')']],
+            legendCustomTemplate: '',
           },
         },
       },
