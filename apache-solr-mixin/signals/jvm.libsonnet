@@ -13,12 +13,17 @@ function(this)
       garbageCollections: {
         name: 'Garbage collections / $__interval',
         nameShort: 'GC count',
-        type: 'raw',
+        type: 'counter',
         description: 'Counts the total number of garbage collection events.',
         unit: 'none',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_total{%(queriesSelector)s}[$__interval:])) > 0',
+            expr: 'solr_metrics_jvm_gc_total{%(queriesSelector)s}',
+            rangeFunction: 'increase',
+            aggKeepLabels: ['solr_cluster', 'base_url', 'item'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - {{item}}',
           },
         },
@@ -39,12 +44,16 @@ function(this)
       cpuLoad: {
         name: 'CPU load',
         nameShort: 'CPU',
-        type: 'raw',
+        type: 'gauge',
         description: 'CPU load caused by the JVM.',
         unit: 'percent',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url) (100 * solr_metrics_jvm_os_cpu_load{%(queriesSelector)s, item="systemCpuLoad"}) > 0',
+            expr: '100 * solr_metrics_jvm_os_cpu_load{%(queriesSelector)s, item="systemCpuLoad"}',
+            aggKeepLabels: ['solr_cluster', 'base_url'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}}',
           },
         },
@@ -65,12 +74,16 @@ function(this)
       osMemoryFree: {
         name: 'OS free physical memory',
         nameShort: 'OS mem free',
-        type: 'raw',
+        type: 'gauge',
         description: 'OS free physical memory.',
         unit: 'bytes',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{%(queriesSelector)s, item="freePhysicalMemorySize"}) > 0',
+            expr: 'solr_metrics_jvm_os_memory_bytes{%(queriesSelector)s, item="freePhysicalMemorySize"}',
+            aggKeepLabels: ['solr_cluster', 'base_url'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - free physical',
           },
         },
@@ -78,12 +91,16 @@ function(this)
       osMemoryTotal: {
         name: 'OS total physical memory',
         nameShort: 'OS mem total',
-        type: 'raw',
+        type: 'gauge',
         description: 'OS total physical memory.',
         unit: 'bytes',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{%(queriesSelector)s, item="totalPhysicalMemorySize"}) > 0',
+            expr: 'solr_metrics_jvm_os_memory_bytes{%(queriesSelector)s, item="totalPhysicalMemorySize"}',
+            aggKeepLabels: ['solr_cluster', 'base_url'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - total physical',
           },
         },
@@ -91,12 +108,16 @@ function(this)
       osMemoryVirtual: {
         name: 'OS committed virtual memory',
         nameShort: 'OS mem virtual',
-        type: 'raw',
+        type: 'gauge',
         description: 'OS committed virtual memory.',
         unit: 'bytes',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{%(queriesSelector)s, item="committedVirtualMemorySize"}) > 0',
+            expr: 'solr_metrics_jvm_os_memory_bytes{%(queriesSelector)s, item="committedVirtualMemorySize"}',
+            aggKeepLabels: ['solr_cluster', 'base_url'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - committed virtual',
           },
         },
@@ -104,12 +125,16 @@ function(this)
       fileDescriptors: {
         name: 'File descriptors',
         nameShort: 'File descriptors',
-        type: 'raw',
+        type: 'gauge',
         description: 'Number of open file descriptors.',
         unit: 'none',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url, item) (solr_metrics_jvm_os_file_descriptors{%(queriesSelector)s}) > 0',
+            expr: 'solr_metrics_jvm_os_file_descriptors{%(queriesSelector)s}',
+            aggKeepLabels: ['solr_cluster', 'base_url', 'item'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - {{item}}',
           },
         },
@@ -117,12 +142,16 @@ function(this)
       memoryHeapUsed: {
         name: 'Heap memory used',
         nameShort: 'Heap used',
-        type: 'raw',
+        type: 'gauge',
         description: 'JVM heap memory used.',
         unit: 'bytes',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="used"}) > 0',
+            expr: 'solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="used"}',
+            aggKeepLabels: ['solr_cluster', 'base_url'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - heap',
           },
         },
@@ -130,12 +159,16 @@ function(this)
       memoryHeapCommitted: {
         name: 'Heap memory committed',
         nameShort: 'Heap committed',
-        type: 'raw',
+        type: 'gauge',
         description: 'JVM heap memory committed.',
         unit: 'bytes',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="committed"}) > 0',
+            expr: 'solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="committed"}',
+            aggKeepLabels: ['solr_cluster', 'base_url'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - heap',
           },
         },
@@ -143,12 +176,16 @@ function(this)
       memoryHeapMax: {
         name: 'Heap memory max',
         nameShort: 'Heap max',
-        type: 'raw',
+        type: 'gauge',
         description: 'Maximum JVM heap memory available.',
         unit: 'bytes',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="max"}) > 0',
+            expr: 'solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="max"}',
+            aggKeepLabels: ['solr_cluster', 'base_url'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - heap max',
           },
         },
@@ -156,12 +193,16 @@ function(this)
       memoryNonHeapUsed: {
         name: 'Non-heap memory used',
         nameShort: 'Non-heap used',
-        type: 'raw',
+        type: 'gauge',
         description: 'JVM non-heap memory used.',
         unit: 'bytes',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{%(queriesSelector)s, item="used"}) > 0',
+            expr: 'solr_metrics_jvm_memory_non_heap_bytes{%(queriesSelector)s, item="used"}',
+            aggKeepLabels: ['solr_cluster', 'base_url'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - non-heap',
           },
         },
@@ -169,12 +210,16 @@ function(this)
       memoryNonHeapCommitted: {
         name: 'Non-heap memory committed',
         nameShort: 'Non-heap committed',
-        type: 'raw',
+        type: 'gauge',
         description: 'JVM non-heap memory committed.',
         unit: 'bytes',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{%(queriesSelector)s, item="committed"}) > 0',
+            expr: 'solr_metrics_jvm_memory_non_heap_bytes{%(queriesSelector)s, item="committed"}',
+            aggKeepLabels: ['solr_cluster', 'base_url'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - non-heap',
           },
         },

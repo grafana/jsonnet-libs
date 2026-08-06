@@ -13,12 +13,16 @@ function(this)
       connections: {
         name: 'Connections',
         nameShort: 'Connections',
-        type: 'raw',
+        type: 'gauge',
         description: 'Number of connections to the Solr node.',
         unit: 'none',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url, item) (solr_metrics_node_connections{%(queriesSelector)s}) > 0',
+            expr: 'solr_metrics_node_connections{%(queriesSelector)s}',
+            aggKeepLabels: ['solr_cluster', 'base_url', 'item'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - {{item}}',
           },
         },
@@ -26,12 +30,17 @@ function(this)
       threadPoolSubmitted: {
         name: 'Threads submitted',
         nameShort: 'Submitted',
-        type: 'raw',
+        type: 'counter',
         description: 'Total number of tasks submitted in the updateOnlyExecutor thread pool.',
         unit: 'none',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_submitted_total{%(queriesSelector)s, executor="updateOnlyExecutor"}[$__interval:])) > 0',
+            expr: 'solr_metrics_node_thread_pool_submitted_total{%(queriesSelector)s, executor="updateOnlyExecutor"}',
+            rangeFunction: 'increase',
+            aggKeepLabels: ['solr_cluster', 'base_url'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - submitted',
           },
         },
@@ -39,12 +48,17 @@ function(this)
       threadPoolCompleted: {
         name: 'Threads completed',
         nameShort: 'Completed',
-        type: 'raw',
+        type: 'counter',
         description: 'Total number of tasks completed in the updateOnlyExecutor thread pool.',
         unit: 'none',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_completed_total{%(queriesSelector)s, executor="updateOnlyExecutor"}[$__interval:])) > 0',
+            expr: 'solr_metrics_node_thread_pool_completed_total{%(queriesSelector)s, executor="updateOnlyExecutor"}',
+            rangeFunction: 'increase',
+            aggKeepLabels: ['solr_cluster', 'base_url'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - completed',
           },
         },
@@ -52,12 +66,16 @@ function(this)
       coreRootFsBytes: {
         name: 'Node core FS usage',
         nameShort: 'Core FS',
-        type: 'raw',
+        type: 'gauge',
         description: "Disk space used by Solr node's root file system.",
         unit: 'bytes',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, base_url, item) (solr_metrics_node_core_root_fs_bytes{%(queriesSelector)s}) > 0',
+            expr: 'solr_metrics_node_core_root_fs_bytes{%(queriesSelector)s}',
+            aggKeepLabels: ['solr_cluster', 'base_url', 'item'],
+            exprWrappers: [['', ' > 0']],
             legendCustomTemplate: '{{base_url}} - {{item}}',
           },
         },
@@ -65,12 +83,16 @@ function(this)
       nodeErrors: {
         name: 'Top nodes by node errors / $__interval',
         nameShort: 'Node errors',
-        type: 'raw',
+        type: 'counter',
         description: 'Top nodes by Solr node errors.',
         unit: 'none',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, base_url, solr_cluster, collection) (increase(solr_metrics_node_errors_total{%(queriesSelector)s}[$__interval:]))',
+            expr: 'solr_metrics_node_errors_total{%(queriesSelector)s}',
+            rangeFunction: 'increase',
+            aggKeepLabels: ['base_url', 'solr_cluster', 'collection'],
             legendCustomTemplate: '{{base_url}}',
           },
         },
@@ -78,12 +100,18 @@ function(this)
       coreErrors: {
         name: 'Top cores by core errors / $__interval',
         nameShort: 'Core errors',
-        type: 'raw',
+        type: 'counter',
         description: 'Top cores by Solr core errors.',
         unit: 'none',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, solr_cluster, collection, core, baseurl) (increase(solr_metrics_core_errors_total{%(queriesSelector)s}[$__interval:]))',
+            expr: 'solr_metrics_core_errors_total{%(queriesSelector)s}',
+            rangeFunction: 'increase',
+            // 'baseurl' (no underscore) is preserved from the legacy expression; it
+            // does not match the 'base_url' label these metrics actually carry.
+            aggKeepLabels: ['solr_cluster', 'collection', 'core', 'baseurl'],
             legendCustomTemplate: '{{collection}} - {{core}}',
           },
         },
@@ -117,12 +145,15 @@ function(this)
       indexSize: {
         name: 'Top cores by index size',
         nameShort: 'Index size',
-        type: 'raw',
+        type: 'gauge',
         description: 'Top cores by the Solr index size.',
         unit: 'bytes',
+        aggLevel: 'group',
+        aggFunction: 'avg',
         sources: {
           prometheus: {
-            expr: 'avg by (job, base_url, solr_cluster, collection, core) (solr_metrics_core_index_size_bytes{%(queriesSelector)s})',
+            expr: 'solr_metrics_core_index_size_bytes{%(queriesSelector)s}',
+            aggKeepLabels: ['base_url', 'solr_cluster', 'collection', 'core'],
             legendCustomTemplate: '{{collection}} - {{core}}',
           },
         },

@@ -13,12 +13,15 @@ function(this)
       liveNodes: {
         name: 'Live nodes',
         nameShort: 'Live nodes',
-        type: 'raw',
+        type: 'gauge',
         description: 'Number of live nodes in the Solr cluster.',
         unit: 'none',
+        aggLevel: 'group',
+        aggFunction: 'min',
         sources: {
           prometheus: {
-            expr: 'min by (job, solr_cluster) (solr_collections_live_nodes{%(queriesSelector)s})',
+            expr: 'solr_collections_live_nodes{%(queriesSelector)s}',
+            aggKeepLabels: ['solr_cluster'],
             legendCustomTemplate: '{{solr_cluster}}',
           },
         },
@@ -26,9 +29,10 @@ function(this)
       zookeeperStatus: {
         name: 'Zookeeper status',
         nameShort: 'ZK status',
-        type: 'raw',
+        type: 'gauge',
         description: 'Status of ZooKeeper, integral for cluster coordination.',
         unit: 'none',
+        aggLevel: 'none',
         sources: {
           prometheus: {
             expr: 'solr_zookeeper_status{%(queriesSelector)s}',
@@ -66,9 +70,10 @@ function(this)
       shardStateTable: {
         name: 'Shard status',
         nameShort: 'Shard status',
-        type: 'raw',
+        type: 'gauge',
         description: 'Shows the state of various shards in the cluster.',
         unit: 'none',
+        aggLevel: 'none',
         sources: {
           prometheus: {
             expr: 'solr_collections_shard_state{%(queriesSelector)s}',
@@ -92,9 +97,10 @@ function(this)
       replicaStateTable: {
         name: 'Replica status',
         nameShort: 'Replica status',
-        type: 'raw',
+        type: 'gauge',
         description: 'State of replicas within a Solr collection.',
         unit: 'none',
+        aggLevel: 'none',
         sources: {
           prometheus: {
             expr: 'solr_collections_replica_state{%(queriesSelector)s}',
