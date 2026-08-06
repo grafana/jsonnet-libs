@@ -17,10 +17,12 @@ function(this)
       proxyCount: {
         name: 'Proxies',
         description: 'Number of proxies in the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'count',
         sources: {
           prometheus: {
-            expr: 'count by(job, cluster) (istio_build{%(queriesGroupSelector)s, %(componentProxyFilter)s})' % selectors,
+            expr: 'istio_build{%(queriesGroupSelector)s, %(componentProxyFilter)s}' % selectors,
             legendCustomTemplate: '',
           },
         },
@@ -89,10 +91,12 @@ function(this)
       istiodCPUUsage: {
         name: 'Istiod CPU usage',
         description: 'vCPU usage for various components of the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by (job, cluster) (rate(process_cpu_seconds_total{%(queriesGroupIstiodSelector)s}[$__rate_interval]))' % selectors,
+            expr: 'process_cpu_seconds_total{%(queriesGroupIstiodSelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - istiod',
           },
         },
@@ -101,10 +105,12 @@ function(this)
       gatewayCPUUsage: {
         name: 'Gateway CPU usage',
         description: 'vCPU usage for various components of the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (rate(istio_agent_process_cpu_seconds_total{%(queriesGroupGatewaySelector)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_agent_process_cpu_seconds_total{%(queriesGroupGatewaySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - gateway',
           },
         },
@@ -113,10 +119,12 @@ function(this)
       proxyCPUUsage: {
         name: 'Proxy CPU usage',
         description: 'vCPU usage for various components of the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (rate(istio_agent_process_cpu_seconds_total{%(queriesGroupProxySelector)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_agent_process_cpu_seconds_total{%(queriesGroupProxySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - proxy',
           },
         },
@@ -125,10 +133,12 @@ function(this)
       istiodOpenFileDescriptors: {
         name: 'Istiod open file descriptors',
         description: 'Number of open file descriptors for various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (process_open_fds{%(queriesGroupIstiodSelector)s})' % selectors,
+            expr: 'process_open_fds{%(queriesGroupIstiodSelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - istiod',
           },
         },
@@ -137,10 +147,12 @@ function(this)
       gatewayOpenFileDescriptors: {
         name: 'Gateway open file descriptors',
         description: 'Number of open file descriptors for various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_process_open_fds{%(queriesGroupGatewaySelector)s})' % selectors,
+            expr: 'istio_agent_process_open_fds{%(queriesGroupGatewaySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - gateway',
           },
         },
@@ -149,10 +161,12 @@ function(this)
       proxyOpenFileDescriptors: {
         name: 'Proxy open file descriptors',
         description: 'Number of open file descriptors for various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_process_open_fds{%(queriesGroupProxySelector)s})' % selectors,
+            expr: 'istio_agent_process_open_fds{%(queriesGroupProxySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - proxy',
           },
         },
@@ -161,10 +175,12 @@ function(this)
       istiodVirtualMemory: {
         name: 'Istiod virtual memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (process_virtual_memory_bytes{%(queriesGroupIstiodSelector)s})' % selectors,
+            expr: 'process_virtual_memory_bytes{%(queriesGroupIstiodSelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - istiod - virtual',
           },
         },
@@ -173,10 +189,12 @@ function(this)
       istiodResidentMemory: {
         name: 'Istiod resident memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (process_resident_memory_bytes{%(queriesGroupIstiodSelector)s})' % selectors,
+            expr: 'process_resident_memory_bytes{%(queriesGroupIstiodSelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - istiod - resident',
           },
         },
@@ -185,10 +203,12 @@ function(this)
       gatewayVirtualMemory: {
         name: 'Gateway virtual memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_process_virtual_memory_bytes{%(queriesGroupGatewaySelector)s})' % selectors,
+            expr: 'istio_agent_process_virtual_memory_bytes{%(queriesGroupGatewaySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - gateway - virtual',
           },
         },
@@ -197,10 +217,12 @@ function(this)
       gatewayResidentMemory: {
         name: 'Gateway resident memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_process_resident_memory_bytes{%(queriesGroupGatewaySelector)s})' % selectors,
+            expr: 'istio_agent_process_resident_memory_bytes{%(queriesGroupGatewaySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - gateway - resident',
           },
         },
@@ -209,10 +231,12 @@ function(this)
       proxyVirtualMemory: {
         name: 'Proxy virtual memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_process_virtual_memory_bytes{%(queriesGroupProxySelector)s})' % selectors,
+            expr: 'istio_agent_process_virtual_memory_bytes{%(queriesGroupProxySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - proxy - virtual',
           },
         },
@@ -221,10 +245,12 @@ function(this)
       proxyResidentMemory: {
         name: 'Proxy resident memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_process_resident_memory_bytes{%(queriesGroupProxySelector)s})' % selectors,
+            expr: 'istio_agent_process_resident_memory_bytes{%(queriesGroupProxySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - proxy - resident',
           },
         },
@@ -233,10 +259,12 @@ function(this)
       istiodHeapAllocated: {
         name: 'Istiod heap allocated',
         description: 'Heap memory information for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (go_memstats_heap_alloc_bytes{%(queriesGroupIstiodSelector)s})' % selectors,
+            expr: 'go_memstats_heap_alloc_bytes{%(queriesGroupIstiodSelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - istiod - alloc',
           },
         },
@@ -245,10 +273,12 @@ function(this)
       istiodHeapInUse: {
         name: 'Istiod heap in use',
         description: 'Heap memory information for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (go_memstats_heap_inuse_bytes{%(queriesGroupIstiodSelector)s})' % selectors,
+            expr: 'go_memstats_heap_inuse_bytes{%(queriesGroupIstiodSelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - istiod - inuse',
           },
         },
@@ -257,10 +287,12 @@ function(this)
       istiodHeapSystem: {
         name: 'Istiod heap system',
         description: 'Heap memory information for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (go_memstats_heap_sys_bytes{%(queriesGroupIstiodSelector)s})' % selectors,
+            expr: 'go_memstats_heap_sys_bytes{%(queriesGroupIstiodSelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - istiod - sys',
           },
         },
@@ -269,10 +301,12 @@ function(this)
       gatewayHeapAllocated: {
         name: 'Gateway heap allocated',
         description: 'Heap memory information for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_go_memstats_heap_alloc_bytes{%(queriesGroupGatewaySelector)s})' % selectors,
+            expr: 'istio_agent_go_memstats_heap_alloc_bytes{%(queriesGroupGatewaySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - gateway - alloc',
           },
         },
@@ -281,10 +315,12 @@ function(this)
       gatewayHeapInUse: {
         name: 'Gateway heap in use',
         description: 'Heap memory information for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_go_memstats_heap_inuse_bytes{%(queriesGroupGatewaySelector)s})' % selectors,
+            expr: 'istio_agent_go_memstats_heap_inuse_bytes{%(queriesGroupGatewaySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - gateway - inuse',
           },
         },
@@ -293,10 +329,12 @@ function(this)
       gatewayHeapSystem: {
         name: 'Gateway heap system',
         description: 'Heap memory information for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_go_memstats_heap_sys_bytes{%(queriesGroupGatewaySelector)s})' % selectors,
+            expr: 'istio_agent_go_memstats_heap_sys_bytes{%(queriesGroupGatewaySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - gateway - sys',
           },
         },
@@ -305,10 +343,12 @@ function(this)
       proxyHeapAllocated: {
         name: 'Proxy heap allocated',
         description: 'Heap memory information for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_go_memstats_heap_alloc_bytes{%(queriesGroupProxySelector)s})' % selectors,
+            expr: 'istio_agent_go_memstats_heap_alloc_bytes{%(queriesGroupProxySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - proxy - alloc',
           },
         },
@@ -317,10 +357,12 @@ function(this)
       proxyHeapInUse: {
         name: 'Proxy heap in use',
         description: 'Heap memory information for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_go_memstats_heap_inuse_bytes{%(queriesGroupProxySelector)s})' % selectors,
+            expr: 'istio_agent_go_memstats_heap_inuse_bytes{%(queriesGroupProxySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - proxy - inuse',
           },
         },
@@ -329,10 +371,12 @@ function(this)
       proxyHeapSystem: {
         name: 'Proxy heap system',
         description: 'Heap memory information for the various components of the Istio system.',
-        type: 'raw',
+        type: 'gauge',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (istio_agent_go_memstats_heap_sys_bytes{%(queriesGroupProxySelector)s})' % selectors,
+            expr: 'istio_agent_go_memstats_heap_sys_bytes{%(queriesGroupProxySelector)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - proxy - sys',
           },
         },
@@ -341,10 +385,12 @@ function(this)
       gatewayHTTPGRPCRequestRate: {
         name: 'Gateway HTTP/GRPC request rate',
         description: 'HTTP/GRPC request rate for the components of the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (rate(istio_requests_total{%(queriesGroupGatewaySelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupGatewaySelector)s, %(reporterSourceFilter)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - gateway',
           },
         },
@@ -353,10 +399,12 @@ function(this)
       proxyHTTPGRPCRequestRate: {
         name: 'Proxy HTTP/GRPC request rate',
         description: 'HTTP/GRPC request rate for the components of the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (rate(istio_requests_total{%(queriesGroupProxySelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupProxySelector)s, %(reporterSourceFilter)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - proxy',
           },
         },
@@ -365,10 +413,13 @@ function(this)
       gatewayHTTPOKResponses: {
         name: 'Gateway HTTP OK responses',
         description: 'Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster) (istio_requests_total{%(queriesGroupGatewaySelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupGatewaySelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - gateway - ok',
           },
         },
@@ -377,10 +428,13 @@ function(this)
       gatewayHTTPErrorResponses: {
         name: 'Gateway HTTP error responses',
         description: 'Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster) (istio_requests_total{%(queriesGroupGatewaySelector)s, %(reporterSourceFilter)s, %(httpResponseCodeErrorFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupGatewaySelector)s, %(reporterSourceFilter)s, %(httpResponseCodeErrorFilter)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - gateway - error',
           },
         },
@@ -389,10 +443,13 @@ function(this)
       proxyHTTPOKResponses: {
         name: 'Proxy HTTP OK responses',
         description: 'Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster) (istio_requests_total{%(queriesGroupProxySelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupProxySelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - proxy - ok',
           },
         },
@@ -401,10 +458,13 @@ function(this)
       proxyHTTPErrorResponses: {
         name: 'Proxy HTTP error responses',
         description: 'Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster) (istio_requests_total{%(queriesGroupProxySelector)s, %(reporterSourceFilter)s, %(httpResponseCodeErrorFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupProxySelector)s, %(reporterSourceFilter)s, %(httpResponseCodeErrorFilter)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - proxy - error',
           },
         },

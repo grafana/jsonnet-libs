@@ -101,7 +101,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval]))",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{source_canonical_service}} -> {{destination_canonical_service}}",
@@ -256,7 +256,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_request_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval]))",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  rate(istio_request_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{source_canonical_service}} -> {{destination_canonical_service}}",
@@ -335,7 +335,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_response_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval]))",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  rate(istio_response_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}",
@@ -379,7 +379,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -391,7 +391,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[45].+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[45].+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -459,7 +459,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"1.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"1.+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -471,7 +471,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"2.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"2.+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -483,7 +483,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"3.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"3.+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -495,7 +495,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"4.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"4.+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -507,7 +507,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"5.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", request_protocol=\"http\", response_code=~\"5.+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -552,7 +552,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", grpc_response_status=\"0\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", grpc_response_status=\"0\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -564,7 +564,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", grpc_response_status=~\"[1-9]\\\\d*\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", grpc_response_status=~\"[1-9]\\\\d*\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -648,7 +648,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", grpc_response_status=~\"[0-9]\\\\d*\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\", grpc_response_status=~\"[0-9]\\\\d*\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}: {{grpc_response_status}}",
@@ -727,7 +727,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval]))",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{source_canonical_service}} -> {{destination_canonical_service}}",
@@ -806,7 +806,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval]))",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\",destination_canonical_service=~\"$server_service\", reporter=\"source\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{source_canonical_service}} <- {{destination_canonical_service}}",
@@ -897,7 +897,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval]))",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{destination_canonical_service}} <- {{source_canonical_service}}",
@@ -1052,7 +1052,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_request_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval]))",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  rate(istio_request_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{destination_canonical_service}} <- {{source_canonical_service}}",
@@ -1131,7 +1131,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_response_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval]))",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  rate(istio_response_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}",
@@ -1175,7 +1175,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[123].+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1187,7 +1187,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[45].+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[45].+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1255,7 +1255,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"1.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"1.+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1267,7 +1267,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"2.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"2.+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1279,7 +1279,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"3.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"3.+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1291,7 +1291,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"4.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"4.+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1303,7 +1303,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"5.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"5.+\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1348,7 +1348,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", grpc_response_status=\"0\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", grpc_response_status=\"0\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1360,7 +1360,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", grpc_response_status=~\"[1-9]\\\\d*\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", grpc_response_status=~\"[1-9]\\\\d*\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1444,7 +1444,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", grpc_response_status=~\"[0-9]\\\\d*\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\", grpc_response_status=~\"[0-9]\\\\d*\"}[$__interval:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}: {{grpc_response_status}}",
@@ -1523,7 +1523,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval]))",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{destination_canonical_service}} <- {{source_canonical_service}}",
@@ -1602,7 +1602,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval]))",
+                  "expr": "sum by (job,cluster,source_canonical_service,destination_canonical_service) (\n  rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\",source_canonical_service=~\"$client_service\", reporter=\"destination\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{destination_canonical_service}} -> {{source_canonical_service}}",
@@ -1844,7 +1844,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\", reporter=\"source\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"source_workload\", \"(.*)\"))",
+                  "expr": "sum by(job, cluster, service, workload) (\n  label_replace(\n  label_replace(\n  rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\", reporter=\"source\"}[$__rate_interval])\n, \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")\n, \"workload\", \"$1\", \"source_workload\", \"(.*)\")\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "",
@@ -1855,7 +1855,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\", reporter=\"destination\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"destination_workload\", \"(.*)\"))",
+                  "expr": "sum by(job, cluster, service, workload) (\n  label_replace(\n  label_replace(\n  rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\", reporter=\"destination\"}[$__rate_interval])\n, \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")\n, \"workload\", \"$1\", \"destination_workload\", \"(.*)\")\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "",
@@ -1914,7 +1914,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\", reporter=\"source\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"source_workload\", \"(.*)\"))",
+                  "expr": "sum by(job, cluster, service, workload) (\n  label_replace(\n  label_replace(\n  rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_canonical_service=~\"$service\", reporter=\"source\"}[$__rate_interval])\n, \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")\n, \"workload\", \"$1\", \"source_workload\", \"(.*)\")\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "",
@@ -1925,7 +1925,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\", reporter=\"destination\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"), \"workload\", \"$1\", \"destination_workload\", \"(.*)\"))",
+                  "expr": "sum by(job, cluster, service, workload) (\n  label_replace(\n  label_replace(\n  rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_canonical_service=~\"$service\", reporter=\"destination\"}[$__rate_interval])\n, \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")\n, \"workload\", \"$1\", \"destination_workload\", \"(.*)\")\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "",

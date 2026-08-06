@@ -17,10 +17,15 @@ function(this)
       tableSourceServiceHTTPGRPCRequestRate: {
         name: 'Source service HTTP/GRPC request rate',
         description: 'Service details for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, service) (label_replace(rate(istio_requests_total{%(queriesGroupSelector)s, %(reporterSourceFilter)s}[$__rate_interval]), "service", "$1", "source_canonical_service", "(.*)"))' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupSelector)s, %(reporterSourceFilter)s}' % selectors,
+            exprWrappers: [
+              ['label_replace(', ', "service", "$1", "source_canonical_service", "(.*)")'],
+              ['sum by(job, cluster, service) (', ')'],
+            ],
             legendCustomTemplate: '',
           },
         },
@@ -29,10 +34,15 @@ function(this)
       tableDestinationServiceHTTPGRPCRequestRate: {
         name: 'Destination service HTTP/GRPC request rate',
         description: 'Service details for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, service) (label_replace(rate(istio_requests_total{%(queriesGroupSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]), "service", "$1", "destination_canonical_service", "(.*)"))' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            exprWrappers: [
+              ['label_replace(', ', "service", "$1", "destination_canonical_service", "(.*)")'],
+              ['sum by(job, cluster, service) (', ')'],
+            ],
             legendCustomTemplate: '',
           },
         },
@@ -105,10 +115,15 @@ function(this)
       tableSourceServiceTCPReceiveRate: {
         name: 'Source service TCP receive rate',
         description: 'Service details for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, service) (label_replace(rate(istio_tcp_received_bytes_total{%(queriesGroupSelector)s, %(reporterSourceFilter)s}[$__rate_interval]), "service", "$1", "source_canonical_service", "(.*)"))' % selectors,
+            expr: 'istio_tcp_received_bytes_total{%(queriesGroupSelector)s, %(reporterSourceFilter)s}' % selectors,
+            exprWrappers: [
+              ['label_replace(', ', "service", "$1", "source_canonical_service", "(.*)")'],
+              ['sum by(job, cluster, service) (', ')'],
+            ],
             legendCustomTemplate: '',
           },
         },
@@ -117,10 +132,15 @@ function(this)
       tableSourceServiceTCPSendRate: {
         name: 'Source service TCP send rate',
         description: 'Service details for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, service) (label_replace(rate(istio_tcp_sent_bytes_total{%(queriesGroupSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]), "service", "$1", "destination_canonical_service", "(.*)"))' % selectors,
+            expr: 'istio_tcp_sent_bytes_total{%(queriesGroupSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            exprWrappers: [
+              ['label_replace(', ', "service", "$1", "destination_canonical_service", "(.*)")'],
+              ['sum by(job, cluster, service) (', ')'],
+            ],
             legendCustomTemplate: '',
           },
         },
@@ -129,11 +149,14 @@ function(this)
       clientServiceHTTPGRPCRequestRate: {
         name: 'HTTP/GRPC requests sent',
         description: 'Rate of HTTP/GRPC requests sent from this service to server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'reqps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
             legendCustomTemplate: '{{source_canonical_service}} -> {{destination_canonical_service}}',
           },
         },
@@ -159,11 +182,14 @@ function(this)
       clientServiceHTTPGRPCRequestThroughputRate: {
         name: 'HTTP/GRPC request throughput',
         description: 'Rate of HTTP/GRPC request data sent from this service to server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_request_bytes_sum{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_request_bytes_sum{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
             legendCustomTemplate: '{{source_canonical_service}} -> {{destination_canonical_service}}',
           },
         },
@@ -172,11 +198,14 @@ function(this)
       clientServiceHTTPGRPCResponseThroughputRate: {
         name: 'HTTP/GRPC response throughput',
         description: 'Rate of HTTP/GRPC response data received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_response_bytes_sum{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_response_bytes_sum{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}',
           },
         },
@@ -185,10 +214,14 @@ function(this)
       clientServiceHTTPOKResponses: {
         name: 'Client service HTTP OK responses',
         description: 'Overview of the types of HTTP responses received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}: (ok)',
           },
         },
@@ -197,10 +230,14 @@ function(this)
       clientServiceHTTPErrorResponses: {
         name: 'Client service HTTP error responses',
         description: 'Overview of the types of HTTP responses received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeErrorFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeErrorFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}: (error)',
           },
         },
@@ -209,10 +246,14 @@ function(this)
       clientServiceHTTP1xxResponses: {
         name: 'Client service HTTP 1xx responses',
         description: 'The types of HTTP responses received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode1xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode1xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}: (1xx)',
           },
         },
@@ -221,10 +262,14 @@ function(this)
       clientServiceHTTP2xxResponses: {
         name: 'Client service HTTP 2xx responses',
         description: 'The types of HTTP responses received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode2xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode2xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}: (2xx)',
           },
         },
@@ -233,10 +278,14 @@ function(this)
       clientServiceHTTP3xxResponses: {
         name: 'Client service HTTP 3xx responses',
         description: 'The types of HTTP responses received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode3xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode3xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}: (3xx)',
           },
         },
@@ -245,10 +294,14 @@ function(this)
       clientServiceHTTP4xxResponses: {
         name: 'Client service HTTP 4xx responses',
         description: 'The types of HTTP responses received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode4xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode4xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}: (4xx)',
           },
         },
@@ -257,10 +310,14 @@ function(this)
       clientServiceHTTP5xxResponses: {
         name: 'Client service HTTP 5xx responses',
         description: 'The types of HTTP responses received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode5xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode5xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}: (5xx)',
           },
         },
@@ -269,10 +326,14 @@ function(this)
       clientServiceGRPCOKResponses: {
         name: 'Client service GRPC OK responses',
         description: 'Overview of the types of GRPC responses received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusOKFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusOKFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}: (ok)',
           },
         },
@@ -281,10 +342,14 @@ function(this)
       clientServiceGRPCErrorResponses: {
         name: 'Client service GRPC error responses',
         description: 'Overview of the types of GRPC responses received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusErrorFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusErrorFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}: (error)',
           },
         },
@@ -293,10 +358,14 @@ function(this)
       clientServiceGRPCResponses: {
         name: 'GRPC responses / $__interval',
         description: 'The types of GRPC responses received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}: {{grpc_response_status}}',
           },
         },
@@ -305,11 +374,14 @@ function(this)
       clientServiceTCPRequestThroughputRate: {
         name: 'TCP request throughput',
         description: 'Rate of TCP request data sent from this service to server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_received_bytes_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_tcp_received_bytes_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
             legendCustomTemplate: '{{source_canonical_service}} -> {{destination_canonical_service}}',
           },
         },
@@ -318,11 +390,14 @@ function(this)
       clientServiceTCPResponseThroughputRate: {
         name: 'TCP response throughput',
         description: 'Rate of TCP response data received by this service from server services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_sent_bytes_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_tcp_sent_bytes_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
             legendCustomTemplate: '{{source_canonical_service}} <- {{destination_canonical_service}}',
           },
         },
@@ -331,11 +406,14 @@ function(this)
       serverServiceHTTPGRPCRequestRate: {
         name: 'HTTP/GRPC requests received',
         description: 'Rate of HTTP/GRPC requests received by this service from client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'reqps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
             legendCustomTemplate: '{{destination_canonical_service}} <- {{source_canonical_service}}',
           },
         },
@@ -361,11 +439,14 @@ function(this)
       serverServiceHTTPGRPCRequestThroughputRate: {
         name: 'HTTP/GRPC request throughput',
         description: 'Rate of HTTP/GRPC request data received by this service from client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_request_bytes_sum{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_request_bytes_sum{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
             legendCustomTemplate: '{{destination_canonical_service}} <- {{source_canonical_service}}',
           },
         },
@@ -374,11 +455,14 @@ function(this)
       serverServiceHTTPGRPCResponseThroughputRate: {
         name: 'HTTP/GRPC response throughput',
         description: 'Rate of HTTP/GRPC response data sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_response_bytes_sum{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_response_bytes_sum{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}',
           },
         },
@@ -387,10 +471,14 @@ function(this)
       serverServiceHTTPOKResponses: {
         name: 'Server service HTTP OK responses',
         description: 'Overview of the types of HTTP responses sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeOKFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeOKFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}: (ok)',
           },
         },
@@ -399,10 +487,14 @@ function(this)
       serverServiceHTTPErrorResponses: {
         name: 'Server service HTTP error responses',
         description: 'Overview of the types of HTTP responses sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeErrorFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeErrorFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}: (error)',
           },
         },
@@ -411,10 +503,14 @@ function(this)
       serverServiceHTTP1xxResponses: {
         name: 'Server service HTTP 1xx responses',
         description: 'The types of HTTP responses sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode1xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode1xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}: (1xx)',
           },
         },
@@ -423,10 +519,14 @@ function(this)
       serverServiceHTTP2xxResponses: {
         name: 'Server service HTTP 2xx responses',
         description: 'The types of HTTP responses sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode2xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode2xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}: (2xx)',
           },
         },
@@ -435,10 +535,14 @@ function(this)
       serverServiceHTTP3xxResponses: {
         name: 'Server service HTTP 3xx responses',
         description: 'The types of HTTP responses sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode3xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode3xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}: (3xx)',
           },
         },
@@ -447,10 +551,14 @@ function(this)
       serverServiceHTTP4xxResponses: {
         name: 'Server service HTTP 4xx responses',
         description: 'The types of HTTP responses sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode4xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode4xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}: (4xx)',
           },
         },
@@ -459,10 +567,14 @@ function(this)
       serverServiceHTTP5xxResponses: {
         name: 'Server service HTTP 5xx responses',
         description: 'The types of HTTP responses sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode5xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode5xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}: (5xx)',
           },
         },
@@ -471,10 +583,14 @@ function(this)
       serverServiceGRPCOKResponses: {
         name: 'Server service GRPC OK responses',
         description: 'Overview of the types of GRPC responses sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusOKFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusOKFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}: (ok)',
           },
         },
@@ -483,10 +599,14 @@ function(this)
       serverServiceGRPCErrorResponses: {
         name: 'Server service GRPC error responses',
         description: 'Overview of the types of GRPC responses sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusErrorFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusErrorFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}: (error)',
           },
         },
@@ -495,10 +615,14 @@ function(this)
       serverServiceGRPCResponses: {
         name: 'GRPC responses / $__interval',
         description: 'The types of GRPC responses sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}: {{grpc_response_status}}',
           },
         },
@@ -507,11 +631,14 @@ function(this)
       serverServiceTCPRequestThroughputRate: {
         name: 'TCP request throughput',
         description: 'Rate of TCP request data received by this service from client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_received_bytes_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_tcp_received_bytes_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
             legendCustomTemplate: '{{destination_canonical_service}} <- {{source_canonical_service}}',
           },
         },
@@ -520,11 +647,14 @@ function(this)
       serverServiceTCPResponseThroughputRate: {
         name: 'TCP response throughput',
         description: 'Rate of TCP response data sent from this service to client services in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_sent_bytes_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_tcp_sent_bytes_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            aggKeepLabels: ['source_canonical_service', 'destination_canonical_service'],
             legendCustomTemplate: '{{destination_canonical_service}} -> {{source_canonical_service}}',
           },
         },

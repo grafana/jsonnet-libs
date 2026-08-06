@@ -17,10 +17,13 @@ function(this)
       pilotCDSxDSPushes: {
         name: 'CDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeCDSFilter)s})[$__interval:])' % selectors,
+            expr: 'pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeCDSFilter)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - CDS',
           },
         },
@@ -29,10 +32,13 @@ function(this)
       pilotEDSxDSPushes: {
         name: 'EDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeEDSFilter)s})[$__interval:])' % selectors,
+            expr: 'pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeEDSFilter)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - EDS',
           },
         },
@@ -41,10 +47,13 @@ function(this)
       pilotLDSxDSPushes: {
         name: 'LDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeLDSFilter)s})[$__interval:])' % selectors,
+            expr: 'pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeLDSFilter)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - LDS',
           },
         },
@@ -53,10 +62,13 @@ function(this)
       pilotRDSxDSPushes: {
         name: 'RDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeRDSFilter)s})[$__interval:])' % selectors,
+            expr: 'pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeRDSFilter)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - RDS',
           },
         },
@@ -65,10 +77,13 @@ function(this)
       pilotSDSxDSPushes: {
         name: 'SDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeSDSFilter)s})[$__interval:])' % selectors,
+            expr: 'pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeSDSFilter)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - SDS',
           },
         },
@@ -77,10 +92,13 @@ function(this)
       pilotNDSxDSPushes: {
         name: 'NDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeNDSFilter)s})[$__interval:])' % selectors,
+            expr: 'pilot_xds_pushes{%(queriesGroupIstiodSelector)s, %(typeNDSFilter)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - NDS',
           },
         },
@@ -101,10 +119,13 @@ function(this)
       galleyValidationsPassed: {
         name: 'Galley validations passed',
         description: 'Number of galley validations over the entire time range for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster) (galley_validation_passed{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'galley_validation_passed{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - passed',
           },
         },
@@ -113,10 +134,13 @@ function(this)
       galleyValidationsFailed: {
         name: 'Galley validations failed',
         description: 'Number of galley validations over the entire time range for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster) (galley_validation_failed{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'galley_validation_failed{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - failed',
           },
         },
@@ -125,10 +149,12 @@ function(this)
       envoyxDSBytesSendRate: {
         name: 'Envoy xDS bytes sent',
         description: 'The send and receive data rates from all envoy proxies in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (rate(envoy_cluster_upstream_cx_rx_bytes_total{%(queriesGroupSelector)s, %(clusterNamexDSGRPCFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'envoy_cluster_upstream_cx_rx_bytes_total{%(queriesGroupSelector)s, %(clusterNamexDSGRPCFilter)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - sent',
           },
         },
@@ -137,10 +163,12 @@ function(this)
       envoyxDSBytesReceiveRate: {
         name: 'Envoy xDS bytes received',
         description: 'The send and receive data rates from all envoy proxies in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster) (rate(envoy_cluster_upstream_cx_tx_bytes_total{%(queriesGroupSelector)s, %(clusterNamexDSGRPCFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'envoy_cluster_upstream_cx_tx_bytes_total{%(queriesGroupSelector)s, %(clusterNamexDSGRPCFilter)s}' % selectors,
             legendCustomTemplate: '{{cluster}} - received',
           },
         },
@@ -149,10 +177,13 @@ function(this)
       pilotCDSxDSRejections: {
         name: 'CDS xDS rejections',
         description: 'The xDS related errors across the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_xds_cds_reject{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'pilot_xds_cds_reject{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - CDS reject',
           },
         },
@@ -161,10 +192,13 @@ function(this)
       pilotEDSxDSRejections: {
         name: 'EDS xDS rejections',
         description: 'The xDS related errors across the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_xds_eds_reject{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'pilot_xds_eds_reject{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - EDS reject',
           },
         },
@@ -173,10 +207,13 @@ function(this)
       pilotRDSxDSRejections: {
         name: 'RDS xDS rejections',
         description: 'The xDS related errors across the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_xds_rds_reject{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'pilot_xds_rds_reject{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - RDS reject',
           },
         },
@@ -185,10 +222,13 @@ function(this)
       pilotLDSxDSRejections: {
         name: 'LDS xDS rejections',
         description: 'The xDS related errors across the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_xds_lds_reject{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'pilot_xds_lds_reject{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - LDS reject',
           },
         },
@@ -197,10 +237,13 @@ function(this)
       pilotxDSWriteTimeouts: {
         name: 'xDS write timeouts',
         description: 'The xDS related errors across the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_xds_write_timeout{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'pilot_xds_write_timeout{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - write timeout',
           },
         },
@@ -209,10 +252,13 @@ function(this)
       pilotxDSInternalErrors: {
         name: 'xDS internal errors',
         description: 'The xDS related errors across the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_total_xds_internal_errors{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'pilot_total_xds_internal_errors{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - internal',
           },
         },
@@ -221,10 +267,13 @@ function(this)
       pilotxDSProxyRejects: {
         name: 'xDS proxy rejects',
         description: 'The xDS related errors across the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_total_xds_rejects{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'pilot_total_xds_rejects{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - proxy rejects',
           },
         },
@@ -233,10 +282,13 @@ function(this)
       pilotxDSInboundListenerConflicts: {
         name: 'xDS inbound listener conflicts',
         description: 'The xDS related errors across the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_conflict_inbound_listener{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'pilot_conflict_inbound_listener{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - in listener conflict',
           },
         },
@@ -245,10 +297,13 @@ function(this)
       pilotxDSOutboundListenerTCPConflicts: {
         name: 'xDS outbound listener TCP conflicts',
         description: 'The xDS related errors across the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (pilot_conflict_outbound_listener_tcp_over_current_tcp{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'pilot_conflict_outbound_listener_tcp_over_current_tcp{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - out listener tcp conflict',
           },
         },
@@ -257,10 +312,13 @@ function(this)
       sidecarInjectionSuccesses: {
         name: 'Sidecar injection successes',
         description: 'Number of sidecar injections over the entire time range for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (sidecar_injection_success_total{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'sidecar_injection_success_total{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - success',
           },
         },
@@ -269,10 +327,13 @@ function(this)
       sidecarInjectionFailures: {
         name: 'Sidecar injection failures',
         description: 'Number of sidecar injections over the entire time range for the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by (job, cluster) (sidecar_injection_failure_total{%(queriesGroupIstiodSelector)s})[$__interval:])' % selectors,
+            expr: 'sidecar_injection_failure_total{%(queriesGroupIstiodSelector)s}' % selectors,
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}} - failure',
           },
         },

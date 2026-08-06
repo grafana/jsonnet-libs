@@ -17,10 +17,16 @@ function(this)
       tableSourceWorkloadHTTPGRPCRequestRate: {
         name: 'Source workload HTTP/GRPC request rate',
         description: 'Workload details for a service in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_requests_total{%(queriesGroupSourceServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]), "service", "$1", "source_canonical_service", "(.*)"), "workload", "$1", "source_workload", "(.*)"))' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupSourceServiceSelector)s, %(reporterSourceFilter)s}' % selectors,
+            exprWrappers: [
+              ['label_replace(', ', "service", "$1", "source_canonical_service", "(.*)")'],
+              ['label_replace(', ', "workload", "$1", "source_workload", "(.*)")'],
+              ['sum by(job, cluster, service, workload) (', ')'],
+            ],
             legendCustomTemplate: '',
           },
         },
@@ -29,10 +35,16 @@ function(this)
       tableDestinationWorkloadHTTPGRPCRequestRate: {
         name: 'Destination workload HTTP/GRPC request rate',
         description: 'Workload details for a service in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_requests_total{%(queriesGroupDestinationServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]), "service", "$1", "destination_canonical_service", "(.*)"), "workload", "$1", "destination_workload", "(.*)"))' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupDestinationServiceSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            exprWrappers: [
+              ['label_replace(', ', "service", "$1", "destination_canonical_service", "(.*)")'],
+              ['label_replace(', ', "workload", "$1", "destination_workload", "(.*)")'],
+              ['sum by(job, cluster, service, workload) (', ')'],
+            ],
             legendCustomTemplate: '',
           },
         },
@@ -105,10 +117,16 @@ function(this)
       tableSourceWorkloadTCPRequestThroughputRate: {
         name: 'Source workload TCP request throughput',
         description: 'Workload details for a service in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_tcp_received_bytes_total{%(queriesGroupSourceServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]), "service", "$1", "source_canonical_service", "(.*)"), "workload", "$1", "source_workload", "(.*)"))' % selectors,
+            expr: 'istio_tcp_received_bytes_total{%(queriesGroupSourceServiceSelector)s, %(reporterSourceFilter)s}' % selectors,
+            exprWrappers: [
+              ['label_replace(', ', "service", "$1", "source_canonical_service", "(.*)")'],
+              ['label_replace(', ', "workload", "$1", "source_workload", "(.*)")'],
+              ['sum by(job, cluster, service, workload) (', ')'],
+            ],
             legendCustomTemplate: '',
           },
         },
@@ -117,10 +135,16 @@ function(this)
       tableDestinationWorkloadTCPResponseThroughputRate: {
         name: 'Destination workload TCP response throughput',
         description: 'Workload details for a service in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'none',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_tcp_sent_bytes_total{%(queriesGroupDestinationServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]), "service", "$1", "destination_canonical_service", "(.*)"), "workload", "$1", "destination_workload", "(.*)"))' % selectors,
+            expr: 'istio_tcp_sent_bytes_total{%(queriesGroupDestinationServiceSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            exprWrappers: [
+              ['label_replace(', ', "service", "$1", "destination_canonical_service", "(.*)")'],
+              ['label_replace(', ', "workload", "$1", "destination_workload", "(.*)")'],
+              ['sum by(job, cluster, service, workload) (', ')'],
+            ],
             legendCustomTemplate: '',
           },
         },
@@ -129,11 +153,14 @@ function(this)
       clientWorkloadHTTPGRPCRequestRate: {
         name: 'HTTP/GRPC requests sent',
         description: 'Rate of HTTP/GRPC requests sent from this workload to server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'reqps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_workload, destination_workload) (rate(istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
             legendCustomTemplate: '{{source_workload}} -> {{destination_workload}}',
           },
         },
@@ -159,11 +186,14 @@ function(this)
       clientWorkloadHTTPGRPCRequestThroughputRate: {
         name: 'HTTP/GRPC request throughput',
         description: 'Rate of HTTP/GRPC request data sent from this workload to server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_workload, destination_workload) (rate(istio_request_bytes_sum{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_request_bytes_sum{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
             legendCustomTemplate: '{{source_workload}} -> {{destination_workload}}',
           },
         },
@@ -172,11 +202,14 @@ function(this)
       clientWorkloadHTTPGRPCResponseThroughputRate: {
         name: 'HTTP/GRPC response throughput',
         description: 'Rate of HTTP/GRPC response data received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_workload, destination_workload) (rate(istio_response_bytes_sum{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_response_bytes_sum{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}',
           },
         },
@@ -185,10 +218,14 @@ function(this)
       clientWorkloadHTTPOKResponses: {
         name: 'Client workload HTTP OK responses',
         description: 'Overview of the types of HTTP responses received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}: (ok)',
           },
         },
@@ -197,10 +234,14 @@ function(this)
       clientWorkloadHTTPErrorResponses: {
         name: 'Client workload HTTP error responses',
         description: 'Overview of the types of HTTP responses received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeErrorFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeErrorFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}: (error)',
           },
         },
@@ -209,10 +250,14 @@ function(this)
       clientWorkloadHTTP1xxResponses: {
         name: 'Client workload HTTP 1xx responses',
         description: 'The types of HTTP responses received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCode1xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCode1xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}: (1xx)',
           },
         },
@@ -221,10 +266,14 @@ function(this)
       clientWorkloadHTTP2xxResponses: {
         name: 'Client workload HTTP 2xx responses',
         description: 'The types of HTTP responses received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCode2xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCode2xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}: (2xx)',
           },
         },
@@ -233,10 +282,14 @@ function(this)
       clientWorkloadHTTP3xxResponses: {
         name: 'Client workload HTTP 3xx responses',
         description: 'The types of HTTP responses received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCode3xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCode3xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}: (3xx)',
           },
         },
@@ -245,10 +298,14 @@ function(this)
       clientWorkloadHTTP4xxResponses: {
         name: 'Client workload HTTP 4xx responses',
         description: 'The types of HTTP responses received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCode4xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCode4xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}: (4xx)',
           },
         },
@@ -257,10 +314,14 @@ function(this)
       clientWorkloadHTTP5xxResponses: {
         name: 'Client workload HTTP 5xx responses',
         description: 'The types of HTTP responses received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCode5xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(httpResponseCode5xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}: (5xx)',
           },
         },
@@ -269,10 +330,14 @@ function(this)
       clientWorkloadGRPCOKResponses: {
         name: 'Client workload GRPC OK responses',
         description: 'Overview of the types of GRPC responses received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusOKFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusOKFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}: (ok)',
           },
         },
@@ -281,10 +346,14 @@ function(this)
       clientWorkloadGRPCErrorResponses: {
         name: 'Client workload GRPC error responses',
         description: 'Overview of the types of GRPC responses received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusErrorFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusErrorFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}: (error)',
           },
         },
@@ -293,10 +362,14 @@ function(this)
       clientWorkloadGRPCResponses: {
         name: 'GRPC responses / $__interval',
         description: 'The types of GRPC responses received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}: {{grpc_response_status}}',
           },
         },
@@ -305,11 +378,14 @@ function(this)
       clientWorkloadTCPRequestThroughputRate: {
         name: 'TCP request throughput',
         description: 'Rate of TCP request data sent from this workload to server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_workload, destination_workload) (rate(istio_tcp_received_bytes_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_tcp_received_bytes_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
             legendCustomTemplate: '{{source_workload}} -> {{destination_workload}}',
           },
         },
@@ -318,11 +394,14 @@ function(this)
       clientWorkloadTCPResponseThroughputRate: {
         name: 'TCP response throughput',
         description: 'Rate of TCP response data received by this workload from server workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_workload, destination_workload) (rate(istio_tcp_sent_bytes_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_tcp_sent_bytes_total{%(queriesGroupClientWorkloadSelector)s, %(reporterSourceFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
             legendCustomTemplate: '{{source_workload}} <- {{destination_workload}}',
           },
         },
@@ -331,11 +410,14 @@ function(this)
       serverWorkloadHTTPGRPCRequestRate: {
         name: 'HTTP/GRPC requests received',
         description: 'Rate of HTTP/GRPC requests received by this workload from client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'reqps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_workload, destination_workload) (rate(istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
             legendCustomTemplate: '{{destination_workload}} <- {{source_workload}}',
           },
         },
@@ -361,11 +443,14 @@ function(this)
       serverWorkloadHTTPGRPCRequestThroughputRate: {
         name: 'HTTP/GRPC request throughput',
         description: 'Rate of HTTP/GRPC request data received by this workload from client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_workload, destination_workload) (rate(istio_request_bytes_sum{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_request_bytes_sum{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
             legendCustomTemplate: '{{destination_workload}} <- {{source_workload}}',
           },
         },
@@ -374,11 +459,14 @@ function(this)
       serverWorkloadHTTPGRPCResponseThroughputRate: {
         name: 'HTTP/GRPC response throughput',
         description: 'Rate of HTTP/GRPC response data sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_workload, destination_workload) (rate(istio_response_bytes_sum{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_response_bytes_sum{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}',
           },
         },
@@ -387,10 +475,14 @@ function(this)
       serverWorkloadHTTPOKResponses: {
         name: 'Server workload HTTP OK responses',
         description: 'Overview of the types of HTTP responses sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeOKFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeOKFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}: (ok)',
           },
         },
@@ -399,10 +491,14 @@ function(this)
       serverWorkloadHTTPErrorResponses: {
         name: 'Server workload HTTP error responses',
         description: 'Overview of the types of HTTP responses sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeErrorFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeErrorFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}: (error)',
           },
         },
@@ -411,10 +507,14 @@ function(this)
       serverWorkloadHTTP1xxResponses: {
         name: 'Server workload HTTP 1xx responses',
         description: 'The types of HTTP responses sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode1xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode1xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}: (1xx)',
           },
         },
@@ -423,10 +523,14 @@ function(this)
       serverWorkloadHTTP2xxResponses: {
         name: 'Server workload HTTP 2xx responses',
         description: 'The types of HTTP responses sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode2xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode2xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}: (2xx)',
           },
         },
@@ -435,10 +539,14 @@ function(this)
       serverWorkloadHTTP3xxResponses: {
         name: 'Server workload HTTP 3xx responses',
         description: 'The types of HTTP responses sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode3xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode3xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}: (3xx)',
           },
         },
@@ -447,10 +555,14 @@ function(this)
       serverWorkloadHTTP4xxResponses: {
         name: 'Server workload HTTP 4xx responses',
         description: 'The types of HTTP responses sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode4xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode4xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}: (4xx)',
           },
         },
@@ -459,10 +571,14 @@ function(this)
       serverWorkloadHTTP5xxResponses: {
         name: 'Server workload HTTP 5xx responses',
         description: 'The types of HTTP responses sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode5xxFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode5xxFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}: (5xx)',
           },
         },
@@ -471,10 +587,14 @@ function(this)
       serverWorkloadGRPCOKResponses: {
         name: 'Server workload GRPC OK responses',
         description: 'Overview of the types of GRPC responses sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusOKFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusOKFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}: (ok)',
           },
         },
@@ -483,10 +603,14 @@ function(this)
       serverWorkloadGRPCErrorResponses: {
         name: 'Server workload GRPC error responses',
         description: 'Overview of the types of GRPC responses sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusErrorFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusErrorFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}: (error)',
           },
         },
@@ -495,10 +619,14 @@ function(this)
       serverWorkloadGRPCResponses: {
         name: 'GRPC responses / $__interval',
         description: 'The types of GRPC responses sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusFilter)s})[$__interval:])' % selectors,
+            expr: 'istio_requests_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}: {{grpc_response_status}}',
           },
         },
@@ -507,11 +635,14 @@ function(this)
       serverWorkloadTCPRequestThroughputRate: {
         name: 'TCP request throughput',
         description: 'Rate of TCP request data received by this workload from client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_workload, destination_workload) (rate(istio_tcp_received_bytes_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_tcp_received_bytes_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
             legendCustomTemplate: '{{destination_workload}} <- {{source_workload}}',
           },
         },
@@ -520,11 +651,14 @@ function(this)
       serverWorkloadTCPResponseThroughputRate: {
         name: 'TCP response throughput',
         description: 'Rate of TCP response data sent from this workload to client workloads in the Istio system.',
-        type: 'raw',
+        type: 'counter',
         unit: 'Bps',
+        aggLevel: 'group',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
-            expr: 'sum by(job, cluster, source_workload, destination_workload) (rate(istio_tcp_sent_bytes_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % selectors,
+            expr: 'istio_tcp_sent_bytes_total{%(queriesGroupServerWorkloadSelector)s, %(reporterDestinationFilter)s}' % selectors,
+            aggKeepLabels: ['source_workload', 'destination_workload'],
             legendCustomTemplate: '{{destination_workload}} -> {{source_workload}}',
           },
         },
