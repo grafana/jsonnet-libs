@@ -58,19 +58,6 @@ function(this)
           },
         },
       },
-      cpuLoadAlert: {
-        name: 'CPU load (alert)',
-        nameShort: 'CPU alert',
-        type: 'raw',
-        description: 'System CPU load aggregated without instance labels (used for alerting).',
-        unit: 'percent',
-        sources: {
-          prometheus: {
-            expr: '100 * sum without (base_url, item) (avg_over_time(solr_metrics_jvm_os_cpu_load{%(queriesSelector)s, item="systemCpuLoad"}[5m]))',
-            legendCustomTemplate: '{{instance}}',
-          },
-        },
-      },
       osMemoryFree: {
         name: 'OS free physical memory',
         nameShort: 'OS mem free',
@@ -234,19 +221,6 @@ function(this)
           prometheus: {
             expr: '100 * avg by (job, base_url, solr_cluster) (sum without(item)(solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="used"}) / clamp_min(sum without(item)(solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="max"}), 1))',
             legendCustomTemplate: '{{base_url}}',
-          },
-        },
-      },
-      heapMemoryUsagePct: {
-        name: 'Heap memory usage %',
-        nameShort: 'Heap %',
-        type: 'raw',
-        description: 'JVM heap memory usage percentage (used for alerting).',
-        unit: 'percent',
-        sources: {
-          prometheus: {
-            expr: '100 * sum without(item, base_url)(solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="used"}) / clamp_min(sum without(item, base_url)(solr_metrics_jvm_memory_heap_bytes{%(queriesSelector)s, item="max"}), 1)',
-            legendCustomTemplate: '{{instance}}',
           },
         },
       },

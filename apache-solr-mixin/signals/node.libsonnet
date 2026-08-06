@@ -116,32 +116,6 @@ function(this)
           },
         },
       },
-      coreErrorsAlert: {
-        name: 'Core error spike',
-        nameShort: 'Core errors %',
-        type: 'raw',
-        description: 'Spike in core errors relative to total (used for alerting).',
-        unit: 'percent',
-        sources: {
-          prometheus: {
-            expr: '100 * sum without(base_url, category, collection, handler, replica, shard) (increase(solr_metrics_core_errors_total{%(queriesSelector)s}[10m]) / clamp_min(avg_over_time(solr_metrics_core_errors_total{%(queriesSelector)s}[10m]), 1))',
-            legendCustomTemplate: '{{core}}',
-          },
-        },
-      },
-      documentIndexingSpike: {
-        name: 'Document indexing spike',
-        nameShort: 'Indexing spike %',
-        type: 'raw',
-        description: 'Spike in document indexing relative to total (used for alerting).',
-        unit: 'percent',
-        sources: {
-          prometheus: {
-            expr: '100 * sum without(base_url, category, collection, handler, replica, shard) (increase(solr_metrics_core_update_handler_adds_total{%(queriesSelector)s}[15m]) / clamp_min(avg_over_time(solr_metrics_core_update_handler_adds_total{%(queriesSelector)s}[15m]), 1))',
-            legendCustomTemplate: '{{core}}',
-          },
-        },
-      },
       indexSize: {
         name: 'Top cores by index size',
         nameShort: 'Index size',

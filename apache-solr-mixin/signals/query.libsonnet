@@ -283,19 +283,6 @@ function(this)
           },
         },
       },
-      searcherCacheRatio: {
-        name: 'Searcher cache hit ratio',
-        nameShort: 'Searcher cache %',
-        type: 'raw',
-        description: 'Cache hit ratio aggregated without instance labels (used for alerting).',
-        unit: 'percent',
-        sources: {
-          prometheus: {
-            expr: '100 * sum without(base_url, category, collection, item, replica, shard) (solr_metrics_core_searcher_cache_ratio{%(queriesSelector)s, item="hitratio", type=~"documentCache|filterCache|queryResultCache"})',
-            legendCustomTemplate: '{{core}} - {{type}}',
-          },
-        },
-      },
       coreTimeouts: {
         name: 'Core timeouts / $__interval',
         nameShort: 'Core timeouts',
