@@ -59,6 +59,9 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     processConnectionRateLimit: 'haproxy_process_limit_connection_rate{%s}' % $._config.baseMatchers,
     processSessionRateLimit: 'haproxy_process_limit_session_rate{%s}' % $._config.baseMatchers,
     processSslRateLimit: 'haproxy_process_limit_ssl_rate{%s}' % $._config.baseMatchers,
+    // Since HAProxy 2.4 PROMEX emits one *_status series per possible state with a
+    // `state` label; all have value 0 except the actual state, which is 1.
+    // Filter with == 1 and read the status from the `state` label.
     backendStatus: 'haproxy_backend_status{%s} == 1' % $._config.baseMatchers,
     frontendStatus: 'haproxy_frontend_status{%s} == 1' % $._config.baseMatchers,
     serverStatus: 'haproxy_server_status{%s} == 1' % $._config.backendMatchers,
