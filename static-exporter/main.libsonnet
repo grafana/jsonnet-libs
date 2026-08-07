@@ -1,7 +1,7 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
 
 {
-  new(name, image='httpd:2.4-alpine')::
+  new(name, image='httpd:2.4.67-alpine@sha256:0136c2d4462f3b8ecc92bea70efdfef4d06523999ae8d7aa533969dea6db4576')::
     {
       name:: name,
       data:: { metrics: '' },
