@@ -5,7 +5,6 @@ local g = import './g.libsonnet';
 local links = import './links.libsonnet';
 local panels = import './panels.libsonnet';
 local rows = import './rows.libsonnet';
-local variables = import './variables.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
@@ -29,7 +28,20 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       },
 
     grafana: {
-      variables: variables.new(this),
+      variables:
+        commonlib.variables.new(
+          filteringSelector=this.config.filteringSelector,
+          groupLabels=this.config.groupLabels,
+          instanceLabels=this.config.instanceLabels,
+          varMetric='openstack_identity_up',
+          enableLokiLogs=this.config.enableLokiLogs,
+        )
+        + {
+          // Group-scoped selector in Grafana's advanced variable syntax, consumed by the
+          // alert list panel. commonlib only exposes the group+instance form.
+          queriesGroupSelectorAdvanced:
+            commonlib.utils.labelsToPromQLSelectorAdvanced(this.config.groupLabels),
+        },
       annotations: {},
       links: links.new(this),
       panels: panels.new(this),

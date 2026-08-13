@@ -1031,7 +1031,7 @@
       "templating": {
          "list": [
             {
-               "label": "Data source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
                "regex": "",

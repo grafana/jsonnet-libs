@@ -545,7 +545,7 @@
             },
             "id": 8,
             "options": {
-               "alertInstanceLabelFilter": "job=\"integrations/openstack\"=~\"${job=\"integrations/openstack\":regex}\",job=~\"${job:regex}\""
+               "alertInstanceLabelFilter": "job=~\"${job:regex}\""
             },
             "pluginVersion": "v11.4.0",
             "title": "Alerts",
@@ -1623,7 +1623,7 @@
       "templating": {
          "list": [
             {
-               "label": "Data source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
                "regex": "",
