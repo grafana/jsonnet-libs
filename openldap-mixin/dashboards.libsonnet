@@ -13,28 +13,21 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
-    local panels = this.grafana.panels;
+    local rows = this.grafana.rows;
 
     {
       'overview.json':
         g.dashboard.new(prefix + 'OpenLDAP overview')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.uptime { gridPos+: { w: 8 } },
-              panels.referrals { gridPos+: { w: 8 } },
-              panels.alerts { gridPos+: { w: 8 } },
-              panels.connections { gridPos+: { w: 8 } },
-              panels.waiters { gridPos+: { w: 8 } },
-              panels.directoryEntries { gridPos+: { w: 8 } },
-              panels.networkConnectivity { gridPos+: { w: 8 } },
-              panels.pduProcessed { gridPos+: { w: 8 } },
-              panels.authenticationAttempts { gridPos+: { w: 8 } },
-              panels.coreOperations { gridPos+: { w: 12 } },
-              panels.auxiliaryOperations { gridPos+: { w: 12 } },
-              panels.primaryThreadActivity { gridPos+: { w: 12 } },
-              panels.threadQueueManagement { gridPos+: { w: 12 } },
-            ], 12, 6
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                rows.overview,
+                rows.connections,
+                rows.operations,
+                rows.threads,
+              ]
+            )
           )
         )
         + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { openldapOverview+:: {} }, annotations, timezone, refresh, period),

@@ -12,6 +12,19 @@
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -53,9 +66,9 @@
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 0
+               "y": 1
             },
-            "id": 1,
+            "id": 2,
             "options": {
                "graphMode": "none",
                "reduceOptions": {
@@ -124,9 +137,9 @@
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 0
+               "y": 1
             },
-            "id": 2,
+            "id": 3,
             "options": {
                "graphMode": "none",
                "reduceOptions": {
@@ -162,15 +175,28 @@
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 0
+               "y": 1
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "alertInstanceLabelFilter": "job=~\"${job:regex}\",instance=~\"${instance:regex}\""
             },
             "pluginVersion": "v11.4.0",
             "title": "OpenLDAP alerts",
             "type": "alertlist"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 7
+            },
+            "id": 5,
+            "panels": [ ],
+            "title": "Connections",
+            "type": "row"
          },
          {
             "datasource": {
@@ -222,9 +248,9 @@
                "h": 6,
                "w": 8,
                "x": 0,
-               "y": 6
+               "y": 8
             },
-            "id": 4,
+            "id": 6,
             "interval": "1m",
             "options": {
                "legend": {
@@ -289,9 +315,9 @@
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 6
+               "y": 8
             },
-            "id": 5,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -328,87 +354,6 @@
                }
             ],
             "title": "Waiters",
-            "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${prometheus_datasource}"
-            },
-            "description": "The total increase of new directory entries added over time.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "#5794f2",
-                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "decimals": 0,
-                  "min": 0,
-                  "thresholds": {
-                     "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
-                  },
-                  "unit": "none"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Directory entries / $__interval"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "none"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 6,
-               "w": 8,
-               "x": 16,
-               "y": 6
-            },
-            "id": 6,
-            "interval": "1m",
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.4.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "expr": "increase(openldap_monitor_counter_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Entries,cn=Statistics,cn=Monitor\"}[$__interval:] offset -$__interval)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{instance}}",
-                  "refId": "Directory entries / $__interval"
-               }
-            ],
-            "title": "Directory entries / $__interval",
             "type": "timeseries"
          },
          {
@@ -460,10 +405,10 @@
             "gridPos": {
                "h": 6,
                "w": 8,
-               "x": 0,
-               "y": 12
+               "x": 16,
+               "y": 8
             },
-            "id": 7,
+            "id": 8,
             "interval": "1m",
             "options": {
                "legend": {
@@ -490,6 +435,100 @@
                }
             ],
             "title": "Network connectivity / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 14
+            },
+            "id": 9,
+            "panels": [ ],
+            "title": "Operations",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The total increase of new directory entries added over time.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green"
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Directory entries / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 15
+            },
+            "id": 10,
+            "interval": "1m",
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "increase(openldap_monitor_counter_object{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Entries,cn=Statistics,cn=Monitor\"}[$__interval:] offset -$__interval)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Directory entries / $__interval"
+               }
+            ],
+            "title": "Directory entries / $__interval",
             "type": "timeseries"
          },
          {
@@ -542,9 +581,9 @@
                "h": 6,
                "w": 8,
                "x": 8,
-               "y": 12
+               "y": 15
             },
-            "id": 8,
+            "id": 11,
             "interval": "1m",
             "options": {
                "legend": {
@@ -623,9 +662,9 @@
                "h": 6,
                "w": 8,
                "x": 16,
-               "y": 12
+               "y": 15
             },
-            "id": 9,
+            "id": 12,
             "interval": "1m",
             "options": {
                "legend": {
@@ -690,9 +729,9 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 18
+               "y": 21
             },
-            "id": 10,
+            "id": 13,
             "options": {
                "legend": {
                   "calcs": [
@@ -811,9 +850,9 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 18
+               "y": 21
             },
-            "id": 11,
+            "id": 14,
             "options": {
                "legend": {
                   "calcs": [
@@ -897,6 +936,19 @@
             "type": "timeseries"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 27
+            },
+            "id": 15,
+            "panels": [ ],
+            "title": "Threads",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -935,9 +987,9 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 24
+               "y": 28
             },
-            "id": 12,
+            "id": 16,
             "options": {
                "legend": {
                   "calcs": [
@@ -1032,9 +1084,9 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 24
+               "y": 28
             },
-            "id": 13,
+            "id": 17,
             "options": {
                "legend": {
                   "calcs": [
