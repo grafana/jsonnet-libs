@@ -7,7 +7,7 @@ local pgbouncer =
     {
       filteringSelector: config.filteringSelector,
       uid: 'pgbouncer',
-      enableLokiLogs: true,
+      enableLokiLogs: config.enableLokiLogs,
     }
   );
 
