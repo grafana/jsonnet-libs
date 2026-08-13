@@ -8,29 +8,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       local stat = g.panel.stat,
       local timeSeriesPanel = g.panel.timeSeries,
       local alertListPanel = g.panel.alertList,
+      // The counter panels bucket by $__interval, so pin a floor matching the
+      // OpenLDAP exporter's scrape interval.
       local withInterval = timeSeriesPanel.queryOptions.withInterval('1m'),
 
       // Uptime Panel
       uptime: signals.overview.uptime.asStat()
               + commonlib.panels.generic.stat.info.stylize()
               + stat.options.withTextMode('value')
-              + stat.standardOptions.withMin(0)
-              + stat.standardOptions.color.withMode('thresholds')
-              + stat.standardOptions.thresholds.withMode('absolute')
-              + stat.standardOptions.thresholds.withSteps([
-                stat.thresholdStep.withColor('green'),
-              ]),
+              + stat.standardOptions.withMin(0),
 
       // Referrals Panel
       referrals: signals.overview.referrals.asStat()
                  + commonlib.panels.generic.stat.info.stylize()
                  + stat.options.withTextMode('value')
-                 + stat.standardOptions.withMin(0)
-                 + stat.standardOptions.color.withMode('thresholds')
-                 + stat.standardOptions.thresholds.withMode('absolute')
-                 + stat.standardOptions.thresholds.withSteps([
-                   stat.thresholdStep.withColor('green'),
-                 ]),
+                 + stat.standardOptions.withMin(0),
 
       alerts:
         alertListPanel.new('OpenLDAP alerts')
@@ -40,27 +32,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       directoryEntries: signals.overview.directoryEntries.asTimeSeries()
                         + commonlib.panels.generic.timeSeries.base.stylize()
                         + withInterval
-                        + timeSeriesPanel.options.legend.withDisplayMode('list')
                         + timeSeriesPanel.standardOptions.withMin(0)
-                        + timeSeriesPanel.standardOptions.withDecimals(0)
-                        + timeSeriesPanel.standardOptions.color.withMode('palette-classic')
-                        + timeSeriesPanel.standardOptions.thresholds.withMode('absolute')
-                        + timeSeriesPanel.standardOptions.thresholds.withSteps([
-                          timeSeriesPanel.thresholdStep.withColor('green'),
-                        ]),
+                        + timeSeriesPanel.standardOptions.withDecimals(0),
 
       // Connections Panel
       connections: signals.connections.connections.asTimeSeries()
                    + commonlib.panels.generic.timeSeries.base.stylize()
                    + withInterval
-                   + timeSeriesPanel.options.legend.withDisplayMode('list')
                    + timeSeriesPanel.standardOptions.withMin(0)
-                   + timeSeriesPanel.standardOptions.withDecimals(0)
-                   + timeSeriesPanel.standardOptions.color.withMode('palette-classic')
-                   + timeSeriesPanel.standardOptions.thresholds.withMode('absolute')
-                   + timeSeriesPanel.standardOptions.thresholds.withSteps([
-                     timeSeriesPanel.thresholdStep.withColor('green'),
-                   ]),
+                   + timeSeriesPanel.standardOptions.withDecimals(0),
 
       // Waiters Panel
       waiters: commonlib.panels.generic.timeSeries.base.new(
@@ -71,104 +51,70 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                  ],
                  description='The number of read and write waiters.'
                )
-               + timeSeriesPanel.options.legend.withDisplayMode('list')
                + timeSeriesPanel.standardOptions.withUnit('none')
                + timeSeriesPanel.standardOptions.withMin(0)
-               + timeSeriesPanel.standardOptions.withDecimals(0)
-               + timeSeriesPanel.standardOptions.color.withMode('palette-classic')
-               + timeSeriesPanel.standardOptions.thresholds.withMode('absolute')
-               + timeSeriesPanel.standardOptions.thresholds.withSteps([
-                 timeSeriesPanel.thresholdStep.withColor('green'),
-               ]),
+               + timeSeriesPanel.standardOptions.withDecimals(0),
 
       // Network Connectivity Panel
       networkConnectivity: signals.connections.networkConnectivity.asTimeSeries()
                            + commonlib.panels.generic.timeSeries.base.stylize()
                            + withInterval
-                           + timeSeriesPanel.options.legend.withDisplayMode('list')
                            + timeSeriesPanel.standardOptions.withMin(0)
-                           + timeSeriesPanel.standardOptions.withDecimals(0)
-                           + timeSeriesPanel.standardOptions.color.withMode('palette-classic')
-                           + timeSeriesPanel.standardOptions.thresholds.withMode('absolute')
-                           + timeSeriesPanel.standardOptions.thresholds.withSteps([
-                             timeSeriesPanel.thresholdStep.withColor('green'),
-                           ]),
+                           + timeSeriesPanel.standardOptions.withDecimals(0),
 
       // PDU Processed Panel
       pduProcessed: signals.operations.pduProcessed.asTimeSeries()
                     + commonlib.panels.generic.timeSeries.base.stylize()
                     + withInterval
-                    + timeSeriesPanel.options.legend.withDisplayMode('list')
                     + timeSeriesPanel.standardOptions.withMin(0)
-                    + timeSeriesPanel.standardOptions.withDecimals(0)
-                    + timeSeriesPanel.standardOptions.color.withMode('palette-classic')
-                    + timeSeriesPanel.standardOptions.thresholds.withMode('absolute')
-                    + timeSeriesPanel.standardOptions.thresholds.withSteps([
-                      timeSeriesPanel.thresholdStep.withColor('green'),
-                    ]),
+                    + timeSeriesPanel.standardOptions.withDecimals(0),
 
       // Authentication Attempts Panel
       authenticationAttempts: signals.authentication.authAttempts.asTimeSeries()
                               + commonlib.panels.generic.timeSeries.base.stylize()
                               + withInterval
-                              + timeSeriesPanel.options.legend.withDisplayMode('list')
                               + timeSeriesPanel.standardOptions.withMin(0)
-                              + timeSeriesPanel.standardOptions.withDecimals(0)
-                              + timeSeriesPanel.standardOptions.color.withMode('palette-classic')
-                              + timeSeriesPanel.standardOptions.thresholds.withMode('absolute')
-                              + timeSeriesPanel.standardOptions.thresholds.withSteps([
-                                timeSeriesPanel.thresholdStep.withColor('green'),
-                              ]),
+                              + timeSeriesPanel.standardOptions.withDecimals(0),
 
       // Core Operations Panel
       coreOperations: commonlib.panels.generic.timeSeries.base.new(
                         'Core operations / $__interval',
                         targets=[
-                          signals.operations.addOperations.asTarget() + withInterval,
-                          signals.operations.bindOperations.asTarget() + withInterval,
-                          signals.operations.modifyOperations.asTarget() + withInterval,
-                          signals.operations.searchOperations.asTarget() + withInterval,
-                          signals.operations.deleteOperations.asTarget() + withInterval,
+                          signals.operations.addOperations.asTarget(),
+                          signals.operations.bindOperations.asTarget(),
+                          signals.operations.modifyOperations.asTarget(),
+                          signals.operations.searchOperations.asTarget(),
+                          signals.operations.deleteOperations.asTarget(),
                         ],
                         description='The key LDAP operations.'
                       )
+                      + withInterval
                       + timeSeriesPanel.options.legend.withDisplayMode('table')
                       + timeSeriesPanel.options.legend.withCalcsMixin(['min', 'max', 'mean'])
                       + timeSeriesPanel.options.legend.withPlacement('right')
-                      + timeSeriesPanel.options.legend.withShowLegend(true)
                       + timeSeriesPanel.standardOptions.withUnit('none')
                       + timeSeriesPanel.standardOptions.withMin(0)
-                      + timeSeriesPanel.standardOptions.withDecimals(0)
-                      + timeSeriesPanel.standardOptions.color.withMode('palette-classic')
-                      + timeSeriesPanel.standardOptions.thresholds.withMode('absolute')
-                      + timeSeriesPanel.standardOptions.thresholds.withSteps([
-                        timeSeriesPanel.thresholdStep.withColor('green'),
-                      ]),
+                      + timeSeriesPanel.standardOptions.withDecimals(0),
 
       // Auxiliary Operations Panel
       auxiliaryOperations: commonlib.panels.generic.timeSeries.base.new(
                              'Auxiliary operations / $__interval',
                              targets=[
-                               signals.operations.abandonOperations.asTarget() + withInterval,
-                               signals.operations.compareOperations.asTarget() + withInterval,
-                               signals.operations.unbindOperations.asTarget() + withInterval,
-                               signals.operations.extendedOperations.asTarget() + withInterval,
-                               signals.operations.modrdnOperations.asTarget() + withInterval,
+                               signals.operations.abandonOperations.asTarget(),
+                               signals.operations.compareOperations.asTarget(),
+                               signals.operations.unbindOperations.asTarget(),
+                               signals.operations.extendedOperations.asTarget(),
+                               signals.operations.modrdnOperations.asTarget(),
                              ],
                              description='The less frequent but important LDAP operations.'
                            )
+                           + withInterval
                            + timeSeriesPanel.options.legend.withDisplayMode('table')
                            + timeSeriesPanel.options.legend.withCalcsMixin(['min', 'max', 'mean'])
                            + timeSeriesPanel.options.legend.withPlacement('right')
-                           + timeSeriesPanel.options.legend.withShowLegend(true)
                            + timeSeriesPanel.standardOptions.withUnit('none')
                            + timeSeriesPanel.standardOptions.withMin(0)
-                           + timeSeriesPanel.standardOptions.withDecimals(0)
-                           + timeSeriesPanel.standardOptions.color.withMode('palette-classic')
-                           + timeSeriesPanel.standardOptions.thresholds.withMode('absolute')
-                           + timeSeriesPanel.standardOptions.thresholds.withSteps([
-                             timeSeriesPanel.thresholdStep.withColor('green'),
-                           ]),
+                           + timeSeriesPanel.standardOptions.withDecimals(0),
 
       // Primary Thread Activity Panel
       primaryThreadActivity: commonlib.panels.generic.timeSeries.base.new(
@@ -183,16 +129,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                              + timeSeriesPanel.options.legend.withDisplayMode('table')
                              + timeSeriesPanel.options.legend.withCalcsMixin(['min', 'max', 'mean'])
                              + timeSeriesPanel.options.legend.withPlacement('right')
-                             + timeSeriesPanel.options.legend.withShowLegend(true)
                              + timeSeriesPanel.standardOptions.withUnit('none')
                              + timeSeriesPanel.standardOptions.withMin(0)
-                             + timeSeriesPanel.standardOptions.withDecimals(0)
-                             + timeSeriesPanel.standardOptions.color.withMode('palette-classic')
-                             + timeSeriesPanel.standardOptions.thresholds.withMode('absolute')
-                             + timeSeriesPanel.standardOptions.thresholds.withSteps([
-                               timeSeriesPanel.thresholdStep.withColor('green'),
-                               timeSeriesPanel.thresholdStep.withValue(null),
-                             ]),
+                             + timeSeriesPanel.standardOptions.withDecimals(0),
 
       // Thread Queue Management Panel
       threadQueueManagement: commonlib.panels.generic.timeSeries.base.new(
@@ -208,15 +147,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                              + timeSeriesPanel.options.legend.withDisplayMode('table')
                              + timeSeriesPanel.options.legend.withCalcsMixin(['min', 'max', 'mean'])
                              + timeSeriesPanel.options.legend.withPlacement('right')
-                             + timeSeriesPanel.options.legend.withShowLegend(true)
                              + timeSeriesPanel.standardOptions.withUnit('none')
                              + timeSeriesPanel.standardOptions.withMin(0)
-                             + timeSeriesPanel.standardOptions.withDecimals(0)
-                             + timeSeriesPanel.standardOptions.color.withMode('palette-classic')
-                             + timeSeriesPanel.standardOptions.thresholds.withMode('absolute')
-                             + timeSeriesPanel.standardOptions.thresholds.withSteps([
-                               timeSeriesPanel.thresholdStep.withColor('green'),
-                               timeSeriesPanel.thresholdStep.withValue(null),
-                             ]),
+                             + timeSeriesPanel.standardOptions.withDecimals(0),
     },
 }

@@ -34,14 +34,15 @@
                "defaults": {
                   "color": {
                      "fixedColor": "text",
-                     "mode": "thresholds"
+                     "mode": "fixed"
                   },
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green"
+                           "color": "#5794f2",
+                           "value": null
                         }
                      ]
                   },
@@ -105,14 +106,15 @@
                "defaults": {
                   "color": {
                      "fixedColor": "text",
-                     "mode": "thresholds"
+                     "mode": "fixed"
                   },
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [
                         {
-                           "color": "green"
+                           "color": "#5794f2",
+                           "value": null
                         }
                      ]
                   },
@@ -221,11 +223,7 @@
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                },
@@ -302,11 +300,7 @@
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -379,11 +373,7 @@
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                },
@@ -473,11 +463,7 @@
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                },
@@ -554,11 +540,7 @@
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                },
@@ -635,11 +617,7 @@
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                },
@@ -716,11 +694,7 @@
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -732,6 +706,7 @@
                "y": 21
             },
             "id": 13,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [
@@ -740,8 +715,7 @@
                      "mean"
                   ],
                   "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -758,7 +732,6 @@
                   "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Add,cn=Operations,cn=Monitor\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}} - Add",
                   "refId": "Add operations"
                },
@@ -770,7 +743,6 @@
                   "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Bind,cn=Operations,cn=Monitor\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}} - Bind",
                   "refId": "Bind operations"
                },
@@ -782,7 +754,6 @@
                   "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Modify,cn=Operations,cn=Monitor\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}} - Modify",
                   "refId": "Modify operations"
                },
@@ -794,7 +765,6 @@
                   "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Search,cn=Operations,cn=Monitor\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}} - Search",
                   "refId": "Search operations"
                },
@@ -806,7 +776,6 @@
                   "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Delete,cn=Operations,cn=Monitor\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}} - Delete",
                   "refId": "Delete operations"
                }
@@ -837,11 +806,7 @@
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -853,6 +818,7 @@
                "y": 21
             },
             "id": 14,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [
@@ -861,8 +827,7 @@
                      "mean"
                   ],
                   "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -879,7 +844,6 @@
                   "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Abandon,cn=Operations,cn=Monitor\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}} - Abandon",
                   "refId": "Abandon operations"
                },
@@ -891,7 +855,6 @@
                   "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Compare,cn=Operations,cn=Monitor\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}} - Compare",
                   "refId": "Compare operations"
                },
@@ -903,7 +866,6 @@
                   "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Unbind,cn=Operations,cn=Monitor\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}} - Unbind",
                   "refId": "Unbind operations"
                },
@@ -915,7 +877,6 @@
                   "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Extended,cn=Operations,cn=Monitor\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}} - Extended",
                   "refId": "Extended operations"
                },
@@ -927,7 +888,6 @@
                   "expr": "increase(openldap_monitor_operation{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\", dn=\"cn=Modrdn,cn=Operations,cn=Monitor\"}[$__interval:] offset -$__interval)",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
                   "legendFormat": "{{instance}} - Modrdn",
                   "refId": "Modrdn operations"
                }
@@ -971,14 +931,7 @@
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -998,8 +951,7 @@
                      "mean"
                   ],
                   "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",
@@ -1068,14 +1020,7 @@
                   "min": 0,
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green"
-                        },
-                        {
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                }
@@ -1095,8 +1040,7 @@
                      "mean"
                   ],
                   "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "placement": "right"
                },
                "tooltip": {
                   "mode": "multi",

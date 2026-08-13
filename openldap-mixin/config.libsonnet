@@ -6,7 +6,6 @@
   enableMultiCluster: false,
   groupLabels: if self.enableMultiCluster then ['job', 'cluster'] else ['job'],
   logLabels: if self.enableMultiCluster then ['job', 'cluster', 'instance'] else ['job', 'instance'],
-  clusterLegendLabel: ['cluster', 'instance'],
   instanceLabels: ['instance'],
 
   // prefix dashboards titles
@@ -16,9 +15,13 @@
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
 
+  // new connections opened in 5m
   alertsWarningConnectionSpike: 100,
+  // percent, 5m search rate versus the preceding 15m
   alertsWarningHighSearchOperationRateSpike: 200,
+  // failed dials in 10m
   alertsWarningDialFailureSpike: 10,
+  // failed binds in 10m
   alertsWarningBindFailureRateIncrease: 10,
 
   enableLokiLogs: true,
