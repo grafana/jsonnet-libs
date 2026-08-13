@@ -15,6 +15,19 @@
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -58,9 +71,9 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
-            "id": 1,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -97,9 +110,9 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
-            "id": 2,
+            "id": 3,
             "options": {
                "alertInstanceLabelFilter": "job=~\"${job:regex}\",pgbouncer_cluster=~\"${pgbouncer_cluster:regex}\""
             },
@@ -151,9 +164,9 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 6
+               "y": 7
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -225,9 +238,9 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 6
+               "y": 7
             },
-            "id": 4,
+            "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -285,9 +298,9 @@
                "h": 6,
                "w": 24,
                "x": 0,
-               "y": 12
+               "y": 13
             },
-            "id": 5,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
