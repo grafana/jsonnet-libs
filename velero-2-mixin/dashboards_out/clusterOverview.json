@@ -310,7 +310,7 @@
             "options": {
                "alertInstanceLabelFilter": "job=~\"${job:regex}\",cluster=~\"${cluster:regex}\""
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "title": "Velero alerts",
             "type": "alertlist"
          },
@@ -715,7 +715,7 @@
          }
       ],
       "refresh": "1m",
-      "schemaVersion": 36,
+      "schemaVersion": 39,
       "tags": [
          "velero"
       ],

@@ -425,6 +425,7 @@
                "y": 4
             },
             "id": 7,
+            "panels": [ ],
             "title": "Backup",
             "type": "row"
          },
@@ -680,7 +681,7 @@
                   "unit": "s"
                }
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -706,6 +707,7 @@
                "y": 23
             },
             "id": 12,
+            "panels": [ ],
             "title": "Restore",
             "type": "row"
          },
@@ -876,6 +878,7 @@
                "y": 30
             },
             "id": 15,
+            "panels": [ ],
             "title": "CSI snapshots",
             "type": "row"
          },
@@ -1046,6 +1049,7 @@
                "y": 37
             },
             "id": 18,
+            "panels": [ ],
             "title": "Volume snapshots",
             "type": "row"
          },
@@ -1209,7 +1213,7 @@
          }
       ],
       "refresh": "1m",
-      "schemaVersion": 36,
+      "schemaVersion": 39,
       "tags": [
          "velero"
       ],
