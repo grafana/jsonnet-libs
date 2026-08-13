@@ -30,6 +30,19 @@
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -73,9 +86,9 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
-            "id": 1,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -150,9 +163,9 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
-            "id": 2,
+            "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -224,9 +237,9 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 6
+               "y": 7
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -301,9 +314,9 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 6
+               "y": 7
             },
-            "id": 4,
+            "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -361,9 +374,9 @@
                "h": 6,
                "w": 24,
                "x": 0,
-               "y": 12
+               "y": 13
             },
-            "id": 5,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -433,9 +446,9 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 18
+               "y": 19
             },
-            "id": 6,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -504,9 +517,9 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 18
+               "y": 19
             },
-            "id": 7,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -550,10 +563,10 @@
             "gridPos": {
                "h": 1,
                "w": 0,
-               "x": 24,
-               "y": 24
+               "x": 0,
+               "y": 25
             },
-            "id": 8,
+            "id": 9,
             "panels": [ ],
             "title": "Disks",
             "type": "row"
@@ -602,9 +615,9 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 25
+               "y": 26
             },
-            "id": 9,
+            "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -679,9 +692,9 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 25
+               "y": 26
             },
-            "id": 10,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -814,9 +827,9 @@
                "h": 6,
                "w": 24,
                "x": 0,
-               "y": 31
+               "y": 32
             },
-            "id": 11,
+            "id": 12,
             "pluginVersion": "v11.4.0",
             "targets": [
                {

@@ -12,41 +12,21 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
-    local panels = this.grafana.panels;
-    local stat = g.panel.stat;
+    local rows = this.grafana.rows;
     {
       'overview.json':
         g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.clustersCountStatus { gridPos+: { w: 6, h: 4 } },
-              panels.hostsCountStatus { gridPos+: { w: 6, h: 4 } },
-              panels.resourcePoolsCountStatus { gridPos+: { w: 6, h: 4 } },
-              panels.vmsCountStatus { gridPos+: { w: 6, h: 4 } },
-              panels.clusteredVMsOnStatus { gridPos+: { w: 4, h: 4 } },
-              panels.clusteredVMsOffStatus { gridPos+: { w: 4, h: 4 } },
-              panels.clusteredVMsSuspendedStatus { gridPos+: { w: 4, h: 4 } },
-              panels.clusteredVMTemplatesCountStatus { gridPos+: { w: 4, h: 4 } },
-              panels.clusteredHostsActiveStatus { gridPos+: { w: 4, h: 4 } },
-              panels.clusteredHostsInactiveStatus { gridPos+: { w: 4, h: 4 } },
-              g.panel.row.new('Clusters'),
-              panels.topCPUUtilizationClusters,
-              panels.topMemoryUtilizationClusters,
-              panels.clustersTable { gridPos+: { w: 24 } },
-              g.panel.row.new('Resource pools'),
-              panels.topCPUUsageResourcePools { gridPos+: { h: 8 } },
-              panels.topMemoryUsageResourcePools { gridPos+: { h: 8 } },
-              panels.topCPUShareResourcePools { gridPos+: { h: 8 } },
-              panels.topMemoryShareResourcePools { gridPos+: { h: 8 } },
-              g.panel.row.new('ESXi hosts'),
-              panels.topCPUUtilizationHosts { gridPos+: { h: 8 } },
-              panels.topMemoryUtilizationHosts { gridPos+: { h: 8 } },
-              panels.topDiskAvgLatencyHosts { gridPos+: { h: 8 } },
-              panels.topPacketErrorRateHosts { gridPos+: { h: 8 } },
-              g.panel.row.new('Datastores'),
-              panels.datastoreTable { gridPos+: { w: 24 } },
-            ], 12, 6
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                rows.overview,
+                rows.clusters,
+                rows.resourcePools,
+                rows.overviewHosts,
+                rows.datastores,
+              ]
+            )
           )
         )
         // hide link to self
@@ -54,25 +34,14 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       'clusters.json':
         g.dashboard.new(prefix + ' clusters')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.clusterVMsOnStatus { gridPos+: { w: 4, h: 4 } },
-              panels.clusterVMsOffStatus { gridPos+: { w: 4, h: 4 } },
-              panels.clusterVMsSuspendedStatus { gridPos+: { w: 4, h: 4 } },
-              panels.clusterHostsActiveStatus { gridPos+: { w: 4, h: 4 } },
-              panels.clusterHostsInactiveStatus { gridPos+: { w: 4, h: 4 } },
-              panels.clusterResourcePoolsStatus { gridPos+: { w: 4, h: 4 } },
-              panels.clusterCPULimit { gridPos+: { w: 8 } },
-              panels.clusterCPUEffective { gridPos+: { w: 8 } },
-              panels.clusterCPUUtilization { gridPos+: { w: 8 } },
-              panels.clusterMemoryLimit { gridPos+: { w: 8 } },
-              panels.clusterMemoryEffective { gridPos+: { w: 8 } },
-              panels.clusterMemoryUtilization { gridPos+: { w: 8 } },
-              g.panel.row.new('ESXi hosts'),
-              panels.clusterHostsTable { gridPos+: { w: 24 } },
-              g.panel.row.new('VMs'),
-              panels.clusterVMsTable { gridPos+: { w: 24 } },
-            ], 12, 6
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                rows.clusterOverview,
+                rows.clusterHosts,
+                rows.clusterVMs,
+              ]
+            )
           )
         )
         // hide link to self
@@ -80,20 +49,14 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       'hosts.json':
         g.dashboard.new(prefix + ' hosts')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.hostCPUUsage,
-              panels.hostCPUUtilization,
-              panels.hostMemoryUsage,
-              panels.hostMemoryUtilization,
-              panels.hostModifiedMemory { gridPos+: { w: 24 } },
-              panels.hostNetworkThroughputRate,
-              panels.hostPacketErrorRate,
-              g.panel.row.new('VMs'),
-              panels.hostVMsTable { gridPos+: { w: 24 } },
-              g.panel.row.new('Disks'),
-              panels.hostDisksTable { gridPos+: { w: 24 } },
-            ], 12, 6
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                rows.hostOverview,
+                rows.hostVMs,
+                rows.hostDisks,
+              ]
+            )
           )
         )
         // hide link to self
@@ -101,20 +64,13 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       'virtualMachines.json':
         g.dashboard.new(prefix + ' virtual machines')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.vmCPUUsage,
-              panels.vmCPUUtilization,
-              panels.vmMemoryUsage,
-              panels.vmMemoryUtilization,
-              panels.vmModifiedMemory { gridPos+: { w: 24 } },
-              panels.vmNetworkThroughputRate,
-              panels.vmPacketDropRate,
-              g.panel.row.new('Disks'),
-              panels.vmDiskUsage,
-              panels.vmDiskUtilization,
-              panels.vmDisksTable { gridPos+: { w: 24 } },
-            ], 12, 6
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                rows.virtualMachineOverview,
+                rows.virtualMachineDisks,
+              ]
+            )
           )
         )
         // hide link to self
