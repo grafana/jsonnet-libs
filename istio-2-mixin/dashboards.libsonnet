@@ -14,7 +14,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local timezone = this.config.dashboardTimezone;
     local rows = this.grafana.rows;
     {
-      overview:
+      'overview.json':
         g.dashboard.new(prefix + 'Istio overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -29,7 +29,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { overview+:: {} }, annotations, timezone, refresh, period),
-      servicesOverview:
+      'servicesOverview.json':
         g.dashboard.new(prefix + 'Istio services overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -44,7 +44,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.serviceOverviewVariables, uid + '-services-overview', tags, links { servicesOverview+:: {} }, annotations, timezone, refresh, period),
-      workloadsOverview:
+      'workloadsOverview.json':
         g.dashboard.new(prefix + 'Istio workloads overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -62,7 +62,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     +
     if this.config.enableLokiLogs then
       {
-        logs:
+        'logs.json':
           logslib.new(
             prefix + 'Istio logs',
             datasourceName=this.grafana.variables.datasources.loki.name,
