@@ -217,7 +217,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "s"
+                  "unit": "ms"
                },
                "overrides": [
                   {
@@ -228,7 +228,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": "s"
+                           "value": "ms"
                         }
                      ]
                   }
@@ -258,7 +258,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:]), 1)\n)",
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:] offset -$__interval) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:] offset -$__interval), 1)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}",

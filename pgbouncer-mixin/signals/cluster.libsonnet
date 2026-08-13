@@ -48,10 +48,12 @@ function(this)
         name: 'Top databases by average query duration',
         description: 'Top databases by average duration of queries being processed by PgBouncer.',
         type: 'raw',
-        unit: 's',
+        // The expression scales seconds to milliseconds, so the unit is ms. The legacy
+        // panel declared 's' and under-reported the value by 1000x.
+        unit: 'ms',
         sources: {
           prometheus: {
-            expr: '1000 * increase(pgbouncer_stats_queries_duration_seconds_total{%(queriesSelectorGroupOnly)s}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{%(queriesSelectorGroupOnly)s}[$__interval:]), 1)',
+            expr: '1000 * increase(pgbouncer_stats_queries_duration_seconds_total{%(queriesSelectorGroupOnly)s}[$__interval:] offset -$__interval) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{%(queriesSelectorGroupOnly)s}[$__interval:] offset -$__interval), 1)',
             exprWrappers: [['topk by(database, instance, pgbouncer_cluster)($top_database_count, ', ')']],
             legendCustomTemplate: '{{pgbouncer_cluster}} - {{instance}} - {{database}}',
           },
