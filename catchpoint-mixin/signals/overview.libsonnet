@@ -109,7 +109,7 @@ function(this)
         },
       },
       contentLoadTimeByTest: {
-        name: 'Top average content loading time',
+        name: 'Top average content loading time by tests',
         nameShort: 'Content load',
         type: 'gauge',
         description: 'The top average content loading time among all tests over the specified interval.',
@@ -139,11 +139,11 @@ function(this)
         },
       },
       redirectTimeByTest: {
-        name: 'Top average redirects by tests',
+        name: 'Top average redirect time by tests',
         nameShort: 'Redirect time',
         type: 'gauge',
-        description: 'The top average number of redirects among all tests over the specified interval.',
-        unit: '',
+        description: 'The top average time spent following redirects among all tests over the specified interval.',
+        unit: 'ms',
         sources: {
           prometheus: {
             expr: 'avg_over_time(catchpoint_redirect_time{%(queriesSelector)s}[$__interval:])',
@@ -154,11 +154,11 @@ function(this)
         },
       },
       redirectTimeByNode: {
-        name: 'Top average redirects by nodes',
+        name: 'Top average redirect time by nodes',
         nameShort: 'Redirect time',
         type: 'gauge',
-        description: 'The top average number of redirects among all nodes over the specified interval.',
-        unit: '',
+        description: 'The top average time spent following redirects among all nodes over the specified interval.',
+        unit: 'ms',
         sources: {
           prometheus: {
             expr: 'avg_over_time(catchpoint_redirect_time{%(queriesSelector)s}[$__interval:])',

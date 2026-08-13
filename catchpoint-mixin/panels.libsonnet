@@ -16,7 +16,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       local stylize =
         commonlib.panels.generic.timeSeries.base.stylize()
         + timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+        + timeSeries.fieldConfig.defaults.custom.withSpanNulls(true),
       local tableLegend =
         timeSeries.options.legend.withDisplayMode('table')
         + timeSeries.options.legend.withPlacement('right')

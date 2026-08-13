@@ -45,7 +45,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -155,7 +155,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -230,7 +230,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -305,7 +305,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -380,7 +380,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -468,7 +468,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -543,7 +543,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -631,7 +631,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -706,7 +706,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -781,7 +781,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -793,7 +793,7 @@
                   {
                      "matcher": {
                         "id": "byFrameRefID",
-                        "options": "Top average content loading time"
+                        "options": "Top average content loading time by tests"
                      },
                      "properties": [
                         {
@@ -832,10 +832,10 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{test_name}}",
-                  "refId": "Top average content loading time"
+                  "refId": "Top average content loading time by tests"
                }
             ],
-            "title": "Top average content loading time",
+            "title": "Top average content loading time by tests",
             "type": "timeseries"
          },
          {
@@ -856,7 +856,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -918,7 +918,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The top average number of redirects among all tests over the specified interval.",
+            "description": "The top average time spent following redirects among all tests over the specified interval.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -931,24 +931,24 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": ""
+                  "unit": "ms"
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byFrameRefID",
-                        "options": "Top average redirects by tests"
+                        "options": "Top average redirect time by tests"
                      },
                      "properties": [
                         {
                            "id": "unit",
-                           "value": ""
+                           "value": "ms"
                         }
                      ]
                   }
@@ -982,10 +982,10 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{test_name}}",
-                  "refId": "Top average redirects by tests"
+                  "refId": "Top average redirect time by tests"
                }
             ],
-            "title": "Top average redirects by tests",
+            "title": "Top average redirect time by tests",
             "type": "timeseries"
          },
          {
@@ -993,7 +993,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The top average number of redirects among all nodes over the specified interval.",
+            "description": "The top average time spent following redirects among all nodes over the specified interval.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1006,24 +1006,24 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": ""
+                  "unit": "ms"
                },
                "overrides": [
                   {
                      "matcher": {
                         "id": "byFrameRefID",
-                        "options": "Top average redirects by nodes"
+                        "options": "Top average redirect time by nodes"
                      },
                      "properties": [
                         {
                            "id": "unit",
-                           "value": ""
+                           "value": "ms"
                         }
                      ]
                   }
@@ -1057,10 +1057,10 @@
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{node_name}}",
-                  "refId": "Top average redirects by nodes"
+                  "refId": "Top average redirect time by nodes"
                }
             ],
-            "title": "Top average redirects by nodes",
+            "title": "Top average redirect time by nodes",
             "type": "timeseries"
          }
       ],

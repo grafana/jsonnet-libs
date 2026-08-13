@@ -382,7 +382,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -457,7 +457,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -532,7 +532,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -618,7 +618,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -693,7 +693,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -781,7 +781,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -853,7 +853,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true",
+                     "spanNulls": true,
                      "stacking": {
                         "mode": "normal"
                      }
@@ -941,7 +941,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -1016,7 +1016,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -1091,7 +1091,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -1179,7 +1179,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
@@ -1254,7 +1254,7 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",

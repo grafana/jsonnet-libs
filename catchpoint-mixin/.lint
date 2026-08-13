@@ -14,8 +14,4 @@ exclusions:
     entries:
       - panel: "Network connections"
       - panel: "Hosts contacted"
-      - panel: "Cache access"
-      - panel: "Redirects"
-      - panel: "Top average redirects by tests"
-      - panel: "Top average redirects by nodes"
       - panel: "Top errors by tests"
