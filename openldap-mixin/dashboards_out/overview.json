@@ -179,7 +179,7 @@
             },
             "id": 4,
             "options": {
-               "alertInstanceLabelFilter": "job=~\"${job:regex}\",instance=~\"${instance:regex}\""
+               "alertInstanceLabelFilter": "job=~\"integrations/openldap\",job=~\"${job:regex}\",instance=~\"${instance:regex}\""
             },
             "pluginVersion": "v11.4.0",
             "title": "OpenLDAP alerts",

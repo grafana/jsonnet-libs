@@ -5,7 +5,6 @@ local g = import './g.libsonnet';
 local links = import './links.libsonnet';
 local panels = import './panels.libsonnet';
 local rows = import './rows.libsonnet';
-local variables = import './variables.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
@@ -29,7 +28,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       },
 
     grafana: {
-      variables: variables.new(this, varMetric='openldap_dial' % this.config),
+      variables: commonlib.variables.new(
+        filteringSelector=this.config.filteringSelector,
+        groupLabels=this.config.groupLabels,
+        instanceLabels=this.config.instanceLabels,
+        varMetric='openldap_dial',
+        customAllValue='.+',
+        enableLokiLogs=this.config.enableLokiLogs,
+      ),
       annotations: {},
       links: links.new(this),
       panels: panels.new(this),

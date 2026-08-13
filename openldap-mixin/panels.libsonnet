@@ -34,7 +34,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       alerts:
         alertListPanel.new('OpenLDAP alerts')
-        + alertListPanel.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
+        + alertListPanel.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesSelectorAdvancedSyntax),
 
       // Directory Entries Panel
       directoryEntries: signals.overview.directoryEntries.asTimeSeries()
