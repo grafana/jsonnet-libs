@@ -25,7 +25,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       },
 
     grafana: {
-      variables: variables.new(this, varMetric='vcenter_cluster_cpu_effective'),
+      variables: variables.new(this),
       annotations: {},
       links: links.new(this),
       panels: panels.new(this),

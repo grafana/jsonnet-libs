@@ -3,50 +3,29 @@ local var = g.dashboard.variable;
 local commonlib = import 'common-lib/common/main.libsonnet';
 local utils = commonlib.utils;
 
+// vSphere's inventory is a five-level hierarchy (datacenter > cluster > ESXi host >
+// resource pool / virtual app > VM), deeper than the group/instance split
+// commonlib.variables models, and a VM's parent may be a resource pool OR a virtual
+// app OR neither. The chained variables below are therefore built here; datasources
+// come from commonlib.
 local extendedUtils = utils {
+  // commonlib's toSentenceCase only uppercases the first character. vSphere labels are
+  // long and fully qualified (vcenter_datacenter_name), so drop the vendor prefix and
+  // the trailing 'name' to get a readable dashboard label ('Datacenter').
   toSentenceCase(string)::
     local noUnderscore = std.join(' ', std.split(string, '_'));
     local noNameSuffix = if std.endsWith(noUnderscore, ' name') then std.substr(noUnderscore, 0, std.length(noUnderscore) - 5) else noUnderscore;
     local noVcenterPrefix = if std.startsWith(noNameSuffix, 'vcenter ') then std.substr(noNameSuffix, 8, std.length(noNameSuffix) - 8) else noNameSuffix;
     std.asciiUpper(noVcenterPrefix[0]) + std.slice(noVcenterPrefix, 1, std.length(noVcenterPrefix), 1),
-
-  labelsToPromQLSelector(labels, optionalLabels)::
-    std.join(
-      ',',
-      [
-        if std.member(optionalLabels, label)
-        then '%s=~"$%s|"' % [label, label]
-        else '%s=~"$%s"' % [label, label]
-        for label in labels
-      ]
-    ),
-
-  labelsToPromQLSelectorWithEmptyOptions(labels, optionalLabels, emptyLabels)::
-    std.join(
-      ',',
-      [
-        if std.member(optionalLabels, label)
-        then '%s=~"$%s|"' % [label, label]
-        else if std.member(emptyLabels, label)
-        then '%s=""' % [label]
-        else '%s=~"$%s"' % [label, label]
-        for label in labels
-      ]
-    ),
 };
 
-// Generates chained variables to use on on all dashboards
+// Generates chained variables to use on all dashboards
 {
-  new(this, varMetric):
+  new(this):
     {
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
       local datacenterLabels = this.config.datacenterLabels,
-      local clusterLabels = this.config.clusterLabels,
-      local hostLabels = this.config.hostLabels,
-      local hostOptionalLabels = ['vcenter_cluster_name'],
-      local virtualMachineLabels = this.config.virtualMachineLabels,
-      local virtualMachineOptionalLabels = ['vcenter_cluster_name', 'vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'],
       local clusterLabel = 'vcenter_cluster_name',
       local clusterSelector = 'job=~"integrations/vsphere",job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name"',
       local hostLabel = 'vcenter_host_name',
@@ -64,6 +43,8 @@ local extendedUtils = utils {
       local vmQuery = 'query_result((sum(label_join(sgn(sum by(vcenter_resource_pool_inventory_path,vcenter_vm_name) (vcenter_vm_memory_usage_mebibytes{job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name",vcenter_cluster_name=~"$vcenter_cluster_name|",vcenter_host_name=~"$vcenter_host_name",vcenter_resource_pool_inventory_path=~"$vcenter_resource_pool_inventory_path",vcenter_resource_pool_inventory_path!=""})),"vm_path","/","vcenter_resource_pool_inventory_path","vcenter_vm_name")) by (vm_path,vcenter_vm_name)) or (sum(label_join(sgn(sum by(vcenter_virtual_app_inventory_path,vcenter_vm_name) (vcenter_vm_memory_usage_mebibytes{job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name",vcenter_cluster_name=~"$vcenter_cluster_name|",vcenter_host_name=~"$vcenter_host_name",vcenter_virtual_app_inventory_path=~"$vcenter_virtual_app_inventory_path",vcenter_virtual_app_inventory_path!=""})),"vm_path","/","vcenter_virtual_app_inventory_path","vcenter_vm_name")) by (vm_path,vcenter_vm_name)) or (sum(label_replace(sgn(sum by(vcenter_resource_pool_inventory_path,vcenter_virtual_app_inventory_path,vcenter_vm_name) (vcenter_vm_memory_usage_mebibytes{job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name",vcenter_cluster_name=~"$vcenter_cluster_name|",vcenter_host_name=~"$vcenter_host_name",vcenter_resource_pool_inventory_path="",vcenter_virtual_app_inventory_path=""})),"vm_path","$1","vcenter_vm_name","(.*)")) by (vm_path,vcenter_vm_name)))',
       local vmRegex = '/vcenter_vm_name="(?<value>[^"]*)",vm_path="(?<text>[^"]*)"/',
 
+      // Present on every vSphere deployment, so it is a safe basis for the chained
+      // job/datacenter variables.
       local varMetric = 'vcenter_vm_memory_usage_mebibytes',
       local topResourceSelector =
         var.custom.new(
@@ -99,17 +80,17 @@ local extendedUtils = utils {
             caseInsensitive=false
           );
         std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels, [filteringSelector])),
-      datasources: {
-        prometheus:
-          var.datasource.new('prometheus_datasource', 'prometheus')
-          + var.datasource.generalOptions.withLabel('Data source')
-          + var.datasource.withRegex(''),
-        loki:
-          var.datasource.new('loki_datasource', 'loki')
-          + var.datasource.generalOptions.withLabel('Loki data source')
-          + var.datasource.withRegex('')
-          + var.datasource.generalOptions.showOnDashboard.withNothing(),
-      },
+
+      datasources:
+        commonlib.variables.new(
+          filteringSelector=filteringSelector,
+          groupLabels=groupLabels,
+          instanceLabels=datacenterLabels,
+          varMetric=varMetric,
+          enableLokiLogs=this.config.enableLokiLogs,
+          prometheusDatasourceName='prometheus_datasource',
+          prometheusDatasourceLabel='Data source',
+        ).datasources,
 
       local createQueryVariable(name, displayName, query, regex, includeAll) =
         local variable =
@@ -167,70 +148,5 @@ local extendedUtils = utils {
         + createLabelValueVariable(resourcePoolLabel, 'Resource pool', varMetric, resourcePoolSelector, resourcePoolLabel, true)
         + createLabelValueVariable(virtualAppLabel, 'Virtual app', varMetric, virtualAppSelector, virtualAppLabel, true)
         + createQueryVariable(vmLabel, 'Virtual machine', vmQuery, vmRegex, true),
-
-      queriesSelector:
-        '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + datacenterLabels),
-        ],
-      clusterQueriesSelector:
-        '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + datacenterLabels + clusterLabels),
-        ],
-      clusterNoRPoolQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + clusterLabels + ['vcenter_resource_pool_inventory_path'], [], ['vcenter_resource_pool_inventory_path']),
-        ],
-      clusterNoVAppQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + clusterLabels + ['vcenter_virtual_app_inventory_path'], [], ['vcenter_virtual_app_inventory_path']),
-        ],
-      clusterNoRPoolOrVAppQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + clusterLabels + ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'], [], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
-        ],
-      hostQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelector(groupLabels + datacenterLabels + hostLabels, hostOptionalLabels),
-        ],
-      hostWithClusterQueriesSelector:
-        '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + datacenterLabels + hostLabels),
-        ],
-      hostNoClusterQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + hostLabels, [], hostOptionalLabels),
-        ],
-      hostNoRPoolQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + hostLabels + ['vcenter_resource_pool_inventory_path'], ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path']),
-        ],
-      hostNoVAppQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + hostLabels + ['vcenter_virtual_app_inventory_path'], ['vcenter_cluster_name'], ['vcenter_virtual_app_inventory_path']),
-        ],
-      hostNoRPoolOrVAppQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + hostLabels + ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'], ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
-        ],
-      virtualMachinesQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelector(groupLabels + datacenterLabels + virtualMachineLabels, virtualMachineOptionalLabels),
-        ],
-      virtualMachinesNoRPoolQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path']),
-        ],
-      virtualMachinesNoVAppQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_virtual_app_inventory_path']),
-        ],
-      virtualMachinesNoRPoolOrVAppQueriesSelector:
-        '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
-        ],
-      queriesGroupSelectorAdvanced:
-        '%s' % [
-          utils.labelsToPromQLSelectorAdvanced(groupLabels + datacenterLabels),
-        ],
     },
 }
