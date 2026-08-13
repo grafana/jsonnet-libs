@@ -49,8 +49,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clusters"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -74,7 +89,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count by(vcenter_cluster_name) (vcenter_cluster_vm_count{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}))"
+                  "expr": "count(\n  count by (vcenter_cluster_name) (\n  vcenter_cluster_vm_count{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Clusters"
                }
             ],
             "title": "Clusters",
@@ -100,8 +119,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -125,7 +159,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count by(vcenter_host_name) (vcenter_host_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}))"
+                  "expr": "count(\n  count by (vcenter_host_name) (\n  vcenter_host_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "ESXi hosts"
                }
             ],
             "title": "ESXi hosts",
@@ -151,8 +189,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Resource pools"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -176,7 +229,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count by(vcenter_resource_pool_inventory_path) (vcenter_resource_pool_cpu_shares{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}))"
+                  "expr": "count(\n  count by (vcenter_resource_pool_inventory_path) (\n  vcenter_resource_pool_cpu_shares{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Resource pools"
                }
             ],
             "title": "Resource pools",
@@ -202,8 +259,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "VMs"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -227,7 +299,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count(count by(vcenter_resource_pool_inventory_path, vcenter_virtual_app_inventory_path, vcenter_vm_name) (vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}))"
+                  "expr": "count(\n  count by (vcenter_resource_pool_inventory_path,vcenter_virtual_app_inventory_path,vcenter_vm_name) (\n  vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "VMs"
                }
             ],
             "title": "VMs",
@@ -253,8 +329,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered VMs on"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -278,7 +369,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, vcenter_datacenter_name) (vcenter_cluster_vm_count{power_state=\"on\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})"
+                  "expr": "sum by (job,vcenter_datacenter_name) (\n  vcenter_cluster_vm_count{power_state=\"on\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Clustered VMs on"
                }
             ],
             "title": "Clustered VMs on",
@@ -304,8 +399,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered VMs off"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -329,7 +439,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, vcenter_datacenter_name) (vcenter_cluster_vm_count{power_state=\"off\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})"
+                  "expr": "sum by (job,vcenter_datacenter_name) (\n  vcenter_cluster_vm_count{power_state=\"off\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Clustered VMs off"
                }
             ],
             "title": "Clustered VMs off",
@@ -355,8 +469,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered VMs suspended"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -380,7 +509,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, vcenter_datacenter_name) (vcenter_cluster_vm_count{power_state=\"suspended\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})"
+                  "expr": "sum by (job,vcenter_datacenter_name) (\n  vcenter_cluster_vm_count{power_state=\"suspended\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Clustered VMs suspended"
                }
             ],
             "title": "Clustered VMs suspended",
@@ -406,8 +539,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered VM templates"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -431,7 +579,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, vcenter_datacenter_name) (vcenter_cluster_vm_template_count{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})"
+                  "expr": "sum by (job,vcenter_datacenter_name) (\n  vcenter_cluster_vm_template_count{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Clustered VM templates"
                }
             ],
             "title": "Clustered VM templates",
@@ -457,8 +609,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered active ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -482,7 +649,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, vcenter_datacenter_name) (vcenter_cluster_host_count{effective=\"true\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})"
+                  "expr": "sum by (job,vcenter_datacenter_name) (\n  vcenter_cluster_host_count{effective=\"true\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Clustered active ESXi hosts"
                }
             ],
             "title": "Clustered active ESXi hosts",
@@ -508,8 +679,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Clustered inactive ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -533,7 +719,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, vcenter_datacenter_name) (vcenter_cluster_host_count{effective=\"false\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})"
+                  "expr": "sum by (job,vcenter_datacenter_name) (\n  vcenter_cluster_host_count{effective=\"false\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Clustered inactive ESXi hosts"
                }
             ],
             "title": "Clustered inactive ESXi hosts",
@@ -579,7 +769,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top CPU utilization by cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -606,7 +810,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk ($top_resource_count, (100 * sum by (job, vcenter_datacenter_name, vcenter_cluster_name) (vcenter_host_cpu_usage_MHz{vcenter_cluster_name!=\"\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}) / clamp_min(vcenter_cluster_cpu_limit{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"},1)))",
-                  "legendFormat": "{{vcenter_cluster_name}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_cluster_name}}",
+                  "refId": "Top CPU utilization by cluster"
                }
             ],
             "title": "Top CPU utilization by cluster",
@@ -639,7 +846,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top memory utilization by cluster"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -666,7 +887,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk ($top_resource_count, (104857600 * sum by (job, vcenter_datacenter_name, vcenter_cluster_name) (vcenter_host_memory_usage_mebibytes{vcenter_cluster_name!=\"\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}) / clamp_min(vcenter_cluster_memory_limit_bytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"},1)))",
-                  "legendFormat": "{{vcenter_cluster_name}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_cluster_name}}",
+                  "refId": "Top memory utilization by cluster"
                }
             ],
             "title": "Top memory utilization by cluster",
@@ -930,6 +1154,7 @@
                   },
                   "expr": "vcenter_cluster_cpu_limit{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}",
                   "format": "table",
+                  "instant": false,
                   "legendFormat": "{{vcenter_cluster_name}}",
                   "range": true,
                   "refId": "total_cpu"
@@ -941,6 +1166,7 @@
                   },
                   "expr": "topk ($top_resource_count, (100 * sum by (job, vcenter_datacenter_name, vcenter_cluster_name) (vcenter_host_cpu_usage_MHz{vcenter_cluster_name!=\"\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}) / clamp_min(vcenter_cluster_cpu_limit{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"},1)))",
                   "format": "table",
+                  "instant": false,
                   "legendFormat": "{{vcenter_cluster_name}}",
                   "range": true,
                   "refId": "cpu_utilization"
@@ -952,6 +1178,7 @@
                   },
                   "expr": "vcenter_cluster_memory_limit_bytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}",
                   "format": "table",
+                  "instant": false,
                   "legendFormat": "{{vcenter_cluster_name}}",
                   "range": true,
                   "refId": "total_memory"
@@ -963,6 +1190,7 @@
                   },
                   "expr": "topk ($top_resource_count, (104857600 * sum by (job, vcenter_datacenter_name, vcenter_cluster_name) (vcenter_host_memory_usage_mebibytes{vcenter_cluster_name!=\"\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}) / clamp_min(vcenter_cluster_memory_limit_bytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"},1)))",
                   "format": "table",
+                  "instant": false,
                   "legendFormat": "{{vcenter_cluster_name}}",
                   "range": true,
                   "refId": "memory_utilization"
@@ -974,6 +1202,8 @@
                   },
                   "expr": "vcenter_cluster_host_count{effective=\"true\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "hosts_active"
                },
@@ -984,6 +1214,8 @@
                   },
                   "expr": "vcenter_cluster_host_count{effective=\"false\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "hosts_inactive"
                },
@@ -994,6 +1226,8 @@
                   },
                   "expr": "vcenter_cluster_vm_count{power_state=\"on\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "vms_on"
                },
@@ -1004,6 +1238,8 @@
                   },
                   "expr": "vcenter_cluster_vm_count{power_state=\"off\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "vms_off"
                },
@@ -1014,6 +1250,8 @@
                   },
                   "expr": "vcenter_cluster_vm_count{power_state=\"suspended\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "vms_suspended"
                }
@@ -1120,7 +1358,21 @@
                      "steps": [ ]
                   },
                   "unit": "rotmhz"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top CPU usage by resource pools"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rotmhz"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1146,8 +1398,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk ($top_resource_count, vcenter_resource_pool_cpu_usage{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})",
-                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}"
+                  "expr": "topk ($top_resource_count, \n  vcenter_resource_pool_cpu_usage{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}",
+                  "refId": "Top CPU usage by resource pools"
                }
             ],
             "title": "Top CPU usage by resource pools",
@@ -1177,7 +1432,21 @@
                      "steps": [ ]
                   },
                   "unit": "mbytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top memory usage by resource pools"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "mbytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1203,8 +1472,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk ($top_resource_count, vcenter_resource_pool_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})",
-                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}"
+                  "expr": "topk ($top_resource_count, \n  vcenter_resource_pool_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}",
+                  "refId": "Top memory usage by resource pools"
                }
             ],
             "title": "Top memory usage by resource pools",
@@ -1234,7 +1506,21 @@
                      "steps": [ ]
                   },
                   "unit": "shares"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top CPU shares by resource pools"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "shares"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1260,8 +1546,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk ($top_resource_count, vcenter_resource_pool_cpu_shares{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})",
-                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}"
+                  "expr": "topk ($top_resource_count, \n  vcenter_resource_pool_cpu_shares{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}",
+                  "refId": "Top CPU shares by resource pools"
                }
             ],
             "title": "Top CPU shares by resource pools",
@@ -1291,7 +1580,21 @@
                      "steps": [ ]
                   },
                   "unit": "shares"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top memory shares by resource pools"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "shares"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1317,8 +1620,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk ($top_resource_count, vcenter_resource_pool_memory_shares{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})",
-                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}"
+                  "expr": "topk ($top_resource_count, \n  vcenter_resource_pool_memory_shares{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}",
+                  "refId": "Top memory shares by resource pools"
                }
             ],
             "title": "Top memory shares by resource pools",
@@ -1364,7 +1670,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top CPU utilization by ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1390,8 +1710,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk ($top_resource_count, vcenter_host_cpu_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})",
-                  "legendFormat": "{{vcenter_host_name}}"
+                  "expr": "topk ($top_resource_count, \n  vcenter_host_cpu_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}}",
+                  "refId": "Top CPU utilization by ESXi hosts"
                }
             ],
             "title": "Top CPU utilization by ESXi hosts",
@@ -1421,7 +1744,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top memory utilization by ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1447,8 +1784,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk ($top_resource_count, vcenter_host_memory_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})",
-                  "legendFormat": "{{vcenter_host_name}}"
+                  "expr": "topk ($top_resource_count, \n  vcenter_host_memory_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}}",
+                  "refId": "Top memory utilization by ESXi hosts"
                }
             ],
             "title": "Top memory utilization by ESXi hosts",
@@ -1478,7 +1818,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top avg disk latency by ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1504,8 +1858,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk ($top_resource_count, sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_disk_latency_avg_milliseconds{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}))",
-                  "legendFormat": "{{vcenter_host_name}}"
+                  "expr": "topk ($top_resource_count, \n  sum by (job,vcenter_datacenter_name,vcenter_cluster_name,vcenter_host_name) (\n  vcenter_host_disk_latency_avg_milliseconds{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}}",
+                  "refId": "Top avg disk latency by ESXi hosts"
                }
             ],
             "title": "Top avg disk latency by ESXi hosts",
@@ -1535,7 +1892,21 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top packet errors by ESXi hosts"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
@@ -1562,7 +1933,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk ($top_resource_count, sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_network_packet_error_rate{object=\"\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}) / clamp_min(sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_network_packet_rate{object=\"\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}), 1))",
-                  "legendFormat": "{{vcenter_host_name}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}}",
+                  "refId": "Top packet errors by ESXi hosts"
                }
             ],
             "title": "Top packet errors by ESXi hosts",
@@ -1698,8 +2072,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, vcenter_datacenter_name, vcenter_datastore_name) (vcenter_datastore_disk_usage_bytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"})",
+                  "expr": "sum by (job,vcenter_datacenter_name,vcenter_datastore_name) (\n  vcenter_datastore_disk_usage_bytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}\n)",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "disk_total"
                },
@@ -1710,6 +2086,8 @@
                   },
                   "expr": "vcenter_datastore_disk_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "disk_utilization"
                },
@@ -1720,6 +2098,8 @@
                   },
                   "expr": "vcenter_datastore_disk_usage_bytes{disk_state=\"available\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "disk_available"
                }
