@@ -15,7 +15,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       alertsPanel:
         alertList.new('Istio alerts')
-        + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
+        + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesSelectorAdvancedSyntax),
 
       proxies:
         signals.overview.proxyCount.asStat()

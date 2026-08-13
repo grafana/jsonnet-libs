@@ -2043,7 +2043,7 @@
                   "uid": "${datasource}"
                },
                "includeAll": true,
-               "label": "K8s cluster",
+               "label": "Cluster",
                "multi": true,
                "name": "cluster",
                "query": "label_values(istiod_uptime_seconds{job=~\"$job\"}, cluster)",
