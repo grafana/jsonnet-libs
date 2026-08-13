@@ -45,7 +45,7 @@ local g = import './g.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.testNameVariable, uid + '-testname-overview', tags, links { catchpointTestNameOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.testNameVariables, uid + '-testname-overview', tags, links { catchpointTestNameOverview+:: {} }, annotations, timezone, refresh, period),
       'nodeNameOverview.json':
         g.dashboard.new(prefix + ' web performance by node')
         + g.dashboard.withPanels(
@@ -62,7 +62,7 @@ local g = import './g.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.nodeNameVariable, uid + '-nodename-overview', tags, links { catchpointNodeNameOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.nodeNameVariables, uid + '-nodename-overview', tags, links { catchpointNodeNameOverview+:: {} }, annotations, timezone, refresh, period),
     },
 
   //Apply common options(uids, tags, annotations etc..) to all dashboards above

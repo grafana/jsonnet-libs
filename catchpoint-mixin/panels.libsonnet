@@ -54,7 +54,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       alertsPanel:
         alertList.new('Catchpoint alerts')
         + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(
-          this.grafana.variables.queriesGroupSelectorAdvanced
+          this.grafana.variables.queriesSelectorAdvancedSyntax
         ),
 
       // Web performance drilldowns. Both dashboards render the same panels; the
