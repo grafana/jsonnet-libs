@@ -356,7 +356,7 @@
                "type": "datasource"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -371,7 +371,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -380,7 +380,7 @@
                "label": "Pgbouncer_cluster",
                "multi": true,
                "name": "pgbouncer_cluster",
-               "query": "label_values(pgbouncer_databases_current_connections{,job=~\"$job\"}, pgbouncer_cluster)",
+               "query": "label_values(pgbouncer_databases_current_connections{job=~\"$job\"}, pgbouncer_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

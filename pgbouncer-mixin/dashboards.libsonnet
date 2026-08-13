@@ -29,7 +29,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { pgbouncerOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { pgbouncerOverview+:: {} }, annotations, timezone, refresh, period),
       'clusterOverview.json':
         g.dashboard.new(prefix + 'PgBouncer cluster overview')
         + g.dashboard.withPanels(
@@ -40,7 +40,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-overview', tags, links { pgbouncerClusterOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.clusterVariables, uid + '-cluster-overview', tags, links { pgbouncerClusterOverview+:: {} }, annotations, timezone, refresh, period),
     }
     +
     if this.config.enableLokiLogs then
