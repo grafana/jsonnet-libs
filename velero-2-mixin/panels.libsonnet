@@ -30,7 +30,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       alertsPanel:
         alertList.new('Velero alerts')
         + alertList.panelOptions.withDescription('Status of firing alerts for Velero.')
-        + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
+        + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.alertInstanceSelector),
 
       topClustersByBackup:
         commonlib.panels.generic.timeSeries.base.new(

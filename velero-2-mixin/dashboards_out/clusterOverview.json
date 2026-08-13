@@ -785,6 +785,14 @@
                "type": "query"
             },
             {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
                "current": {
                   "selected": false,
                   "text": "2",

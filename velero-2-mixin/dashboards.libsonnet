@@ -27,7 +27,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-view', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.clusterVariables, uid + '-cluster-view', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
       'overview.json':
         g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(

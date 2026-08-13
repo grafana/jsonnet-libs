@@ -1240,34 +1240,37 @@
                "type": "datasource"
             },
             {
+               "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "includeAll": false,
+               "includeAll": true,
                "label": "Job",
-               "multi": false,
+               "multi": true,
                "name": "job",
-               "query": "label_values(velero_backup_attempt_total{}, job)",
+               "query": "label_values(velero_backup_success_total{job=\"integrations/velero\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
             },
             {
+               "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "includeAll": false,
+               "includeAll": true,
                "label": "Cluster",
-               "multi": false,
+               "multi": true,
                "name": "cluster",
-               "query": "label_values(velero_backup_attempt_total{job=~\"$job\"}, cluster)",
+               "query": "label_values(velero_backup_success_total{job=\"integrations/velero\",job=~\"$job\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
             },
             {
+               "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -1276,10 +1279,18 @@
                "label": "Instance",
                "multi": false,
                "name": "instance",
-               "query": "label_values(velero_backup_attempt_total{}, instance)",
+               "query": "label_values(velero_backup_success_total{job=\"integrations/velero\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             },
             {
                "allValue": ".*",
@@ -1291,7 +1302,7 @@
                "label": "Schedule",
                "multi": true,
                "name": "schedule",
-               "query": "label_values(velero_backup_attempt_total{job=~\"$job\", cluster=~\"$cluster\", instance=~\"$instance\"}, schedule)",
+               "query": "label_values(velero_backup_attempt_total{job=\"integrations/velero\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}, schedule)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
