@@ -315,6 +315,19 @@
             "type": "alertlist"
          },
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 4
+            },
+            "id": 6,
+            "panels": [ ],
+            "title": "Top clusters",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -343,9 +356,9 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 6
+               "y": 5
             },
-            "id": 6,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -424,9 +437,9 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 6
+               "y": 5
             },
-            "id": 7,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -520,9 +533,9 @@
                "h": 6,
                "w": 24,
                "x": 0,
-               "y": 12
+               "y": 11
             },
-            "id": 8,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -580,9 +593,9 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 18
+               "y": 17
             },
-            "id": 9,
+            "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -661,9 +674,9 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 18
+               "y": 17
             },
-            "id": 10,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
