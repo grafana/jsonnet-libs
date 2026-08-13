@@ -904,9 +904,7 @@ local utils = commonlib.utils;
           + table.fieldOverride.byName.withProperty('custom.align', 'left')
           + table.fieldOverride.byName.withProperty('unit', 'Bps'),
         ])
-        + table.options.withFooter(
-          table.options.footer.TableFooterOptions.withReducerMixin(['sum'])
-        )
+        + table.options.footer.withReducerMixin(['sum'])
         + table.queryOptions.withTransformationsMixin([
           {
             id: 'merge',
@@ -1010,9 +1008,7 @@ local utils = commonlib.utils;
           + table.fieldOverride.byName.withProperty('custom.align', 'left')
           + table.fieldOverride.byName.withProperty('unit', 'Bps'),
         ])
-        + table.options.withFooter(
-          table.options.footer.TableFooterOptions.withReducerMixin(['sum'])
-        )
+        + table.options.footer.withReducerMixin(['sum'])
         + table.queryOptions.withTransformationsMixin([
           {
             id: 'merge',

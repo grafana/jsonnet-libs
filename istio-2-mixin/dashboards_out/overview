@@ -57,7 +57,7 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -107,7 +107,7 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -157,7 +157,7 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -185,7 +185,7 @@
             "options": {
                "alertInstanceLabelFilter": "job=~\"${job:regex}\",cluster=~\"${cluster:regex}\""
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "title": "Istio alerts",
             "type": "alertlist"
          },
@@ -226,7 +226,7 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -276,7 +276,7 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -326,7 +326,7 @@
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -386,7 +386,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -464,7 +464,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -573,7 +573,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -731,7 +731,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -833,7 +833,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -882,7 +882,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -933,6 +933,7 @@
                "y": 30
             },
             "id": 14,
+            "panels": [ ],
             "title": "Control plane",
             "type": "row"
          },
@@ -968,7 +969,7 @@
                   ]
                }
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1060,7 +1061,7 @@
                   "placement": "right"
                }
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1109,7 +1110,7 @@
                   ]
                }
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1177,7 +1178,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1245,7 +1246,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1364,7 +1365,7 @@
                   ]
                }
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1397,6 +1398,7 @@
                "y": 43
             },
             "id": 21,
+            "panels": [ ],
             "title": "Services",
             "type": "row"
          },
@@ -1587,16 +1589,12 @@
             "id": 22,
             "options": {
                "footer": {
-                  "options": {
-                     "footer": {
-                        "reducer": [
-                           "sum"
-                        ]
-                     }
-                  }
+                  "reducer": [
+                     "sum"
+                  ]
                }
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1722,7 +1720,7 @@
          }
       ],
       "refresh": "1m",
-      "schemaVersion": 36,
+      "schemaVersion": 39,
       "tags": [
          "istio"
       ],
