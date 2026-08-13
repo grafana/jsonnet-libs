@@ -10,36 +10,19 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
-    local panels = this.grafana.panels;
-    local stat = g.panel.stat;
+    local rows = this.grafana.rows;
     {
       overview:
         g.dashboard.new('OpenStack overview')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.placementStatus { gridPos+: { w: 4 } },
-              panels.keystoneStatus { gridPos+: { w: 4 } },
-              panels.novaStatus { gridPos+: { w: 4 } },
-              panels.neutronStatus { gridPos+: { w: 4 } },
-              panels.cinderStatus { gridPos+: { w: 4 } },
-              panels.glanceStatus { gridPos+: { w: 4 } },
-              panels.alertsPanel { gridPos+: { w: 8 } },
-              panels.totalResources { gridPos+: { w: 16 } },
-              panels.vCPUUsedStat { gridPos+: { w: 4, h: 5 } },
-              panels.RAMUsedStat { gridPos+: { w: 4, h: 5 } },
-              panels.freeIPsStat { gridPos+: { w: 16, h: 5 } },
-              g.panel.row.new('Keystone service'),
-              panels.domains { gridPos+: { w: 4 } },
-              panels.projects { gridPos+: { w: 4 } },
-              panels.regions { gridPos+: { w: 4 } },
-              panels.users,
-              panels.projectDetails { gridPos+: { w: 24 } },
-              g.panel.row.new('Glance service'),
-              panels.glanceStatus { gridPos+: { w: 6 } },
-              panels.imageCount { gridPos+: { w: 18 } },
-              panels.images { gridPos+: { w: 24 } },
-            ], 12, 8
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                rows.overview,
+                rows.keystone,
+                rows.glance,
+              ]
+            )
           )
         )
         // hide link to self
@@ -47,15 +30,12 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       nova:
         g.dashboard.new('OpenStack Nova')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.novaStatus { gridPos+: { w: 6 } },
-              panels.vms { gridPos+: { w: 18 } },
-              panels.instanceUsage,
-              panels.vCPUUsage,
-              panels.memoryUsage,
-              panels.novaAgents,
-            ], 12, 8
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                rows.nova,
+              ]
+            )
           )
         )
         // hide link to self
@@ -63,20 +43,12 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       neutron:
         g.dashboard.new('OpenStack Neutron')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.neutronStatus { gridPos+: { w: 6 } },
-              panels.networks { gridPos+: { w: 9 } },
-              panels.subnets { gridPos+: { w: 9 } },
-              panels.routers,
-              panels.routerDetails,
-              panels.ports { gridPos+: { w: 8 } },
-              panels.portDetails { gridPos+: { w: 16 } },
-              panels.floatingIPs,
-              panels.ipsUsed,
-              panels.securityGroups,
-              panels.neutronAgents,
-            ], 12, 8
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                rows.neutron,
+              ]
+            )
           )
         )
         // hide link to self
@@ -84,17 +56,12 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       cinder:
         g.dashboard.new('OpenStack Cinder')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.cinderStatus { gridPos+: { w: 4 } },
-              panels.volumes { gridPos+: { w: 10 } },
-              panels.volumeStatus { gridPos+: { w: 10 } },
-              panels.volumeUsage,
-              panels.backupUsage,
-              panels.poolUsage,
-              panels.snapshots,
-              panels.cinderAgents { gridPos+: { w: 24 } },
-            ], 12, 8
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                rows.cinder,
+              ]
+            )
           )
         )
         // hide link to self

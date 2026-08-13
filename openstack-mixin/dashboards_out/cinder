@@ -27,6 +27,19 @@
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Cinder service",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -85,9 +98,9 @@
                "h": 8,
                "w": 4,
                "x": 0,
-               "y": 0
+               "y": 1
             },
-            "id": 1,
+            "id": 2,
             "options": {
                "graphMode": "none"
             },
@@ -153,9 +166,9 @@
                "h": 8,
                "w": 10,
                "x": 4,
-               "y": 0
+               "y": 1
             },
-            "id": 2,
+            "id": 3,
             "interval": "1m",
             "options": {
                "legend": {
@@ -218,9 +231,9 @@
                "h": 8,
                "w": 10,
                "x": 14,
-               "y": 0
+               "y": 1
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -295,9 +308,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 9
             },
-            "id": 4,
+            "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -360,9 +373,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 9
             },
-            "id": 5,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -425,9 +438,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 16
+               "y": 17
             },
-            "id": 6,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -501,9 +514,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 16
+               "y": 17
             },
-            "id": 7,
+            "id": 8,
             "interval": "1m",
             "options": {
                "legend": {
@@ -584,9 +597,9 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 24
+               "y": 25
             },
-            "id": 8,
+            "id": 9,
             "pluginVersion": "v11.4.0",
             "targets": [
                {
