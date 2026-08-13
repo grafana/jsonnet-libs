@@ -34,8 +34,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Successful backups / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -59,11 +74,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (cluster) ((increase(velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "Backups"
+                  "expr": "sum by (cluster) (\n  increase(velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Backups",
+                  "refId": "Successful backups / $__interval"
                }
             ],
-            "title": "Successful backups / $__interval ",
+            "title": "Successful backups / $__interval",
             "type": "stat"
          },
          {
@@ -86,8 +104,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Failed backups / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -111,11 +144,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (cluster) ((increase(velero_backup_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "Backups"
+                  "expr": "sum by (cluster) (\n  increase(velero_backup_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Backups",
+                  "refId": "Failed backups / $__interval"
                }
             ],
-            "title": "Failed backups / $__interval ",
+            "title": "Failed backups / $__interval",
             "type": "stat"
          },
          {
@@ -123,7 +159,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Number of succesful restores across all clusters.",
+            "description": "Number of successful restores across all clusters.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -138,8 +174,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Successful restores / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -163,11 +214,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (cluster) ((increase(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "Restores"
+                  "expr": "sum by (cluster) (\n  increase(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Restores",
+                  "refId": "Successful restores / $__interval"
                }
             ],
-            "title": "Succesful restores / $__interval ",
+            "title": "Successful restores / $__interval",
             "type": "stat"
          },
          {
@@ -190,8 +244,23 @@
                            "value": null
                         }
                      ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Failed restores / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 4,
@@ -215,11 +284,14 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (cluster) ((increase(velero_restore_failed_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "Restores"
+                  "expr": "sum by (cluster) (\n  increase(velero_restore_failed_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Restores",
+                  "refId": "Failed restores / $__interval"
                }
             ],
-            "title": "Failed restores / $__interval ",
+            "title": "Failed restores / $__interval",
             "type": "stat"
          },
          {
@@ -291,27 +363,36 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - success"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_backup_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - success",
+                  "refId": "Top clusters by backup success"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_backup_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - failure"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_backup_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - failure",
+                  "refId": "Top clusters by backup failures"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_backup_attempt_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - attempt"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_backup_attempt_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - attempt",
+                  "refId": "Top clusters by backup attempts"
                }
             ],
-            "title": "Top clusters by backups / $__interval ",
+            "title": "Top clusters by backups / $__interval",
             "type": "timeseries"
          },
          {
@@ -363,27 +444,36 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - success"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - success",
+                  "refId": "Top clusters by restore success"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_restore_failed_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - failure"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_restore_failed_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - failure",
+                  "refId": "Top clusters by restore failures"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - attempt"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - attempt",
+                  "refId": "Top clusters by restore attempts"
                }
             ],
-            "title": "Top clusters by restores / $__interval ",
+            "title": "Top clusters by restores / $__interval",
             "type": "timeseries"
          },
          {
@@ -391,7 +481,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top clusters by size of backups.\n",
+            "description": "Top clusters by size of backups.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -410,7 +500,21 @@
                      "steps": [ ]
                   },
                   "unit": "decbytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top clusters by backup size"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "decbytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -437,8 +541,11 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (velero_backup_tarball_size_bytes{job=~\"$job\",cluster=~\"$cluster\"}))",
-                  "legendFormat": "{{cluster}}"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  velero_backup_tarball_size_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}}",
+                  "refId": "Top clusters by backup size"
                }
             ],
             "title": "Top clusters by backup size",
@@ -493,27 +600,36 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_volume_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - success"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_volume_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - success",
+                  "refId": "Top clusters by volume snapshot success"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_volume_snapshot_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - failure"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_volume_snapshot_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - failure",
+                  "refId": "Top clusters by volume snapshot failures"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_volume_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - attempt"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_volume_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - attempt",
+                  "refId": "Top clusters by volume snapshot attempts"
                }
             ],
-            "title": "Top clusters by volume snapshots / $__interval ",
+            "title": "Top clusters by volume snapshots / $__interval",
             "type": "timeseries"
          },
          {
@@ -565,27 +681,36 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_csi_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - success"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_csi_snapshot_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - success",
+                  "refId": "Top clusters by CSI snapshot success"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_csi_snapshot_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - failure"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_csi_snapshot_failure_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - failure",
+                  "refId": "Top clusters by CSI snapshot failures"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, sum by (cluster) (increase(velero_csi_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:])))",
-                  "legendFormat": "{{cluster}} - attempt"
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_csi_snapshot_attempt_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - attempt",
+                  "refId": "Top clusters by CSI snapshot attempts"
                }
             ],
-            "title": "Top clusters by CSI snapshots / $__interval ",
+            "title": "Top clusters by CSI snapshots / $__interval",
             "type": "timeseries"
          }
       ],

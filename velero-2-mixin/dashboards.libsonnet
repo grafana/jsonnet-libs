@@ -15,7 +15,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local panels = this.grafana.panels;
     local stat = g.panel.stat;
     {
-      clusterOverview:
+      'clusterOverview.json':
         g.dashboard.new(prefix + ' cluster view')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -35,7 +35,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-view', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
-      overview:
+      'overview.json':
         g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -70,7 +70,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     +
     if this.config.enableLokiLogs then
       {
-        logs:
+        'logs.json':
           logslib.new(
             prefix + ' logs',
             datasourceName=this.grafana.variables.datasources.loki.name,
