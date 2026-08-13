@@ -492,7 +492,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_restore_success_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
+                  "expr": "topk by(cluster)($top_cluster_count, \n  sum by (cluster) (\n  increase(velero_restore_attempt_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval:] offset -$__interval)\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{cluster}} - attempt",

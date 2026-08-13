@@ -138,8 +138,7 @@ function(this)
         description: 'Top clusters by number of attempted restores.',
         sources: {
           prometheus: {
-            // preserved from the legacy dashboard: queries the success metric, not attempts
-            expr: 'velero_restore_success_total{%(queriesSelector)s}',
+            expr: 'velero_restore_attempt_total{%(queriesSelector)s}',
             aggKeepLabels: ['cluster'],
             exprWrappers: [['topk by(cluster)($top_cluster_count, ', ')']],
             legendCustomTemplate: '{{cluster}} - attempt',

@@ -110,7 +110,7 @@ function(this)
         description: 'Success rate of backups.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_backup_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]) / clamp_min(rate(label_replace(velero_backup_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]),1)',
+            expr: 'increase(label_replace(velero_backup_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]) / clamp_min(increase(label_replace(velero_backup_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]),1)',
             legendCustomTemplate: '{{schedule}}',
           },
         },
@@ -289,8 +289,7 @@ function(this)
         description: 'Number of failed CSI snapshots by schedule.',
         sources: {
           prometheus: {
-            // preserved from the legacy dashboard: queries the success metric, not failures
-            expr: 'label_replace(velero_csi_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
+            expr: 'label_replace(velero_csi_snapshot_failure_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")',
             aggKeepLabels: ['schedule'],
             legendCustomTemplate: '{{schedule}} - failure',
           },
