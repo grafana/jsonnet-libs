@@ -55,9 +55,9 @@ function(this)
         sources: {
           prometheus: {
             expr: |||
-              sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{%(queriesGroupSelector)s, %(reporterSourceFilter)s}[$__rate_interval:]), "service", "$1", "source_canonical_service", "(.*)"))
+              sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{%(queriesGroupSelector)s, %(reporterSourceFilter)s}[$__rate_interval]), "service", "$1", "source_canonical_service", "(.*)"))
               /
-              clamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{%(queriesGroupSelector)s, %(reporterSourceFilter)s}[$__rate_interval:]), "service", "$1", "source_canonical_service", "(.*)")), 1)
+              clamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{%(queriesGroupSelector)s, %(reporterSourceFilter)s}[$__rate_interval]), "service", "$1", "source_canonical_service", "(.*)")), 1)
             ||| % selectors,
             legendCustomTemplate: '',
           },
@@ -71,9 +71,9 @@ function(this)
         sources: {
           prometheus: {
             expr: |||
-              sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{%(queriesGroupSelector)s, %(reporterDestinationFilter)s}[$__rate_interval:]), "service", "$1", "destination_canonical_service", "(.*)"))
+              sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{%(queriesGroupSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]), "service", "$1", "destination_canonical_service", "(.*)"))
               /
-              clamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{%(queriesGroupSelector)s, %(reporterDestinationFilter)s}[$__rate_interval:]), "service", "$1", "destination_canonical_service", "(.*)")), 1)
+              clamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{%(queriesGroupSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]), "service", "$1", "destination_canonical_service", "(.*)")), 1)
             ||| % selectors,
             legendCustomTemplate: '',
           },
@@ -87,9 +87,9 @@ function(this)
         sources: {
           prometheus: {
             expr: |||
-              100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{%(queriesGroupSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s}[$__rate_interval:]), "service", "$1", "source_canonical_service", "(.*)"))
+              100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{%(queriesGroupSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s}[$__rate_interval]), "service", "$1", "source_canonical_service", "(.*)"))
               /
-              clamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{%(queriesGroupSelector)s, %(reporterSourceFilter)s, %(requestProtocolHTTPFilter)s}[$__rate_interval:]), "service", "$1", "source_canonical_service", "(.*)")), 1)
+              clamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{%(queriesGroupSelector)s, %(reporterSourceFilter)s, %(requestProtocolHTTPFilter)s}[$__rate_interval]), "service", "$1", "source_canonical_service", "(.*)")), 1)
             ||| % selectors,
             legendCustomTemplate: '',
           },
@@ -103,9 +103,9 @@ function(this)
         sources: {
           prometheus: {
             expr: |||
-              100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{%(queriesGroupSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeOKFilter)s}[$__rate_interval:]), "service", "$1", "destination_canonical_service", "(.*)"))
+              100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{%(queriesGroupSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeOKFilter)s}[$__rate_interval]), "service", "$1", "destination_canonical_service", "(.*)"))
               /
-              clamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{%(queriesGroupSelector)s, %(reporterDestinationFilter)s, %(requestProtocolHTTPFilter)s}[$__rate_interval:]), "service", "$1", "destination_canonical_service", "(.*)")), 1)
+              clamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{%(queriesGroupSelector)s, %(reporterDestinationFilter)s, %(requestProtocolHTTPFilter)s}[$__rate_interval]), "service", "$1", "destination_canonical_service", "(.*)")), 1)
             ||| % selectors,
             legendCustomTemplate: '',
           },
@@ -170,9 +170,9 @@ function(this)
         sources: {
           prometheus: {
             expr: |||
-              sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_sum{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval:]))
+              sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_sum{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))
               /
-              clamp_min(sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_count{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval:])), 1)
+              clamp_min(sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_count{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval])), 1)
             ||| % selectors,
             legendCustomTemplate: '{{source_canonical_service}} -> {{destination_canonical_service}}',
           },
@@ -427,9 +427,9 @@ function(this)
         sources: {
           prometheus: {
             expr: |||
-              sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_sum{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval:]))
+              sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_sum{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))
               /
-              clamp_min(sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_count{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval:])), 1)
+              clamp_min(sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_count{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval])), 1)
             ||| % selectors,
             legendCustomTemplate: '{{destination_canonical_service}} <- {{source_canonical_service}}',
           },

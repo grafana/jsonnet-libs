@@ -34,7 +34,7 @@ function(this)
         type: 'raw',
         sources: {
           prometheus: {
-            expr: 'max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeGatewayFilter)s, %(eventAddFilter)s}) - (max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeGatewayFilter)s, %(eventDeleteFilter)s}) or max(up * 0))' % selectors,
+            expr: 'max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeGatewayFilter)s, %(eventAddFilter)s}) - (max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeGatewayFilter)s, %(eventDeleteFilter)s}) or (max(up) * 0))' % selectors,
             legendCustomTemplate: '',
           },
         },

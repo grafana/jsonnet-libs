@@ -148,7 +148,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"Gateway\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"Gateway\", event=\"delete\"}) or max(up * 0))",
+                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"Gateway\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"Gateway\", event=\"delete\"}) or (max(up) * 0))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "",
@@ -1884,7 +1884,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")), 1)\n",
+                  "expr": "sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
                   "interval": "1m",
@@ -1896,7 +1896,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")), 1)\n",
+                  "expr": "sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
                   "interval": "1m",
@@ -1908,7 +1908,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\", request_protocol=\"http\"}[$__rate_interval:]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")), 1)\n",
+                  "expr": "100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\", request_protocol=\"http\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
                   "interval": "1m",
@@ -1920,7 +1920,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\", request_protocol=\"http\"}[$__rate_interval:]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")), 1)\n",
+                  "expr": "100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\", request_protocol=\"http\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")), 1)\n",
                   "format": "table",
                   "instant": true,
                   "interval": "1m",
