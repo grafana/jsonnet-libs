@@ -44,7 +44,7 @@
                "y": 0
             },
             "id": 1,
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -88,7 +88,7 @@
                "y": 0
             },
             "id": 2,
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -140,7 +140,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -192,7 +192,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -244,7 +244,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -296,7 +296,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -319,6 +319,7 @@
                "y": 4
             },
             "id": 7,
+            "panels": [ ],
             "title": "Backup",
             "type": "row"
          },
@@ -365,7 +366,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -440,7 +441,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -497,7 +498,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -531,7 +532,7 @@
                   "unit": "s"
                }
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -553,6 +554,7 @@
                "y": 23
             },
             "id": 12,
+            "panels": [ ],
             "title": "Restore",
             "type": "row"
          },
@@ -599,7 +601,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -674,7 +676,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -697,6 +699,7 @@
                "y": 30
             },
             "id": 15,
+            "panels": [ ],
             "title": "CSI snapshots",
             "type": "row"
          },
@@ -743,7 +746,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -818,7 +821,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -841,6 +844,7 @@
                "y": 37
             },
             "id": 18,
+            "panels": [ ],
             "title": "Volume snapshots",
             "type": "row"
          },
@@ -887,7 +891,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -962,7 +966,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -978,7 +982,7 @@
          }
       ],
       "refresh": "1m",
-      "schemaVersion": 36,
+      "schemaVersion": 39,
       "tags": [
          "velero"
       ],

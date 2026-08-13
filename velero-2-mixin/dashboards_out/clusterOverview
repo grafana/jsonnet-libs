@@ -52,7 +52,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -104,7 +104,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -156,7 +156,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -208,7 +208,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -238,7 +238,7 @@
             "options": {
                "alertInstanceLabelFilter": "job=~\"${job:regex}\",cluster=~\"${cluster:regex}\""
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "title": "Velero alerts",
             "type": "alertlist"
          },
@@ -284,7 +284,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -356,7 +356,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -430,7 +430,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -486,7 +486,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -558,7 +558,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -590,7 +590,7 @@
          }
       ],
       "refresh": "1m",
-      "schemaVersion": 36,
+      "schemaVersion": 39,
       "tags": [
          "velero"
       ],
