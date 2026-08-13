@@ -111,7 +111,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_placement_up{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "openstack_neutron_up{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",

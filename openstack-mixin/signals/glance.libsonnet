@@ -9,7 +9,7 @@ function(this) {
   aggFunction: 'avg',
   alertsInterval: '5m',
   discoveryMetric: {
-    prometheus: 'openstack_placement_up',
+    prometheus: 'openstack_glance_up',
   },
   signals: {
     glance_up: {
@@ -19,7 +19,7 @@ function(this) {
       unit: 'string',
       sources: {
         prometheus: {
-          expr: 'openstack_placement_up{%(queriesSelector)s}',
+          expr: 'openstack_glance_up{%(queriesSelector)s}',
           legendCustomTemplate: '{{instance}}',
         },
       },
