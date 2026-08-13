@@ -1,17 +1,17 @@
 {
+      "annotations": {
+         "list": [ ]
+      },
       "links": [
          {
             "asDropdown": false,
-            "icon": "external link",
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "apache-solr-mixin"
             ],
-            "targetBlank": false,
             "title": "Other Apache Solr dashboards",
-            "type": "dashboards",
-            "url": ""
+            "type": "dashboards"
          }
       ],
       "panels": [
@@ -221,7 +221,7 @@
                "label": "Loki data source",
                "name": "loki_datasource",
                "query": "loki",
-               "regex": "(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+",
+               "regex": "",
                "type": "datasource"
             },
             {
@@ -320,10 +320,10 @@
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-30m",
          "to": "now"
       },
-      "timezone": "utc",
+      "timezone": "default",
       "title": "Apache Solr logs",
       "uid": "apache-solr-logs-overview"
    }
