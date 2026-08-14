@@ -12,55 +12,35 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
-    local panels = this.grafana.panels;
-    local stat = g.panel.stat;
+    local rows = this.grafana.rows;
     {
-      clusterOverview:
+      'clusterOverview.json':
         g.dashboard.new(prefix + ' cluster view')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.successfulBackupsCount { gridPos+: { w: 4, h: 4 } },
-              panels.failedBackupsCount { gridPos+: { w: 4, h: 4 } },
-              panels.successfulRestores { gridPos+: { w: 4, h: 4 } },
-              panels.failedRestores { gridPos+: { w: 4, h: 4 } },
-              panels.alertsPanel { gridPos+: { w: 8, h: 4 } },
-              panels.topClustersByBackup,
-              panels.topClustersByRestore,
-              panels.topClustersByBackupSize { gridPos+: { w: 24 } },
-              panels.topClustersByVolumeSnapshots,
-              panels.topClustersByCSISnapshots,
-            ], 12, 6
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                rows.clusterSummary,
+                rows.topClusters,
+              ]
+            )
           )
         )
         // hide link to self
-        + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-view', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
-      overview:
+        + root.applyCommon(vars.clusterVariables, uid + '-cluster-view', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
+      'overview.json':
         g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.backupSuccessRate { gridPos+: { w: 4, h: 4 } },
-              panels.restoreSuccessRate { gridPos+: { w: 4, h: 4 } },
-              panels.successfulBackups { gridPos+: { w: 4, h: 4 } },
-              panels.failedBackups { gridPos+: { w: 4, h: 4 } },
-              panels.restoreValidationFailure { gridPos+: { w: 4, h: 4 } },
-              panels.backupValidationFailure { gridPos+: { w: 4, h: 4 } },
-              g.panel.row.new('Backup'),
-              panels.backupCount { gridPos+: { w: 16 } },
-              panels.backupSuccessRateTimeseries { gridPos+: { w: 8 } },
-              panels.backupSize { gridPos+: { w: 24 } },
-              panels.backupTime { gridPos+: { w: 24 } },
-              g.panel.row.new('Restore'),
-              panels.restoreCount { gridPos+: { w: 16 } },
-              panels.restoreSuccessRateTimeseries { gridPos+: { w: 8 } },
-              g.panel.row.new('CSI snapshots'),
-              panels.csiSnapshotCount { gridPos+: { w: 16 } },
-              panels.csiSnapshotSuccessRateTimeseries { gridPos+: { w: 8 } },
-              g.panel.row.new('Volume snapshots'),
-              panels.volumeSnapshotCount { gridPos+: { w: 16 } },
-              panels.volumeSnapshotSuccessRateTimeseries { gridPos+: { w: 8 } },
-            ], 12, 6
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                rows.overviewSummary,
+                rows.backup,
+                rows.restore,
+                rows.csiSnapshots,
+                rows.volumeSnapshots,
+              ]
+            )
           )
         )
         // hide link to self
@@ -70,7 +50,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     +
     if this.config.enableLokiLogs then
       {
-        logs:
+        'logs.json':
           logslib.new(
             prefix + ' logs',
             datasourceName=this.grafana.variables.datasources.loki.name,
