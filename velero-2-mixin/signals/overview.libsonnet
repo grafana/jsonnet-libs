@@ -110,7 +110,7 @@ function(this)
         description: 'Success rate of backups.',
         sources: {
           prometheus: {
-            expr: 'increase(label_replace(velero_backup_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]) / clamp_min(increase(label_replace(velero_backup_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]),1)',
+            expr: 'increase(label_replace(velero_backup_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:] offset -$__interval) / clamp_min(increase(label_replace(velero_backup_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:] offset -$__interval),1)',
             legendCustomTemplate: '{{schedule}}',
           },
         },

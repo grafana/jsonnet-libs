@@ -592,7 +592,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "increase(label_replace(velero_backup_success_total{job=\"integrations/velero\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__rate_interval:]) / clamp_min(increase(label_replace(velero_backup_attempt_total{job=\"integrations/velero\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__rate_interval:]),1)",
+                  "expr": "increase(label_replace(velero_backup_success_total{job=\"integrations/velero\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval) / clamp_min(increase(label_replace(velero_backup_attempt_total{job=\"integrations/velero\",job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\",schedule=~\"$schedule\"}, \"schedule\", \"none\", \"schedule\", \"^$\")[$__interval:] offset -$__interval),1)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{schedule}}",
