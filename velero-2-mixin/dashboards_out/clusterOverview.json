@@ -1,12 +1,14 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Velero logs",
             "type": "link",
             "url": "/d/velero-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Velero overview",
             "type": "link",
