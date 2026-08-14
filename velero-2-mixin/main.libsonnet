@@ -19,11 +19,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     config: config,
     signals:
       {
-        // legacy panel queries filter by dashboard variables only, so the static
-        // filteringSelector is kept out of dashboard queries here; the signal
-        // specs retain it for alert expressions
         [sig]: commonlib.signals.unmarshallJsonMulti(
-          this.config.signals[sig] { filteringSelector: '' },
+          this.config.signals[sig],
           type=this.config.metricsSource
         )
         for sig in std.objectFields(this.config.signals)
