@@ -1,6 +1,5 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
-local utils = commonlib.utils;
 {
   new(this): {
     local signals = this.signals,

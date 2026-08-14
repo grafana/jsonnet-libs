@@ -28,7 +28,7 @@ function(this) {
       name: 'VMs',
       description: 'The current number of total and running virtual machines.',
       type: 'gauge',
-      unit: '',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'openstack_nova_total_vms{%(queriesSelector)s}',

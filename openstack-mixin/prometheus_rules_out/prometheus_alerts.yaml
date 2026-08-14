@@ -1,5 +1,5 @@
 groups:
-    - name: openstack-alerts-openstack
+    - name: openstack-alerts
       rules:
         - alert: OpenStackGlanceIsDown
           annotations:
@@ -129,7 +129,7 @@ groups:
           keep_firing_for: 5m
           labels:
             severity: critical
-    - name: openstack-nova-alertsopenstack
+    - name: openstack-nova-alerts
       rules:
         - alert: OpenStackNovaIsDown
           annotations:
@@ -185,7 +185,7 @@ groups:
           for: 15m
           labels:
             severity: critical
-    - name: openstack-neutron-alertsopenstack
+    - name: openstack-neutron-alerts
       rules:
         - alert: OpenStackNeutronIsDown
           annotations:
@@ -240,7 +240,7 @@ groups:
           for: 5m
           labels:
             severity: critical
-    - name: openstack-cinder-alertsopenstack
+    - name: openstack-cinder-alerts
       rules:
         - alert: OpenStackCinderIsDown
           annotations:

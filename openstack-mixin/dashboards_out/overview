@@ -1,24 +1,28 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack Cinder",
             "type": "link",
             "url": "/d/openstack-cinder"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack logs",
             "type": "link",
             "url": "/d/openstack-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack Neutron",
             "type": "link",
             "url": "/d/openstack-neutron"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack Nova",
             "type": "link",
@@ -1187,7 +1191,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": ""
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1198,7 +1202,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": ""
+                           "value": "short"
                         }
                      ]
                   }
@@ -1474,7 +1478,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": ""
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1485,7 +1489,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": ""
+                           "value": "short"
                         }
                      ]
                   }

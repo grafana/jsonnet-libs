@@ -28,7 +28,7 @@ function(this) {
       name: 'Volumes',
       description: 'The number of volumes managed by Cinder.',
       type: 'gauge',
-      unit: '',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'openstack_cinder_volumes{%(queriesSelector)s}',
@@ -40,7 +40,7 @@ function(this) {
       name: 'Snapshots',
       description: 'The number of volume snapshots in Cinder.',
       type: 'gauge',
-      unit: '',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'openstack_cinder_snapshots{%(queriesSelector)s}',

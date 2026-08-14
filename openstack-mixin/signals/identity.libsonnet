@@ -76,7 +76,7 @@ function(this) {
       name: 'Users',
       description: 'The number of users for the OpenStack cloud.',
       type: 'gauge',
-      unit: '',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'openstack_identity_users{%(queriesSelector)s}',

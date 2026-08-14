@@ -28,7 +28,7 @@ function(this) {
       name: 'Image count',
       description: 'The number of images present in Glance.',
       type: 'gauge',
-      unit: '',
+      unit: 'short',
       sources: {
         prometheus: {
           expr: 'openstack_glance_images{%(queriesSelector)s}',

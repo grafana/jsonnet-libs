@@ -1,24 +1,28 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack Cinder",
             "type": "link",
             "url": "/d/openstack-cinder"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack Neutron",
             "type": "link",
             "url": "/d/openstack-neutron"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack Nova",
             "type": "link",
             "url": "/d/openstack-nova"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack overview",
             "type": "link",

@@ -2,7 +2,7 @@
   new(this): {
     groups: [
       {
-        name: 'openstack-alerts-' + this.config.uid,
+        name: this.config.uid + '-alerts',
         rules: [
           {
             alert: 'OpenStackGlanceIsDown',
@@ -204,7 +204,7 @@
         ],
       },
       {
-        name: 'openstack-nova-alerts' + this.config.uid,
+        name: this.config.uid + '-nova-alerts',
         rules: [
           {
             alert: 'OpenStackNovaIsDown',
@@ -295,7 +295,7 @@
         ],
       },
       {
-        name: 'openstack-neutron-alerts' + this.config.uid,
+        name: this.config.uid + '-neutron-alerts',
         rules: [
           {
             alert: 'OpenStackNeutronIsDown',
@@ -385,7 +385,7 @@
         ],
       },
       {
-        name: 'openstack-cinder-alerts' + this.config.uid,
+        name: this.config.uid + '-cinder-alerts',
         rules: [
           {
             alert: 'OpenStackCinderIsDown',
