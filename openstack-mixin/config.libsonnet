@@ -1,7 +1,6 @@
 {
   local this = self,
-  // Static selector applied to all dashboard variable queries and alerts.
-  filteringSelector: 'job="integrations/openstack"',
+  filteringSelector: '',
   groupLabels: ['job'],
   // instance of openstack cluster
   instanceLabels: ['instance'],

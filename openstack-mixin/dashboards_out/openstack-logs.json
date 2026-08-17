@@ -176,7 +176,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=\"integrations/openstack\",job=~\"$job\",level=~\"$level\",service=~\"$service\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",level=~\"$level\",service=~\"$service\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -218,7 +218,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=\"integrations/openstack\",job=~\"$job\",level=~\"$level\",service=~\"$service\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",level=~\"$level\",service=~\"$service\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -249,7 +249,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=\"integrations/openstack\"}, job)",
+               "query": "label_values({}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -264,7 +264,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=\"integrations/openstack\",job=~\"$job\"}, level)",
+               "query": "label_values({job=~\"$job\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -279,7 +279,7 @@
                "label": "Service",
                "multi": true,
                "name": "service",
-               "query": "label_values({job=\"integrations/openstack\",job=~\"$job\",level=~\"$level\"}, service)",
+               "query": "label_values({job=~\"$job\",level=~\"$level\"}, service)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

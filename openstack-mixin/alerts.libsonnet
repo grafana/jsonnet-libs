@@ -64,11 +64,11 @@
           {
             alert: 'OpenStackPlacementHighMemoryUsage',
             expr: |||
-              (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="MEMORY_MB"})
+              (100 * (openstack_placement_resource_usage{resourcetype="MEMORY_MB", %(filteringSelector)s})
               /
-              (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="MEMORY_MB"}
+              (openstack_placement_resource_total{resourcetype="MEMORY_MB", %(filteringSelector)s}
               *
-              openstack_placement_resource_allocation_ratio{%(filteringSelector)s, resourcetype="MEMORY_MB"}) > 0)
+              openstack_placement_resource_allocation_ratio{resourcetype="MEMORY_MB", %(filteringSelector)s}) > 0)
               > %(alertsWarningPlacementHighMemoryUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
@@ -87,11 +87,11 @@
           {
             alert: 'OpenStackPlacementHighMemoryUsage',
             expr: |||
-              (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="MEMORY_MB"})
+              (100 * (openstack_placement_resource_usage{resourcetype="MEMORY_MB", %(filteringSelector)s})
               /
-              (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="MEMORY_MB"}
+              (openstack_placement_resource_total{resourcetype="MEMORY_MB", %(filteringSelector)s}
               *
-              openstack_placement_resource_allocation_ratio{%(filteringSelector)s, resourcetype="MEMORY_MB"}) > 0)
+              openstack_placement_resource_allocation_ratio{resourcetype="MEMORY_MB", %(filteringSelector)s}) > 0)
               > %(alertsCriticalPlacementHighMemoryUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
@@ -110,11 +110,11 @@
           {
             alert: 'OpenStackPlacementHighVCPUUsage',
             expr: |||
-              (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="VCPU"})
+              (100 * (openstack_placement_resource_usage{resourcetype="VCPU", %(filteringSelector)s})
               /
-              (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="VCPU"}
+              (openstack_placement_resource_total{resourcetype="VCPU", %(filteringSelector)s}
               *
-              openstack_placement_resource_allocation_ratio{%(filteringSelector)s, resourcetype="VCPU"}) > 0)
+              openstack_placement_resource_allocation_ratio{resourcetype="VCPU", %(filteringSelector)s}) > 0)
               > %(alertsWarningPlacementHighVCPUUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
@@ -133,11 +133,11 @@
           {
             alert: 'OpenStackPlacementHighVCPUUsage',
             expr: |||
-              (100 * (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="VCPU"})
+              (100 * (openstack_placement_resource_usage{resourcetype="VCPU", %(filteringSelector)s})
               /
-              (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="VCPU"}
+              (openstack_placement_resource_total{resourcetype="VCPU", %(filteringSelector)s}
               *
-              openstack_placement_resource_allocation_ratio{%(filteringSelector)s, resourcetype="VCPU"}) > 0)
+              openstack_placement_resource_allocation_ratio{resourcetype="VCPU", %(filteringSelector)s}) > 0)
               > %(alertsCriticalPlacementHighVCPUUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
@@ -157,9 +157,9 @@
             alert: 'OpenStackNeutronHighIPsUsage',
             expr: |||
               100 * 
-              sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_used{%(filteringSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"}) 
+              sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_used{network_name=~"%(alertsIPutilizationNetworksMatcher)s", %(filteringSelector)s}) 
               /
-              (sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_total{%(filteringSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"})
+              (sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_total{network_name=~"%(alertsIPutilizationNetworksMatcher)s", %(filteringSelector)s})
               > 0)
               > %(alertsWarningNeutronHighIPsUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
@@ -173,7 +173,7 @@
               description: |||
                 Network {{$labels.network_name}} is running out of free IP addresses on OpenStack {{$labels.%(instanceFirstLabel)s}},
                 {{ printf "%%.0f" $value }} percent of the pool used,
-                {{ with printf `sum(openstack_neutron_network_ip_availabilities_total{%(filteringSelector)s, %(instanceFirstLabel)s=~"%%s", network_name=~"%%s"}) - (sum(openstack_neutron_network_ip_availabilities_used{%(filteringSelector)s, %(instanceFirstLabel)s=~"%%s", network_name=~"%%s"}))` .Labels.%(instanceFirstLabel)s .Labels.network_name .Labels.%(instanceFirstLabel)s .Labels.network_name | query -}}{{ . | first | value | humanize }}{{ end }} IP addresses available.
+                {{ with printf `sum(openstack_neutron_network_ip_availabilities_total{%(instanceFirstLabel)s=~"%%s", network_name=~"%%s", %(filteringSelector)s}) - (sum(openstack_neutron_network_ip_availabilities_used{%(instanceFirstLabel)s=~"%%s", network_name=~"%%s", %(filteringSelector)s}))` .Labels.%(instanceFirstLabel)s .Labels.network_name .Labels.%(instanceFirstLabel)s .Labels.network_name | query -}}{{ . | first | value | humanize }}{{ end }} IP addresses available.
               ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
@@ -181,9 +181,9 @@
             alert: 'OpenStackNeutronHighIPsUsage',
             expr: |||
               100 * 
-              sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_used{%(filteringSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"}) 
+              sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_used{network_name=~"%(alertsIPutilizationNetworksMatcher)s", %(filteringSelector)s}) 
               /
-              (sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_total{%(filteringSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"})
+              (sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_total{network_name=~"%(alertsIPutilizationNetworksMatcher)s", %(filteringSelector)s})
               > 0)
               > %(alertsCriticalNeutronHighIPsUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
@@ -197,7 +197,7 @@
               description: |||
                 Network {{$labels.network_name}} is running out of free IP addresses on OpenStack {{$labels.%(instanceFirstLabel)s}},
                 {{ printf "%%.0f" $value }} percent of the pool used,
-                {{ with printf `sum(openstack_neutron_network_ip_availabilities_total{%(filteringSelector)s, %(instanceFirstLabel)s=~"%%s", network_name=~"%%s"}) - (sum(openstack_neutron_network_ip_availabilities_used{%(filteringSelector)s, %(instanceFirstLabel)s=~"%%s", network_name=~"%%s"}))` .Labels.%(instanceFirstLabel)s .Labels.network_name .Labels.%(instanceFirstLabel)s .Labels.network_name | query -}}{{ . | first | value | humanize }}{{ end }} IP addresses available.
+                {{ with printf `sum(openstack_neutron_network_ip_availabilities_total{%(instanceFirstLabel)s=~"%%s", network_name=~"%%s", %(filteringSelector)s}) - (sum(openstack_neutron_network_ip_availabilities_used{%(instanceFirstLabel)s=~"%%s", network_name=~"%%s", %(filteringSelector)s}))` .Labels.%(instanceFirstLabel)s .Labels.network_name .Labels.%(instanceFirstLabel)s .Labels.network_name | query -}}{{ . | first | value | humanize }}{{ end }} IP addresses available.
               ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
@@ -225,7 +225,7 @@
           {
             alert: 'OpenStackNovaAgentIsDown',
             expr: |||
-              openstack_nova_agent_state{%(filteringSelector)s,adminState="enabled"} != 1
+              openstack_nova_agent_state{adminState="enabled", %(filteringSelector)s} != 1
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -275,7 +275,7 @@
           {
             alert: 'OpenStackNovaTooManyVMsNotRunning',
             expr: |||
-              count by (%(agg)s, hypervisor_hostname, availability_zone) (openstack_nova_server_status{%(filteringSelector)s, status=~"SHUTOFF|ERROR", hypervisor_hostname!=""})/
+              count by (%(agg)s, hypervisor_hostname, availability_zone) (openstack_nova_server_status{status=~"SHUTOFF|ERROR", hypervisor_hostname!="", %(filteringSelector)s})/
               (count by (%(agg)s, hypervisor_hostname, availability_zone) (openstack_nova_server_status{%(filteringSelector)s}) > %(alertsCriticalVMsNotRunningInstanceMin)s) * 100 > %(alertsCriticalVMsNotRunningPercent)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '15m',
@@ -316,7 +316,7 @@
           {
             alert: 'OpenStackNeutronAgentIsDown',
             expr: |||
-              openstack_neutron_agent_state{%(filteringSelector)s,adminState="up"} != 1
+              openstack_neutron_agent_state{adminState="up", %(filteringSelector)s} != 1
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -335,7 +335,7 @@
           {
             alert: 'OpenStackNeutronL3AgentIsDown',
             expr: |||
-              openstack_neutron_l3_agent_of_router{%(filteringSelector)s,agent_admin_up="true"} != 1
+              openstack_neutron_l3_agent_of_router{agent_admin_up="true", %(filteringSelector)s} != 1
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -406,7 +406,7 @@
           {
             alert: 'OpenStackCinderAgentIsDown',
             expr: |||
-              openstack_cinder_agent_state{%(filteringSelector)s,adminState="enabled"} != 1
+              openstack_cinder_agent_state{adminState="enabled", %(filteringSelector)s} != 1
             ||| % this.config,
             'for': '5m',
             labels: {

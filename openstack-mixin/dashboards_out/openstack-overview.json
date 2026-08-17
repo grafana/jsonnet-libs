@@ -563,8 +563,16 @@
             "description": "Summary of the hardware resources available and used by OpenStack.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "align": "center"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                },
                "overrides": [
@@ -1251,8 +1259,16 @@
             "description": "Details for the projects in the OpenStack cloud.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "align": "center"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                },
                "overrides": [
@@ -1538,8 +1554,16 @@
             "description": "Details for the images in Glance.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "align": "center"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                },
                "overrides": [
@@ -1643,7 +1667,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(openstack_identity_up{job=\"integrations/openstack\"}, job)",
+               "query": "label_values(openstack_identity_up{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1658,7 +1682,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(openstack_identity_up{job=\"integrations/openstack\",job=~\"$job\"}, instance)",
+               "query": "label_values(openstack_identity_up{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

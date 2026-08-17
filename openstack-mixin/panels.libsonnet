@@ -4,17 +4,17 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   new(this): {
     local signals = this.signals,
 
-    local alertList = g.panel.alertList,
-    local stat = g.panel.stat,
-    local timeSeries = g.panel.timeSeries,
-    local table = g.panel.table,
-    local gauge = g.panel.gauge,
+    local statBase = commonlib.panels.generic.stat.base,
+    local statInfo = commonlib.panels.generic.stat.info,
+    local tableBase = commonlib.panels.generic.table.base,
+    local timeSeriesBase = commonlib.panels.generic.timeSeries.base,
+    local timeSeriesPercentage = commonlib.panels.generic.timeSeries.percentage,
 
     placementStatus:
       signals.placement.placement_up.asStat()
-      + commonlib.panels.generic.stat.base.stylize()
-      + stat.options.withGraphMode('none')
-      + stat.standardOptions.withMappings({
+      + statBase.stylize()
+      + g.panel.stat.options.withGraphMode('none')
+      + g.panel.stat.standardOptions.withMappings({
         type: 'value',
         options: {
           '0': {
@@ -32,9 +32,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     keystoneStatus:
       signals.identity.identity_up.asStat()
-      + commonlib.panels.generic.stat.base.stylize()
-      + stat.options.withGraphMode('none')
-      + stat.standardOptions.withMappings({
+      + statBase.stylize()
+      + g.panel.stat.options.withGraphMode('none')
+      + g.panel.stat.standardOptions.withMappings({
         type: 'value',
         options: {
           '0': {
@@ -52,9 +52,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     novaStatus:
       signals.nova.nova_up.asStat()
-      + commonlib.panels.generic.stat.base.stylize()
-      + stat.options.withGraphMode('none')
-      + stat.standardOptions.withMappings({
+      + statBase.stylize()
+      + g.panel.stat.options.withGraphMode('none')
+      + g.panel.stat.standardOptions.withMappings({
         type: 'value',
         options: {
           '0': {
@@ -72,9 +72,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     neutronStatus:
       signals.neutron.neutron_up.asStat()
-      + commonlib.panels.generic.stat.base.stylize()
-      + stat.options.withGraphMode('none')
-      + stat.standardOptions.withMappings({
+      + statBase.stylize()
+      + g.panel.stat.options.withGraphMode('none')
+      + g.panel.stat.standardOptions.withMappings({
         type: 'value',
         options: {
           '0': {
@@ -92,9 +92,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     cinderStatus:
       signals.cinder.cinder_up.asStat()
-      + commonlib.panels.generic.stat.base.stylize()
-      + stat.options.withGraphMode('none')
-      + stat.standardOptions.withMappings({
+      + statBase.stylize()
+      + g.panel.stat.options.withGraphMode('none')
+      + g.panel.stat.standardOptions.withMappings({
         type: 'value',
         options: {
           '0': {
@@ -112,9 +112,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     glanceStatus:
       signals.glance.glance_up.asStat()
-      + commonlib.panels.generic.stat.base.stylize()
-      + stat.options.withGraphMode('none')
-      + stat.standardOptions.withMappings({
+      + statBase.stylize()
+      + g.panel.stat.options.withGraphMode('none')
+      + g.panel.stat.standardOptions.withMappings({
         type: 'value',
         options: {
           '0': {
@@ -131,34 +131,36 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       }),
 
     alertsPanel:
-      alertList.new('Alerts')
-      + alertList.panelOptions.withDescription('Panel to report on the status of firing alerts.')
-      + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
+      // common-lib has no alert list panel, so this is built from grafonnet directly.
+      g.panel.alertList.new('Alerts')
+      + g.panel.alertList.panelOptions.withDescription('Panel to report on the status of firing alerts.')
+      + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
 
     totalResources:
-      table.new('Total resources')
-      + table.queryOptions.withTargets([
-        signals.placement.placement_resource_total_disk.asTableTarget(),
-        signals.placement.placement_resource_usage_disk.asTableTarget(),
-        signals.placement.placement_resource_total_memory.asTableTarget(),
-        signals.placement.placement_resource_usage_memory.asTableTarget(),
-        signals.placement.placement_resource_total_vcpu.asTableTarget(),
-        signals.placement.placement_resource_usage_vcpu.asTableTarget(),
-      ])
-      + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-      + table.panelOptions.withDescription('Summary of the hardware resources available and used by OpenStack.')
-      + table.fieldConfig.defaults.custom.withAlign('center')
-      + table.standardOptions.withOverridesMixin([
-        table.fieldOverride.byRegexp.new('/Disk/')
-        + table.standardOptions.override.byRegexp.withPropertiesFromOptions(
-          table.standardOptions.withUnit('decgbytes')
+      tableBase.new(
+        'Total resources',
+        targets=[
+          signals.placement.placement_resource_total_disk.asTableTarget(),
+          signals.placement.placement_resource_usage_disk.asTableTarget(),
+          signals.placement.placement_resource_total_memory.asTableTarget(),
+          signals.placement.placement_resource_usage_memory.asTableTarget(),
+          signals.placement.placement_resource_total_vcpu.asTableTarget(),
+          signals.placement.placement_resource_usage_vcpu.asTableTarget(),
+        ],
+        description='Summary of the hardware resources available and used by OpenStack.',
+      )
+      + g.panel.table.fieldConfig.defaults.custom.withAlign('center')
+      + g.panel.table.standardOptions.withOverridesMixin([
+        g.panel.table.fieldOverride.byRegexp.new('/Disk/')
+        + g.panel.table.standardOptions.override.byRegexp.withPropertiesFromOptions(
+          g.panel.table.standardOptions.withUnit('decgbytes')
         ),
-        table.fieldOverride.byRegexp.new('/Memory/')
-        + table.standardOptions.override.byRegexp.withPropertiesFromOptions(
-          table.standardOptions.withUnit('decmbytes')
+        g.panel.table.fieldOverride.byRegexp.new('/Memory/')
+        + g.panel.table.standardOptions.override.byRegexp.withPropertiesFromOptions(
+          g.panel.table.standardOptions.withUnit('decmbytes')
         ),
       ])
-      + table.queryOptions.withTransformationsMixin([
+      + g.panel.table.queryOptions.withTransformationsMixin([
         {
           id: 'joinByField',
           options: {
@@ -245,64 +247,65 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     vCPUUsedStat:
       signals.placement.placement_vcpu_usage_ratio.asGauge()
-      + gauge.standardOptions.withMin(0)
-      + gauge.standardOptions.withMax(150)
-      + gauge.standardOptions.thresholds.withSteps([
-        gauge.standardOptions.threshold.step.withValue(0) +
-        gauge.standardOptions.threshold.step.withColor('green'),
-        gauge.standardOptions.threshold.step.withValue(99) +
-        gauge.standardOptions.threshold.step.withColor('red'),
+      + g.panel.gauge.standardOptions.withMin(0)
+      + g.panel.gauge.standardOptions.withMax(150)
+      + g.panel.gauge.standardOptions.thresholds.withSteps([
+        g.panel.gauge.standardOptions.threshold.step.withValue(0) +
+        g.panel.gauge.standardOptions.threshold.step.withColor('green'),
+        g.panel.gauge.standardOptions.threshold.step.withValue(99) +
+        g.panel.gauge.standardOptions.threshold.step.withColor('red'),
       ]),
 
     RAMUsedStat:
       signals.placement.placement_memory_usage_ratio.asGauge()
-      + gauge.standardOptions.withMin(0)
-      + gauge.standardOptions.withMax(150)
-      + gauge.standardOptions.thresholds.withSteps([
-        gauge.standardOptions.threshold.step.withValue(0) +
-        gauge.standardOptions.threshold.step.withColor('green'),
-        gauge.standardOptions.threshold.step.withValue(99) +
-        gauge.standardOptions.threshold.step.withColor('red'),
+      + g.panel.gauge.standardOptions.withMin(0)
+      + g.panel.gauge.standardOptions.withMax(150)
+      + g.panel.gauge.standardOptions.thresholds.withSteps([
+        g.panel.gauge.standardOptions.threshold.step.withValue(0) +
+        g.panel.gauge.standardOptions.threshold.step.withColor('green'),
+        g.panel.gauge.standardOptions.threshold.step.withValue(99) +
+        g.panel.gauge.standardOptions.threshold.step.withColor('red'),
       ]),
 
     freeIPsStat:
       signals.neutron.neutron_free_ips.asStat()
-      + stat.standardOptions.thresholds.withSteps([
-        stat.standardOptions.threshold.step.withValue(0) +
-        stat.standardOptions.threshold.step.withColor('red'),
-        stat.standardOptions.threshold.step.withValue(20) +
-        stat.standardOptions.threshold.step.withColor('green'),
+      + g.panel.stat.standardOptions.thresholds.withSteps([
+        g.panel.stat.standardOptions.threshold.step.withValue(0) +
+        g.panel.stat.standardOptions.threshold.step.withColor('red'),
+        g.panel.stat.standardOptions.threshold.step.withValue(20) +
+        g.panel.stat.standardOptions.threshold.step.withColor('green'),
       ]),
 
     domains:
       signals.identity.identity_domains.asStat()
-      + commonlib.panels.generic.stat.info.stylize(),
+      + statInfo.stylize(),
 
     projects:
       signals.identity.identity_projects.asStat()
-      + commonlib.panels.generic.stat.info.stylize(),
+      + statInfo.stylize(),
 
     regions:
       signals.identity.identity_regions.asStat()
-      + commonlib.panels.generic.stat.info.stylize(),
+      + statInfo.stylize(),
 
     users:
       signals.identity.identity_users.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + timeSeries.queryOptions.withInterval('1m')
-      + timeSeries.standardOptions.withDecimals(0),
+      + timeSeriesBase.stylize()
+      + g.panel.timeSeries.queryOptions.withInterval('1m')
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     projectDetails:
-      table.new('Project details')
-      + table.queryOptions.withTargets([signals.identity.identity_project_info.asTableTarget()])
-      + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-      + table.panelOptions.withDescription('Details for the projects in the OpenStack cloud.')
-      + table.fieldConfig.defaults.custom.withAlign('center')
-      + table.standardOptions.withOverridesMixin([
-        table.fieldOverride.byName.new('Enabled')
-        + table.fieldOverride.byName.withProperty('custom.displayMode', 'color-text')
-        + table.fieldOverride.byName.withPropertiesFromOptions(
-          table.standardOptions.withMappings(
+      tableBase.new(
+        'Project details',
+        targets=[signals.identity.identity_project_info.asTableTarget()],
+        description='Details for the projects in the OpenStack cloud.',
+      )
+      + g.panel.table.fieldConfig.defaults.custom.withAlign('center')
+      + g.panel.table.standardOptions.withOverridesMixin([
+        g.panel.table.fieldOverride.byName.new('Enabled')
+        + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'color-text')
+        + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+          g.panel.table.standardOptions.withMappings(
             {
               type: 'value',
               options: {
@@ -321,7 +324,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ),
         ),
       ])
-      + table.queryOptions.withTransformationsMixin([
+      + g.panel.table.queryOptions.withTransformationsMixin([
         {
           id: 'joinByField',
           options: {
@@ -369,63 +372,64 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     vms:
       signals.nova.nova_total_vms.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + timeSeries.queryOptions.withInterval('1m')
-      + timeSeries.standardOptions.withDecimals(0),
+      + timeSeriesBase.stylize()
+      + g.panel.timeSeries.queryOptions.withInterval('1m')
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     instanceUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      timeSeriesPercentage.new(
         'Instance usage',
         targets=[
           signals.nova.nova_instance_usage.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
         ],
         description='Percentage of the maximum number of instances in use for each project.'
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
-      + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.standardOptions.withMax(1)
+      + g.panel.timeSeries.standardOptions.withMin(0),
 
     vCPUUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      timeSeriesPercentage.new(
         'VCPU usage',
         targets=[
           signals.nova.nova_vcpu_usage.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
         ],
         description='Percentage of the maximum number of virtual CPUs in use for each project.'
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
-      + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.standardOptions.withMax(1)
+      + g.panel.timeSeries.standardOptions.withMin(0),
 
     memoryUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      timeSeriesPercentage.new(
         'Memory usage',
         targets=[
           signals.nova.nova_memory_usage.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
         ],
         description='Percentage of the maximum amount of memory in use for each project.'
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
-      + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.standardOptions.withMax(1)
+      + g.panel.timeSeries.standardOptions.withMin(0),
 
     novaAgents:
-      table.new('Agents')
-      + table.queryOptions.withTargets([signals.nova.nova_agent_state.asTableTarget()])
-      + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-      + table.panelOptions.withDescription('Details for the agents for OpenStack Nova.')
-      + table.fieldConfig.defaults.custom.withAlign('center')
-      + table.standardOptions.withOverridesMixin([
-        table.fieldOverride.byName.new('Admin state')
-        + table.fieldOverride.byName.withProperty('custom.displayMode', 'color-text')
-        + table.fieldOverride.byName.withPropertiesFromOptions(
-          table.standardOptions.withMappings(
+      tableBase.new(
+        'Agents',
+        targets=[signals.nova.nova_agent_state.asTableTarget()],
+        description='Details for the agents for OpenStack Nova.',
+      )
+      + g.panel.table.fieldConfig.defaults.custom.withAlign('center')
+      + g.panel.table.standardOptions.withOverridesMixin([
+        g.panel.table.fieldOverride.byName.new('Admin state')
+        + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'color-text')
+        + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+          g.panel.table.standardOptions.withMappings(
             {
               type: 'value',
               options: {
@@ -444,7 +448,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ),
         ),
       ])
-      + table.queryOptions.withTransformationsMixin([
+      + g.panel.table.queryOptions.withTransformationsMixin([
         {
           id: 'joinByField',
           options: {
@@ -489,40 +493,41 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     networks:
       signals.neutron.neutron_networks.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + timeSeries.queryOptions.withInterval('1m')
-      + timeSeries.standardOptions.withDecimals(0),
+      + timeSeriesBase.stylize()
+      + g.panel.timeSeries.queryOptions.withInterval('1m')
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     subnets:
       signals.neutron.neutron_subnets.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + timeSeries.queryOptions.withInterval('1m')
-      + timeSeries.standardOptions.withDecimals(0),
+      + timeSeriesBase.stylize()
+      + g.panel.timeSeries.queryOptions.withInterval('1m')
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     routers:
-      commonlib.panels.generic.timeSeries.base.new(
+      timeSeriesBase.new(
         'Routers',
         targets=[
           signals.neutron.neutron_routers.withLegendFormat('{{instance}} - total').asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
           signals.neutron.neutron_routers_not_active.withLegendFormat('{{instance}} - inactive').asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
         ],
         description='The number of routers managed by Neutron.',
       )
-      + timeSeries.standardOptions.withDecimals(0),
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     routerDetails:
-      table.new('Router details')
-      + table.queryOptions.withTargets([signals.neutron.neutron_router_info.asTableTarget()])
-      + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-      + table.panelOptions.withDescription('Detailed view of the routers managed by Neutron.')
-      + table.fieldConfig.defaults.custom.withAlign('center')
-      + table.standardOptions.withOverridesMixin([
-        table.fieldOverride.byRegexp.new('/Admin up|Status/')
-        + table.fieldOverride.byRegexp.withProperty('custom.displayMode', 'color-text')
-        + table.fieldOverride.byRegexp.withPropertiesFromOptions(
-          table.standardOptions.withMappings(
+      tableBase.new(
+        'Router details',
+        targets=[signals.neutron.neutron_router_info.asTableTarget()],
+        description='Detailed view of the routers managed by Neutron.',
+      )
+      + g.panel.table.fieldConfig.defaults.custom.withAlign('center')
+      + g.panel.table.standardOptions.withOverridesMixin([
+        g.panel.table.fieldOverride.byRegexp.new('/Admin up|Status/')
+        + g.panel.table.fieldOverride.byRegexp.withProperty('custom.displayMode', 'color-text')
+        + g.panel.table.fieldOverride.byRegexp.withPropertiesFromOptions(
+          g.panel.table.standardOptions.withMappings(
             {
               type: 'value',
               options: {
@@ -551,7 +556,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ),
         ),
       ])
-      + table.queryOptions.withTransformationsMixin([
+      + g.panel.table.queryOptions.withTransformationsMixin([
         {
           id: 'joinByField',
           options: {
@@ -602,31 +607,32 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
 
     ports:
-      commonlib.panels.generic.timeSeries.base.new(
+      timeSeriesBase.new(
         'Ports',
         targets=[
           signals.neutron.neutron_ports.withLegendFormat('{{instance}} - total').asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
           signals.neutron.neutron_ports_lb_not_active.withLegendFormat('{{instance}} - load balancer inactive').asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
           signals.neutron.neutron_ports_no_ips.withLegendFormat('{{instance}} - no IPs').asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
         ],
         description='The number of routers managed by Neutron.',
       )
-      + timeSeries.standardOptions.withDecimals(0),
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     portDetails:
-      table.new('Port details')
-      + table.queryOptions.withTargets([signals.neutron.neutron_port_info.asTableTarget()])
-      + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-      + table.panelOptions.withDescription('Detailed view of the ports managed by Neutron.')
-      + table.fieldConfig.defaults.custom.withAlign('center')
-      + table.standardOptions.withOverridesMixin([
-        table.fieldOverride.byRegexp.new('/Admin up|Status/')
-        + table.fieldOverride.byRegexp.withProperty('custom.displayMode', 'color-text')
-        + table.fieldOverride.byRegexp.withPropertiesFromOptions(
-          table.standardOptions.withMappings(
+      tableBase.new(
+        'Port details',
+        targets=[signals.neutron.neutron_port_info.asTableTarget()],
+        description='Detailed view of the ports managed by Neutron.',
+      )
+      + g.panel.table.fieldConfig.defaults.custom.withAlign('center')
+      + g.panel.table.standardOptions.withOverridesMixin([
+        g.panel.table.fieldOverride.byRegexp.new('/Admin up|Status/')
+        + g.panel.table.fieldOverride.byRegexp.withProperty('custom.displayMode', 'color-text')
+        + g.panel.table.fieldOverride.byRegexp.withPropertiesFromOptions(
+          g.panel.table.standardOptions.withMappings(
             {
               type: 'value',
               options: {
@@ -655,7 +661,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ),
         ),
       ])
-      + table.queryOptions.withTransformationsMixin([
+      + g.panel.table.queryOptions.withTransformationsMixin([
         {
           id: 'joinByField',
           options: {
@@ -710,49 +716,50 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
 
     floatingIPs:
-      commonlib.panels.generic.timeSeries.base.new(
+      timeSeriesBase.new(
         'Floating IPs',
         targets=[
           signals.neutron.neutron_floating_ips.withLegendFormat('{{instance}} - total').asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
           signals.neutron.neutron_floating_ips_associated_not_active.withLegendFormat('{{instance}} - associated inactive').asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
         ],
         description='The number of public IP addresses managed by Neutron.',
       )
-      + timeSeries.standardOptions.withDecimals(0),
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     ipsUsed:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      timeSeriesPercentage.new(
         'IPs used',
         targets=[
           signals.neutron.neutron_ip_usage_ratio.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
         ],
         description='The usage of available IP addresses broken down by subnet.',
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
-      + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.standardOptions.withMax(1)
+      + g.panel.timeSeries.standardOptions.withMin(0),
 
     securityGroups:
       signals.neutron.neutron_security_groups.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + timeSeries.queryOptions.withInterval('1m')
-      + timeSeries.standardOptions.withDecimals(0),
+      + timeSeriesBase.stylize()
+      + g.panel.timeSeries.queryOptions.withInterval('1m')
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     neutronAgents:
-      table.new('Agents')
-      + table.queryOptions.withTargets([signals.neutron.neutron_agent_state.asTableTarget()])
-      + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-      + table.panelOptions.withDescription('Details for the agents for OpenStack Neutron.')
-      + table.fieldConfig.defaults.custom.withAlign('center')
-      + table.standardOptions.withOverridesMixin([
-        table.fieldOverride.byName.new('Admin state')
-        + table.fieldOverride.byName.withProperty('custom.displayMode', 'color-text')
-        + table.fieldOverride.byName.withPropertiesFromOptions(
-          table.standardOptions.withMappings(
+      tableBase.new(
+        'Agents',
+        targets=[signals.neutron.neutron_agent_state.asTableTarget()],
+        description='Details for the agents for OpenStack Neutron.',
+      )
+      + g.panel.table.fieldConfig.defaults.custom.withAlign('center')
+      + g.panel.table.standardOptions.withOverridesMixin([
+        g.panel.table.fieldOverride.byName.new('Admin state')
+        + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'color-text')
+        + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+          g.panel.table.standardOptions.withMappings(
             {
               type: 'value',
               options: {
@@ -771,7 +778,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ),
         ),
       ])
-      + table.queryOptions.withTransformationsMixin([
+      + g.panel.table.queryOptions.withTransformationsMixin([
         {
           id: 'joinByField',
           options: {
@@ -816,87 +823,88 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     volumes:
       signals.cinder.cinder_volumes.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + timeSeries.queryOptions.withInterval('1m')
-      + timeSeries.standardOptions.withDecimals(0),
+      + timeSeriesBase.stylize()
+      + g.panel.timeSeries.queryOptions.withInterval('1m')
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     volumeStatus:
-      commonlib.panels.generic.timeSeries.base.new(
+      timeSeriesBase.new(
         'Volume status',
         targets=[
           signals.cinder.cinder_volume_error_status.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
           signals.cinder.cinder_volume_top_statuses.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
         ],
         description='The current status of volumes in Cinder.',
       )
-      + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
         group: 'A',
         mode: 'normal',
       })
-      + timeSeries.standardOptions.withDecimals(0),
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     volumeUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      timeSeriesPercentage.new(
         'Volume usage',
         targets=[
           signals.cinder.cinder_volume_usage.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
         ],
         description='The percent of volume storage in use for Cinder.',
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
-      + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.standardOptions.withMax(1)
+      + g.panel.timeSeries.standardOptions.withMin(0),
 
     backupUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      timeSeriesPercentage.new(
         'Backup usage',
         targets=[
           signals.cinder.cinder_backup_usage.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
         ],
         description='The percent of backup storage in use for Cinder.',
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
-      + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.standardOptions.withMax(1)
+      + g.panel.timeSeries.standardOptions.withMin(0),
 
     poolUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      timeSeriesPercentage.new(
         'Pool usage',
         targets=[
           signals.cinder.cinder_pool_usage.asTarget()
-          + timeSeries.queryOptions.withInterval('1m'),
+          + g.panel.timeSeries.queryOptions.withInterval('1m'),
         ],
         description='The percent of pool capacity in use for Cinder.',
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+      + g.panel.timeSeries.standardOptions.withMax(1)
+      + g.panel.timeSeries.standardOptions.withMin(0),
 
     snapshots:
       signals.cinder.cinder_snapshots.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + timeSeries.queryOptions.withInterval('1m')
-      + timeSeries.standardOptions.withDecimals(0),
+      + timeSeriesBase.stylize()
+      + g.panel.timeSeries.queryOptions.withInterval('1m')
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     cinderAgents:
-      table.new('Agents')
-      + table.queryOptions.withTargets([signals.cinder.cinder_agent_state.asTableTarget()])
-      + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-      + table.panelOptions.withDescription('Details for the agents for OpenStack Cinder.')
-      + table.fieldConfig.defaults.custom.withAlign('center')
-      + table.fieldConfig.defaults.custom.withCellOptions('color-text')
-      + table.standardOptions.withOverridesMixin([
-        table.fieldOverride.byName.new('Admin state')
-        + table.fieldOverride.byName.withProperty('custom.displayMode', 'color-text')
-        + table.fieldOverride.byName.withPropertiesFromOptions(
-          table.standardOptions.withMappings(
+      tableBase.new(
+        'Agents',
+        targets=[signals.cinder.cinder_agent_state.asTableTarget()],
+        description='Details for the agents for OpenStack Cinder.',
+      )
+      + g.panel.table.fieldConfig.defaults.custom.withAlign('center')
+      + g.panel.table.fieldConfig.defaults.custom.withCellOptions('color-text')
+      + g.panel.table.standardOptions.withOverridesMixin([
+        g.panel.table.fieldOverride.byName.new('Admin state')
+        + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'color-text')
+        + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+          g.panel.table.standardOptions.withMappings(
             {
               type: 'value',
               options: {
@@ -915,7 +923,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ),
         ),
       ])
-      + table.queryOptions.withTransformationsMixin([
+      + g.panel.table.queryOptions.withTransformationsMixin([
         {
           id: 'joinByField',
           options: {
@@ -961,23 +969,24 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     imageCount:
       signals.glance.glance_images.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + timeSeries.queryOptions.withInterval('1m')
-      + timeSeries.standardOptions.withDecimals(0),
+      + timeSeriesBase.stylize()
+      + g.panel.timeSeries.queryOptions.withInterval('1m')
+      + g.panel.timeSeries.standardOptions.withDecimals(0),
 
     images:
-      table.new('Images')
-      + table.queryOptions.withTargets([signals.glance.glance_image_bytes.asTableTarget()])
-      + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-      + table.panelOptions.withDescription('Details for the images in Glance.')
-      + table.fieldConfig.defaults.custom.withAlign('center')
-      + table.standardOptions.withOverridesMixin([
-        table.fieldOverride.byName.new('Size')
-        + table.standardOptions.override.byName.withPropertiesFromOptions(
-          table.standardOptions.withUnit('decbytes')
+      tableBase.new(
+        'Images',
+        targets=[signals.glance.glance_image_bytes.asTableTarget()],
+        description='Details for the images in Glance.',
+      )
+      + g.panel.table.fieldConfig.defaults.custom.withAlign('center')
+      + g.panel.table.standardOptions.withOverridesMixin([
+        g.panel.table.fieldOverride.byName.new('Size')
+        + g.panel.table.standardOptions.override.byName.withPropertiesFromOptions(
+          g.panel.table.standardOptions.withUnit('decbytes')
         ),
       ])
-      + table.queryOptions.withTransformationsMixin([
+      + g.panel.table.queryOptions.withTransformationsMixin([
         {
           id: 'joinByField',
           options: {

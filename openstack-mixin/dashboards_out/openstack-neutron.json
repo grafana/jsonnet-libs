@@ -358,8 +358,16 @@
             "description": "Detailed view of the routers managed by Neutron.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "align": "center"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                },
                "overrides": [
@@ -573,8 +581,16 @@
             "description": "Detailed view of the ports managed by Neutron.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "align": "center"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                },
                "overrides": [
@@ -921,8 +937,16 @@
             "description": "Details for the agents for OpenStack Neutron.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "align": "center"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                },
                "overrides": [
@@ -1051,7 +1075,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(openstack_identity_up{job=\"integrations/openstack\"}, job)",
+               "query": "label_values(openstack_identity_up{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1066,7 +1090,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(openstack_identity_up{job=\"integrations/openstack\",job=~\"$job\"}, instance)",
+               "query": "label_values(openstack_identity_up{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

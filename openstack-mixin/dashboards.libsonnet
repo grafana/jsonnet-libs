@@ -12,7 +12,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local timezone = this.config.dashboardTimezone;
     local rows = this.grafana.rows;
     {
-      overview:
+      'openstack-overview.json':
         g.dashboard.new('OpenStack overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -27,7 +27,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.multiInstance, uid + '-overview', tags, links { overview+:: {} }, timezone, refresh, period),
-      nova:
+      'openstack-nova.json':
         g.dashboard.new('OpenStack Nova')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -40,7 +40,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.multiInstance, uid + '-nova', tags, links { nova+:: {} }, timezone, refresh, period),
-      neutron:
+      'openstack-neutron.json':
         g.dashboard.new('OpenStack Neutron')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -53,7 +53,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.multiInstance, uid + '-neutron', tags, links { neutron+:: {} }, timezone, refresh, period),
-      cinder:
+      'openstack-cinder.json':
         g.dashboard.new('OpenStack Cinder')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -70,7 +70,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     +
     if this.config.enableLokiLogs then
       {
-        logs:
+        'openstack-logs.json':
           logslib.new(
             'OpenStack logs',
             datasourceName=this.grafana.variables.datasources.loki.name,
