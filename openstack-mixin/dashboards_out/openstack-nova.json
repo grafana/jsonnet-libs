@@ -1,24 +1,28 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack Cinder",
             "type": "link",
             "url": "/d/openstack-cinder"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack logs",
             "type": "link",
             "url": "/d/openstack-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack Neutron",
             "type": "link",
             "url": "/d/openstack-neutron"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenStack overview",
             "type": "link",
@@ -26,6 +30,19 @@
          }
       ],
       "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Nova service",
+            "type": "row"
+         },
          {
             "datasource": {
                "type": "prometheus",
@@ -65,26 +82,44 @@
                      ]
                   },
                   "unit": "string"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Nova status"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "string"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 8,
                "w": 6,
                "x": 0,
-               "y": 0
+               "y": 1
             },
-            "id": 1,
+            "id": 2,
             "options": {
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "openstack_placement_up{job=~\"$job\",instance=~\"$instance\"}"
+                  "expr": "openstack_nova_up{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Nova status"
                }
             ],
             "title": "Nova status",
@@ -113,16 +148,32 @@
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "VMs"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 8,
                "w": 18,
                "x": 6,
-               "y": 0
+               "y": 1
             },
-            "id": 2,
+            "id": 3,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -133,7 +184,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -141,8 +192,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_nova_total_vms{job=~\"$job\",instance=~\"$instance\"}",
-                  "interval": "1m",
-                  "legendFormat": "{{instance}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "VMs"
                }
             ],
             "title": "VMs",
@@ -181,9 +234,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 8
+               "y": 9
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -195,7 +248,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -203,8 +256,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_nova_limits_instances_used{job=~\"$job\",instance=~\"$instance\"} / clamp_min(openstack_nova_limits_instances_max{job=~\"$job\",instance=~\"$instance\"}, 1)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - {{tenant}}"
+                  "legendFormat": "{{instance}} - {{tenant}}",
+                  "refId": "Instance usage"
                }
             ],
             "title": "Instance usage",
@@ -243,9 +299,9 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 8
+               "y": 9
             },
-            "id": 4,
+            "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -257,7 +313,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -265,8 +321,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_nova_limits_vcpus_used{job=~\"$job\",instance=~\"$instance\"} / clamp_min(openstack_nova_limits_vcpus_max{job=~\"$job\",instance=~\"$instance\"}, 1)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - {{tenant}}"
+                  "legendFormat": "{{instance}} - {{tenant}}",
+                  "refId": "vCPU usage"
                }
             ],
             "title": "VCPU usage",
@@ -305,9 +364,9 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 16
+               "y": 17
             },
-            "id": 5,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -319,7 +378,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -327,8 +386,11 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "openstack_nova_limits_memory_used{job=~\"$job\",instance=~\"$instance\"} / clamp_min(openstack_nova_limits_memory_max{job=~\"$job\",instance=~\"$instance\"}, 1)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{instance}} - {{tenant}}"
+                  "legendFormat": "{{instance}} - {{tenant}}",
+                  "refId": "Memory usage"
                }
             ],
             "title": "Memory usage",
@@ -342,8 +404,16 @@
             "description": "Details for the agents for OpenStack Nova.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "align": "center"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   }
                },
                "overrides": [
@@ -385,10 +455,10 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 16
+               "y": 17
             },
-            "id": 6,
-            "pluginVersion": "v10.0.0",
+            "id": 7,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -397,7 +467,9 @@
                   },
                   "expr": "openstack_nova_agent_state{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
-                  "instant": true
+                  "instant": true,
+                  "legendFormat": "{{instance}} - {{service}} - {{hostname}}",
+                  "refId": "Nova agent state"
                }
             ],
             "title": "Agents",
@@ -447,14 +519,14 @@
          }
       ],
       "refresh": "1m",
-      "schemaVersion": 36,
+      "schemaVersion": 39,
       "tags": [
          "openstack"
       ],
       "templating": {
          "list": [
             {
-               "label": "Data source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
                "regex": "",
@@ -470,7 +542,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(openstack_identity_up{job=\"integrations/openstack\"}, job)",
+               "query": "label_values(openstack_identity_up{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -485,7 +557,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(openstack_identity_up{job=\"integrations/openstack\",job=~\"$job\"}, instance)",
+               "query": "label_values(openstack_identity_up{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
