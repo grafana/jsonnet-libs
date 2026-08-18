@@ -1,12 +1,14 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Velero cluster view",
             "type": "link",
             "url": "/d/velero-cluster-view"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Velero overview",
             "type": "link",
