@@ -1,18 +1,20 @@
 local g = import './g.libsonnet';
 {
-  local link = g.dashboard.link,
   new(this):
+    local uid = g.util.string.slugify(this.config.uid);
     {
       openldapOverview:
-        link.link.new('OpenLDAP overview', '/d/' + this.grafana.dashboards.overview.uid)
-        + link.link.options.withKeepTime(true),
+        g.dashboard.link.link.new('OpenLDAP overview', '/d/' + this.grafana.dashboards[uid + '-overview.json'].uid)
+        + g.dashboard.link.link.options.withKeepTime(true)
+        + g.dashboard.link.link.options.withIncludeVars(true),
     }
     +
     if this.config.enableLokiLogs then
       {
         logs:
-          link.link.new('OpenLDAP logs', '/d/' + this.grafana.dashboards.logs.uid)
-          + link.link.options.withKeepTime(true),
+          g.dashboard.link.link.new('OpenLDAP logs', '/d/' + this.grafana.dashboards[uid + '-logs.json'].uid)
+          + g.dashboard.link.link.options.withKeepTime(true)
+          + g.dashboard.link.link.options.withIncludeVars(true),
       }
     else {},
 }

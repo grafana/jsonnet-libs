@@ -4,6 +4,7 @@
       },
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenLDAP overview",
             "type": "link",
@@ -157,7 +158,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\",component=~\"$component\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",instance=~\"$instance\",level=~\"$level\",component=~\"$component\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -199,7 +200,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\",component=~\"$component\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",instance=~\"$instance\",level=~\"$level\",component=~\"$component\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -230,7 +231,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=~\"integrations/openldap\"}, job)",
+               "query": "label_values({}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -245,7 +246,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values({job=~\"integrations/openldap\",job=~\"$job\"}, instance)",
+               "query": "label_values({job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -260,7 +261,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\"}, level)",
+               "query": "label_values({job=~\"$job\",instance=~\"$instance\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -275,7 +276,7 @@
                "label": "Component",
                "multi": true,
                "name": "component",
-               "query": "label_values({job=~\"integrations/openldap\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"}, component)",
+               "query": "label_values({job=~\"$job\",instance=~\"$instance\",level=~\"$level\"}, component)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
