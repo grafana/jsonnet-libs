@@ -1,28 +1,18 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
-            "title": "OpenStack Cinder",
+            "title": "Velero cluster view",
             "type": "link",
-            "url": "/d/openstack-cinder"
+            "url": "/d/velero-cluster-view"
          },
          {
+            "includeVars": true,
             "keepTime": true,
-            "title": "OpenStack Neutron",
+            "title": "Velero overview",
             "type": "link",
-            "url": "/d/openstack-neutron"
-         },
-         {
-            "keepTime": true,
-            "title": "OpenStack Nova",
-            "type": "link",
-            "url": "/d/openstack-nova"
-         },
-         {
-            "keepTime": true,
-            "title": "OpenStack overview",
-            "type": "link",
-            "url": "/d/openstack-overview"
+            "url": "/d/velero-overview"
          }
       ],
       "panels": [
@@ -172,7 +162,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=\"integrations/openstack\",job=~\"$job\",level=~\"$level\",service=~\"$service\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=\"integrations/velero\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -214,7 +204,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=\"integrations/openstack\",job=~\"$job\",level=~\"$level\",service=~\"$service\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=\"integrations/velero\",job=~\"$job\",instance=~\"$instance\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -224,7 +214,7 @@
       "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
-         "openstack"
+         "velero"
       ],
       "templating": {
          "list": [
@@ -245,7 +235,22 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=\"integrations/openstack\"}, job)",
+               "query": "label_values({job=\"integrations/velero\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values({job=\"integrations/velero\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -260,22 +265,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=\"integrations/openstack\",job=~\"$job\"}, level)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Service",
-               "multi": true,
-               "name": "service",
-               "query": "label_values({job=\"integrations/openstack\",job=~\"$job\",level=~\"$level\"}, service)",
+               "query": "label_values({job=\"integrations/velero\",job=~\"$job\",instance=~\"$instance\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -300,7 +290,7 @@
             },
             {
                "hide": 2,
-               "label": "Data source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
                "regex": "",
@@ -313,6 +303,6 @@
          "to": "now"
       },
       "timezone": "default",
-      "title": "OpenStack logs",
-      "uid": "openstack-logs"
+      "title": "Velero logs",
+      "uid": "velero-logs"
    }
