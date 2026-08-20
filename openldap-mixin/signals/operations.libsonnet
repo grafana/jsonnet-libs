@@ -17,7 +17,7 @@ function(this)
         nameShort: 'PDUs',
         type: 'counter',
         description: 'The number of LDAP Protocol Data Units (PDUs) processed over time.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=PDU,cn=Statistics,cn=Monitor"}',
@@ -31,7 +31,7 @@ function(this)
         nameShort: 'Add',
         type: 'counter',
         description: 'The number of LDAP Add operations over the selected interval.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Add,cn=Operations,cn=Monitor"}',
@@ -45,7 +45,7 @@ function(this)
         nameShort: 'Bind',
         type: 'counter',
         description: 'The number of LDAP Bind operations over the selected interval.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Bind,cn=Operations,cn=Monitor"}',
@@ -59,7 +59,7 @@ function(this)
         nameShort: 'Modify',
         type: 'counter',
         description: 'The number of LDAP Modify operations over the selected interval.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Modify,cn=Operations,cn=Monitor"}',
@@ -73,7 +73,7 @@ function(this)
         nameShort: 'Search',
         type: 'counter',
         description: 'The number of LDAP Search operations over the selected interval.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Search,cn=Operations,cn=Monitor"}',
@@ -87,7 +87,7 @@ function(this)
         nameShort: 'Delete',
         type: 'counter',
         description: 'The number of LDAP Delete operations over the selected interval.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Delete,cn=Operations,cn=Monitor"}',
@@ -101,7 +101,7 @@ function(this)
         nameShort: 'Abandon',
         type: 'counter',
         description: 'The number of LDAP Abandon operations over the selected interval.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Abandon,cn=Operations,cn=Monitor"}',
@@ -115,7 +115,7 @@ function(this)
         nameShort: 'Compare',
         type: 'counter',
         description: 'The number of LDAP Compare operations over the selected interval.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Compare,cn=Operations,cn=Monitor"}',
@@ -129,7 +129,7 @@ function(this)
         nameShort: 'Unbind',
         type: 'counter',
         description: 'The number of LDAP Unbind operations over the selected interval.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Unbind,cn=Operations,cn=Monitor"}',
@@ -143,7 +143,7 @@ function(this)
         nameShort: 'Extended',
         type: 'counter',
         description: 'The number of LDAP Extended operations over the selected interval.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Extended,cn=Operations,cn=Monitor"}',
@@ -157,7 +157,7 @@ function(this)
         nameShort: 'Modrdn',
         type: 'counter',
         description: 'The number of LDAP Modify RDN operations over the selected interval.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_operation{%(queriesSelector)s, dn="cn=Modrdn,cn=Operations,cn=Monitor"}',

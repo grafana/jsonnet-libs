@@ -50,7 +50,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='The number of read and write waiters.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.standardOptions.withDecimals(0),
 
@@ -91,7 +91,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
         + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.standardOptions.withDecimals(0),
 
@@ -111,7 +111,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
         + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.standardOptions.withDecimals(0),
 
@@ -128,7 +128,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
         + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.standardOptions.withDecimals(0),
 
@@ -146,7 +146,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
         + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.standardOptions.withUnit('none')
+        + g.panel.timeSeries.standardOptions.withUnit('short')
         + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.standardOptions.withDecimals(0),
     },

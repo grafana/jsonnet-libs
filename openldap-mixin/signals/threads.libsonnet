@@ -16,7 +16,7 @@ function(this)
         nameShort: 'Open',
         type: 'gauge',
         description: 'The number of open threads in the LDAP server.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitored_object{%(queriesSelector)s, dn="cn=Open,cn=Threads,cn=Monitor"}',
@@ -30,7 +30,7 @@ function(this)
         nameShort: 'Active',
         type: 'gauge',
         description: 'The number of active threads in the LDAP server.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitored_object{%(queriesSelector)s, dn="cn=Active,cn=Threads,cn=Monitor"}',
@@ -44,7 +44,7 @@ function(this)
         nameShort: 'Max',
         type: 'gauge',
         description: 'The maximum number of threads configured for the LDAP server.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitored_object{%(queriesSelector)s, dn="cn=Max,cn=Threads,cn=Monitor"}',
@@ -58,7 +58,7 @@ function(this)
         nameShort: 'Starting',
         type: 'gauge',
         description: 'The number of threads currently starting in the LDAP server.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitored_object{%(queriesSelector)s, dn="cn=Starting,cn=Threads,cn=Monitor"}',
@@ -72,7 +72,7 @@ function(this)
         nameShort: 'Pending',
         type: 'gauge',
         description: 'The number of pending threads in the LDAP server queue.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitored_object{%(queriesSelector)s, dn="cn=Pending,cn=Threads,cn=Monitor"}',
@@ -86,7 +86,7 @@ function(this)
         nameShort: 'Max Pending',
         type: 'gauge',
         description: 'The maximum number of pending threads allowed in the LDAP server queue.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitored_object{%(queriesSelector)s, dn="cn=Max Pending,cn=Threads,cn=Monitor"}',
@@ -100,7 +100,7 @@ function(this)
         nameShort: 'Backload',
         type: 'gauge',
         description: 'The number of pending threads that have been backloaded.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitored_object{%(queriesSelector)s, dn="cn=Backload,cn=Threads,cn=Monitor"}',

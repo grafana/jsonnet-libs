@@ -16,7 +16,7 @@ function(this)
         nameShort: 'Auth attempts',
         type: 'counter',
         description: 'The total increase of authentication attempts over time.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_bind{%(queriesSelector)s}',

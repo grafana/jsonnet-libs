@@ -16,7 +16,7 @@ function(this)
         nameShort: 'Connections',
         type: 'counter',
         description: 'The increase of new LDAP connections over time.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=Current,cn=Connections,cn=Monitor"}',
@@ -31,7 +31,7 @@ function(this)
         nameShort: 'Read waiters',
         type: 'gauge',
         description: 'The current number of read waiters in the LDAP server.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=Read,cn=Waiters,cn=Monitor"}',
@@ -45,7 +45,7 @@ function(this)
         nameShort: 'Write waiters',
         type: 'gauge',
         description: 'The current number of write waiters in the LDAP server.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=Write,cn=Waiters,cn=Monitor"}',
@@ -59,7 +59,7 @@ function(this)
         nameShort: 'Dial attempts',
         type: 'counter',
         description: 'The LDAP network connection attempts over time.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_dial{%(queriesSelector)s}',

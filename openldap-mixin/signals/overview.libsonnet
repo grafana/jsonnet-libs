@@ -30,7 +30,7 @@ function(this)
         nameShort: 'Referrals',
         type: 'gauge',
         description: 'The number of LDAP referrals.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=Referrals,cn=Statistics,cn=Monitor"}',
@@ -44,7 +44,7 @@ function(this)
         nameShort: 'Entries',
         type: 'counter',
         description: 'The total increase of new directory entries added over time.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'openldap_monitor_counter_object{%(queriesSelector)s, dn="cn=Entries,cn=Statistics,cn=Monitor"}',
