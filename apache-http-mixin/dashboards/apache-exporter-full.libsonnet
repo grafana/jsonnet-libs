@@ -850,7 +850,7 @@ local errorsPanel =
     },
     targets: [
       {
-        expr: 'sum by (le,job, instance) (rate(apache_response_http_codes_bucket{le=~"499.0|599.0", ' + matcher + '}[$__rate_interval]))',
+        expr: 'sum by (le,job, instance) (rate(apache_response_http_codes_bucket{le=~"499|499.0|599|599.0", ' + matcher + '}[$__rate_interval]))',
         legendFormat: '',
         interval: '',
         exemplar: false,
