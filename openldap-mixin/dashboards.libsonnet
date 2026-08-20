@@ -16,7 +16,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
     local rows = this.grafana.rows;
 
     {
-      'overview.json':
+      [uid + '-overview.json']:
         g.dashboard.new(prefix + 'OpenLDAP overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -35,7 +35,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
     +
     (if this.config.enableLokiLogs then
        {
-         'logs.json':
+         [uid + '-logs.json']:
            logslib.new(prefix + 'OpenLDAP logs',
                        datasourceName=this.grafana.variables.datasources.loki.name,
                        datasourceRegex=this.grafana.variables.datasources.loki.regex,
