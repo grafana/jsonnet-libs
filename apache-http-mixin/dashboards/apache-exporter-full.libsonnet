@@ -865,7 +865,7 @@ local errorsPanel =
         hide: true,
       },
       {
-        expr: 'avg by (le,job, instance)\n(\n(\n  increase(apache_response_http_codes_bucket{le=~"499.0", job=~"$job", instance=~"$instance"}[$__rate_interval])\n- ignoring(le)\n  increase(apache_response_http_codes_bucket{le=~"399.0", job=~"$job", instance=~"$instance"}[$__rate_interval])\n)\n/\nincrease(apache_response_http_codes_count{job=~"$job", instance=~"$instance"}[$__rate_interval]) * 100\n)',
+        expr: 'avg by (le,job, instance)\n(\n(\n  increase(apache_response_http_codes_bucket{le=~"499|499.0", job=~"$job", instance=~"$instance"}[$__rate_interval])\n- ignoring(le)\n  increase(apache_response_http_codes_bucket{le=~"399|399.0", job=~"$job", instance=~"$instance"}[$__rate_interval])\n)\n/\nincrease(apache_response_http_codes_count{job=~"$job", instance=~"$instance"}[$__rate_interval]) * 100\n)',
         legendFormat: 'Error rate',
         interval: '',
         exemplar: true,
