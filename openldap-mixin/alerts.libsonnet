@@ -7,7 +7,7 @@
           {
             alert: 'OpenLDAPConnectionSpike',
             expr: |||
-              increase(openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor"}[5m]) > %(alertsWarningConnectionSpike)s
+              increase(openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor", %(filteringSelector)s}[5m]) > %(alertsWarningConnectionSpike)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -26,9 +26,9 @@
             alert: 'OpenLDAPHighSearchOperationRateSpike',
             expr: |||
               100 * (
-                rate(openldap_monitor_operation{dn="cn=Search,cn=Operations,cn=Monitor"}[5m]) 
+                rate(openldap_monitor_operation{dn="cn=Search,cn=Operations,cn=Monitor", %(filteringSelector)s}[5m]) 
                 / 
-                clamp_min(rate(openldap_monitor_operation{dn="cn=Search,cn=Operations,cn=Monitor"}[15m] offset 5m), 0.0001)
+                clamp_min(rate(openldap_monitor_operation{dn="cn=Search,cn=Operations,cn=Monitor", %(filteringSelector)s}[15m] offset 5m), 0.0001)
               ) > %(alertsWarningHighSearchOperationRateSpike)s
             ||| % this.config,
             'for': '5m',
@@ -47,7 +47,7 @@
           {
             alert: 'OpenLDAPDialFailures',
             expr: |||
-              increase(openldap_dial{result!="ok"}[10m]) > %(alertsWarningDialFailureSpike)s
+              increase(openldap_dial{result!="ok", %(filteringSelector)s}[10m]) > %(alertsWarningDialFailureSpike)s
             ||| % this.config,
             'for': '10m',
             labels: {
@@ -65,7 +65,7 @@
           {
             alert: 'OpenLDAPBindFailureRateIncrease',
             expr: |||
-              increase(openldap_bind{result!="ok"}[10m]) > %(alertsWarningBindFailureRateIncrease)s
+              increase(openldap_bind{result!="ok", %(filteringSelector)s}[10m]) > %(alertsWarningBindFailureRateIncrease)s
             ||| % this.config,
             'for': '10m',
             labels: {
