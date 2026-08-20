@@ -15,14 +15,10 @@
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
 
-  // new connections opened in 5m
-  alertsWarningConnectionSpike: 100,
-  // percent, 5m search rate versus the preceding 15m
-  alertsWarningHighSearchOperationRateSpike: 200,
-  // failed dials in 10m
-  alertsWarningDialFailureSpike: 10,
-  // failed binds in 10m
-  alertsWarningBindFailureRateIncrease: 10,
+  alertsWarningConnectionSpike: 100,  // OpenLDAPConnectionSpike: new connections opened in 5m.
+  alertsWarningHighSearchOperationRateSpike: 200,  // OpenLDAPHighSearchOperationRateSpike: percent, 5m search rate versus the preceding 15m.
+  alertsWarningDialFailureSpike: 10,  // OpenLDAPDialFailures: failed dials in 10m.
+  alertsWarningBindFailureRateIncrease: 10,  // OpenLDAPBindFailureRateIncrease: failed binds in 10m.
 
   enableLokiLogs: true,
   customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
@@ -30,7 +26,7 @@
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,
 
-  metricsSource: 'prometheus',
+  metricsSource: ['prometheus'],
   signals+: {
     overview: (import './signals/overview.libsonnet')(this),
     connections: (import './signals/connections.libsonnet')(this),

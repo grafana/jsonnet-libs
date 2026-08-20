@@ -2,7 +2,7 @@
   new(this): {
     groups: [
       {
-        name: 'openldap-alerts',
+        name: this.config.uid + '-alerts',
         rules: [
           {
             alert: 'OpenLDAPConnectionSpike',
