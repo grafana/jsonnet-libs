@@ -4,6 +4,7 @@
       },
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "OpenLDAP overview",
             "type": "link",
