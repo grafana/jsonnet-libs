@@ -1,84 +1,59 @@
 {
-      "__inputs": [ ],
-      "__requires": [ ],
       "annotations": {
          "list": [ ]
       },
-      "description": "",
-      "editable": false,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "hideControls": false,
-      "id": null,
       "links": [
          {
             "asDropdown": false,
-            "icon": "external link",
             "includeVars": true,
             "keepTime": true,
             "tags": [
                "apache-solr-mixin"
             ],
-            "targetBlank": false,
             "title": "Other Apache Solr dashboards",
-            "type": "dashboards",
-            "url": ""
+            "type": "dashboards"
          }
       ],
       "panels": [
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Number of connections to the Solr node.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -86,28 +61,29 @@
                "x": 0,
                "y": 0
             },
-            "id": 2,
+            "id": 1,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, item) (solr_metrics_node_connections{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url,item) (\n  solr_metrics_node_connections{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}\n)\n > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{item}}"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - {{item}}",
+                  "refId": "Connections"
                }
             ],
             "title": "Connections",
@@ -115,57 +91,29 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Total number of tasks submitted and completed in the thread pool.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
@@ -173,37 +121,42 @@
                "x": 12,
                "y": 0
             },
-            "id": 3,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_submitted_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", executor=\"updateOnlyExecutor\"}[$__interval:])) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url) (\n  increase(solr_metrics_node_thread_pool_submitted_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", executor=\"updateOnlyExecutor\"}[$__interval:] offset -$__interval)\n)\n > 0",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - submitted"
+                  "legendFormat": "{{base_url}} - submitted",
+                  "refId": "Threads submitted"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_completed_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", executor=\"updateOnlyExecutor\"}[$__interval:])) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url) (\n  increase(solr_metrics_node_thread_pool_completed_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", executor=\"updateOnlyExecutor\"}[$__interval:] offset -$__interval)\n)\n > 0",
                   "format": "time_series",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - completed"
+                  "legendFormat": "{{base_url}} - completed",
+                  "refId": "Threads completed"
                }
             ],
             "title": "Threads / $__interval",
@@ -211,57 +164,43 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Disk space used by Solr node's root file system.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "bytes"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Node core FS usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -269,28 +208,29 @@
                "x": 0,
                "y": 6
             },
-            "id": 4,
+            "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, item) (solr_metrics_node_core_root_fs_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url,item) (\n  solr_metrics_node_core_root_fs_bytes{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}\n)\n > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{item}}"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - {{item}}",
+                  "refId": "Node core FS usage"
                }
             ],
             "title": "Node core FS usage",
@@ -298,57 +238,43 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Number of open file descriptors.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "File descriptors"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -356,28 +282,29 @@
                "x": 12,
                "y": 6
             },
-            "id": 5,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, item) (solr_metrics_jvm_os_file_descriptors{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url,item) (\n  solr_metrics_jvm_os_file_descriptors{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}\n)\n > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{item}}"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - {{item}}",
+                  "refId": "File descriptors"
                }
             ],
             "title": "File descriptors",
@@ -385,73 +312,55 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
                "w": 24,
                "x": 0,
                "y": 12
             },
-            "id": 6,
-            "targets": [ ],
+            "id": 5,
             "title": "JVM metrics",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Counts the total number of garbage collection events.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Garbage collections / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -459,29 +368,31 @@
                "x": 0,
                "y": 13
             },
-            "id": 7,
+            "id": 6,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:])) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url,item) (\n  increase(solr_metrics_jvm_gc_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:] offset -$__interval)\n)\n > 0",
                   "format": "time_series",
-                  "interval": "1m",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{item}}"
+                  "legendFormat": "{{base_url}} - {{item}}",
+                  "refId": "Garbage collections / $__interval"
                }
             ],
             "title": "Garbage collections / $__interval",
@@ -489,57 +400,43 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Total time spent in garbage collection.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "s"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Garbage collection time / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -547,29 +444,31 @@
                "x": 12,
                "y": 13
             },
-            "id": 8,
+            "id": 7,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_seconds_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:]) / clamp_min(increase(solr_metrics_jvm_gc_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:]), 1)) > 0",
+                  "expr": "avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_seconds_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:] offset -$__interval) / clamp_min(increase(solr_metrics_jvm_gc_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:] offset -$__interval), 1)) > 0",
                   "format": "time_series",
-                  "interval": "1m",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{item}}"
+                  "legendFormat": "{{base_url}} - {{item}}",
+                  "refId": "Garbage collection time / $__interval"
                }
             ],
             "title": "Garbage collection time / $__interval",
@@ -577,45 +476,23 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "CPU load caused by the JVM.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "max": 100,
                   "min": 0,
                   "thresholds": {
@@ -635,8 +512,7 @@
                      ]
                   },
                   "unit": "percent"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
@@ -644,28 +520,29 @@
                "x": 0,
                "y": 19
             },
-            "id": 9,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (100 * solr_metrics_jvm_os_cpu_load{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"systemCpuLoad\"}) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url) (\n  100 * solr_metrics_jvm_os_cpu_load{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"systemCpuLoad\"}\n)\n > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}}"
+                  "instant": false,
+                  "legendFormat": "{{base_url}}",
+                  "refId": "CPU load"
                }
             ],
             "title": "CPU load",
@@ -673,57 +550,29 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The operating system's virtual committed memory, free physical memory and total physical memory usage.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "bytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
@@ -731,46 +580,51 @@
                "x": 12,
                "y": 19
             },
-            "id": 10,
+            "id": 9,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"freePhysicalMemorySize\"}) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url) (\n  solr_metrics_jvm_os_memory_bytes{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"freePhysicalMemorySize\"}\n)\n > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - free physical"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - free physical",
+                  "refId": "OS free physical memory"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"totalPhysicalMemorySize\"}) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url) (\n  solr_metrics_jvm_os_memory_bytes{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"totalPhysicalMemorySize\"}\n)\n > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - total physical"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - total physical",
+                  "refId": "OS total physical memory"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"committedVirtualMemorySize\"}) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url) (\n  solr_metrics_jvm_os_memory_bytes{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"committedVirtualMemorySize\"}\n)\n > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - committed virtual"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - committed virtual",
+                  "refId": "OS committed virtual memory"
                }
             ],
             "title": "OS memory",
@@ -778,57 +632,29 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The heap and non-heap memory used by the JVM.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "bytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
@@ -836,37 +662,40 @@
                "x": 0,
                "y": 25
             },
-            "id": 11,
+            "id": 10,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"used\"}) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url) (\n  solr_metrics_jvm_memory_heap_bytes{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"used\"}\n)\n > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - heap"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - heap",
+                  "refId": "Heap memory used"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"used\"}) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url) (\n  solr_metrics_jvm_memory_non_heap_bytes{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"used\"}\n)\n > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - non-heap"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - non-heap",
+                  "refId": "Non-heap memory used"
                }
             ],
             "title": "Memory used",
@@ -874,57 +703,29 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "The heap and non-heap memory committed by the JVM.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "bytes"
-               },
-               "overrides": [ ]
+               }
             },
             "gridPos": {
                "h": 6,
@@ -932,37 +733,40 @@
                "x": 12,
                "y": 25
             },
-            "id": 12,
+            "id": 11,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"committed\"}) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url) (\n  solr_metrics_jvm_memory_heap_bytes{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"committed\"}\n)\n > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - heap"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - heap",
+                  "refId": "Heap memory committed"
                },
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\", item=\"committed\"}) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url) (\n  solr_metrics_jvm_memory_non_heap_bytes{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\", item=\"committed\"}\n)\n > 0",
                   "format": "time_series",
-                  "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - non-heap"
+                  "instant": false,
+                  "legendFormat": "{{base_url}} - non-heap",
+                  "refId": "Non-heap memory committed"
                }
             ],
             "title": "Memory committed",
@@ -970,73 +774,55 @@
          },
          {
             "collapsed": false,
-            "datasource": {
-               "uid": "${prometheus_datasource}"
-            },
             "gridPos": {
                "h": 1,
                "w": 24,
                "x": 0,
                "y": 31
             },
-            "id": 13,
-            "targets": [ ],
+            "id": 12,
             "title": "Jetty metrics",
             "type": "row"
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Total number of requests received by Jetty.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Requests  / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1044,29 +830,31 @@
                "x": 0,
                "y": 37
             },
-            "id": 14,
+            "id": 13,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, method) (increase(solr_metrics_jetty_requests_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:])) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url,method) (\n  increase(solr_metrics_jetty_requests_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:] offset -$__interval)\n)\n > 0",
                   "format": "time_series",
-                  "interval": "1m",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{method}}"
+                  "legendFormat": "{{base_url}} - {{method}}",
+                  "refId": "Requests  / $__interval"
                }
             ],
             "title": "Requests  / $__interval",
@@ -1074,57 +862,43 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Total number of responses generated by Jetty.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Responses  / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1132,29 +906,31 @@
                "x": 12,
                "y": 37
             },
-            "id": 15,
+            "id": 14,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url, status) (increase(solr_metrics_jetty_response_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:])) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url,status) (\n  increase(solr_metrics_jetty_response_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:] offset -$__interval)\n)\n > 0",
                   "format": "time_series",
-                  "interval": "1m",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{base_url}} - {{status}}"
+                  "legendFormat": "{{base_url}} - {{status}}",
+                  "refId": "Responses  / $__interval"
                }
             ],
             "title": "Responses  / $__interval",
@@ -1162,57 +938,43 @@
          },
          {
             "datasource": {
+               "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
             "description": "Total count of dispatches handled by Jetty.",
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "palette-classic"
                   },
                   "custom": {
-                     "axisCenteredZero": false,
-                     "axisColorMode": "text",
-                     "axisLabel": "",
-                     "axisPlacement": "auto",
-                     "barAlignment": 0,
-                     "drawStyle": "line",
                      "fillOpacity": 30,
-                     "gradientMode": "none",
-                     "hideFrom": {
-                        "legend": false,
-                        "tooltip": false,
-                        "viz": false
-                     },
+                     "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
-                     "pointSize": 5,
-                     "scaleDistribution": {
-                        "type": "linear"
-                     },
-                     "showPoints": "never",
-                     "spanNulls": true,
-                     "stacking": {
-                        "group": "A",
-                        "mode": "none"
-                     },
-                     "thresholdsStyle": {
-                        "mode": "off"
-                     }
+                     "showPoints": "never"
                   },
-                  "mappings": [ ],
                   "thresholds": {
                      "mode": "absolute",
-                     "steps": [
-                        {
-                           "color": "green",
-                           "value": null
-                        }
-                     ]
+                     "steps": [ ]
                   },
                   "unit": "none"
                },
-               "overrides": [ ]
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Dispatches  / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "none"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1220,29 +982,31 @@
                "x": 0,
                "y": 43
             },
-            "id": 16,
+            "id": 15,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
+                     "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job, solr_cluster, base_url) (increase(solr_metrics_jetty_dispatches_total{job=~\"$job\", solr_cluster=~\"$solr_cluster\", base_url=~\"$base_url\"}[$__interval:])) > 0",
+                  "expr": "\n  avg by (job,solr_cluster,base_url) (\n  increase(solr_metrics_jetty_dispatches_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\",base_url=~\"$base_url\"}[$__interval:] offset -$__interval)\n)\n > 0",
                   "format": "time_series",
-                  "interval": "1m",
+                  "instant": false,
                   "intervalFactor": 2,
-                  "legendFormat": "{{base_url}}"
+                  "legendFormat": "{{base_url}}",
+                  "refId": "Dispatches  / $__interval"
                }
             ],
             "title": "Dispatches  / $__interval",
@@ -1250,112 +1014,71 @@
          }
       ],
       "refresh": "1m",
-      "rows": [ ],
-      "schemaVersion": 14,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [
          "apache-solr-mixin"
       ],
       "templating": {
          "list": [
             {
-               "current": { },
-               "hide": 0,
-               "label": "Data Source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
-               "options": [ ],
                "query": "prometheus",
-               "refresh": 1,
                "regex": "",
                "type": "datasource"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
                "includeAll": true,
                "label": "Job",
                "multi": true,
                "name": "job",
-               "options": [ ],
-               "query": "label_values(solr_metrics_core_errors_total,job)",
+               "query": "label_values(solr_metrics_core_errors_total{}, job)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".*",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 2,
-               "includeAll": true,
-               "label": "Cluster",
-               "multi": true,
-               "name": "cluster",
-               "options": [ ],
-               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, cluster)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 0,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
             },
             {
                "allValue": ".+",
-               "current": { },
                "datasource": {
+                  "type": "prometheus",
                   "uid": "${prometheus_datasource}"
                },
-               "hide": 0,
-               "includeAll": true,
-               "label": "Instance",
-               "multi": true,
-               "name": "base_url",
-               "options": [ ],
-               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, base_url)",
-               "refresh": 2,
-               "regex": "",
-               "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
-            },
-            {
-               "allValue": ".+",
-               "current": { },
-               "datasource": {
-                  "uid": "${prometheus_datasource}"
-               },
-               "hide": 0,
                "includeAll": true,
                "label": "Solr cluster",
                "multi": true,
                "name": "solr_cluster",
-               "options": [ ],
                "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, solr_cluster)",
                "refresh": 2,
-               "regex": "",
                "sort": 1,
-               "tagValuesQuery": "",
-               "tags": [ ],
-               "tagsQuery": "",
-               "type": "query",
-               "useTags": false
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "base_url",
+               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\",solr_cluster=~\"$solr_cluster\"}, base_url)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },
@@ -1363,33 +1086,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timepicker": {
-         "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-         ],
-         "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-         ]
-      },
       "timezone": "default",
       "title": "Apache Solr resource monitoring",
-      "uid": "apache-solr-resource-monitoring",
-      "version": 0
+      "uid": "apache-solr-resource-monitoring"
    }
