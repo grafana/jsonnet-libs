@@ -60,7 +60,21 @@
                      "steps": [ ]
                   },
                   "unit": "reqps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "HTTP/GRPC requests sent"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "reqps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -80,15 +94,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{source_workload}} -> {{destination_workload}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_workload}} -> {{destination_workload}}",
+                  "refId": "HTTP/GRPC requests sent"
                }
             ],
             "title": "HTTP/GRPC requests sent",
@@ -118,7 +135,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "HTTP/GRPC request delay"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -127,6 +158,7 @@
                "y": 1
             },
             "id": 3,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -138,16 +170,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval:]))\n/\nclamp_min(sum by(job, cluster, source_workload, destination_workload) (increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval:])), 1)\n",
-                  "interval": "1m",
-                  "legendFormat": "{{source_workload}} -> {{destination_workload}}"
+                  "expr": "sum by(job, cluster, source_workload, destination_workload) (increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval]))\n/\nclamp_min(sum by(job, cluster, source_workload, destination_workload) (increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval])), 1)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_workload}} -> {{destination_workload}}",
+                  "refId": "HTTP/GRPC request delay"
                }
             ],
             "title": "HTTP/GRPC request delay",
@@ -181,7 +215,21 @@
                      "steps": [ ]
                   },
                   "unit": "Bps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "HTTP/GRPC request throughput"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -201,15 +249,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (rate(istio_request_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{source_workload}} -> {{destination_workload}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  rate(istio_request_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_workload}} -> {{destination_workload}}",
+                  "refId": "HTTP/GRPC request throughput"
                }
             ],
             "title": "HTTP/GRPC request throughput",
@@ -243,7 +294,21 @@
                      "steps": [ ]
                   },
                   "unit": "Bps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "HTTP/GRPC response throughput"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -263,15 +328,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (rate(istio_response_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  rate(istio_response_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}",
+                  "refId": "HTTP/GRPC response throughput"
                }
             ],
             "title": "HTTP/GRPC response throughput",
@@ -311,18 +379,24 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (ok)"
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (ok)",
+                  "refId": "Client workload HTTP OK responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[45].+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[45].+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (error)"
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (error)",
+                  "refId": "Client workload HTTP error responses"
                }
             ],
             "title": "HTTP response overview",
@@ -378,52 +452,67 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"1.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"1.+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (1xx)"
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (1xx)",
+                  "refId": "Client workload HTTP 1xx responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"2.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"2.+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (2xx)"
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (2xx)",
+                  "refId": "Client workload HTTP 2xx responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"3.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"3.+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (3xx)"
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (3xx)",
+                  "refId": "Client workload HTTP 3xx responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"4.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"4.+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (4xx)"
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (4xx)",
+                  "refId": "Client workload HTTP 4xx responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"5.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", request_protocol=\"http\", response_code=~\"5.+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (5xx)"
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (5xx)",
+                  "refId": "Client workload HTTP 5xx responses"
                }
             ],
             "title": "HTTP responses / $__interval",
@@ -463,18 +552,24 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", grpc_response_status=\"0\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", grpc_response_status=\"0\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (ok)"
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (ok)",
+                  "refId": "Client workload GRPC OK responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", grpc_response_status=~\"[1-9]\\\\d*\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", grpc_response_status=~\"[1-9]\\\\d*\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (error)"
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: (error)",
+                  "refId": "Client workload GRPC error responses"
                }
             ],
             "title": "GRPC response overview",
@@ -506,8 +601,23 @@
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "GRPC responses / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -516,6 +626,7 @@
                "y": 19
             },
             "id": 9,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [
@@ -530,16 +641,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", grpc_response_status=~\"[0-9]\\\\d*\"})[$__interval:])",
-                  "interval": "1m",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: {{grpc_response_status}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\", grpc_response_status=~\"[0-9]\\\\d*\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}: {{grpc_response_status}}",
+                  "refId": "GRPC responses / $__interval"
                }
             ],
             "title": "GRPC responses / $__interval",
@@ -573,7 +686,21 @@
                      "steps": [ ]
                   },
                   "unit": "Bps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "TCP request throughput"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -593,15 +720,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{source_workload}} -> {{destination_workload}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_workload}} -> {{destination_workload}}",
+                  "refId": "TCP request throughput"
                }
             ],
             "title": "TCP request throughput",
@@ -635,7 +765,21 @@
                      "steps": [ ]
                   },
                   "unit": "Bps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "TCP response throughput"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -655,15 +799,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval]))",
-                  "legendFormat": "{{source_workload}} <- {{destination_workload}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",source_workload_namespace=~\"$namespace\",source_workload=~\"$workload\",destination_workload=~\"$server_workload\", reporter=\"source\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{source_workload}} <- {{destination_workload}}",
+                  "refId": "TCP response throughput"
                }
             ],
             "title": "TCP response throughput",
@@ -709,7 +856,21 @@
                      "steps": [ ]
                   },
                   "unit": "reqps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "HTTP/GRPC requests received"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "reqps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -729,15 +890,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval]))",
-                  "legendFormat": "{{destination_workload}} <- {{source_workload}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_workload}} <- {{source_workload}}",
+                  "refId": "HTTP/GRPC requests received"
                }
             ],
             "title": "HTTP/GRPC requests received",
@@ -767,7 +931,21 @@
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "HTTP/GRPC request delay"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -776,6 +954,7 @@
                "y": 32
             },
             "id": 14,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -787,16 +966,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval:]))\n/\nclamp_min(sum by(job, cluster, source_workload, destination_workload) (increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval:])), 1)\n",
-                  "interval": "1m",
-                  "legendFormat": "{{destination_workload}} <- {{source_workload}}"
+                  "expr": "sum by(job, cluster, source_workload, destination_workload) (increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval]))\n/\nclamp_min(sum by(job, cluster, source_workload, destination_workload) (increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval])), 1)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_workload}} <- {{source_workload}}",
+                  "refId": "HTTP/GRPC request delay"
                }
             ],
             "title": "HTTP/GRPC request delay",
@@ -830,7 +1011,21 @@
                      "steps": [ ]
                   },
                   "unit": "Bps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "HTTP/GRPC request throughput"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -850,15 +1045,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (rate(istio_request_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval]))",
-                  "legendFormat": "{{destination_workload}} <- {{source_workload}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  rate(istio_request_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_workload}} <- {{source_workload}}",
+                  "refId": "HTTP/GRPC request throughput"
                }
             ],
             "title": "HTTP/GRPC request throughput",
@@ -892,7 +1090,21 @@
                      "steps": [ ]
                   },
                   "unit": "Bps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "HTTP/GRPC response throughput"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -912,15 +1124,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (rate(istio_response_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval]))",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  rate(istio_response_bytes_sum{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}",
+                  "refId": "HTTP/GRPC response throughput"
                }
             ],
             "title": "HTTP/GRPC response throughput",
@@ -960,18 +1175,24 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[123].+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (ok)"
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (ok)",
+                  "refId": "Server workload HTTP OK responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[45].+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[45].+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (error)"
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (error)",
+                  "refId": "Server workload HTTP error responses"
                }
             ],
             "title": "HTTP response overview",
@@ -1027,52 +1248,67 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"1.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"1.+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (1xx)"
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (1xx)",
+                  "refId": "Server workload HTTP 1xx responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"2.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"2.+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (2xx)"
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (2xx)",
+                  "refId": "Server workload HTTP 2xx responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"3.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"3.+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (3xx)"
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (3xx)",
+                  "refId": "Server workload HTTP 3xx responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"4.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"4.+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (4xx)"
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (4xx)",
+                  "refId": "Server workload HTTP 4xx responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"5.+\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"5.+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (5xx)"
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (5xx)",
+                  "refId": "Server workload HTTP 5xx responses"
                }
             ],
             "title": "HTTP responses / $__interval",
@@ -1112,18 +1348,24 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", grpc_response_status=\"0\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", grpc_response_status=\"0\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (ok)"
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (ok)",
+                  "refId": "Server workload GRPC OK responses"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", grpc_response_status=~\"[1-9]\\\\d*\"})[$__interval:])",
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", grpc_response_status=~\"[1-9]\\\\d*\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
                   "interval": "1m",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (error)"
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: (error)",
+                  "refId": "Server workload GRPC error responses"
                }
             ],
             "title": "GRPC response overview",
@@ -1155,8 +1397,23 @@
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
+                  },
+                  "unit": ""
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "GRPC responses / $__interval"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1165,6 +1422,7 @@
                "y": 50
             },
             "id": 20,
+            "interval": "1m",
             "options": {
                "legend": {
                   "calcs": [
@@ -1179,16 +1437,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "increase(sum by(job, cluster, source_workload, destination_workload) (istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", grpc_response_status=~\"[0-9]\\\\d*\"})[$__interval:])",
-                  "interval": "1m",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: {{grpc_response_status}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\", grpc_response_status=~\"[0-9]\\\\d*\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}: {{grpc_response_status}}",
+                  "refId": "GRPC responses / $__interval"
                }
             ],
             "title": "GRPC responses / $__interval",
@@ -1222,7 +1482,21 @@
                      "steps": [ ]
                   },
                   "unit": "Bps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "TCP request throughput"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1242,15 +1516,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval]))",
-                  "legendFormat": "{{destination_workload}} <- {{source_workload}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_workload}} <- {{source_workload}}",
+                  "refId": "TCP request throughput"
                }
             ],
             "title": "TCP request throughput",
@@ -1284,7 +1561,21 @@
                      "steps": [ ]
                   },
                   "unit": "Bps"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "TCP response throughput"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -1304,15 +1595,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by(job, cluster, source_workload, destination_workload) (rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval]))",
-                  "legendFormat": "{{destination_workload}} -> {{source_workload}}"
+                  "expr": "sum by (job,cluster,source_workload,destination_workload) (\n  rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\",destination_workload_namespace=~\"$namespace\",destination_workload=~\"$workload\",source_workload=~\"$client_workload\", reporter=\"destination\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{destination_workload}} -> {{source_workload}}",
+                  "refId": "TCP response throughput"
                }
             ],
             "title": "TCP response throughput",

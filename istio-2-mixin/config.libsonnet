@@ -1,8 +1,10 @@
 {
+  local this = self,
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
   filteringSelector: '',
   // Used to identify 'group' of instances.
   groupLabels: ['job', 'cluster'],
+  metricsSource: ['prometheus'],
 
   // Prefix all dashboards uids and alert groups
   uid: 'istio',
@@ -20,6 +22,14 @@
   alertsWarningXDSConfigRejections: 0,
   alertsCriticalHTTPRequestErrorPercentage: 5,  //%
   alertsCriticalGRPCRequestErrorPercentage: 5,  //%
+
+  // Signal definitions
+  signals: {
+    overview: (import './signals/overview.libsonnet')(this),
+    controlplane: (import './signals/controlplane.libsonnet')(this),
+    services: (import './signals/services.libsonnet')(this),
+    workloads: (import './signals/workloads.libsonnet')(this),
+  },
 
   // Logs lib related
   // Set to false to disable logs dashboard and logs annotations

@@ -4,8 +4,8 @@ local dashboards = import './dashboards.libsonnet';
 local g = import './g.libsonnet';
 local links = import './links.libsonnet';
 local panels = import './panels.libsonnet';
-local targets = import './targets.libsonnet';
 local variables = import './variables.libsonnet';
+local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
 
@@ -18,9 +18,17 @@ local variables = import './variables.libsonnet';
     local this = self,
     config: config,
 
+    signals:
+      {
+        [category]: commonlib.signals.unmarshallJsonMulti(
+          this.config.signals[category],
+          type=this.config.metricsSource
+        )
+        for category in std.objectFields(this.config.signals)
+      },
+
     grafana: {
       variables: variables.new(this),
-      targets: targets.new(this),
       annotations: {},
       links: links.new(this),
       panels: panels.new(this),
