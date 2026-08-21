@@ -4,17 +4,17 @@ local g = import './g.libsonnet';
   new(this):
     {
       pgbouncerOverview:
-        link.link.new('PgBouncer overview', '/d/' + this.grafana.dashboards.overview.uid)
+        link.link.new('PgBouncer overview', '/d/' + this.grafana.dashboards['overview.json'].uid)
         + link.link.options.withKeepTime(true),
       pgbouncerClusterOverview:
-        link.link.new('PgBouncer cluster overview', '/d/' + this.grafana.dashboards.clusterOverview.uid)
+        link.link.new('PgBouncer cluster overview', '/d/' + this.grafana.dashboards['clusterOverview.json'].uid)
         + link.link.options.withKeepTime(true),
     }
     +
     if this.config.enableLokiLogs then
       {
         logs:
-          link.link.new('PgBouncer logs', '/d/' + this.grafana.dashboards.logs.uid)
+          link.link.new('PgBouncer logs', '/d/' + this.grafana.dashboards['logs.json'].uid)
           + link.link.options.withKeepTime(true),
       }
     else {},

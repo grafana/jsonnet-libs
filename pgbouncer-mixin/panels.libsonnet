@@ -1,20 +1,17 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
-local utils = commonlib.utils;
 {
   new(this):
     {
-      local t = this.grafana.targets,
+      local signals = this.signals,
       local stat = g.panel.stat,
       local alertList = g.panel.alertList,
 
-      // create stat panel using commonlib
+      // Single-signal stat panels: signal.asStat() + generic stat stylize(). Title, unit,
+      // description and query all come from the signal spec; only styling lives here.
       clientsWaitingConnections:
-        commonlib.panels.generic.stat.base.new(
-          'Client waiting connections',
-          targets=[t.clientsWaitingConnections],
-          description='Current number of client connections waiting on a server connection.'
-        )
+        signals.connections.pools_client_waiting_connections_total.asStat()
+        + commonlib.panels.generic.stat.base.stylize()
         + stat.options.withGraphMode('none')
         + stat.standardOptions.color.withMode('thresholds')
         + stat.standardOptions.thresholds.withSteps([
@@ -26,65 +23,43 @@ local utils = commonlib.utils;
           + stat.thresholdStep.withValue(20),
         ]),
       activeClientConnections:
-        commonlib.panels.generic.stat.info.new(
-          'Active client connections',
-          targets=[t.activeClientConnections],
-          description='Current number of active client connections.'
-        )
+        signals.connections.pools_client_active_connections_total.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
       activeServerConnections:
-        commonlib.panels.generic.stat.info.new(
-          'Active server connections',
-          targets=[t.activeServerConnections],
-          description='Current number of client connections that are linked to a server connection and able to process queries.'
-        )
+        signals.connections.pools_server_active_connections.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
       maxDatabaseConnections:
-        commonlib.panels.generic.stat.info.new(
-          'Max database connections',
-          targets=[t.maxDatabaseConnections],
-          description='Maximum number of allowed connections for database.'
-        )
+        signals.connections.databases_max_connections.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
       maxUserConnections:
-        commonlib.panels.generic.stat.info.new(
-          'Max user connections',
-          targets=[t.maxUserConnections],
-          description='Maximum number of server connections per user allowed.'
-        )
+        signals.config.config_max_user_connections.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
       maxClientConnections:
-        commonlib.panels.generic.stat.info.new(
-          'Max client connections',
-          targets=[t.maxClientConnections],
-          description='Maximum number of client connections allowed.'
-        )
+        signals.config.config_max_client_connections.asStat()
+        + commonlib.panels.generic.stat.info.stylize()
         + stat.options.withGraphMode('none'),
 
+      // Single-signal timeSeries panels: signal.asTimeSeries() + generic timeSeries stylize().
       queriesPooled:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Queries processed',
-          targets=[t.queriesPooled],
-          description=|||
-            Rate of SQL queries pooled by PgBouncer.
-          |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ops'),
+        signals.stats.stats_queries_pooled_total.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
 
       queryDuration:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Queries average duration / $__interval',
-          targets=[t.queryDuration],
-          description=|||
-            Average duration of queries being processed by PgBouncer.
-          |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
+        signals.stats.stats_query_avg_duration.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
 
+      // Multi-signal network traffic panel keeps target-based construction.
       networkTraffic:
         commonlib.panels.network.timeSeries.traffic.new(
           'Network traffic',
-          targets=[t.networkTrafficRecieved, t.networkTrafficSent],
+          targets=[
+            signals.stats.stats_received_bytes_total.asTarget(),
+            signals.stats.stats_sent_bytes_total.asTarget(),
+          ],
           description=|||
             Volume in bytes of network traffic received by PgBouncer.
           |||
@@ -94,29 +69,23 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       transactionRate:
-        commonlib.panels.generic.timeSeries.base.new(
-          'SQL transaction rate',
-          targets=[t.transactionRate],
-          description=|||
-            Rate of SQL transactions pooled.
-          |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ops'),
+        signals.stats.stats_sql_transactions_pooled_total.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
 
       transactionAverageDuration:
-        commonlib.panels.generic.timeSeries.base.new(
-          'SQL average transaction duration / $__interval',
-          targets=[t.transactionAverageDuration],
-          description=|||
-            Average duration of SQL transactions pooled.
-          |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
+        signals.stats.stats_transaction_avg_duration.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
 
+      // Multi-signal server connection states panel keeps target-based construction.
       serverConnections:
         commonlib.panels.generic.timeSeries.base.new(
           'Server connections',
-          targets=[t.serverIdleConnections, t.serverUsedConnections, t.serverLoginConnections, t.serverTestingConnections],
+          targets=[
+            signals.connections.pools_server_idle_connections.asTarget(),
+            signals.connections.pools_server_used_connections.asTarget(),
+            signals.connections.pools_server_login_connections.asTarget(),
+            signals.connections.pools_server_testing_connections.asTarget(),
+          ],
           description=|||
             Number of various server connection states.
           |||
@@ -126,70 +95,38 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       granularActiveClientConnections:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Active client connections',
-          targets=[t.granularActiveClientConnections],
-          description=|||
-            Current number of active client connections.
-          |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('conn'),
+        signals.connections.pools_client_active_connections.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
 
       clientsWaiting:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Waiting clients',
-          targets=[t.clientsWaiting],
-          description=|||
-            Current number of client connections waiting on a server connection.
-          |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('clients'),
+        signals.connections.pools_client_waiting_connections.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
 
       maxClientWaitTime:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Max client wait time',
-          targets=[t.maxClientWaitTime],
-          description=|||
-            Age of the oldest unserved client connection in seconds.
-          |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('s'),
+        signals.connections.pools_client_maxwait_seconds.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
 
       alertsPanel:
         alertList.new('PgBouncer alerts')
         + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
 
       topDatabaseActiveConnection:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top databases by active connections',
-          targets=[t.topDatabaseActiveConnection],
-          description=|||
-            Top databases by current number of active client connections.
-          |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('conn'),
+        signals.cluster.top_database_active_connection.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
       topDatabaseQueryPooled:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top databases by queries processed',
-          targets=[t.topDatabaseQueryProcessed],
-          description=|||
-            Top databases by rate of SQL queries pooled by PgBouncer.
-          |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ops'),
+        signals.cluster.top_database_query_processed.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
       topDatabaseQueryDuration:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top databases by average query duration',
-          targets=[t.topDatabaseQueryDuration],
-          description=|||
-            Top databases by average duration of queries being processed by PgBouncer.
-          |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('s'),
+        signals.cluster.top_database_query_duration.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
+      // Multi-signal top-database network panel keeps target-based construction.
       topDatabaseNetworkTraffic:
         commonlib.panels.generic.timeSeries.base.new(
           'Top databases by network traffic',
-          targets=[t.topDatabaseNetworkTrafficReceived, t.topDatabaseNetworkTrafficSent],
+          targets=[
+            signals.cluster.top_database_network_received.asTarget(),
+            signals.cluster.top_database_network_sent.asTarget(),
+          ],
           description=|||
             Top databases by volume of network traffic.
           |||
