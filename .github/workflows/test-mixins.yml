@@ -68,6 +68,7 @@ jobs:
 
   lint-mixin:
     name: Test mixin
+    if: needs.check-for-changed-mixins.outputs.changed-mixins != '[]'
     runs-on: ubuntu-latest
     permissions:
       issues: write
