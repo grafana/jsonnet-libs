@@ -13,7 +13,12 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     configMap.new('redis-config')
     + configMap.mixin.metadata.withNamespace($._config.namespace)
     + configMap.withData({
-      'label.sh': importstr 'files/label.sh',
+      'label-reconciler.sh': std.format(
+        importstr 'files/label-reconciler.sh',
+        {
+          redis_port: $._config.redis.port,
+        }
+      ),
       'init.sh': std.format(
         importstr 'files/init.sh',
         {
@@ -21,6 +26,8 @@ local k = import 'ksonnet-util/kausal.libsonnet';
           redis_port: $._config.redis.port,
           sentinel_port: $._config.redis.sentinel_port,
           master_group: master_group,
+          down_after_milliseconds: $._config.redis.down_after_milliseconds,
+          parallel_syncs: parallel_syncs,
         }
       ),
       'redis.conf': std.format(
@@ -36,12 +43,12 @@ local k = import 'ksonnet-util/kausal.libsonnet';
           extraConfig: $._config.redis.extra_config,
         },
       ),
+      // Only global Sentinel settings are templated here; the `monitor` line and
+      // per-master options (which must follow it) are appended at runtime by
+      // init.sh, in terms of the master's stable FQDN.
       'sentinel.conf': std.format(
         importstr 'files/sentinel.conf',
         {
-          master_group: master_group,
-          down_after_milliseconds: $._config.redis.down_after_milliseconds,
-          parallel_syncs: parallel_syncs,
           sentinel_port: $._config.redis.sentinel_port,
         },
       ),
