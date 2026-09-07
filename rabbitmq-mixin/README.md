@@ -5,7 +5,7 @@ For more information on the plugin please refer to [Monitoring with Prometheus &
 
 The dashboards were based on those available at RabbitMQ's Grafana organization profile. See [RabbitMQ Organization](https://grafana.com/orgs/rabbitmq/dashboards).
 
-The alerts were based on those published at [https://awesome-prometheus-alerts.grep.to/rules#rabbitmq](https://awesome-prometheus-alerts.grep.to/rules#rabbitmq).
+The alerts were based on those published at [https://samber.github.io/awesome-prometheus-alerts/rules#rabbitmq](https://samber.github.io/awesome-prometheus-alerts/rules#rabbitmq).
 
 To use them, you need to have `mixtool` and `jsonnetfmt` installed. If you have a working Go development environment, it's easiest to run the following:
 
