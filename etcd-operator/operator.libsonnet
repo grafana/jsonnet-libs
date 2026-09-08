@@ -28,6 +28,11 @@
       policyRule.withApiGroups(['apps']) +
       policyRule.withResources(['deployments']) +
       policyRule.withVerbs(['*']),
+
+      policyRule.new() +
+      policyRule.withApiGroups(['policy']) +
+      policyRule.withResources(['poddisruptionbudgets']) +
+      policyRule.withVerbs(['*']),
     ]),
 
   local container = k.core.v1.container,
