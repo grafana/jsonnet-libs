@@ -1,5 +1,5 @@
 groups:
-    - name: vsphere
+    - name: vsphere-alerts
       rules:
         - alert: VSphereHostInfoCpuUtilization
           annotations:

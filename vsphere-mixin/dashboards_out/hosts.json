@@ -1,6 +1,7 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "vSphere logs",
             "type": "link",

@@ -3,7 +3,7 @@
 
     groups: [
       {
-        name: this.config.uid,
+        name: this.config.uid + '-alerts',
         rules: [
           {
             alert: 'VSphereHostInfoCpuUtilization',

@@ -18,7 +18,7 @@ function(this)
         name: 'VMs on',
         description: 'The number of virtual machines currently powered on within the cluster.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_cluster_vm_count{power_state="on", ' + s.clusterQueriesSelector + '}',
@@ -30,7 +30,7 @@ function(this)
         name: 'VMs off',
         description: 'The number of virtual machines currently powered off within the cluster.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_cluster_vm_count{power_state="off", ' + s.clusterQueriesSelector + '}',
@@ -42,7 +42,7 @@ function(this)
         name: 'VMs suspended',
         description: 'The number of virtual machines currently in a suspended state within the cluster.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_cluster_vm_count{power_state="suspended", ' + s.clusterQueriesSelector + '}',
@@ -54,7 +54,7 @@ function(this)
         name: 'Active ESXi hosts',
         description: 'The number of ESXi hosts that are currently running (responding and not in maintenance mode) within the cluster.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_cluster_host_count{effective="true", ' + s.clusterQueriesSelector + '}',
@@ -66,7 +66,7 @@ function(this)
         name: 'Inactive ESXi hosts',
         description: 'The number of ESXi hosts that are currently not running (not responding or in maintenance mode) within the cluster.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_cluster_host_count{effective="false", ' + s.clusterQueriesSelector + '}',
@@ -78,7 +78,7 @@ function(this)
         name: 'Resource pools',
         description: 'The number of resource pools within the cluster (including nested).',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_resource_pool_cpu_shares{' + s.clusterQueriesSelector + '}',

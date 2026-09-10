@@ -19,11 +19,11 @@
   customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
 
   // Alert thresholds
-  alertsHighCPUUtilization: 90,  // %
-  alertsHighMemoryUtilization: 90,  // %
-  alertsWarningDiskUtilization: 75,  // %
-  alertsCriticalDiskUtilization: 90,  // %
-  alertsHighPacketErrors: 20,  // % of total packets
+  alertsHighCPUUtilization: 90,  // Percent. Fires VSphereHostInfoCpuUtilization when an ESXi host's CPU utilization stays above this for 15m.
+  alertsHighMemoryUtilization: 90,  // Percent. Fires VSphereHostWarningMemoryUtilization when an ESXi host's memory utilization stays above this for 15m.
+  alertsWarningDiskUtilization: 75,  // Percent. Fires VSphereDatastoreWarningDiskUtilization when a datastore's disk utilization stays above this for 5m.
+  alertsCriticalDiskUtilization: 90,  // Percent. Fires VSphereDatastoreCriticalDiskUtilization when a datastore's disk utilization stays above this for 5m.
+  alertsHighPacketErrors: 20,  // Percent of total packets. Fires VSphereHostWarningHighPacketErrors when an ESXi host's packet error ratio stays above this for 5m.
   // Logs lib related
   // Set to false to disable logs dashboard and logs annotations
   enableLokiLogs: true,
@@ -31,7 +31,7 @@
   showLogsVolume: true,
 
   // Source(s) used when unmarshalling signals into panel targets.
-  metricsSource: 'prometheus',
+  metricsSource: ['prometheus'],
 
   // Signal definitions, grouped by domain. Pass `this` (the config) so the
   // signal files can read the config's label lists. Passing `self` would

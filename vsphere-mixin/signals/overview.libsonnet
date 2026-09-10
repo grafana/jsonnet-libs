@@ -22,7 +22,7 @@ function(this)
         name: 'Clusters',
         description: 'The number of clusters in the datacenter.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         // Inner `count by (vcenter_cluster_name)` collapses each cluster to one series;
         // the outer bare count() then counts the clusters.
         aggLevel: 'aggKeepLabels',
@@ -40,7 +40,7 @@ function(this)
         name: 'ESXi hosts',
         description: 'The number of ESXi hosts in the datacenter.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         aggLevel: 'aggKeepLabels',
         aggFunction: 'count',
         sources: {
@@ -56,7 +56,7 @@ function(this)
         name: 'Resource pools',
         description: 'The number of resource pools in the datacenter.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         aggLevel: 'aggKeepLabels',
         aggFunction: 'count',
         sources: {
@@ -72,7 +72,7 @@ function(this)
         name: 'VMs',
         description: 'The number of virtual machines in the datacenter.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         aggLevel: 'aggKeepLabels',
         aggFunction: 'count',
         sources: {
@@ -88,7 +88,7 @@ function(this)
         name: 'Clustered VMs on',
         description: 'The number of virtual machines currently powered on that belong to a cluster in the datacenter.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -103,7 +103,7 @@ function(this)
         name: 'Clustered VMs off',
         description: 'The number of virtual machines currently powered off that belong to a cluster in the datacenter.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -118,7 +118,7 @@ function(this)
         name: 'Clustered VMs suspended',
         description: 'The number of virtual machines currently in a suspended state that belong to a cluster in the datacenter.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -133,7 +133,7 @@ function(this)
         name: 'Clustered VM templates',
         description: 'The number of virtual machine templates that belong to a cluster in the datacenter.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -148,7 +148,7 @@ function(this)
         name: 'Clustered active ESXi hosts',
         description: 'The number of ESXi hosts that are currently running (responding and not in maintenance mode) that belong to a cluster within the datacenter.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -163,7 +163,7 @@ function(this)
         name: 'Clustered inactive ESXi hosts',
         description: 'The number of ESXi hosts that are currently not running (not responding or in maintenance mode) that belong to a cluster within the datacenter.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -228,7 +228,7 @@ function(this)
         name: 'Active ESXi hosts by cluster',
         description: 'Active ESXi hosts per cluster.',
         type: 'gauge',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_cluster_host_count{effective="true", ' + s.queriesSelector + '}',
@@ -240,7 +240,7 @@ function(this)
         name: 'Inactive ESXi hosts by cluster',
         description: 'Inactive ESXi hosts per cluster.',
         type: 'gauge',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_cluster_host_count{effective="false", ' + s.queriesSelector + '}',
@@ -252,7 +252,7 @@ function(this)
         name: 'VMs on by cluster',
         description: 'VMs powered on per cluster.',
         type: 'gauge',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_cluster_vm_count{power_state="on", ' + s.queriesSelector + '}',
@@ -264,7 +264,7 @@ function(this)
         name: 'VMs off by cluster',
         description: 'VMs powered off per cluster.',
         type: 'gauge',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_cluster_vm_count{power_state="off", ' + s.queriesSelector + '}',
@@ -276,7 +276,7 @@ function(this)
         name: 'VMs suspended by cluster',
         description: 'VMs suspended per cluster.',
         type: 'gauge',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_cluster_vm_count{power_state="suspended", ' + s.queriesSelector + '}',
@@ -314,7 +314,7 @@ function(this)
         name: 'Top CPU shares by resource pools',
         description: 'The resource pools with the highest amount of CPU shares allocated in the datacenter.',
         type: 'gauge',
-        unit: 'shares',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_resource_pool_cpu_shares{' + s.queriesSelector + '}',
@@ -327,7 +327,7 @@ function(this)
         name: 'Top memory shares by resource pools',
         description: 'The resource pools with the highest amount of memory shares allocated in the datacenter.',
         type: 'gauge',
-        unit: 'shares',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'vcenter_resource_pool_memory_shares{' + s.queriesSelector + '}',

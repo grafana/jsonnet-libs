@@ -25,7 +25,8 @@ local g = import './g.libsonnet';
       {
         logs:
           link.link.new('vSphere logs', '/d/' + this.grafana.dashboards['logs.json'].uid)
-          + link.link.options.withKeepTime(true),
+          + link.link.options.withKeepTime(true)
+          + link.link.options.withIncludeVars(true),
       }
     else {},
 }
