@@ -4,84 +4,77 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   new(this):
     {
       local signals = this.signals,
-      local prometheusQuery = g.query.prometheus,
-      local alertList = g.panel.alertList,
-      local stat = g.panel.stat,
-      local timeSeries = g.panel.timeSeries,
-      local pieChart = g.panel.pieChart,
-      local barGauge = g.panel.barGauge,
-      local table = g.panel.table,
-      local histogram = g.panel.histogram,
 
       alertsPanel:
-        alertList.new('Istio alerts')
-        + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesSelectorAdvancedSyntax),
+        // common-lib has no alertList base: this panel renders Grafana alert state, not a signal query.
+        g.panel.alertList.new('Istio alerts')
+        + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesSelectorAdvancedSyntax),
 
       proxies:
         signals.overview.proxyCount.asStat()
         + commonlib.panels.generic.stat.base.stylize()
-        + stat.options.withGraphMode('none')
-        + stat.standardOptions.color.withMode('thresholds')
-        + stat.standardOptions.thresholds.withSteps([
-          stat.thresholdStep.withColor('super-light-red')
-          + stat.thresholdStep.withValue(null),
-          stat.thresholdStep.withColor('super-light-green')
-          + stat.thresholdStep.withValue(1),
+        + g.panel.stat.options.withGraphMode('none')
+        + g.panel.stat.standardOptions.color.withMode('thresholds')
+        + g.panel.stat.standardOptions.thresholds.withSteps([
+          g.panel.stat.thresholdStep.withColor('super-light-red')
+          + g.panel.stat.thresholdStep.withValue(null),
+          g.panel.stat.thresholdStep.withColor('super-light-green')
+          + g.panel.stat.thresholdStep.withValue(1),
         ]),
       gateways:
         signals.overview.gatewayCount.asStat()
         + commonlib.panels.generic.stat.base.stylize()
-        + stat.options.withGraphMode('none')
-        + stat.standardOptions.color.withMode('thresholds')
-        + stat.standardOptions.thresholds.withSteps([
-          stat.thresholdStep.withColor('text')
-          + stat.thresholdStep.withValue(null),
-          stat.thresholdStep.withColor('super-light-green')
-          + stat.thresholdStep.withValue(1),
+        + g.panel.stat.options.withGraphMode('none')
+        + g.panel.stat.standardOptions.color.withMode('thresholds')
+        + g.panel.stat.standardOptions.thresholds.withSteps([
+          g.panel.stat.thresholdStep.withColor('text')
+          + g.panel.stat.thresholdStep.withValue(null),
+          g.panel.stat.thresholdStep.withColor('super-light-green')
+          + g.panel.stat.thresholdStep.withValue(1),
         ]),
       virtualServices:
         signals.overview.virtualServiceCount.asStat()
         + commonlib.panels.generic.stat.base.stylize()
-        + stat.options.withGraphMode('none')
-        + stat.standardOptions.color.withMode('thresholds')
-        + stat.standardOptions.thresholds.withSteps([
-          stat.thresholdStep.withColor('text')
-          + stat.thresholdStep.withValue(null),
-          stat.thresholdStep.withColor('super-light-green')
-          + stat.thresholdStep.withValue(1),
+        + g.panel.stat.options.withGraphMode('none')
+        + g.panel.stat.standardOptions.color.withMode('thresholds')
+        + g.panel.stat.standardOptions.thresholds.withSteps([
+          g.panel.stat.thresholdStep.withColor('text')
+          + g.panel.stat.thresholdStep.withValue(null),
+          g.panel.stat.thresholdStep.withColor('super-light-green')
+          + g.panel.stat.thresholdStep.withValue(1),
         ]),
       destinationRules:
         signals.overview.destinationRuleCount.asStat()
         + commonlib.panels.generic.stat.base.stylize()
-        + stat.options.withGraphMode('none')
-        + stat.standardOptions.color.withMode('thresholds')
-        + stat.standardOptions.thresholds.withSteps([
-          stat.thresholdStep.withColor('super-light-orange')
-          + stat.thresholdStep.withValue(null),
-          stat.thresholdStep.withColor('super-light-green')
-          + stat.thresholdStep.withValue(1),
+        + g.panel.stat.options.withGraphMode('none')
+        + g.panel.stat.standardOptions.color.withMode('thresholds')
+        + g.panel.stat.standardOptions.thresholds.withSteps([
+          g.panel.stat.thresholdStep.withColor('super-light-orange')
+          + g.panel.stat.thresholdStep.withValue(null),
+          g.panel.stat.thresholdStep.withColor('super-light-green')
+          + g.panel.stat.thresholdStep.withValue(1),
         ]),
       serviceEntries:
         signals.overview.serviceEntryCount.asStat()
         + commonlib.panels.generic.stat.base.stylize()
-        + stat.options.withGraphMode('none')
-        + stat.standardOptions.color.withMode('thresholds')
-        + stat.standardOptions.thresholds.withSteps([
-          stat.thresholdStep.withColor('text')
-          + stat.thresholdStep.withValue(null),
-          stat.thresholdStep.withColor('super-light-green')
-          + stat.thresholdStep.withValue(1),
+        + g.panel.stat.options.withGraphMode('none')
+        + g.panel.stat.standardOptions.color.withMode('thresholds')
+        + g.panel.stat.standardOptions.thresholds.withSteps([
+          g.panel.stat.thresholdStep.withColor('text')
+          + g.panel.stat.thresholdStep.withValue(null),
+          g.panel.stat.thresholdStep.withColor('super-light-green')
+          + g.panel.stat.thresholdStep.withValue(1),
         ]),
       workloadEntries:
         signals.overview.workloadEntryCount.asStat()
         + commonlib.panels.generic.stat.base.stylize()
-        + stat.options.withGraphMode('none')
-        + stat.standardOptions.color.withMode('thresholds')
-        + stat.standardOptions.thresholds.withSteps([
-          stat.thresholdStep.withColor('text')
-          + stat.thresholdStep.withValue(null),
-          stat.thresholdStep.withColor('super-light-green')
-          + stat.thresholdStep.withValue(1),
+        + g.panel.stat.options.withGraphMode('none')
+        + g.panel.stat.standardOptions.color.withMode('thresholds')
+        + g.panel.stat.standardOptions.thresholds.withSteps([
+          g.panel.stat.thresholdStep.withColor('text')
+          + g.panel.stat.thresholdStep.withValue(null),
+          g.panel.stat.thresholdStep.withColor('super-light-green')
+          + g.panel.stat.thresholdStep.withValue(1),
         ]),
 
       vCPUUsage:
@@ -94,12 +87,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='vCPU usage for various components of the Istio system.',
         )
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         })
-        + timeSeries.standardOptions.withUnit('percentunit'),
+        + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
       openFileDescriptors:
         commonlib.panels.generic.timeSeries.base.new(
           'Open file descriptors',
@@ -110,8 +103,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Number of open file descriptors for various components of the Istio system.',
         )
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
@@ -128,12 +121,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Available virtual memory compared to the resident memory for the various components of the Istio system.',
         )
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withScaleDistributionMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withScaleDistributionMixin({
           log: 2,
           type: 'log',
         })
-        + timeSeries.standardOptions.withUnit('bytes'),
+        + g.panel.timeSeries.standardOptions.withUnit('bytes'),
       heapMemory:
         commonlib.panels.memory.timeSeries.usageBytes.new(
           'Heap memory',
@@ -150,9 +143,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Heap memory information for the various components of the Istio system.',
         )
-        + timeSeries.options.legend.withDisplayMode('table')
-        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
-        + timeSeries.standardOptions.withUnit('bytes'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + g.panel.timeSeries.standardOptions.withUnit('bytes'),
       httpGRPCRequests:
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP/GRPC requests',
@@ -162,12 +155,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='HTTP/GRPC request rate for the components of the Istio system.',
         )
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         })
-        + timeSeries.standardOptions.withUnit('reqps'),
+        + g.panel.timeSeries.standardOptions.withUnit('reqps'),
       xDSEnvoyThroughput:
         commonlib.panels.generic.timeSeries.base.new(
           'xDS envoy throughput',
@@ -177,52 +170,52 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='The send and receive data rates from all envoy proxies in the Istio system.',
         )
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.standardOptions.withUnit('Bps'),
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.standardOptions.withUnit('Bps'),
       xDSErrors:
         commonlib.panels.generic.timeSeries.base.new(
           'xDS errors / $__interval',
           targets=[
-            signals.controlplane.pilotCDSxDSRejections.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.controlplane.pilotEDSxDSRejections.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.controlplane.pilotRDSxDSRejections.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.controlplane.pilotLDSxDSRejections.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.controlplane.pilotxDSWriteTimeouts.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.controlplane.pilotxDSInternalErrors.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.controlplane.pilotxDSProxyRejects.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.controlplane.pilotxDSInboundListenerConflicts.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.controlplane.pilotxDSOutboundListenerTCPConflicts.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.controlplane.pilotCDSxDSRejections.asTarget() { interval: '1m' },
+            signals.controlplane.pilotEDSxDSRejections.asTarget() { interval: '1m' },
+            signals.controlplane.pilotRDSxDSRejections.asTarget() { interval: '1m' },
+            signals.controlplane.pilotLDSxDSRejections.asTarget() { interval: '1m' },
+            signals.controlplane.pilotxDSWriteTimeouts.asTarget() { interval: '1m' },
+            signals.controlplane.pilotxDSInternalErrors.asTarget() { interval: '1m' },
+            signals.controlplane.pilotxDSProxyRejects.asTarget() { interval: '1m' },
+            signals.controlplane.pilotxDSInboundListenerConflicts.asTarget() { interval: '1m' },
+            signals.controlplane.pilotxDSOutboundListenerTCPConflicts.asTarget() { interval: '1m' },
           ],
           description='The xDS related errors across the Istio system.'
         )
-        + timeSeries.options.legend.withDisplayMode('table')
-        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean']),
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean']),
       clientServiceHTTPGRPCRequests:
         signals.services.clientServiceHTTPGRPCRequestRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       clientServiceHTTPGRPCRequestDelay:
         signals.services.clientServiceHTTPGRPCAvgRequestDelay.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
-        + timeSeries.options.legend.withPlacement('right'),
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
       clientServiceHTTPGRPCRequestThroughput:
         signals.services.clientServiceHTTPGRPCRequestThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       clientServiceHTTPGRPCResponseThroughput:
         signals.services.clientServiceHTTPGRPCResponseThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
@@ -230,72 +223,72 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP responses / $__interval',
           targets=[
-            signals.services.clientServiceHTTP1xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.services.clientServiceHTTP2xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.services.clientServiceHTTP3xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.services.clientServiceHTTP4xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.services.clientServiceHTTP5xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.services.clientServiceHTTP1xxResponses.asTarget() { interval: '1m' },
+            signals.services.clientServiceHTTP2xxResponses.asTarget() { interval: '1m' },
+            signals.services.clientServiceHTTP3xxResponses.asTarget() { interval: '1m' },
+            signals.services.clientServiceHTTP4xxResponses.asTarget() { interval: '1m' },
+            signals.services.clientServiceHTTP5xxResponses.asTarget() { interval: '1m' },
           ],
           description='The types of HTTP responses received by this service from server services in the Istio system.',
         )
-        + timeSeries.options.legend.withDisplayMode('table')
-        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       clientServiceGRPCResponses:
         signals.services.clientServiceGRPCResponses.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
-        + timeSeries.options.legend.withDisplayMode('table')
-        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       clientServiceTCPRequestThroughput:
         signals.services.clientServiceTCPRequestThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       clientServiceTCPResponseThroughput:
         signals.services.clientServiceTCPResponseThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverServiceHTTPGRPCRequests:
         signals.services.serverServiceHTTPGRPCRequestRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverServiceHTTPGRPCRequestDelay:
         signals.services.serverServiceHTTPGRPCAvgRequestDelay.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
-        + timeSeries.options.legend.withPlacement('right'),
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
       serverServiceHTTPGRPCRequestThroughput:
         signals.services.serverServiceHTTPGRPCRequestThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverServiceHTTPGRPCResponseThroughput:
         signals.services.serverServiceHTTPGRPCResponseThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
@@ -303,72 +296,72 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP responses / $__interval',
           targets=[
-            signals.services.serverServiceHTTP1xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.services.serverServiceHTTP2xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.services.serverServiceHTTP3xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.services.serverServiceHTTP4xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.services.serverServiceHTTP5xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.services.serverServiceHTTP1xxResponses.asTarget() { interval: '1m' },
+            signals.services.serverServiceHTTP2xxResponses.asTarget() { interval: '1m' },
+            signals.services.serverServiceHTTP3xxResponses.asTarget() { interval: '1m' },
+            signals.services.serverServiceHTTP4xxResponses.asTarget() { interval: '1m' },
+            signals.services.serverServiceHTTP5xxResponses.asTarget() { interval: '1m' },
           ],
           description='The types of HTTP responses sent from this service to client services in the Istio system.',
         )
-        + timeSeries.options.legend.withDisplayMode('table')
-        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverServiceGRPCResponses:
         signals.services.serverServiceGRPCResponses.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
-        + timeSeries.options.legend.withDisplayMode('table')
-        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverServiceTCPRequestThroughput:
         signals.services.serverServiceTCPRequestThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverServiceTCPResponseThroughput:
         signals.services.serverServiceTCPResponseThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       clientWorkloadHTTPGRPCRequests:
         signals.workloads.clientWorkloadHTTPGRPCRequestRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       clientWorkloadHTTPGRPCRequestDelay:
         signals.workloads.clientWorkloadHTTPGRPCAvgRequestDelay.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
-        + timeSeries.options.legend.withPlacement('right'),
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
       clientWorkloadHTTPGRPCRequestThroughput:
         signals.workloads.clientWorkloadHTTPGRPCRequestThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       clientWorkloadHTTPGRPCResponseThroughput:
         signals.workloads.clientWorkloadHTTPGRPCResponseThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
@@ -376,72 +369,72 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP responses / $__interval',
           targets=[
-            signals.workloads.clientWorkloadHTTP1xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.workloads.clientWorkloadHTTP2xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.workloads.clientWorkloadHTTP3xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.workloads.clientWorkloadHTTP4xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.workloads.clientWorkloadHTTP5xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.workloads.clientWorkloadHTTP1xxResponses.asTarget() { interval: '1m' },
+            signals.workloads.clientWorkloadHTTP2xxResponses.asTarget() { interval: '1m' },
+            signals.workloads.clientWorkloadHTTP3xxResponses.asTarget() { interval: '1m' },
+            signals.workloads.clientWorkloadHTTP4xxResponses.asTarget() { interval: '1m' },
+            signals.workloads.clientWorkloadHTTP5xxResponses.asTarget() { interval: '1m' },
           ],
           description='The types of HTTP responses received by this workload from server workloads in the Istio system.',
         )
-        + timeSeries.options.legend.withDisplayMode('table')
-        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       clientWorkloadGRPCResponses:
         signals.workloads.clientWorkloadGRPCResponses.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
-        + timeSeries.options.legend.withDisplayMode('table')
-        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       clientWorkloadTCPRequestThroughput:
         signals.workloads.clientWorkloadTCPRequestThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       clientWorkloadTCPResponseThroughput:
         signals.workloads.clientWorkloadTCPResponseThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverWorkloadHTTPGRPCRequests:
         signals.workloads.serverWorkloadHTTPGRPCRequestRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverWorkloadHTTPGRPCRequestDelay:
         signals.workloads.serverWorkloadHTTPGRPCAvgRequestDelay.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
-        + timeSeries.options.legend.withPlacement('right'),
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
       serverWorkloadHTTPGRPCRequestThroughput:
         signals.workloads.serverWorkloadHTTPGRPCRequestThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverWorkloadHTTPGRPCResponseThroughput:
         signals.workloads.serverWorkloadHTTPGRPCResponseThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
@@ -449,289 +442,301 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         commonlib.panels.generic.timeSeries.base.new(
           'HTTP responses / $__interval',
           targets=[
-            signals.workloads.serverWorkloadHTTP1xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.workloads.serverWorkloadHTTP2xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.workloads.serverWorkloadHTTP3xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.workloads.serverWorkloadHTTP4xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-            signals.workloads.serverWorkloadHTTP5xxResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+            signals.workloads.serverWorkloadHTTP1xxResponses.asTarget() { interval: '1m' },
+            signals.workloads.serverWorkloadHTTP2xxResponses.asTarget() { interval: '1m' },
+            signals.workloads.serverWorkloadHTTP3xxResponses.asTarget() { interval: '1m' },
+            signals.workloads.serverWorkloadHTTP4xxResponses.asTarget() { interval: '1m' },
+            signals.workloads.serverWorkloadHTTP5xxResponses.asTarget() { interval: '1m' },
           ],
           description='The types of HTTP responses sent from this workload to client workloads in the Istio system.',
         )
-        + timeSeries.options.legend.withDisplayMode('table')
-        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverWorkloadGRPCResponses:
         signals.workloads.serverWorkloadGRPCResponses.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
-        + timeSeries.options.legend.withDisplayMode('table')
-        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverWorkloadTCPRequestThroughput:
         signals.workloads.serverWorkloadTCPRequestThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
       serverWorkloadTCPResponseThroughput:
         signals.workloads.serverWorkloadTCPResponseThroughputRate.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStackingMixin({
           group: 'A',
           mode: 'normal',
         }),
 
       httpResponseOverview:
-        pieChart.new(title='HTTP response overview')
-        + pieChart.queryOptions.withTargets([
-          signals.overview.gatewayHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.overview.gatewayHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.overview.proxyHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.overview.proxyHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no pieChart base.
+        g.panel.pieChart.new(title='HTTP response overview')
+        + g.panel.pieChart.queryOptions.withTargets([
+          signals.overview.gatewayHTTPOKResponses.asTarget() { interval: '1m' },
+          signals.overview.gatewayHTTPErrorResponses.asTarget() { interval: '1m' },
+          signals.overview.proxyHTTPOKResponses.asTarget() { interval: '1m' },
+          signals.overview.proxyHTTPErrorResponses.asTarget() { interval: '1m' },
         ])
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.reduceOptions.withCalcs(['sum'])
-        + pieChart.options.withTooltipMixin({
+        + g.panel.pieChart.options.legend.withPlacement('right')
+        + g.panel.pieChart.options.reduceOptions.withCalcs(['sum'])
+        + g.panel.pieChart.options.withTooltipMixin({
           mode: 'multi',
           sort: 'desc',
         })
-        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
-        + pieChart.panelOptions.withDescription('Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.'),
+        + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
+        + g.panel.pieChart.panelOptions.withDescription('Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.'),
       clientServiceHTTPResponseOverview:
-        pieChart.new(title='HTTP response overview')
-        + pieChart.queryOptions.withTargets([
-          signals.services.clientServiceHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.services.clientServiceHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no pieChart base.
+        g.panel.pieChart.new(title='HTTP response overview')
+        + g.panel.pieChart.queryOptions.withTargets([
+          signals.services.clientServiceHTTPOKResponses.asTarget() { interval: '1m' },
+          signals.services.clientServiceHTTPErrorResponses.asTarget() { interval: '1m' },
         ])
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.reduceOptions.withCalcs(['sum'])
-        + pieChart.options.withTooltipMixin({
+        + g.panel.pieChart.options.legend.withPlacement('right')
+        + g.panel.pieChart.options.reduceOptions.withCalcs(['sum'])
+        + g.panel.pieChart.options.withTooltipMixin({
           mode: 'multi',
           sort: 'desc',
         })
-        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
-        + pieChart.panelOptions.withDescription('Overview of the types of HTTP responses received by this service from server services in the Istio system.'),
+        + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
+        + g.panel.pieChart.panelOptions.withDescription('Overview of the types of HTTP responses received by this service from server services in the Istio system.'),
       clientServiceGRPCResponseOverview:
-        pieChart.new(title='GRPC response overview')
-        + pieChart.queryOptions.withTargets([
-          signals.services.clientServiceGRPCOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.services.clientServiceGRPCErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no pieChart base.
+        g.panel.pieChart.new(title='GRPC response overview')
+        + g.panel.pieChart.queryOptions.withTargets([
+          signals.services.clientServiceGRPCOKResponses.asTarget() { interval: '1m' },
+          signals.services.clientServiceGRPCErrorResponses.asTarget() { interval: '1m' },
         ])
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.reduceOptions.withCalcs(['sum'])
-        + pieChart.options.withTooltipMixin({
+        + g.panel.pieChart.options.legend.withPlacement('right')
+        + g.panel.pieChart.options.reduceOptions.withCalcs(['sum'])
+        + g.panel.pieChart.options.withTooltipMixin({
           mode: 'multi',
           sort: 'desc',
         })
-        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
-        + pieChart.panelOptions.withDescription('Overview of the types of GRPC responses received by this service from server services in the Istio system.'),
+        + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
+        + g.panel.pieChart.panelOptions.withDescription('Overview of the types of GRPC responses received by this service from server services in the Istio system.'),
       serverServiceHTTPResponseOverview:
-        pieChart.new(title='HTTP response overview')
-        + pieChart.queryOptions.withTargets([
-          signals.services.serverServiceHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.services.serverServiceHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no pieChart base.
+        g.panel.pieChart.new(title='HTTP response overview')
+        + g.panel.pieChart.queryOptions.withTargets([
+          signals.services.serverServiceHTTPOKResponses.asTarget() { interval: '1m' },
+          signals.services.serverServiceHTTPErrorResponses.asTarget() { interval: '1m' },
         ])
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.reduceOptions.withCalcs(['sum'])
-        + pieChart.options.withTooltipMixin({
+        + g.panel.pieChart.options.legend.withPlacement('right')
+        + g.panel.pieChart.options.reduceOptions.withCalcs(['sum'])
+        + g.panel.pieChart.options.withTooltipMixin({
           mode: 'multi',
           sort: 'desc',
         })
-        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
-        + pieChart.panelOptions.withDescription('Overview of the types of HTTP responses sent from this service to client services in the Istio system.'),
+        + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
+        + g.panel.pieChart.panelOptions.withDescription('Overview of the types of HTTP responses sent from this service to client services in the Istio system.'),
       serverServiceGRPCResponseOverview:
-        pieChart.new(title='GRPC response overview')
-        + pieChart.queryOptions.withTargets([
-          signals.services.serverServiceGRPCOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.services.serverServiceGRPCErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no pieChart base.
+        g.panel.pieChart.new(title='GRPC response overview')
+        + g.panel.pieChart.queryOptions.withTargets([
+          signals.services.serverServiceGRPCOKResponses.asTarget() { interval: '1m' },
+          signals.services.serverServiceGRPCErrorResponses.asTarget() { interval: '1m' },
         ])
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.reduceOptions.withCalcs(['sum'])
-        + pieChart.options.withTooltipMixin({
+        + g.panel.pieChart.options.legend.withPlacement('right')
+        + g.panel.pieChart.options.reduceOptions.withCalcs(['sum'])
+        + g.panel.pieChart.options.withTooltipMixin({
           mode: 'multi',
           sort: 'desc',
         })
-        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
-        + pieChart.panelOptions.withDescription('Overview of the types of GRPC responses sent from this service to client services in the Istio system.'),
+        + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
+        + g.panel.pieChart.panelOptions.withDescription('Overview of the types of GRPC responses sent from this service to client services in the Istio system.'),
       clientWorkloadHTTPResponseOverview:
-        pieChart.new(title='HTTP response overview')
-        + pieChart.queryOptions.withTargets([
-          signals.workloads.clientWorkloadHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.workloads.clientWorkloadHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no pieChart base.
+        g.panel.pieChart.new(title='HTTP response overview')
+        + g.panel.pieChart.queryOptions.withTargets([
+          signals.workloads.clientWorkloadHTTPOKResponses.asTarget() { interval: '1m' },
+          signals.workloads.clientWorkloadHTTPErrorResponses.asTarget() { interval: '1m' },
         ])
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.reduceOptions.withCalcs(['sum'])
-        + pieChart.options.withTooltipMixin({
+        + g.panel.pieChart.options.legend.withPlacement('right')
+        + g.panel.pieChart.options.reduceOptions.withCalcs(['sum'])
+        + g.panel.pieChart.options.withTooltipMixin({
           mode: 'multi',
           sort: 'desc',
         })
-        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
-        + pieChart.panelOptions.withDescription('Overview of the types of HTTP responses received by this workload from server workloads in the Istio system.'),
+        + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
+        + g.panel.pieChart.panelOptions.withDescription('Overview of the types of HTTP responses received by this workload from server workloads in the Istio system.'),
       clientWorkloadGRPCResponseOverview:
-        pieChart.new(title='GRPC response overview')
-        + pieChart.queryOptions.withTargets([
-          signals.workloads.clientWorkloadGRPCOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.workloads.clientWorkloadGRPCErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no pieChart base.
+        g.panel.pieChart.new(title='GRPC response overview')
+        + g.panel.pieChart.queryOptions.withTargets([
+          signals.workloads.clientWorkloadGRPCOKResponses.asTarget() { interval: '1m' },
+          signals.workloads.clientWorkloadGRPCErrorResponses.asTarget() { interval: '1m' },
         ])
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.reduceOptions.withCalcs(['sum'])
-        + pieChart.options.withTooltipMixin({
+        + g.panel.pieChart.options.legend.withPlacement('right')
+        + g.panel.pieChart.options.reduceOptions.withCalcs(['sum'])
+        + g.panel.pieChart.options.withTooltipMixin({
           mode: 'multi',
           sort: 'desc',
         })
-        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
-        + pieChart.panelOptions.withDescription('Overview of the types of GRPC responses received by this workload from server workloads in the Istio system.'),
+        + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
+        + g.panel.pieChart.panelOptions.withDescription('Overview of the types of GRPC responses received by this workload from server workloads in the Istio system.'),
       serverWorkloadHTTPResponseOverview:
-        pieChart.new(title='HTTP response overview')
-        + pieChart.queryOptions.withTargets([
-          signals.workloads.serverWorkloadHTTPOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.workloads.serverWorkloadHTTPErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no pieChart base.
+        g.panel.pieChart.new(title='HTTP response overview')
+        + g.panel.pieChart.queryOptions.withTargets([
+          signals.workloads.serverWorkloadHTTPOKResponses.asTarget() { interval: '1m' },
+          signals.workloads.serverWorkloadHTTPErrorResponses.asTarget() { interval: '1m' },
         ])
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.reduceOptions.withCalcs(['sum'])
-        + pieChart.options.withTooltipMixin({
+        + g.panel.pieChart.options.legend.withPlacement('right')
+        + g.panel.pieChart.options.reduceOptions.withCalcs(['sum'])
+        + g.panel.pieChart.options.withTooltipMixin({
           mode: 'multi',
           sort: 'desc',
         })
-        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
-        + pieChart.panelOptions.withDescription('Overview of the types of HTTP responses sent from this workload to client workloads in the Istio system.'),
+        + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
+        + g.panel.pieChart.panelOptions.withDescription('Overview of the types of HTTP responses sent from this workload to client workloads in the Istio system.'),
       serverWorkloadGRPCResponseOverview:
-        pieChart.new(title='GRPC response overview')
-        + pieChart.queryOptions.withTargets([
-          signals.workloads.serverWorkloadGRPCOKResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.workloads.serverWorkloadGRPCErrorResponses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no pieChart base.
+        g.panel.pieChart.new(title='GRPC response overview')
+        + g.panel.pieChart.queryOptions.withTargets([
+          signals.workloads.serverWorkloadGRPCOKResponses.asTarget() { interval: '1m' },
+          signals.workloads.serverWorkloadGRPCErrorResponses.asTarget() { interval: '1m' },
         ])
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.reduceOptions.withCalcs(['sum'])
-        + pieChart.options.withTooltipMixin({
+        + g.panel.pieChart.options.legend.withPlacement('right')
+        + g.panel.pieChart.options.reduceOptions.withCalcs(['sum'])
+        + g.panel.pieChart.options.withTooltipMixin({
           mode: 'multi',
           sort: 'desc',
         })
-        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
-        + pieChart.panelOptions.withDescription('Overview of the types of GRPC responses sent from this workload to client workloads in the Istio system.'),
+        + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${datasource}',)
+        + g.panel.pieChart.panelOptions.withDescription('Overview of the types of GRPC responses sent from this workload to client workloads in the Istio system.'),
 
       xDSPushes:
-        barGauge.new(title='xDS pushes')
-        + barGauge.queryOptions.withTargets([
-          signals.controlplane.pilotCDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.controlplane.pilotEDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.controlplane.pilotLDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.controlplane.pilotRDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.controlplane.pilotSDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.controlplane.pilotNDSxDSPushes.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no barGauge base.
+        g.panel.barGauge.new(title='xDS pushes')
+        + g.panel.barGauge.queryOptions.withTargets([
+          signals.controlplane.pilotCDSxDSPushes.asTarget() { interval: '1m' },
+          signals.controlplane.pilotEDSxDSPushes.asTarget() { interval: '1m' },
+          signals.controlplane.pilotLDSxDSPushes.asTarget() { interval: '1m' },
+          signals.controlplane.pilotRDSxDSPushes.asTarget() { interval: '1m' },
+          signals.controlplane.pilotSDSxDSPushes.asTarget() { interval: '1m' },
+          signals.controlplane.pilotNDSxDSPushes.asTarget() { interval: '1m' },
         ])
-        + barGauge.queryOptions.withDatasource('prometheus', '${datasource}',)
-        + barGauge.panelOptions.withDescription('Number of xDS pushes by Istiod over the entire time range for the Istio system.')
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
+        + g.panel.barGauge.queryOptions.withDatasource('prometheus', '${datasource}',)
+        + g.panel.barGauge.panelOptions.withDescription('Number of xDS pushes by Istiod over the entire time range for the Istio system.')
+        + g.panel.barGauge.standardOptions.thresholds.withSteps([
+          g.panel.barGauge.thresholdStep.withColor('super-light-green'),
         ])
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.options.reduceOptions.withCalcs(['sum']),
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.options.reduceOptions.withCalcs(['sum']),
       galleyValidations:
-        barGauge.new(title='Galley validations')
-        + barGauge.queryOptions.withTargets([
-          signals.controlplane.galleyValidationsPassed.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.controlplane.galleyValidationsFailed.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no barGauge base.
+        g.panel.barGauge.new(title='Galley validations')
+        + g.panel.barGauge.queryOptions.withTargets([
+          signals.controlplane.galleyValidationsPassed.asTarget() { interval: '1m' },
+          signals.controlplane.galleyValidationsFailed.asTarget() { interval: '1m' },
         ])
-        + barGauge.queryOptions.withDatasource('prometheus', '${datasource}')
-        + barGauge.panelOptions.withDescription('Number of galley validations over the entire time range for the Istio system.')
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
+        + g.panel.barGauge.queryOptions.withDatasource('prometheus', '${datasource}')
+        + g.panel.barGauge.panelOptions.withDescription('Number of galley validations over the entire time range for the Istio system.')
+        + g.panel.barGauge.standardOptions.thresholds.withSteps([
+          g.panel.barGauge.thresholdStep.withColor('super-light-green'),
         ])
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.options.reduceOptions.withCalcs(['sum']),
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.options.reduceOptions.withCalcs(['sum']),
       sidecarInjections:
-        barGauge.new(title='Sidecar injections')
-        + barGauge.queryOptions.withTargets([
-          signals.controlplane.sidecarInjectionSuccesses.asTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.controlplane.sidecarInjectionFailures.asTarget() + timeSeries.queryOptions.withInterval('1m'),
+        // common-lib has no barGauge base.
+        g.panel.barGauge.new(title='Sidecar injections')
+        + g.panel.barGauge.queryOptions.withTargets([
+          signals.controlplane.sidecarInjectionSuccesses.asTarget() { interval: '1m' },
+          signals.controlplane.sidecarInjectionFailures.asTarget() { interval: '1m' },
         ])
-        + barGauge.queryOptions.withDatasource('prometheus', '${datasource}')
-        + barGauge.panelOptions.withDescription('Number of sidecar injections over the entire time range for the Istio system.')
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
+        + g.panel.barGauge.queryOptions.withDatasource('prometheus', '${datasource}')
+        + g.panel.barGauge.panelOptions.withDescription('Number of sidecar injections over the entire time range for the Istio system.')
+        + g.panel.barGauge.standardOptions.thresholds.withSteps([
+          g.panel.barGauge.thresholdStep.withColor('super-light-green'),
         ])
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.options.reduceOptions.withCalcs(['sum']),
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.options.reduceOptions.withCalcs(['sum']),
 
       xDSPushDelay:
-        histogram.new(title='xDS push delay (s)')
-        + histogram.queryOptions.withTargets([
-          signals.controlplane.pilotxDSProxyPushLatencyBucket.asTarget() + timeSeries.queryOptions.withInterval('1m') + prometheusQuery.withInstant(true) + prometheusQuery.withFormat('heatmap'),
+        // common-lib has no histogram base.
+        g.panel.histogram.new(title='xDS push delay (s)')
+        + g.panel.histogram.queryOptions.withTargets([
+          signals.controlplane.pilotxDSProxyPushLatencyBucket.asTarget() { interval: '1m', instant: true, format: 'heatmap' },
         ])
-        + histogram.queryOptions.withDatasource('prometheus', '${datasource}')
-        + histogram.options.legend.withPlacement('right')
-        + histogram.standardOptions.color.withMode('thresholds')
-        + histogram.standardOptions.thresholds.withSteps([
-          histogram.thresholdStep.withColor('super-light-green'),
+        + g.panel.histogram.queryOptions.withDatasource('prometheus', '${datasource}')
+        + g.panel.histogram.options.legend.withPlacement('right')
+        + g.panel.histogram.standardOptions.color.withMode('thresholds')
+        + g.panel.histogram.standardOptions.thresholds.withSteps([
+          g.panel.histogram.thresholdStep.withColor('super-light-green'),
         ])
-        + histogram.panelOptions.withDescription('The latency of xDS pushes by Istiod over the entire time range for the Istio system.'),
+        + g.panel.histogram.panelOptions.withDescription('The latency of xDS pushes by Istiod over the entire time range for the Istio system.'),
 
       services:
-        table.new(
-          title='Services'
+        commonlib.panels.generic.table.base.new(
+          'Services',
+          targets=[
+            signals.services.tableSourceServiceHTTPGRPCRequestRate.asTableTarget(),
+            signals.services.tableDestinationServiceHTTPGRPCRequestRate.asTableTarget(),
+            signals.services.tableSourceServiceHTTPGRPCRequestLatency.asTableTarget() { interval: '1m' },
+            signals.services.tableDestinationServiceHTTPGRPCRequestLatency.asTableTarget() { interval: '1m' },
+            signals.services.tableSourceServiceHTTPRequestSuccessRate.asTableTarget() { interval: '1m' },
+            signals.services.tableDestinationServiceHTTPRequestSuccessRate.asTableTarget() { interval: '1m' },
+            signals.services.tableSourceServiceTCPReceiveRate.asTableTarget(),
+            signals.services.tableSourceServiceTCPSendRate.asTableTarget(),
+          ],
+          description='Service details for the Istio system.',
         )
-        + table.queryOptions.withTargets([
-          signals.services.tableSourceServiceHTTPGRPCRequestRate.asTableTarget(),
-          signals.services.tableDestinationServiceHTTPGRPCRequestRate.asTableTarget(),
-          signals.services.tableSourceServiceHTTPGRPCRequestLatency.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.services.tableDestinationServiceHTTPGRPCRequestLatency.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.services.tableSourceServiceHTTPRequestSuccessRate.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.services.tableDestinationServiceHTTPRequestSuccessRate.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.services.tableSourceServiceTCPReceiveRate.asTableTarget(),
-          signals.services.tableSourceServiceTCPSendRate.asTableTarget(),
-        ])
-        + table.queryOptions.withDatasource('prometheus', '${datasource}')
-        + table.panelOptions.withDescription('Service details for the Istio system.')
-        + table.standardOptions.withNoValue('NA')
-        + table.standardOptions.withOverridesMixin([
-          table.fieldOverride.byName.new('job')
-          + table.fieldOverride.byName.withProperty('custom.hidden', 'true'),
-          table.fieldOverride.byName.new('Service')
-          + table.fieldOverride.byName.withProperty('links', [
+        + g.panel.table.standardOptions.withNoValue('NA')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('job')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.hidden', 'true'),
+          g.panel.table.fieldOverride.byName.new('Service')
+          + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: '',
               url: 'd/istio-services-overview?var-datasource=${datasource}&var-job=${__data.fields["Job"]}&var-cluster=${__data.fields["Cluster"]}&var-service=${__value.raw}&${__url_time_range}',
             },
           ]),
-          table.fieldOverride.byName.new('HTTP/GRPC tx delay')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'ms'),
-          table.fieldOverride.byName.new('HTTP/GRPC rx delay')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'ms'),
-          table.fieldOverride.byName.new('HTTP/GRPC tx')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'reqps'),
-          table.fieldOverride.byName.new('HTTP/GRPC rx')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'reqps'),
-          table.fieldOverride.byName.new('HTTP tx success')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'percent'),
-          table.fieldOverride.byName.new('HTTP rx success')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'percent'),
-          table.fieldOverride.byName.new('TCP tx')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'Bps'),
-          table.fieldOverride.byName.new('TCP rx')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'Bps'),
+          g.panel.table.fieldOverride.byName.new('HTTP/GRPC tx delay')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'ms'),
+          g.panel.table.fieldOverride.byName.new('HTTP/GRPC rx delay')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'ms'),
+          g.panel.table.fieldOverride.byName.new('HTTP/GRPC tx')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'reqps'),
+          g.panel.table.fieldOverride.byName.new('HTTP/GRPC rx')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'reqps'),
+          g.panel.table.fieldOverride.byName.new('HTTP tx success')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'percent'),
+          g.panel.table.fieldOverride.byName.new('HTTP rx success')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'percent'),
+          g.panel.table.fieldOverride.byName.new('TCP tx')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'Bps'),
+          g.panel.table.fieldOverride.byName.new('TCP rx')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'Bps'),
         ])
-        + table.options.footer.withReducerMixin(['sum'])
-        + table.queryOptions.withTransformationsMixin([
+        + g.panel.table.options.footer.withReducerMixin(['sum'])
+        + g.panel.table.queryOptions.withTransformationsMixin([
           {
             id: 'merge',
             options: {},
@@ -774,68 +779,67 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           },
         ]),
       workloads:
-        table.new(
-          title='Workloads'
+        commonlib.panels.generic.table.base.new(
+          'Workloads',
+          targets=[
+            signals.workloads.tableSourceWorkloadHTTPGRPCRequestRate.asTableTarget(),
+            signals.workloads.tableDestinationWorkloadHTTPGRPCRequestRate.asTableTarget(),
+            signals.workloads.tableSourceWorkloadHTTPGRPCRequestLatency.asTableTarget() { interval: '1m' },
+            signals.workloads.tableDestinationWorkloadHTTPGRPCRequestLatency.asTableTarget() { interval: '1m' },
+            signals.workloads.tableSourceWorkloadHTTPRequestSuccessRate.asTableTarget() { interval: '1m' },
+            signals.workloads.tableDestinationWorkloadHTTPRequestSuccessRate.asTableTarget() { interval: '1m' },
+            signals.workloads.tableSourceWorkloadTCPRequestThroughputRate.asTableTarget(),
+            signals.workloads.tableDestinationWorkloadTCPResponseThroughputRate.asTableTarget(),
+          ],
+          description='Workload details for a service in the Istio system.',
         )
-        + table.queryOptions.withTargets([
-          signals.workloads.tableSourceWorkloadHTTPGRPCRequestRate.asTableTarget(),
-          signals.workloads.tableDestinationWorkloadHTTPGRPCRequestRate.asTableTarget(),
-          signals.workloads.tableSourceWorkloadHTTPGRPCRequestLatency.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.workloads.tableDestinationWorkloadHTTPGRPCRequestLatency.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.workloads.tableSourceWorkloadHTTPRequestSuccessRate.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.workloads.tableDestinationWorkloadHTTPRequestSuccessRate.asTableTarget() + timeSeries.queryOptions.withInterval('1m'),
-          signals.workloads.tableSourceWorkloadTCPRequestThroughputRate.asTableTarget(),
-          signals.workloads.tableDestinationWorkloadTCPResponseThroughputRate.asTableTarget(),
-        ])
-        + table.queryOptions.withDatasource('prometheus', '${datasource}')
-        + table.panelOptions.withDescription('Workload details for a service in the Istio system.')
-        + table.standardOptions.withNoValue('NA')
-        + table.standardOptions.withOverridesMixin([
-          table.fieldOverride.byName.new('job')
-          + table.fieldOverride.byName.withProperty('custom.hidden', 'true'),
-          table.fieldOverride.byName.new('Service')
-          + table.fieldOverride.byName.withProperty('links', [
+        + g.panel.table.standardOptions.withNoValue('NA')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('job')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.hidden', 'true'),
+          g.panel.table.fieldOverride.byName.new('Service')
+          + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: '',
               url: 'd/istio-workloads-overview?var-datasource=${datasource}&var-job=${__data.fields["Job"]}&var-cluster=${__data.fields["Cluster"]}&var-service=${__value.raw}&${__url_time_range}',
             },
           ]),
-          table.fieldOverride.byName.new('Workload')
-          + table.fieldOverride.byName.withProperty('links', [
+          g.panel.table.fieldOverride.byName.new('Workload')
+          + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: '',
               url: 'd/istio-workloads-overview?var-datasource=${datasource}&var-job=${__data.fields["Job"]}&var-cluster=${__data.fields["Cluster"]}&var-service=${__data.fields["Service"]}&var-workload=${__value.raw}&${__url_time_range}',
             },
           ]),
-          table.fieldOverride.byName.new('HTTP/GRPC tx delay')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'ms'),
-          table.fieldOverride.byName.new('HTTP/GRPC rx delay')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'ms'),
-          table.fieldOverride.byName.new('HTTP/GRPC tx')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'reqps'),
-          table.fieldOverride.byName.new('HTTP/GRPC rx')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'reqps'),
-          table.fieldOverride.byName.new('HTTP tx success')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'percent'),
-          table.fieldOverride.byName.new('HTTP rx success')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'percent'),
-          table.fieldOverride.byName.new('TCP tx')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'Bps'),
-          table.fieldOverride.byName.new('TCP rx')
-          + table.fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('unit', 'Bps'),
+          g.panel.table.fieldOverride.byName.new('HTTP/GRPC tx delay')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'ms'),
+          g.panel.table.fieldOverride.byName.new('HTTP/GRPC rx delay')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'ms'),
+          g.panel.table.fieldOverride.byName.new('HTTP/GRPC tx')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'reqps'),
+          g.panel.table.fieldOverride.byName.new('HTTP/GRPC rx')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'reqps'),
+          g.panel.table.fieldOverride.byName.new('HTTP tx success')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'percent'),
+          g.panel.table.fieldOverride.byName.new('HTTP rx success')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'percent'),
+          g.panel.table.fieldOverride.byName.new('TCP tx')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'Bps'),
+          g.panel.table.fieldOverride.byName.new('TCP rx')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('unit', 'Bps'),
         ])
-        + table.options.footer.withReducerMixin(['sum'])
-        + table.queryOptions.withTransformationsMixin([
+        + g.panel.table.options.footer.withReducerMixin(['sum'])
+        + g.panel.table.queryOptions.withTransformationsMixin([
           {
             id: 'merge',
             options: {},

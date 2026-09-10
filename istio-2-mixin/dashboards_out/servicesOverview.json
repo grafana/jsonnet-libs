@@ -1635,7 +1635,15 @@
             "description": "Workload details for a service in the Istio system.",
             "fieldConfig": {
                "defaults": {
-                  "noValue": "NA"
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "noValue": "NA",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
                },
                "overrides": [
                   {
