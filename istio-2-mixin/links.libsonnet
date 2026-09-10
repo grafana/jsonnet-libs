@@ -4,15 +4,15 @@ local g = import './g.libsonnet';
   new(this):
     {
       overview:
-        link.link.new('Istio overview', '/d/' + this.grafana.dashboards['overview.json'].uid)
+        link.link.new('Istio overview', '/d/' + this.grafana.dashboards['istio-overview.json'].uid)
         + link.link.options.withKeepTime(true)
         + link.link.options.withIncludeVars(true),
       servicesOverview:
-        link.link.new('Istio services overview', '/d/' + this.grafana.dashboards['servicesOverview.json'].uid)
+        link.link.new('Istio services overview', '/d/' + this.grafana.dashboards['istio-services-overview.json'].uid)
         + link.link.options.withKeepTime(true)
         + link.link.options.withIncludeVars(true),
       workloadsOverview:
-        link.link.new('Istio workloads overview', '/d/' + this.grafana.dashboards['workloadsOverview.json'].uid)
+        link.link.new('Istio workloads overview', '/d/' + this.grafana.dashboards['istio-workloads-overview.json'].uid)
         + link.link.options.withKeepTime(true)
         + link.link.options.withIncludeVars(true),
     }
@@ -20,7 +20,7 @@ local g = import './g.libsonnet';
     if this.config.enableLokiLogs then
       {
         logs:
-          link.link.new('Istio logs', '/d/' + this.grafana.dashboards['logs.json'].uid)
+          link.link.new('Istio logs', '/d/' + this.grafana.dashboards['istio-logs.json'].uid)
           + link.link.options.withKeepTime(true)
           + link.link.options.withIncludeVars(true),
       }
