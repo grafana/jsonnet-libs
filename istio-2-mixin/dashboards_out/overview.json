@@ -1,18 +1,21 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Istio logs",
             "type": "link",
             "url": "/d/istio-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Istio services overview",
             "type": "link",
             "url": "/d/istio-services-overview"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Istio workloads overview",
             "type": "link",
