@@ -5,9 +5,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   new(this):
     {
       local signals = this.signals,
-      local table = g.panel.table,
-      local barGauge = g.panel.barGauge,
-      local fieldOverride = g.panel.table.fieldOverride,
 
       clustersCountStatus:
         signals.overview.clustersCount.asStat()
@@ -99,86 +96,86 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Information about the clusters in the vCenter environment.'
         )
-        + table.standardOptions.withNoValue('NA')
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Cluster')
-          + table.fieldOverride.byName.withProperty('links', [
+        + g.panel.table.standardOptions.withNoValue('NA')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Cluster')
+          + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: '',
               url: 'd/vsphere-clusters?var-datasource=${datasource}&${__all_variables}&var-vcenter_cluster_name=${__value.raw}&${__url_time_range}',
             },
           ]),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('CPU')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('rotmhz')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('CPU')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('rotmhz')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('CPU utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('CPU utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
+            + g.panel.table.standardOptions.color.withMode('continuous-BlPu')
+            + g.panel.table.standardOptions.withMin(0)
+            + g.panel.table.standardOptions.withMax(100)
+            + g.panel.table.standardOptions.withDecimals(1)
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('bytes')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Memory')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('bytes')
           ),
         ])
         +
-        table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+        g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Memory utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
+            + g.panel.table.standardOptions.color.withMode('continuous-BlPu')
+            + g.panel.table.standardOptions.withMin(0)
+            + g.panel.table.standardOptions.withMax(100)
+            + g.panel.table.standardOptions.withDecimals(1)
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Active ESXi')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140),
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Active ESXi')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Inactive ESXi')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140),
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Inactive ESXi')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('VMs on')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140),
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('VMs on')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('VMs off')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140),
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('VMs off')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('VMs suspended')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140),
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('VMs suspended')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140),
         ])
         +
-        table.queryOptions.withTransformationsMixin([
+        g.panel.table.queryOptions.withTransformationsMixin([
           {
             id: 'joinByField',
             options: {
@@ -259,38 +256,38 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Information about the datastores in the vCenter environment.'
         )
-        + table.standardOptions.withNoValue('NA')
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Disk total')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('min.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('bytes')
+        + g.panel.table.standardOptions.withNoValue('NA')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Disk total')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('min.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('bytes')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Disk utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('min.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Disk utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('min.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
+            + g.panel.table.standardOptions.color.withMode('continuous-BlPu')
+            + g.panel.table.standardOptions.withMin(0)
+            + g.panel.table.standardOptions.withMax(100)
+            + g.panel.table.standardOptions.withDecimals(1)
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Disk free')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('min.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('bytes')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Disk free')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('min.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('bytes')
           ),
         ])
         +
-        table.queryOptions.withTransformationsMixin([
+        g.panel.table.queryOptions.withTransformationsMixin([
           {
             id: 'joinByField',
             options: {
@@ -454,97 +451,97 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Information about the VMs associated with the ESXi hosts.'
         )
-        + table.standardOptions.withNoValue('NA')
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('VM')
-          + table.fieldOverride.byName.withProperty('links', [
+        + g.panel.table.standardOptions.withNoValue('NA')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('VM')
+          + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: '',
               url: 'd/vsphere-virtual-machines?var-datasource=${datasource}&${__all_variables}&var-vcenter_vm_name=${__value.raw}&${__url_time_range}',
             },
           ]),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('CPU usage')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('rotmhz')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('CPU usage')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('rotmhz')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('CPU utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('CPU utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
+            + g.panel.table.standardOptions.color.withMode('continuous-BlPu')
+            + g.panel.table.standardOptions.withMin(0)
+            + g.panel.table.standardOptions.withMax(100)
+            + g.panel.table.standardOptions.withDecimals(1)
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory usage')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbytes')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Memory usage')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('mbytes')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Memory utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
+            + g.panel.table.standardOptions.color.withMode('continuous-BlPu')
+            + g.panel.table.standardOptions.withMin(0)
+            + g.panel.table.standardOptions.withMax(100)
+            + g.panel.table.standardOptions.withDecimals(1)
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Disk usage')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('bytes')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Disk usage')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('bytes')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Disk utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Disk utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
+            + g.panel.table.standardOptions.color.withMode('continuous-BlPu')
+            + g.panel.table.standardOptions.withMin(0)
+            + g.panel.table.standardOptions.withMax(100)
+            + g.panel.table.standardOptions.withDecimals(1)
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Net throughput')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('KiBs')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Net throughput')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('KiBs')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Packet drops')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Packet drops')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
           ),
         ])
         +
-        table.queryOptions.withTransformationsMixin([
+        g.panel.table.queryOptions.withTransformationsMixin([
           {
             id: 'joinByField',
             options: {
@@ -620,41 +617,41 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Information about the disks associated with the ESXi hosts.'
         )
-        + table.standardOptions.withNoValue('NA')
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Throughput (R)')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('KiBs')
+        + g.panel.table.standardOptions.withNoValue('NA')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Throughput (R)')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('KiBs')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Delay (R)')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('ms')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Delay (R)')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('ms')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Throughput (W)')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('KiBs')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Throughput (W)')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('KiBs')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Delay (W)')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('ms')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Delay (W)')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('ms')
           ),
         ])
         +
-        table.queryOptions.withTransformationsMixin([
+        g.panel.table.queryOptions.withTransformationsMixin([
           {
             id: 'joinByField',
             options: {
@@ -767,41 +764,41 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Information about the disks associated with the virtual machines.'
         )
-        + table.standardOptions.withNoValue('NA')
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Throughput (R)')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('KiBs')
+        + g.panel.table.standardOptions.withNoValue('NA')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Throughput (R)')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('KiBs')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Delay (R)')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('ms')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Delay (R)')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('ms')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Throughput (W)')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('KiBs')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Throughput (W)')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('KiBs')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Delay (W)')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('ms')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Delay (W)')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('ms')
           ),
         ])
         +
-        table.queryOptions.withTransformationsMixin([
+        g.panel.table.queryOptions.withTransformationsMixin([
           {
             id: 'joinByField',
             options: {
@@ -870,57 +867,62 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         signals.cluster.clusterResourcePoolsCount.asStat()
         + commonlib.panels.generic.stat.info.stylize(),
 
+      // The four capacity panels below are the only ones still built from raw grafonnet.
+      // common-lib's panels.generic exposes timeSeries, stat, table and statusHistory
+      // bases only -- there is no barGauge base to inherit from, and these are horizontal
+      // bar gauges by design (a single capacity figure per cluster reads better as a bar
+      // than as a stat or a line). Spelled out in full rather than aliased.
       clusterCPULimit:
-        barGauge.new(title='Cluster CPU limit')
-        + barGauge.queryOptions.withTargets([
+        g.panel.barGauge.new(title='Cluster CPU limit')
+        + g.panel.barGauge.queryOptions.withTargets([
           signals.cluster.clusterCPULimit.asTarget(),
         ])
-        + barGauge.panelOptions.withDescription('The available CPU capacity of the cluster.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
+        + g.panel.barGauge.panelOptions.withDescription('The available CPU capacity of the cluster.')
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.standardOptions.thresholds.withSteps([
+          g.panel.barGauge.thresholdStep.withColor('super-light-green'),
         ])
-        + barGauge.standardOptions.withUnit('rotmhz'),
+        + g.panel.barGauge.standardOptions.withUnit('rotmhz'),
 
       clusterCPUEffective:
-        barGauge.new(title='Cluster CPU effective')
-        + barGauge.queryOptions.withTargets([
+        g.panel.barGauge.new(title='Cluster CPU effective')
+        + g.panel.barGauge.queryOptions.withTargets([
           signals.cluster.clusterCPUEffective.asTarget(),
         ])
-        + barGauge.panelOptions.withDescription('The effective CPU capacity of the cluster.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
+        + g.panel.barGauge.panelOptions.withDescription('The effective CPU capacity of the cluster.')
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.standardOptions.thresholds.withSteps([
+          g.panel.barGauge.thresholdStep.withColor('super-light-green'),
         ])
-        + barGauge.standardOptions.withUnit('rotmhz'),
+        + g.panel.barGauge.standardOptions.withUnit('rotmhz'),
 
       clusterCPUUtilization:
         signals.cluster.clusterCPUUtilization.asTimeSeries()
         + commonlib.panels.memory.timeSeries.usagePercent.stylize(),
 
       clusterMemoryLimit:
-        barGauge.new(title='Cluster memory limit')
-        + barGauge.queryOptions.withTargets([
+        g.panel.barGauge.new(title='Cluster memory limit')
+        + g.panel.barGauge.queryOptions.withTargets([
           signals.cluster.clusterMemoryLimit.asTarget(),
         ])
-        + barGauge.panelOptions.withDescription('The available memory capacity of the cluster.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
+        + g.panel.barGauge.panelOptions.withDescription('The available memory capacity of the cluster.')
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.standardOptions.thresholds.withSteps([
+          g.panel.barGauge.thresholdStep.withColor('super-light-green'),
         ])
-        + barGauge.standardOptions.withUnit('bytes'),
+        + g.panel.barGauge.standardOptions.withUnit('bytes'),
 
       clusterMemoryEffective:
-        barGauge.new(title='Cluster memory effective')
-        + barGauge.queryOptions.withTargets([
+        g.panel.barGauge.new(title='Cluster memory effective')
+        + g.panel.barGauge.queryOptions.withTargets([
           signals.cluster.clusterMemoryEffective.asTarget(),
         ])
-        + barGauge.panelOptions.withDescription('The effective memory capacity of the cluster.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
+        + g.panel.barGauge.panelOptions.withDescription('The effective memory capacity of the cluster.')
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.standardOptions.thresholds.withSteps([
+          g.panel.barGauge.thresholdStep.withColor('super-light-green'),
         ])
-        + barGauge.standardOptions.withUnit('bytes'),
+        + g.panel.barGauge.standardOptions.withUnit('bytes'),
 
       clusterMemoryUtilization:
         signals.cluster.clusterMemoryUtilization.asTimeSeries()
@@ -964,92 +966,92 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Information about the ESXi hosts associated with the clusters.'
         )
-        + table.standardOptions.withNoValue('NA')
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('ESXi host')
-          + table.fieldOverride.byName.withProperty('links', [
+        + g.panel.table.standardOptions.withNoValue('NA')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('ESXi host')
+          + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: '',
               url: 'd/vsphere-hosts?var-datasource=${datasource}&${__all_variables}&var-vcenter_host_name=${__value.raw}&${__url_time_range}',
             },
           ]),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('CPU usage')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('rotmhz')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('CPU usage')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('rotmhz')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('CPU utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('CPU utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
+            + g.panel.table.standardOptions.color.withMode('continuous-BlPu')
+            + g.panel.table.standardOptions.withMin(0)
+            + g.panel.table.standardOptions.withMax(100)
+            + g.panel.table.standardOptions.withDecimals(1)
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory usage')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbytes')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Memory usage')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('mbytes')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Memory utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
+            + g.panel.table.standardOptions.color.withMode('continuous-BlPu')
+            + g.panel.table.standardOptions.withMin(0)
+            + g.panel.table.standardOptions.withMax(100)
+            + g.panel.table.standardOptions.withDecimals(1)
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Disk throughput')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('KiBs')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Disk throughput')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('KiBs')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Disk delay')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('ms')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Disk delay')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('ms')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Net throughput')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('KiBs')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Net throughput')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('KiBs')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Packet errors')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Packet errors')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
           ),
         ])
         +
-        table.queryOptions.withTransformationsMixin([
+        g.panel.table.queryOptions.withTransformationsMixin([
           {
             id: 'joinByField',
             options: {
@@ -1147,97 +1149,97 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Information about the VMs associated with the clusters.'
         )
-        + table.standardOptions.withNoValue('NA')
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('VM')
-          + table.fieldOverride.byName.withProperty('links', [
+        + g.panel.table.standardOptions.withNoValue('NA')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('VM')
+          + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: '',
               url: 'd/vsphere-virtual-machines?var-datasource=${datasource}&${__all_variables}&var-vcenter_vm_name=${__value.raw}&${__url_time_range}',
             },
           ]),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('CPU usage')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('rotmhz')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('CPU usage')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('rotmhz')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('CPU utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('CPU utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
+            + g.panel.table.standardOptions.color.withMode('continuous-BlPu')
+            + g.panel.table.standardOptions.withMin(0)
+            + g.panel.table.standardOptions.withMax(100)
+            + g.panel.table.standardOptions.withDecimals(1)
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory usage')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbytes')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Memory usage')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('mbytes')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Memory utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
+            + g.panel.table.standardOptions.color.withMode('continuous-BlPu')
+            + g.panel.table.standardOptions.withMin(0)
+            + g.panel.table.standardOptions.withMax(100)
+            + g.panel.table.standardOptions.withDecimals(1)
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Disk usage')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('bytes')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Disk usage')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('bytes')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Disk utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 157)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Disk utilization')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 157)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
+            + g.panel.table.standardOptions.color.withMode('continuous-BlPu')
+            + g.panel.table.standardOptions.withMin(0)
+            + g.panel.table.standardOptions.withMax(100)
+            + g.panel.table.standardOptions.withDecimals(1)
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Net throughput')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('KiBs')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Net throughput')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('KiBs')
           ),
         ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Packet drops')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + table.fieldOverride.byName.withProperty('custom.width', 140)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
+        + g.panel.table.standardOptions.withOverridesMixin([
+          g.panel.table.fieldOverride.byName.new('Packet drops')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + g.panel.table.fieldOverride.byName.withProperty('custom.width', 140)
+          + g.panel.table.fieldOverride.byName.withPropertiesFromOptions(
+            g.panel.table.standardOptions.withUnit('percent')
           ),
         ])
         +
-        table.queryOptions.withTransformationsMixin([
+        g.panel.table.queryOptions.withTransformationsMixin([
           {
             id: 'joinByField',
             options: {
