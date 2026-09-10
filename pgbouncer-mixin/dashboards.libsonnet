@@ -14,7 +14,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local timezone = this.config.dashboardTimezone;
     local rows = this.grafana.rows;
     {
-      'overview.json':
+      'pgbouncer-overview.json':
         g.dashboard.new(prefix + 'PgBouncer overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -30,7 +30,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { pgbouncerOverview+:: {} }, annotations, timezone, refresh, period),
-      'clusterOverview.json':
+      'pgbouncer-cluster-overview.json':
         g.dashboard.new(prefix + 'PgBouncer cluster overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -45,7 +45,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     +
     if this.config.enableLokiLogs then
       {
-        'logs.json':
+        'pgbouncer-logs.json':
           logslib.new(
             prefix + 'PgBouncer logs',
             datasourceName=this.grafana.variables.datasources.loki.name,
@@ -66,7 +66,6 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               },
             panels+:
               {
-                // modify log panel
                 logs+:
                   g.panel.logs.options.withEnableLogDetails(true)
                   + g.panel.logs.options.withShowTime(false)
