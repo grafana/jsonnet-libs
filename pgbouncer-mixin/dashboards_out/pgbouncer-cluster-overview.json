@@ -1,12 +1,14 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "PgBouncer logs",
             "type": "link",
             "url": "/d/pgbouncer-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "PgBouncer overview",
             "type": "link",
@@ -15,11 +17,24 @@
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top databases by current number of active client connections.\n",
+            "description": "Top databases by current number of active client connections.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -38,15 +53,29 @@
                      "steps": [ ]
                   },
                   "unit": "conn"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top databases by active connections"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "conn"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
-            "id": 1,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -57,15 +86,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",})",
-                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}"
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  pgbouncer_pools_client_active_connections{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}",
+                  "refId": "Top databases by active connections"
                }
             ],
             "title": "Top databases by active connections",
@@ -80,13 +112,13 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
-            "id": 2,
+            "id": 3,
             "options": {
                "alertInstanceLabelFilter": "job=~\"${job:regex}\",pgbouncer_cluster=~\"${pgbouncer_cluster:regex}\""
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "title": "PgBouncer alerts",
             "type": "alertlist"
          },
@@ -95,7 +127,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top databases by rate of SQL queries pooled by PgBouncer.\n",
+            "description": "Top databases by rate of SQL queries pooled by PgBouncer.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -114,15 +146,29 @@
                      "steps": [ ]
                   },
                   "unit": "ops"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top databases by queries processed"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ops"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 6
+               "y": 7
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -133,15 +179,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",}[$__rate_interval]))",
-                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}"
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  rate(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}",
+                  "refId": "Top databases by queries processed"
                }
             ],
             "title": "Top databases by queries processed",
@@ -152,7 +201,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top databases by average duration of queries being processed by PgBouncer.\n",
+            "description": "Top databases by average duration of queries being processed by PgBouncer.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -170,16 +219,30 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "s"
-               }
+                  "unit": "ms"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top databases by average query duration"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 6
+               "y": 7
             },
-            "id": 4,
+            "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -190,15 +253,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, 1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",}[$__interval:]), 1))",
-                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}"
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  1000 * increase(pgbouncer_stats_queries_duration_seconds_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:] offset -$__interval) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__interval:] offset -$__interval), 1)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}}",
+                  "refId": "Top databases by average query duration"
                }
             ],
             "title": "Top databases by average query duration",
@@ -223,6 +289,8 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
+                  "decimals": 1,
+                  "noValue": "No traffic",
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
@@ -234,9 +302,9 @@
                "h": 6,
                "w": 24,
                "x": 0,
-               "y": 12
+               "y": 13
             },
-            "id": 5,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -248,23 +316,29 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_received_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",}[$__rate_interval]))",
-                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - received"
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  rate(pgbouncer_stats_received_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - received",
+                  "refId": "Top databases by network traffic received"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, rate(pgbouncer_stats_sent_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\",}[$__rate_interval]))",
-                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - sent"
+                  "expr": "topk by(database, instance, pgbouncer_cluster)($top_database_count, \n  rate(pgbouncer_stats_sent_bytes_total{job=~\"$job\",pgbouncer_cluster=~\"$pgbouncer_cluster\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{pgbouncer_cluster}} - {{instance}} - {{database}} - sent",
+                  "refId": "Top databases by network traffic sent"
                }
             ],
             "title": "Top databases by network traffic",
@@ -272,7 +346,7 @@
          }
       ],
       "refresh": "1m",
-      "schemaVersion": 36,
+      "schemaVersion": 39,
       "tags": [
          "pgbouncer"
       ],
@@ -286,7 +360,7 @@
                "type": "datasource"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -301,7 +375,7 @@
                "type": "query"
             },
             {
-               "allValue": ".+",
+               "allValue": ".*",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${prometheus_datasource}"
@@ -310,7 +384,7 @@
                "label": "Pgbouncer_cluster",
                "multi": true,
                "name": "pgbouncer_cluster",
-               "query": "label_values(pgbouncer_databases_current_connections{,job=~\"$job\"}, pgbouncer_cluster)",
+               "query": "label_values(pgbouncer_databases_current_connections{job=~\"$job\"}, pgbouncer_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

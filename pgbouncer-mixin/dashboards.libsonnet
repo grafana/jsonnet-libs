@@ -12,59 +12,40 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
-    local panels = this.grafana.panels;
-    local stat = g.panel.stat;
+    local rows = this.grafana.rows;
     {
-      overview:
+      'pgbouncer-overview.json':
         g.dashboard.new(prefix + 'PgBouncer overview')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.clientsWaitingConnections { gridPos+: { w: 4, h: 4 } },
-              panels.activeClientConnections { gridPos+: { w: 4, h: 4 } },
-              panels.activeServerConnections { gridPos+: { w: 4, h: 4 } },
-              panels.maxDatabaseConnections { gridPos+: { w: 4, h: 4 } },
-              panels.maxUserConnections { gridPos+: { w: 4, h: 4 } },
-              panels.maxClientConnections { gridPos+: { w: 4, h: 4 } },
-              g.panel.row.new('Queries'),
-              panels.queriesPooled { gridPos+: { w: 12 } },
-              panels.queryDuration { gridPos+: { w: 12 } },
-              g.panel.row.new('Network'),
-              panels.networkTraffic { gridPos+: { w: 24 } },
-              g.panel.row.new('Transactions'),
-              panels.transactionRate { gridPos+: { w: 12 } },
-              panels.transactionAverageDuration { gridPos+: { w: 12 } },
-              g.panel.row.new('Server'),
-              panels.serverConnections { gridPos+: { w: 24 } },
-              g.panel.row.new('Client'),
-              panels.granularActiveClientConnections { gridPos+: { w: 8 } },
-              panels.clientsWaiting { gridPos+: { w: 8 } },
-              panels.maxClientWaitTime { gridPos+: { w: 8 } },
-            ], 12, 6
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels([
+              rows.overview,
+              rows.queries,
+              rows.network,
+              rows.transactions,
+              rows.server,
+              rows.client,
+            ])
           )
         )
         // hide link to self
-        + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { pgbouncerOverview+:: {} }, annotations, timezone, refresh, period),
-      clusterOverview:
+        + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { pgbouncerOverview+:: {} }, annotations, timezone, refresh, period),
+      'pgbouncer-cluster-overview.json':
         g.dashboard.new(prefix + 'PgBouncer cluster overview')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              panels.topDatabaseActiveConnection { gridPos+: { w: 12 } },
-              panels.alertsPanel { gridPos+: { w: 12 } },
-              panels.topDatabaseQueryPooled { gridPos+: { w: 12 } },
-              panels.topDatabaseQueryDuration { gridPos+: { w: 12 } },
-              panels.topDatabaseNetworkTraffic { gridPos+: { w: 24 } },
-            ], 12, 6
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels([
+              rows.clusterOverview,
+            ])
           )
         )
         // hide link to self
-        + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-overview', tags, links { pgbouncerClusterOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.clusterVariables, uid + '-cluster-overview', tags, links { pgbouncerClusterOverview+:: {} }, annotations, timezone, refresh, period),
     }
     +
     if this.config.enableLokiLogs then
       {
-        logs:
+        'pgbouncer-logs.json':
           logslib.new(
             prefix + 'PgBouncer logs',
             datasourceName=this.grafana.variables.datasources.loki.name,
@@ -85,7 +66,6 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               },
             panels+:
               {
-                // modify log panel
                 logs+:
                   g.panel.logs.options.withEnableLogDetails(true)
                   + g.panel.logs.options.withShowTime(false)
