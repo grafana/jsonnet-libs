@@ -1,12 +1,14 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Catchpoint web performance by nodes",
             "type": "link",
             "url": "/d/catchpoint-nodename-overview"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Catchpoint web performance by tests",
             "type": "link",
@@ -51,7 +53,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": ""
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -62,7 +64,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": ""
+                           "value": "short"
                         }
                      ]
                   }

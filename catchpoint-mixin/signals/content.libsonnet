@@ -117,7 +117,7 @@ function(this, pivot)
         nameShort: 'Images',
         type: 'gauge',
         description: 'Number of image elements loaded.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_image_count{%(queriesSelector)s}',
@@ -131,7 +131,7 @@ function(this, pivot)
         nameShort: 'HTML',
         type: 'gauge',
         description: 'Number of HTML elements loaded.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_html_count{%(queriesSelector)s}',
@@ -145,7 +145,7 @@ function(this, pivot)
         nameShort: 'CSS',
         type: 'gauge',
         description: 'Number of CSS elements loaded.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_css_count{%(queriesSelector)s}',
@@ -159,7 +159,7 @@ function(this, pivot)
         nameShort: 'Scripts',
         type: 'gauge',
         description: 'Number of script elements loaded.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_script_count{%(queriesSelector)s}',
@@ -173,7 +173,7 @@ function(this, pivot)
         nameShort: 'Fonts',
         type: 'gauge',
         description: 'Number of font elements loaded.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_font_count{%(queriesSelector)s}',
@@ -187,7 +187,7 @@ function(this, pivot)
         nameShort: 'XML',
         type: 'gauge',
         description: 'Number of XML elements loaded.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_xml_count{%(queriesSelector)s}',
@@ -201,7 +201,7 @@ function(this, pivot)
         nameShort: 'Media',
         type: 'gauge',
         description: 'Number of media elements loaded.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_media_count{%(queriesSelector)s}',

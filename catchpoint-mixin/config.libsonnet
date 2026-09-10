@@ -20,12 +20,15 @@
   // consumed by the signal files as their filteringSelector. The overview ranks
   // across every node, so it constrains test_name only; both drilldowns show a
   // single test (or node) broken down by the other label, so they constrain both.
+  //
+  // filteringSelector goes LAST so that leaving it blank can never emit a leading
+  // comma, even if the empty-string filter below is ever dropped.
   local scopedSelector(extra) =
-    std.join(',', std.filter(function(s) std.length(s) > 0, [this.filteringSelector, extra])),
+    std.join(',', std.filter(function(s) std.length(s) > 0, [extra, this.filteringSelector])),
   overviewSelector: scopedSelector('test_name=~"$test_name"'),
   drilldownSelector: scopedSelector('test_name=~"$test_name",node_name=~"$node_name"'),
 
-  metricsSource: 'prometheus',
+  metricsSource: ['prometheus'],
   // The drilldown signal files are imported once per pivot label: the "by test"
   // dashboard breaks its single test down by node_name and vice versa, while the
   // content and error breakdowns aggregate by the dashboard's own label.

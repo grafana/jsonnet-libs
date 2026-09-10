@@ -18,7 +18,7 @@ function(this, pivot)
         nameShort: 'Object errors',
         type: 'gauge',
         description: 'Number of objects that failed to load.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_error_objects_loaded{%(queriesSelector)s}',
@@ -32,7 +32,7 @@ function(this, pivot)
         nameShort: 'DNS error',
         type: 'gauge',
         description: 'DNS resolution error indicator.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_dns_error{%(queriesSelector)s}',
@@ -46,7 +46,7 @@ function(this, pivot)
         nameShort: 'Load error',
         type: 'gauge',
         description: 'Page load error indicator.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_load_error{%(queriesSelector)s}',
@@ -60,7 +60,7 @@ function(this, pivot)
         nameShort: 'Timeout',
         type: 'gauge',
         description: 'Connection or request timeout error indicator.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_timeout_error{%(queriesSelector)s}',
@@ -74,7 +74,7 @@ function(this, pivot)
         nameShort: 'Conn error',
         type: 'gauge',
         description: 'Connection establishment error indicator.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_connection_error{%(queriesSelector)s}',
@@ -88,7 +88,7 @@ function(this, pivot)
         nameShort: 'Txn error',
         type: 'gauge',
         description: 'Transaction-level error indicator.',
-        unit: 'none',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'catchpoint_transaction_error{%(queriesSelector)s}',

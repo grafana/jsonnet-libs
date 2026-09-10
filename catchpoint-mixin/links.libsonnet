@@ -5,12 +5,15 @@ local g = import './g.libsonnet';
     {
       catchpointOverview:
         link.link.new('Catchpoint overview', '/d/' + this.grafana.dashboards['overview.json'].uid)
-        + link.link.options.withKeepTime(true),
+        + link.link.options.withKeepTime(true)
+        + link.link.options.withIncludeVars(true),
       catchpointTestNameOverview:
         link.link.new('Catchpoint web performance by tests', '/d/' + this.grafana.dashboards['testNameOverview.json'].uid)
-        + link.link.options.withKeepTime(true),
+        + link.link.options.withKeepTime(true)
+        + link.link.options.withIncludeVars(true),
       catchpointNodeNameOverview:
         link.link.new('Catchpoint web performance by nodes', '/d/' + this.grafana.dashboards['nodeNameOverview.json'].uid)
-        + link.link.options.withKeepTime(true),
+        + link.link.options.withKeepTime(true)
+        + link.link.options.withIncludeVars(true),
     },
 }

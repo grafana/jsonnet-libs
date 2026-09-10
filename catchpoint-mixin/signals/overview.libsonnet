@@ -174,7 +174,7 @@ function(this)
         type: 'gauge',
         aggFunction: 'sum',
         description: 'The top number of errors encountered among all tests over the specified interval.',
-        unit: '',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum_over_time(catchpoint_any_error{%(queriesSelector)s}[$__interval:])',
