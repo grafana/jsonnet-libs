@@ -1,12 +1,14 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "PgBouncer logs",
             "type": "link",
             "url": "/d/pgbouncer-logs"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "PgBouncer cluster overview",
             "type": "link",
