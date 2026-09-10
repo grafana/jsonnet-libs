@@ -13,7 +13,7 @@ local g = import './g.libsonnet';
     local timezone = this.config.dashboardTimezone;
     local rows = this.grafana.rows;
     {
-      'overview.json':
+      'catchpoint-overview.json':
         g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -29,7 +29,7 @@ local g = import './g.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { catchpointOverview+:: {} }, annotations, timezone, refresh, period),
-      'testNameOverview.json':
+      'catchpoint-testname-overview.json':
         g.dashboard.new(prefix + ' web performance by test')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -46,7 +46,7 @@ local g = import './g.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.testNameVariables, uid + '-testname-overview', tags, links { catchpointTestNameOverview+:: {} }, annotations, timezone, refresh, period),
-      'nodeNameOverview.json':
+      'catchpoint-nodename-overview.json':
         g.dashboard.new(prefix + ' web performance by node')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
