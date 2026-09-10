@@ -966,13 +966,21 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "Datacenter",
+               "label": "Vcenter_datacenter_name",
                "multi": true,
                "name": "vcenter_datacenter_name",
                "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"$job\"}, vcenter_datacenter_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             },
             {
                "datasource": {
@@ -983,7 +991,7 @@
                "label": "vSphere cluster",
                "multi": true,
                "name": "vcenter_cluster_name",
-               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}, vcenter_cluster_name)",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}, vcenter_cluster_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1012,7 +1020,7 @@
                "label": "Resource pool",
                "multi": true,
                "name": "vcenter_resource_pool_inventory_path",
-               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}, vcenter_resource_pool_inventory_path)",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}, vcenter_resource_pool_inventory_path)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1026,7 +1034,7 @@
                "label": "Virtual app",
                "multi": true,
                "name": "vcenter_virtual_app_inventory_path",
-               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}, vcenter_virtual_app_inventory_path)",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}, vcenter_virtual_app_inventory_path)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

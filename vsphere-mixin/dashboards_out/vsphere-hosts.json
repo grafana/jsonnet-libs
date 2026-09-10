@@ -1257,13 +1257,21 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "Datacenter",
+               "label": "Vcenter_datacenter_name",
                "multi": true,
                "name": "vcenter_datacenter_name",
                "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"$job\"}, vcenter_datacenter_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             },
             {
                "datasource": {
@@ -1274,7 +1282,7 @@
                "label": "vSphere cluster",
                "multi": true,
                "name": "vcenter_cluster_name",
-               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}, vcenter_cluster_name)",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}, vcenter_cluster_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
