@@ -1,45 +1,45 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
-local timeSeries = g.panel.timeSeries;
-local stat = g.panel.stat;
-local table = g.panel.table;
-
 local promDatasource = { uid: '${prometheus_datasource}' };
 
 // The three cluster-state tables all render a single 0/1 availability metric
 // alongside its label columns, so they share mappings, cell styling and the
 // column show/hide/rename machinery.
 local availabilityMappings = [
-  table.standardOptions.mapping.ValueMap.withType()
-  + table.standardOptions.mapping.ValueMap.withOptions({
+  g.panel.table.standardOptions.mapping.ValueMap.withType()
+  + g.panel.table.standardOptions.mapping.ValueMap.withOptions({
     '0': { color: 'red', index: 1, text: 'Unavailable' },
     '1': { color: 'green', index: 0, text: 'Available' },
   }),
 ];
 
+// Column show/hide/rename: common-lib has no field-override helper, so these
+// use grafonnet's fieldOverride builder directly.
 local hiddenColumns(names) = [
-  table.fieldOverride.byName.new(name)
-  + table.fieldOverride.byName.withProperty('custom.hidden', true)
+  g.panel.table.fieldOverride.byName.new(name)
+  + g.panel.table.fieldOverride.byName.withProperty('custom.hidden', true)
   for name in names
 ];
 
 local renamedColumns(names) = [
-  table.fieldOverride.byName.new(name)
-  + table.fieldOverride.byName.withProperty('displayName', names[name])
+  g.panel.table.fieldOverride.byName.new(name)
+  + g.panel.table.fieldOverride.byName.withProperty('displayName', names[name])
   for name in std.objectFields(names)
 ];
 
 local availabilityTable(title, target, description, hidden, renamed) =
   commonlib.panels.generic.table.base.new(title, targets=[target], description=description)
-  + table.standardOptions.withUnit('none')
-  // Value mappings supply the Status colours; every other column is plain text.
-  + table.standardOptions.color.withMode('fixed')
-  + table.standardOptions.color.withFixedColor('text')
-  + table.standardOptions.withMappings(availabilityMappings)
-  + table.fieldConfig.defaults.custom.withAlign('left')
-  + table.fieldConfig.defaults.custom.cellOptions.TableColorTextCellOptions.withType()
-  + table.standardOptions.withOverrides(hiddenColumns(hidden) + renamedColumns(renamed));
+  // Unit and the color/cell/align styling are not part of the table base: the
+  // value column is a mapped 0/1 status, so it must render as plain colored
+  // text rather than the base's numeric formatting.
+  + g.panel.table.standardOptions.withUnit('none')
+  + g.panel.table.standardOptions.color.withMode('fixed')
+  + g.panel.table.standardOptions.color.withFixedColor('text')
+  + g.panel.table.standardOptions.withMappings(availabilityMappings)
+  + g.panel.table.fieldConfig.defaults.custom.withAlign('left')
+  + g.panel.table.fieldConfig.defaults.custom.cellOptions.TableColorTextCellOptions.withType()
+  + g.panel.table.standardOptions.withOverrides(hiddenColumns(hidden) + renamedColumns(renamed));
 
 {
   new(this)::
@@ -67,7 +67,9 @@ local availabilityTable(title, target, description, hidden, renamed) =
           ],
           description='Total number of tasks submitted and completed in the thread pool.',
         )
-        + timeSeries.standardOptions.withUnit('short'),
+        // Two signals share this panel, so the unit lives here rather than
+        // coming from a single signal definition.
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       nodeCoreFSUsage:
         signals.node.coreRootFsBytes.asTimeSeries()
@@ -76,13 +78,13 @@ local availabilityTable(title, target, description, hidden, renamed) =
       garbageCollections:
         signals.jvm.garbageCollections.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + { targets: [super.targets[0] { intervalFactor: 2 }] },
 
       garbageCollectionTime:
         signals.jvm.garbageCollectionTime.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + { targets: [super.targets[0] { intervalFactor: 2 }] },
 
       cpuAverageLoad:
@@ -91,11 +93,13 @@ local availabilityTable(title, target, description, hidden, renamed) =
           targets=[signals.jvm.cpuLoad.asTarget()],
           description='CPU load caused by the JVM.',
         )
-        + timeSeries.standardOptions.withUnit('percent')
-        + timeSeries.standardOptions.withMin(0)
-        + timeSeries.standardOptions.withMax(100)
-        + timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
-        + timeSeries.standardOptions.thresholds.withSteps([
+        // Not .percentage: its stylize() adds decimals=1 and gradientMode='scheme'
+        // and would fight the explicit threshold steps below.
+        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        + g.panel.timeSeries.standardOptions.withMin(0)
+        + g.panel.timeSeries.standardOptions.withMax(100)
+        + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
+        + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green' },
           { color: 'yellow', value: 90 },
           { color: 'red', value: 80 },
@@ -111,8 +115,8 @@ local availabilityTable(title, target, description, hidden, renamed) =
           ],
           description="The operating system's virtual committed memory, free physical memory and total physical memory usage.",
         )
-        + timeSeries.standardOptions.withUnit('bytes')
-        + timeSeries.standardOptions.color.withMode('continuous-BlYlRd'),
+        + g.panel.timeSeries.standardOptions.withUnit('bytes')
+        + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlYlRd'),
 
       numberOfFileDescriptors:
         signals.jvm.fileDescriptors.asTimeSeries()
@@ -127,8 +131,8 @@ local availabilityTable(title, target, description, hidden, renamed) =
           ],
           description='The heap and non-heap memory used by the JVM.',
         )
-        + timeSeries.standardOptions.withUnit('bytes')
-        + timeSeries.standardOptions.color.withMode('continuous-BlYlRd'),
+        + g.panel.timeSeries.standardOptions.withUnit('bytes')
+        + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlYlRd'),
 
       memoryCommitted:
         commonlib.panels.generic.timeSeries.base.new(
@@ -139,25 +143,25 @@ local availabilityTable(title, target, description, hidden, renamed) =
           ],
           description='The heap and non-heap memory committed by the JVM.',
         )
-        + timeSeries.standardOptions.withUnit('bytes')
-        + timeSeries.standardOptions.color.withMode('continuous-BlYlRd'),
+        + g.panel.timeSeries.standardOptions.withUnit('bytes')
+        + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlYlRd'),
 
       requests:
         signals.jetty.requests.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + { targets: [super.targets[0] { intervalFactor: 2 }] },
 
       responses:
         signals.jetty.responses.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + { targets: [super.targets[0] { intervalFactor: 2 }] },
 
       dispatches:
         signals.jetty.dispatches.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + { targets: [super.targets[0] { intervalFactor: 2 }] },
 
       //
@@ -170,7 +174,7 @@ local availabilityTable(title, target, description, hidden, renamed) =
           targets=[signals.query.updateHandlerAdds.withFilteringSelectorMixin(coreFilter).asTarget() + { interval: '1m', intervalFactor: 2 }],
           description='Counts the increase in document additions over the specified interval.',
         )
-        + timeSeries.standardOptions.withUnit('short'),
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
 
       coreSearchAndRetrievalQueryLoad:
         signals.query.queryLoad5min.withFilteringSelectorMixin(coreFilter).asTimeSeries()
@@ -223,7 +227,7 @@ local availabilityTable(title, target, description, hidden, renamed) =
       cacheEvictions:
         signals.query.cacheEvictions.withFilteringSelectorMixin(coreFilter).asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + { targets: [super.targets[0] { intervalFactor: 2 }] },
 
       cacheHitRatio:
@@ -232,10 +236,10 @@ local availabilityTable(title, target, description, hidden, renamed) =
           targets=[signals.query.cacheHitRatio.withFilteringSelectorMixin(coreFilter).asTarget()],
           description='The cache hit ratio for various cache activities.',
         )
-        + timeSeries.standardOptions.withUnit('percent')
-        + timeSeries.standardOptions.withMin(0)
-        + timeSeries.standardOptions.withMax(100)
-        + timeSeries.standardOptions.thresholds.withSteps([
+        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        + g.panel.timeSeries.standardOptions.withMin(0)
+        + g.panel.timeSeries.standardOptions.withMax(100)
+        + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green' },
           { color: 'red', value: 80 },
         ]),
@@ -243,13 +247,13 @@ local availabilityTable(title, target, description, hidden, renamed) =
       coreTimeouts:
         signals.query.coreTimeouts.withFilteringSelectorMixin(coreFilter).asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + { targets: [super.targets[0] { intervalFactor: 2 }] },
 
       nodeTimeouts:
         signals.query.nodeTimeouts.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + { targets: [super.targets[0] { intervalFactor: 2 }] },
 
       queryErrorRate:
@@ -267,42 +271,42 @@ local availabilityTable(title, target, description, hidden, renamed) =
       liveNodes:
         signalsCluster.cluster.liveNodes.asStat()
         + commonlib.panels.generic.stat.base.stylize()
-        + stat.standardOptions.withMin(0)
-        + stat.standardOptions.color.withMode('thresholds')
-        + stat.standardOptions.thresholds.withSteps([
+        + g.panel.stat.standardOptions.withMin(0)
+        + g.panel.stat.standardOptions.color.withMode('thresholds')
+        + g.panel.stat.standardOptions.thresholds.withSteps([
           { color: 'red', value: null },
           { color: 'green', value: 1 },
         ])
-        + stat.options.withGraphMode('none')
-        + stat.options.withTextMode('value'),
+        + g.panel.stat.options.withGraphMode('none')
+        + g.panel.stat.options.withTextMode('value'),
 
       shardState:
         signalsCluster.cluster.shardState.asStat()
         + commonlib.panels.generic.stat.base.stylize()
-        + stat.standardOptions.withMin(0)
-        + stat.standardOptions.withMax(100)
-        + stat.standardOptions.color.withMode('thresholds')
-        + stat.standardOptions.thresholds.withSteps([
+        + g.panel.stat.standardOptions.withMin(0)
+        + g.panel.stat.standardOptions.withMax(100)
+        + g.panel.stat.standardOptions.color.withMode('thresholds')
+        + g.panel.stat.standardOptions.thresholds.withSteps([
           { color: 'red', value: null },
           { color: 'yellow', value: 80 },
           { color: 'green', value: 95 },
         ])
-        + stat.options.withGraphMode('none')
-        + stat.options.withTextMode('value'),
+        + g.panel.stat.options.withGraphMode('none')
+        + g.panel.stat.options.withTextMode('value'),
 
       replicaState:
         signalsCluster.cluster.replicaState.asStat()
         + commonlib.panels.generic.stat.base.stylize()
-        + stat.standardOptions.withMin(0)
-        + stat.standardOptions.withMax(100)
-        + stat.standardOptions.color.withMode('thresholds')
-        + stat.standardOptions.thresholds.withSteps([
+        + g.panel.stat.standardOptions.withMin(0)
+        + g.panel.stat.standardOptions.withMax(100)
+        + g.panel.stat.standardOptions.color.withMode('thresholds')
+        + g.panel.stat.standardOptions.thresholds.withSteps([
           { color: 'red', value: null },
           { color: 'yellow', value: 80 },
           { color: 'green', value: 95 },
         ])
-        + stat.options.withGraphMode('none')
-        + stat.options.withTextMode('value'),
+        + g.panel.stat.options.withGraphMode('none')
+        + g.panel.stat.options.withTextMode('value'),
 
       zookeeperEnsembleSize:
         signalsCluster.cluster.zookeeperEnsembleSize.asTimeSeries()
@@ -311,10 +315,10 @@ local availabilityTable(title, target, description, hidden, renamed) =
       topCPULoadByNode:
         signalsCluster.jvm.topCpuLoad.withTopK('$k').asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.standardOptions.withMin(0)
-        + timeSeries.standardOptions.withMax(100)
-        + timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
-        + timeSeries.standardOptions.thresholds.withSteps([
+        + g.panel.timeSeries.standardOptions.withMin(0)
+        + g.panel.timeSeries.standardOptions.withMax(100)
+        + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
+        + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'blue' },
           { color: 'yellow', value: 90 },
           { color: 'red', value: 80 },
@@ -323,10 +327,10 @@ local availabilityTable(title, target, description, hidden, renamed) =
       topHeapMemoryUsageByNode:
         signalsCluster.jvm.heapMemoryUsage.withTopK('$k').asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.standardOptions.withMin(0)
-        + timeSeries.standardOptions.withMax(100)
-        + timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
-        + timeSeries.standardOptions.thresholds.withSteps([
+        + g.panel.timeSeries.standardOptions.withMin(0)
+        + g.panel.timeSeries.standardOptions.withMax(100)
+        + g.panel.timeSeries.standardOptions.color.withMode('continuous-BlYlRd')
+        + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'blue' },
           { color: 'yellow', value: 90 },
           { color: 'red', value: 80 },
@@ -339,7 +343,7 @@ local availabilityTable(title, target, description, hidden, renamed) =
       topUpdateHandlersByNode:
         signalsCluster.query.topUpdateHandlerAdds.withFilteringSelectorMixin(coreFilter).withTopK('$k').asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + { targets: [super.targets[0] { intervalFactor: 2 }] },
 
       topIndexSizeByNode:
@@ -349,9 +353,9 @@ local availabilityTable(title, target, description, hidden, renamed) =
       topCacheHitRatioByNode:
         signalsCluster.query.topCacheHitRatio.withFilteringSelectorMixin(coreFilter).withExprWrappersMixin(['bottomk($k,', ')']).asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.standardOptions.withMin(0)
-        + timeSeries.standardOptions.withMax(100)
-        + timeSeries.standardOptions.thresholds.withSteps([
+        + g.panel.timeSeries.standardOptions.withMin(0)
+        + g.panel.timeSeries.standardOptions.withMax(100)
+        + g.panel.timeSeries.standardOptions.thresholds.withSteps([
           { color: 'green' },
           { color: 'yellow', value: 90 },
           { color: 'red', value: 80 },
@@ -360,13 +364,13 @@ local availabilityTable(title, target, description, hidden, renamed) =
       topCoreErrorsByNode:
         signalsCluster.node.coreErrors.withFilteringSelectorMixin(coreFilter).withTopK('$k').asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + { targets: [super.targets[0] { intervalFactor: 2 }] },
 
       topNodeErrors:
         signalsCluster.node.nodeErrors.withTopK('$k').asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.queryOptions.withInterval('1m')
+        + g.panel.timeSeries.queryOptions.withInterval('1m')
         + { targets: [super.targets[0] { intervalFactor: 2 }] },
 
       alerts:
