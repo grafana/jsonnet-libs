@@ -1,5 +1,5 @@
 groups:
-    - name: istio-alerts-istio
+    - name: istio-alerts
       rules:
         - alert: IstioHighRequestLatencyWarning
           annotations:

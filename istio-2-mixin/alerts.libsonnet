@@ -8,7 +8,7 @@
 
     groups: [
       {
-        name: 'istio-alerts-' + this.config.uid,
+        name: this.config.uid + '-alerts',
         rules: [
           {
             alert: 'IstioHighRequestLatencyWarning',
