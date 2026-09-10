@@ -131,7 +131,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               prefix + ' logs',
               datasourceName=vars.datasources.loki.name,
               datasourceRegex=vars.datasources.loki.regex,
-              filterSelector=this.config.filterSelector,
+              filterSelector=this.config.filteringSelector,
               labels=this.config.logLabels + this.config.extraLogLabels,
               formatParser=null,
               showLogsVolume=this.config.showLogsVolume,

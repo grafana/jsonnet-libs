@@ -161,7 +161,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",instance=~\"$instance\",level=~\"$level\",filename=~\"$filename\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",solr_cluster=~\"$solr_cluster\",instance=~\"$instance\",level=~\"$level\",filename=~\"$filename\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -203,7 +203,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",instance=~\"$instance\",level=~\"$level\",filename=~\"$filename\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",solr_cluster=~\"$solr_cluster\",instance=~\"$instance\",level=~\"$level\",filename=~\"$filename\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -234,7 +234,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=~\"integrations/apache-solr\"}, job)",
+               "query": "label_values({}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -249,7 +249,7 @@
                "label": "Solr_cluster",
                "multi": true,
                "name": "solr_cluster",
-               "query": "label_values({job=~\"integrations/apache-solr\",job=~\"$job\"}, solr_cluster)",
+               "query": "label_values({job=~\"$job\"}, solr_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -264,7 +264,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values({job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\"}, instance)",
+               "query": "label_values({job=~\"$job\",solr_cluster=~\"$solr_cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -279,7 +279,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",instance=~\"$instance\"}, level)",
+               "query": "label_values({job=~\"$job\",solr_cluster=~\"$solr_cluster\",instance=~\"$instance\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -294,7 +294,7 @@
                "label": "Filename",
                "multi": true,
                "name": "filename",
-               "query": "label_values({job=~\"integrations/apache-solr\",job=~\"$job\",solr_cluster=~\"$solr_cluster\",instance=~\"$instance\",level=~\"$level\"}, filename)",
+               "query": "label_values({job=~\"$job\",solr_cluster=~\"$solr_cluster\",instance=~\"$instance\",level=~\"$level\"}, filename)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

@@ -15,7 +15,7 @@ function(this)
         nameShort: 'Live nodes',
         type: 'gauge',
         description: 'Number of live nodes in the Solr cluster.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'min',
         sources: {
@@ -45,7 +45,7 @@ function(this)
         nameShort: 'ZK ensemble size',
         type: 'gauge',
         description: 'Size of the ZooKeeper ensemble.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'none',
         sources: {
           prometheus: {

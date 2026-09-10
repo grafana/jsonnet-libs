@@ -2,7 +2,7 @@
   new(this): {
     groups: [
       {
-        name: 'apache-solr',
+        name: this.config.uid + '-alerts',
         rules: [
           {
             alert: 'ApacheSolrZookeeperChangeInEnsembleSize',

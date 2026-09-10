@@ -40,7 +40,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         filteringSelector=this.config.filteringSelector,
         groupLabels=this.config.groupLabels,
         instanceLabels=this.config.instanceLabels,
-        varMetric='solr_metrics_core_errors_total',
+        // node-level metric: every Solr node exports JVM metrics, so job /
+        // solr_cluster / base_url discovery works on all dashboards, including
+        // resource monitoring where a node may host no cores.
+        varMetric='solr_metrics_jvm_os_cpu_load',
         customAllValue=this.config.customAllValue,
         enableLokiLogs=this.config.enableLokiLogs,
       ),

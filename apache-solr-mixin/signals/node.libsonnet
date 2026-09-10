@@ -15,7 +15,7 @@ function(this)
         nameShort: 'Connections',
         type: 'gauge',
         description: 'Number of connections to the Solr node.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {
@@ -32,7 +32,7 @@ function(this)
         nameShort: 'Submitted',
         type: 'counter',
         description: 'Total number of tasks submitted in the updateOnlyExecutor thread pool.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {
@@ -50,7 +50,7 @@ function(this)
         nameShort: 'Completed',
         type: 'counter',
         description: 'Total number of tasks completed in the updateOnlyExecutor thread pool.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {
@@ -85,7 +85,7 @@ function(this)
         nameShort: 'Node errors',
         type: 'counter',
         description: 'Top nodes by Solr node errors.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {
@@ -102,7 +102,7 @@ function(this)
         nameShort: 'Core errors',
         type: 'counter',
         description: 'Top cores by Solr core errors.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {

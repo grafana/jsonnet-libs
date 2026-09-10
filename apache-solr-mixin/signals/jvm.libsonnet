@@ -15,7 +15,7 @@ function(this)
         nameShort: 'GC count',
         type: 'counter',
         description: 'Counts the total number of garbage collection events.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {
@@ -114,7 +114,7 @@ function(this)
         nameShort: 'File descriptors',
         type: 'gauge',
         description: 'Number of open file descriptors.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {

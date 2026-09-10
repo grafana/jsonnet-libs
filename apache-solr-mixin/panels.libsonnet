@@ -67,7 +67,7 @@ local availabilityTable(title, target, description, hidden, renamed) =
           ],
           description='Total number of tasks submitted and completed in the thread pool.',
         )
-        + timeSeries.standardOptions.withUnit('none'),
+        + timeSeries.standardOptions.withUnit('short'),
 
       nodeCoreFSUsage:
         signals.node.coreRootFsBytes.asTimeSeries()
@@ -170,7 +170,7 @@ local availabilityTable(title, target, description, hidden, renamed) =
           targets=[signals.query.updateHandlerAdds.withFilteringSelectorMixin(coreFilter).asTarget() + { interval: '1m', intervalFactor: 2 }],
           description='Counts the increase in document additions over the specified interval.',
         )
-        + timeSeries.standardOptions.withUnit('none'),
+        + timeSeries.standardOptions.withUnit('short'),
 
       coreSearchAndRetrievalQueryLoad:
         signals.query.queryLoad5min.withFilteringSelectorMixin(coreFilter).asTimeSeries()

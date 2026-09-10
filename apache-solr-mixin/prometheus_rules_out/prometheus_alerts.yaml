@@ -1,5 +1,5 @@
 groups:
-    - name: apache-solr
+    - name: apache-solr-alerts
       rules:
         - alert: ApacheSolrZookeeperChangeInEnsembleSize
           annotations:

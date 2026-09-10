@@ -54,7 +54,7 @@
                         }
                      ]
                   },
-                  "unit": "none"
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -65,7 +65,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": "none"
+                           "value": "short"
                         }
                      ]
                   }
@@ -274,7 +274,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "none"
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -285,7 +285,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": "none"
+                           "value": "short"
                         }
                      ]
                   }
@@ -1242,7 +1242,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "documents"
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1253,7 +1253,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": "documents"
+                           "value": "short"
                         }
                      ]
                   }
@@ -1493,7 +1493,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "none"
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1504,7 +1504,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": "none"
+                           "value": "short"
                         }
                      ]
                   }
@@ -1569,7 +1569,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "none"
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1580,7 +1580,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": "none"
+                           "value": "short"
                         }
                      ]
                   }
@@ -1647,7 +1647,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values(solr_metrics_core_errors_total{}, job)",
+               "query": "label_values(solr_metrics_jvm_os_cpu_load{}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1662,7 +1662,7 @@
                "label": "Solr cluster",
                "multi": true,
                "name": "solr_cluster",
-               "query": "label_values(solr_metrics_core_errors_total{job=~\"$job\"}, solr_cluster)",
+               "query": "label_values(solr_metrics_jvm_os_cpu_load{job=~\"$job\"}, solr_cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

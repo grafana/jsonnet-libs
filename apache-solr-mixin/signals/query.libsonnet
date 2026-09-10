@@ -15,7 +15,7 @@ function(this)
         nameShort: 'Update handlers',
         type: 'counter',
         description: 'Counts the increase in document additions over the specified interval.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {
@@ -35,7 +35,7 @@ function(this)
         nameShort: 'Update handlers',
         type: 'counter',
         description: 'Top cores by the number of total document additions in the cluster.',
-        unit: 'documents',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {
@@ -291,7 +291,7 @@ function(this)
         nameShort: 'Cache evictions',
         type: 'counter',
         description: 'Tracks the number of cache evictions.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {
@@ -326,7 +326,7 @@ function(this)
         nameShort: 'Core timeouts',
         type: 'counter',
         description: 'Tracks the increase in the number of query timeouts over the specified time interval.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {
@@ -343,7 +343,7 @@ function(this)
         nameShort: 'Node timeouts',
         type: 'counter',
         description: 'Tracks the increase in node-level query timeouts over the specified interval.',
-        unit: 'none',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'avg',
         sources: {
