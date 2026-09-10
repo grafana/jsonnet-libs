@@ -1,5 +1,10 @@
 {
   new(this): {
+    // %(filteringSelector)s is intentionally LAST in every matcher list: it is blank
+    // in config.libsonnet and only injected by the integration, and a blank selector
+    // in any earlier position would render a leading comma, which is a fatal PromQL
+    // parse error. A trailing comma is valid PromQL.
+    local istiodPodFilter = 'pod=~"istiod.*"',
     local reporterSourceFilter = 'reporter="source"',
     local grpcResponseStatusErrorFilter = 'grpc_response_status=~"[1-9]\\\\d*"',
     local grpcResponseStatusFilter = 'grpc_response_status=~"[0-9]\\\\d*"',
@@ -13,10 +18,10 @@
           {
             alert: 'IstioHighRequestLatencyWarning',
             expr: |||
-              sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_sum{%(reporterSourceSelector)s}[5m]))
+              sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_sum{%(reporterSourceFilter)s, %(filteringSelector)s}[5m]))
               /
-              clamp_min(sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_count{%(reporterSourceSelector)s}[5m])), 1) > %(alertsWarningHighRequestLatency)s
-            ||| % this.config { reporterSourceSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', ' + reporterSourceFilter else reporterSourceFilter },
+              clamp_min(sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_count{%(reporterSourceFilter)s, %(filteringSelector)s}[5m])), 1) > %(alertsWarningHighRequestLatency)s
+            ||| % this.config { reporterSourceFilter: reporterSourceFilter },
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -31,8 +36,8 @@
           {
             alert: 'IstioGalleyValidationFailuresWarning',
             expr: |||
-              sum by (job, cluster, pod) (increase(galley_validation_failed{%(istiodPodSelector)s}[5m])) > %(alertsWarningGalleyValidationFailures)s
-            ||| % this.config { istiodPodSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', pod=~"istiod.*"' else 'pod=~"istiod.*"' },
+              sum by (job, cluster, pod) (increase(galley_validation_failed{%(istiodPodFilter)s, %(filteringSelector)s}[5m])) > %(alertsWarningGalleyValidationFailures)s
+            ||| % this.config { istiodPodFilter: istiodPodFilter },
             'for': '1m',
             labels: {
               severity: 'warning',
@@ -47,8 +52,8 @@
           {
             alert: 'IstioListenerConfigConflictsCritical',
             expr: |||
-              sum by (job, cluster, pod) (increase(pilot_conflict_inbound_listener{%(istiodPodSelector)s}[5m])) + sum by (job, cluster, pod) (increase(pilot_conflict_outbound_listener_tcp_over_current_tcp{%(istiodPodSelector)s}[5m])) > %(alertsCriticalListenerConfigConflicts)s
-            ||| % this.config { istiodPodSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', pod=~"istiod.*"' else 'pod=~"istiod.*"' },
+              sum by (job, cluster, pod) (increase(pilot_conflict_inbound_listener{%(istiodPodFilter)s, %(filteringSelector)s}[5m])) + sum by (job, cluster, pod) (increase(pilot_conflict_outbound_listener_tcp_over_current_tcp{%(istiodPodFilter)s, %(filteringSelector)s}[5m])) > %(alertsCriticalListenerConfigConflicts)s
+            ||| % this.config { istiodPodFilter: istiodPodFilter },
             'for': '1m',
             labels: {
               severity: 'critical',
@@ -63,8 +68,8 @@
           {
             alert: 'IstioXDSConfigRejectionsWarning',
             expr: |||
-              sum by (job, cluster, pod) (increase(pilot_total_xds_rejects{%(istiodPodSelector)s}[5m])) > %(alertsWarningXDSConfigRejections)s
-            ||| % this.config { istiodPodSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', pod=~"istiod.*"' else 'pod=~"istiod.*"' },
+              sum by (job, cluster, pod) (increase(pilot_total_xds_rejects{%(istiodPodFilter)s, %(filteringSelector)s}[5m])) > %(alertsWarningXDSConfigRejections)s
+            ||| % this.config { istiodPodFilter: istiodPodFilter },
             'for': '1m',
             labels: {
               severity: 'warning',
@@ -79,10 +84,14 @@
           {
             alert: 'IstioHighHTTPRequestErrorsCritical',
             expr: |||
-              100 * sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_requests_total{%(httpErrorSelector)s}[5m]))
+              100 * sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_requests_total{%(reporterSourceFilter)s, %(httpResponseCodeErrorFilter)s, %(filteringSelector)s}[5m]))
               /
-              clamp_min(sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_requests_total{%(httpRequestSelector)s}[5m])), 1) > %(alertsCriticalHTTPRequestErrorPercentage)s
-            ||| % this.config { httpErrorSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', ' + reporterSourceFilter + ', ' + httpResponseCodeErrorFilter else reporterSourceFilter + ', ' + httpResponseCodeErrorFilter, httpRequestSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', ' + reporterSourceFilter + ', ' + requestProtocolHTTPFilter else reporterSourceFilter + ', ' + requestProtocolHTTPFilter },
+              clamp_min(sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_requests_total{%(reporterSourceFilter)s, %(requestProtocolHTTPFilter)s, %(filteringSelector)s}[5m])), 1) > %(alertsCriticalHTTPRequestErrorPercentage)s
+            ||| % this.config {
+              reporterSourceFilter: reporterSourceFilter,
+              httpResponseCodeErrorFilter: httpResponseCodeErrorFilter,
+              requestProtocolHTTPFilter: requestProtocolHTTPFilter,
+            },
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -97,10 +106,14 @@
           {
             alert: 'IstioHighGRPCRequestErrorsCritical',
             expr: |||
-              100 * sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_requests_total{%(grpcErrorSelector)s}[5m]))
+              100 * sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_requests_total{%(reporterSourceFilter)s, %(grpcResponseStatusErrorFilter)s, %(filteringSelector)s}[5m]))
               /
-              clamp_min(sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_requests_total{%(grpcRequestSelector)s}[5m])), 1) > %(alertsCriticalGRPCRequestErrorPercentage)s
-            ||| % this.config { grpcErrorSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', ' + reporterSourceFilter + ', ' + grpcResponseStatusErrorFilter else reporterSourceFilter + ', ' + grpcResponseStatusErrorFilter, grpcRequestSelector: if this.config.filteringSelector != '' then this.config.filteringSelector + ', ' + reporterSourceFilter + ', ' + grpcResponseStatusFilter else reporterSourceFilter + ', ' + grpcResponseStatusFilter },
+              clamp_min(sum by (job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_requests_total{%(reporterSourceFilter)s, %(grpcResponseStatusFilter)s, %(filteringSelector)s}[5m])), 1) > %(alertsCriticalGRPCRequestErrorPercentage)s
+            ||| % this.config {
+              reporterSourceFilter: reporterSourceFilter,
+              grpcResponseStatusErrorFilter: grpcResponseStatusErrorFilter,
+              grpcResponseStatusFilter: grpcResponseStatusFilter,
+            },
             'for': '5m',
             labels: {
               severity: 'critical',
