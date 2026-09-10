@@ -23,10 +23,10 @@
   dashboardRefresh: '1m',
 
   // alert thresholds
-  alertsHighClientWaitingConnections: 20,  // clients waiting on a server connection
-  alertsHighClientWaitTime: 15,  // seconds
-  alertsHighServerConnectionSaturationWarning: 80,  // percent of max_user_connections
-  alertsHighServerConnectionSaturationCritical: 90,  // percent of max_user_connections
+  alertsHighClientWaitingConnections: 20,  // clients waiting, sustained for 5m
+  alertsHighClientWaitTime: 15,  // seconds, sustained for 5m
+  alertsHighServerConnectionSaturationWarning: 80,  // percent of max_user_connections, sustained for 5m
+  alertsHighServerConnectionSaturationCritical: 90,  // percent of max_user_connections, sustained for 5m
 
   // logs lib related
   enableLokiLogs: true,
