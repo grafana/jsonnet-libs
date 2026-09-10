@@ -18,6 +18,7 @@ function(this)
         name: 'Source service HTTP/GRPC request rate',
         description: 'Service details for the Istio system.',
         type: 'counter',
+        unit: 'reqps',
         aggLevel: 'none',
         sources: {
           prometheus: {
@@ -35,6 +36,7 @@ function(this)
         name: 'Destination service HTTP/GRPC request rate',
         description: 'Service details for the Istio system.',
         type: 'counter',
+        unit: 'reqps',
         aggLevel: 'none',
         sources: {
           prometheus: {
@@ -52,6 +54,7 @@ function(this)
         name: 'Source service HTTP/GRPC request latency',
         description: 'Service details for the Istio system.',
         type: 'raw',
+        unit: 'ms',
         sources: {
           prometheus: {
             expr: |||
@@ -68,6 +71,7 @@ function(this)
         name: 'Destination service HTTP/GRPC request latency',
         description: 'Service details for the Istio system.',
         type: 'raw',
+        unit: 'ms',
         sources: {
           prometheus: {
             expr: |||
@@ -84,6 +88,7 @@ function(this)
         name: 'Source service HTTP request success rate',
         description: 'Service details for the Istio system.',
         type: 'raw',
+        unit: 'percent',
         sources: {
           prometheus: {
             expr: |||
@@ -100,6 +105,7 @@ function(this)
         name: 'Destination service HTTP request success rate',
         description: 'Service details for the Istio system.',
         type: 'raw',
+        unit: 'percent',
         sources: {
           prometheus: {
             expr: |||
@@ -116,6 +122,7 @@ function(this)
         name: 'Source service TCP receive rate',
         description: 'Service details for the Istio system.',
         type: 'counter',
+        unit: 'Bps',
         aggLevel: 'none',
         sources: {
           prometheus: {
@@ -133,6 +140,7 @@ function(this)
         name: 'Source service TCP send rate',
         description: 'Service details for the Istio system.',
         type: 'counter',
+        unit: 'Bps',
         aggLevel: 'none',
         sources: {
           prometheus: {
@@ -215,6 +223,7 @@ function(this)
         name: 'Client service HTTP OK responses',
         description: 'Overview of the types of HTTP responses received by this service from server services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -231,6 +240,7 @@ function(this)
         name: 'Client service HTTP error responses',
         description: 'Overview of the types of HTTP responses received by this service from server services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -247,6 +257,7 @@ function(this)
         name: 'Client service HTTP 1xx responses',
         description: 'The types of HTTP responses received by this service from server services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -263,6 +274,7 @@ function(this)
         name: 'Client service HTTP 2xx responses',
         description: 'The types of HTTP responses received by this service from server services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -279,6 +291,7 @@ function(this)
         name: 'Client service HTTP 3xx responses',
         description: 'The types of HTTP responses received by this service from server services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -295,6 +308,7 @@ function(this)
         name: 'Client service HTTP 4xx responses',
         description: 'The types of HTTP responses received by this service from server services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -311,6 +325,7 @@ function(this)
         name: 'Client service HTTP 5xx responses',
         description: 'The types of HTTP responses received by this service from server services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -327,6 +342,7 @@ function(this)
         name: 'Client service GRPC OK responses',
         description: 'Overview of the types of GRPC responses received by this service from server services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -343,6 +359,7 @@ function(this)
         name: 'Client service GRPC error responses',
         description: 'Overview of the types of GRPC responses received by this service from server services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -359,6 +376,7 @@ function(this)
         name: 'GRPC responses / $__interval',
         description: 'The types of GRPC responses received by this service from server services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -472,6 +490,7 @@ function(this)
         name: 'Server service HTTP OK responses',
         description: 'Overview of the types of HTTP responses sent from this service to client services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -488,6 +507,7 @@ function(this)
         name: 'Server service HTTP error responses',
         description: 'Overview of the types of HTTP responses sent from this service to client services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -504,6 +524,7 @@ function(this)
         name: 'Server service HTTP 1xx responses',
         description: 'The types of HTTP responses sent from this service to client services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -520,6 +541,7 @@ function(this)
         name: 'Server service HTTP 2xx responses',
         description: 'The types of HTTP responses sent from this service to client services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -536,6 +558,7 @@ function(this)
         name: 'Server service HTTP 3xx responses',
         description: 'The types of HTTP responses sent from this service to client services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -552,6 +575,7 @@ function(this)
         name: 'Server service HTTP 4xx responses',
         description: 'The types of HTTP responses sent from this service to client services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -568,6 +592,7 @@ function(this)
         name: 'Server service HTTP 5xx responses',
         description: 'The types of HTTP responses sent from this service to client services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -584,6 +609,7 @@ function(this)
         name: 'Server service GRPC OK responses',
         description: 'Overview of the types of GRPC responses sent from this service to client services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -600,6 +626,7 @@ function(this)
         name: 'Server service GRPC error responses',
         description: 'Overview of the types of GRPC responses sent from this service to client services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -616,6 +643,7 @@ function(this)
         name: 'GRPC responses / $__interval',
         description: 'The types of GRPC responses sent from this service to client services in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {

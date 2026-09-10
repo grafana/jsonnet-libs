@@ -18,6 +18,7 @@ function(this)
         name: 'CDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -33,6 +34,7 @@ function(this)
         name: 'EDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -48,6 +50,7 @@ function(this)
         name: 'LDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -63,6 +66,7 @@ function(this)
         name: 'RDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -78,6 +82,7 @@ function(this)
         name: 'SDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -93,6 +98,7 @@ function(this)
         name: 'NDS xDS pushes',
         description: 'Number of xDS pushes by Istiod over the entire time range for the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -108,6 +114,7 @@ function(this)
         name: 'xDS proxy push latency',
         description: 'The latency of xDS pushes by Istiod over the entire time range for the Istio system.',
         type: 'raw',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'sum by(le, job, cluster) (increase(pilot_proxy_convergence_time_bucket{%(queriesGroupIstiodSelector)s}[$__range:]))' % selectors,
@@ -120,6 +127,7 @@ function(this)
         name: 'Galley validations passed',
         description: 'Number of galley validations over the entire time range for the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -135,6 +143,7 @@ function(this)
         name: 'Galley validations failed',
         description: 'Number of galley validations over the entire time range for the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -150,6 +159,7 @@ function(this)
         name: 'Envoy xDS bytes sent',
         description: 'The send and receive data rates from all envoy proxies in the Istio system.',
         type: 'counter',
+        unit: 'Bps',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -164,6 +174,7 @@ function(this)
         name: 'Envoy xDS bytes received',
         description: 'The send and receive data rates from all envoy proxies in the Istio system.',
         type: 'counter',
+        unit: 'Bps',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -178,6 +189,7 @@ function(this)
         name: 'CDS xDS rejections',
         description: 'The xDS related errors across the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -193,6 +205,7 @@ function(this)
         name: 'EDS xDS rejections',
         description: 'The xDS related errors across the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -208,6 +221,7 @@ function(this)
         name: 'RDS xDS rejections',
         description: 'The xDS related errors across the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -223,6 +237,7 @@ function(this)
         name: 'LDS xDS rejections',
         description: 'The xDS related errors across the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -238,6 +253,7 @@ function(this)
         name: 'xDS write timeouts',
         description: 'The xDS related errors across the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -253,6 +269,7 @@ function(this)
         name: 'xDS internal errors',
         description: 'The xDS related errors across the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -268,6 +285,7 @@ function(this)
         name: 'xDS proxy rejects',
         description: 'The xDS related errors across the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -283,6 +301,7 @@ function(this)
         name: 'xDS inbound listener conflicts',
         description: 'The xDS related errors across the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -298,6 +317,7 @@ function(this)
         name: 'xDS outbound listener TCP conflicts',
         description: 'The xDS related errors across the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -313,6 +333,7 @@ function(this)
         name: 'Sidecar injection successes',
         description: 'Number of sidecar injections over the entire time range for the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -328,6 +349,7 @@ function(this)
         name: 'Sidecar injection failures',
         description: 'Number of sidecar injections over the entire time range for the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {

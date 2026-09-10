@@ -603,7 +603,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": ""
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -614,7 +614,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": ""
+                           "value": "short"
                         }
                      ]
                   }
@@ -1400,7 +1400,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": ""
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1411,7 +1411,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": ""
+                           "value": "short"
                         }
                      ]
                   }

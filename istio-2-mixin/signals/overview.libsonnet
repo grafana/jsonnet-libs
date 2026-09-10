@@ -18,6 +18,7 @@ function(this)
         name: 'Proxies',
         description: 'Number of proxies in the Istio system.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'count',
         sources: {
@@ -32,6 +33,7 @@ function(this)
         name: 'Gateways',
         description: 'Number of gateways in the Istio system.',
         type: 'raw',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeGatewayFilter)s, %(eventAddFilter)s}) - (max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeGatewayFilter)s, %(eventDeleteFilter)s}) or (max(up) * 0))' % selectors,
@@ -44,6 +46,7 @@ function(this)
         name: 'Virtual services',
         description: 'Number of virtual services in the Istio system.',
         type: 'raw',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeVirtualServiceFilter)s, %(eventAddFilter)s}) - (max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeVirtualServiceFilter)s, %(eventDeleteFilter)s}) or (max(up) * 0))' % selectors,
@@ -56,6 +59,7 @@ function(this)
         name: 'Destination rules',
         description: 'Number of destination rules in the Istio system.',
         type: 'raw',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeDestinationRuleFilter)s, %(eventAddFilter)s}) - (max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeDestinationRuleFilter)s, %(eventDeleteFilter)s}) or (max(up) * 0))' % selectors,
@@ -68,6 +72,7 @@ function(this)
         name: 'Service entries',
         description: 'Number of service entries in the Istio system.',
         type: 'raw',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeServiceEntryFilter)s, %(eventAddFilter)s}) - (max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeServiceEntryFilter)s, %(eventDeleteFilter)s}) or (max(up) * 0))' % selectors,
@@ -80,6 +85,7 @@ function(this)
         name: 'Workload entries',
         description: 'Number of workload entries in the Istio system.',
         type: 'raw',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeWorkloadEntryFilter)s, %(eventAddFilter)s}) - (max(pilot_k8s_cfg_events{%(queriesGroupSelector)s, %(typeWorkloadEntryFilter)s, %(eventDeleteFilter)s}) or (max(up) * 0))' % selectors,
@@ -92,6 +98,7 @@ function(this)
         name: 'Istiod CPU usage',
         description: 'vCPU usage for various components of the Istio system.',
         type: 'counter',
+        unit: 'percentunit',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -106,6 +113,7 @@ function(this)
         name: 'Gateway CPU usage',
         description: 'vCPU usage for various components of the Istio system.',
         type: 'counter',
+        unit: 'percentunit',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -120,6 +128,7 @@ function(this)
         name: 'Proxy CPU usage',
         description: 'vCPU usage for various components of the Istio system.',
         type: 'counter',
+        unit: 'percentunit',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -134,6 +143,7 @@ function(this)
         name: 'Istiod open file descriptors',
         description: 'Number of open file descriptors for various components of the Istio system.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -148,6 +158,7 @@ function(this)
         name: 'Gateway open file descriptors',
         description: 'Number of open file descriptors for various components of the Istio system.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -162,6 +173,7 @@ function(this)
         name: 'Proxy open file descriptors',
         description: 'Number of open file descriptors for various components of the Istio system.',
         type: 'gauge',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -176,6 +188,7 @@ function(this)
         name: 'Istiod virtual memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -190,6 +203,7 @@ function(this)
         name: 'Istiod resident memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -204,6 +218,7 @@ function(this)
         name: 'Gateway virtual memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -218,6 +233,7 @@ function(this)
         name: 'Gateway resident memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -232,6 +248,7 @@ function(this)
         name: 'Proxy virtual memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -246,6 +263,7 @@ function(this)
         name: 'Proxy resident memory',
         description: 'Available virtual memory compared to the resident memory for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -260,6 +278,7 @@ function(this)
         name: 'Istiod heap allocated',
         description: 'Heap memory information for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -274,6 +293,7 @@ function(this)
         name: 'Istiod heap in use',
         description: 'Heap memory information for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -288,6 +308,7 @@ function(this)
         name: 'Istiod heap system',
         description: 'Heap memory information for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -302,6 +323,7 @@ function(this)
         name: 'Gateway heap allocated',
         description: 'Heap memory information for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -316,6 +338,7 @@ function(this)
         name: 'Gateway heap in use',
         description: 'Heap memory information for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -330,6 +353,7 @@ function(this)
         name: 'Gateway heap system',
         description: 'Heap memory information for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -344,6 +368,7 @@ function(this)
         name: 'Proxy heap allocated',
         description: 'Heap memory information for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -358,6 +383,7 @@ function(this)
         name: 'Proxy heap in use',
         description: 'Heap memory information for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -372,6 +398,7 @@ function(this)
         name: 'Proxy heap system',
         description: 'Heap memory information for the various components of the Istio system.',
         type: 'gauge',
+        unit: 'bytes',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -386,6 +413,7 @@ function(this)
         name: 'Gateway HTTP/GRPC request rate',
         description: 'HTTP/GRPC request rate for the components of the Istio system.',
         type: 'counter',
+        unit: 'reqps',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -400,6 +428,7 @@ function(this)
         name: 'Proxy HTTP/GRPC request rate',
         description: 'HTTP/GRPC request rate for the components of the Istio system.',
         type: 'counter',
+        unit: 'reqps',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -414,6 +443,7 @@ function(this)
         name: 'Gateway HTTP OK responses',
         description: 'Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -429,6 +459,7 @@ function(this)
         name: 'Gateway HTTP error responses',
         description: 'Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -444,6 +475,7 @@ function(this)
         name: 'Proxy HTTP OK responses',
         description: 'Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -459,6 +491,7 @@ function(this)
         name: 'Proxy HTTP error responses',
         description: 'Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {

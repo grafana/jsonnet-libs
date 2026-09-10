@@ -18,6 +18,7 @@ function(this)
         name: 'Source workload HTTP/GRPC request rate',
         description: 'Workload details for a service in the Istio system.',
         type: 'counter',
+        unit: 'reqps',
         aggLevel: 'none',
         sources: {
           prometheus: {
@@ -36,6 +37,7 @@ function(this)
         name: 'Destination workload HTTP/GRPC request rate',
         description: 'Workload details for a service in the Istio system.',
         type: 'counter',
+        unit: 'reqps',
         aggLevel: 'none',
         sources: {
           prometheus: {
@@ -54,6 +56,7 @@ function(this)
         name: 'Source workload HTTP/GRPC request latency',
         description: 'Workload details for a service in the Istio system.',
         type: 'raw',
+        unit: 'ms',
         sources: {
           prometheus: {
             expr: |||
@@ -70,6 +73,7 @@ function(this)
         name: 'Destination workload HTTP/GRPC request latency',
         description: 'Workload details for a service in the Istio system.',
         type: 'raw',
+        unit: 'ms',
         sources: {
           prometheus: {
             expr: |||
@@ -86,6 +90,7 @@ function(this)
         name: 'Source workload HTTP request success rate',
         description: 'Workload details for a service in the Istio system.',
         type: 'raw',
+        unit: 'percent',
         sources: {
           prometheus: {
             expr: |||
@@ -102,6 +107,7 @@ function(this)
         name: 'Destination workload HTTP request success rate',
         description: 'Workload details for a service in the Istio system.',
         type: 'raw',
+        unit: 'percent',
         sources: {
           prometheus: {
             expr: |||
@@ -118,6 +124,7 @@ function(this)
         name: 'Source workload TCP request throughput',
         description: 'Workload details for a service in the Istio system.',
         type: 'counter',
+        unit: 'Bps',
         aggLevel: 'none',
         sources: {
           prometheus: {
@@ -136,6 +143,7 @@ function(this)
         name: 'Destination workload TCP response throughput',
         description: 'Workload details for a service in the Istio system.',
         type: 'counter',
+        unit: 'Bps',
         aggLevel: 'none',
         sources: {
           prometheus: {
@@ -219,6 +227,7 @@ function(this)
         name: 'Client workload HTTP OK responses',
         description: 'Overview of the types of HTTP responses received by this workload from server workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -235,6 +244,7 @@ function(this)
         name: 'Client workload HTTP error responses',
         description: 'Overview of the types of HTTP responses received by this workload from server workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -251,6 +261,7 @@ function(this)
         name: 'Client workload HTTP 1xx responses',
         description: 'The types of HTTP responses received by this workload from server workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -267,6 +278,7 @@ function(this)
         name: 'Client workload HTTP 2xx responses',
         description: 'The types of HTTP responses received by this workload from server workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -283,6 +295,7 @@ function(this)
         name: 'Client workload HTTP 3xx responses',
         description: 'The types of HTTP responses received by this workload from server workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -299,6 +312,7 @@ function(this)
         name: 'Client workload HTTP 4xx responses',
         description: 'The types of HTTP responses received by this workload from server workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -315,6 +329,7 @@ function(this)
         name: 'Client workload HTTP 5xx responses',
         description: 'The types of HTTP responses received by this workload from server workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -331,6 +346,7 @@ function(this)
         name: 'Client workload GRPC OK responses',
         description: 'Overview of the types of GRPC responses received by this workload from server workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -347,6 +363,7 @@ function(this)
         name: 'Client workload GRPC error responses',
         description: 'Overview of the types of GRPC responses received by this workload from server workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -363,6 +380,7 @@ function(this)
         name: 'GRPC responses / $__interval',
         description: 'The types of GRPC responses received by this workload from server workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -476,6 +494,7 @@ function(this)
         name: 'Server workload HTTP OK responses',
         description: 'Overview of the types of HTTP responses sent from this workload to client workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -492,6 +511,7 @@ function(this)
         name: 'Server workload HTTP error responses',
         description: 'Overview of the types of HTTP responses sent from this workload to client workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -508,6 +528,7 @@ function(this)
         name: 'Server workload HTTP 1xx responses',
         description: 'The types of HTTP responses sent from this workload to client workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -524,6 +545,7 @@ function(this)
         name: 'Server workload HTTP 2xx responses',
         description: 'The types of HTTP responses sent from this workload to client workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -540,6 +562,7 @@ function(this)
         name: 'Server workload HTTP 3xx responses',
         description: 'The types of HTTP responses sent from this workload to client workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -556,6 +579,7 @@ function(this)
         name: 'Server workload HTTP 4xx responses',
         description: 'The types of HTTP responses sent from this workload to client workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -572,6 +596,7 @@ function(this)
         name: 'Server workload HTTP 5xx responses',
         description: 'The types of HTTP responses sent from this workload to client workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -588,6 +613,7 @@ function(this)
         name: 'Server workload GRPC OK responses',
         description: 'Overview of the types of GRPC responses sent from this workload to client workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -604,6 +630,7 @@ function(this)
         name: 'Server workload GRPC error responses',
         description: 'Overview of the types of GRPC responses sent from this workload to client workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
@@ -620,6 +647,7 @@ function(this)
         name: 'GRPC responses / $__interval',
         description: 'The types of GRPC responses sent from this workload to client workloads in the Istio system.',
         type: 'counter',
+        unit: 'short',
         aggLevel: 'group',
         aggFunction: 'sum',
         sources: {
