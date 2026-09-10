@@ -39,7 +39,7 @@ function(this)
         name: 'Client waiting connections',
         description: 'Current number of client connections waiting on a server connection.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'pgbouncer_pools_client_waiting_connections{%(queriesSelector)s}',
@@ -64,7 +64,7 @@ function(this)
         name: 'Active client connections',
         description: 'Current number of active client connections.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'pgbouncer_pools_client_active_connections{%(queriesSelector)s}',
@@ -91,7 +91,7 @@ function(this)
         name: 'Active server connections',
         description: 'Current number of client connections that are linked to a server connection and able to process queries.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'pgbouncer_pools_server_active_connections{%(queriesSelector)s}',
@@ -154,7 +154,7 @@ function(this)
         name: 'Max database connections',
         description: 'Maximum number of allowed connections for database.',
         type: 'gauge',
-        unit: '',
+        unit: 'short',
         sources: {
           prometheus: {
             expr: 'pgbouncer_databases_max_connections{%(queriesSelector)s}',
