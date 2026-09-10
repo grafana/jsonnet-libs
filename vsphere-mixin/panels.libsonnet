@@ -5,6 +5,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   new(this):
     {
       local signals = this.signals,
+      // Drill-down targets are dashboard uids, which are '<config.uid>-<name>'.
+      local uid = g.util.string.slugify(this.config.uid),
 
       clustersCountStatus:
         signals.overview.clustersCount.asStat()
@@ -102,7 +104,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: '',
-              url: 'd/vsphere-clusters?var-datasource=${datasource}&${__all_variables}&var-vcenter_cluster_name=${__value.raw}&${__url_time_range}',
+              url: 'd/' + uid + '-clusters?var-datasource=${datasource}&${__all_variables}&var-vcenter_cluster_name=${__value.raw}&${__url_time_range}',
             },
           ]),
         ])
@@ -457,7 +459,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: '',
-              url: 'd/vsphere-virtual-machines?var-datasource=${datasource}&${__all_variables}&var-vcenter_vm_name=${__value.raw}&${__url_time_range}',
+              url: 'd/' + uid + '-virtual-machines?var-datasource=${datasource}&${__all_variables}&var-vcenter_vm_name=${__value.raw}&${__url_time_range}',
             },
           ]),
         ])
@@ -972,7 +974,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: '',
-              url: 'd/vsphere-hosts?var-datasource=${datasource}&${__all_variables}&var-vcenter_host_name=${__value.raw}&${__url_time_range}',
+              url: 'd/' + uid + '-hosts?var-datasource=${datasource}&${__all_variables}&var-vcenter_host_name=${__value.raw}&${__url_time_range}',
             },
           ]),
         ])
@@ -1155,7 +1157,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.panel.table.fieldOverride.byName.withProperty('links', [
             {
               title: '',
-              url: 'd/vsphere-virtual-machines?var-datasource=${datasource}&${__all_variables}&var-vcenter_vm_name=${__value.raw}&${__url_time_range}',
+              url: 'd/' + uid + '-virtual-machines?var-datasource=${datasource}&${__all_variables}&var-vcenter_vm_name=${__value.raw}&${__url_time_range}',
             },
           ]),
         ])

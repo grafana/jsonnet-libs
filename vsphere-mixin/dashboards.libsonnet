@@ -14,7 +14,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local timezone = this.config.dashboardTimezone;
     local rows = this.grafana.rows;
     {
-      'overview.json':
+      [uid + '-overview.json']:
         g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -31,7 +31,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { vSphereOverview+:: {} }, annotations, timezone, refresh, period),
-      'clusters.json':
+      [uid + '-clusters.json']:
         g.dashboard.new(prefix + ' clusters')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -46,7 +46,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.clusterVariables, uid + '-clusters', tags, links { vSphereClusters+:: {} }, annotations, timezone, refresh, period),
-      'hosts.json':
+      [uid + '-hosts.json']:
         g.dashboard.new(prefix + ' hosts')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -61,7 +61,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.hostsVariable, uid + '-hosts', tags, links { vSphereHosts+:: {} }, annotations, timezone, refresh, period),
-      'virtualMachines.json':
+      [uid + '-virtual-machines.json']:
         g.dashboard.new(prefix + ' virtual machines')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
@@ -79,7 +79,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     +
     if this.config.enableLokiLogs then
       {
-        'logs.json':
+        [uid + '-logs.json']:
           logslib.new(
             prefix + ' logs',
             datasourceName=this.grafana.variables.datasources.loki.name,
