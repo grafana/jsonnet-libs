@@ -5,22 +5,24 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   new(this):
     {
       local signals = this.signals,
-      local alertList = g.panel.alertList,
-      local pieChart = g.panel.pieChart,
-      local barGauge = g.panel.barGauge,
-      local timeSeries = g.panel.timeSeries,
 
       // Shared styling for the drilldown time series: a filled area, spanned
       // gaps (Catchpoint reports per test run, so the series are sparse), and a
       // right-hand table legend on the panels that carry several series.
+      //
+      // commonlib.panels.generic.timeSeries.base.stylize() applies exactly the
+      // styling that base.new() applies, so the signal-built panels below
+      // (asTimeSeries(), which keeps unit/description/overrides on the signals
+      // layer) render identically to the hand-built multi-target panels that do
+      // call base.new().
       local stylize =
         commonlib.panels.generic.timeSeries.base.stylize()
-        + timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + timeSeries.fieldConfig.defaults.custom.withSpanNulls(true),
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(true),
       local tableLegend =
-        timeSeries.options.legend.withDisplayMode('table')
-        + timeSeries.options.legend.withPlacement('right')
-        + timeSeries.options.legend.withCalcs(['lastNotNull']),
+        g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull']),
 
       // Catchpoint overview dashboard
       topAvgLoadTimeTestName:
@@ -31,6 +33,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         signals.overview.documentCompleteTimeByTest.asTimeSeries() + stylize,
       topAvgDocumentCompletionTimeNodeName:
         signals.overview.documentCompleteTimeByNode.asTimeSeries() + stylize,
+      // Not timeSeries.percentage.new: these are `percentunit` ratios (0-1), and
+      // that helper hardcodes unit='percent' with min=0/max=100.
       bottomAvgRequestRatioTestName:
         signals.overview.requestSuccessRatioByTest.asTimeSeries() + stylize,
       bottomAvgRequestSuccessRatioNodeName:
@@ -51,9 +55,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       topErrorsByTestName:
         signals.overview.anyErrorByTest.asTimeSeries() + stylize + tableLegend,
 
+      // Spelled out in full: common-lib has no generic alertList helper
+      // (commonlib.panels.generic covers timeSeries, stat, table and
+      // statusHistory only), and an alert list has no targets for the generic
+      // base to style.
       alertsPanel:
-        alertList.new('Catchpoint alerts')
-        + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(
+        g.panel.alertList.new('Catchpoint alerts')
+        + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(
           this.grafana.variables.queriesSelectorAdvancedSyntax
         ),
 
@@ -69,7 +77,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Time taken for the browser to fully render the page after all resources are downloaded.'
         )
-        + timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
         + stylize
         + tableLegend,
 
@@ -83,7 +91,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Time taken to establish an SSL handshake, DNS resolution, and connect.'
         )
-        + timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
         + stylize
         + tableLegend,
 
@@ -96,7 +104,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Time taken to load and render content on the webpage.'
         )
-        + timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
         + stylize
         + tableLegend,
 
@@ -109,7 +117,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Additional delays encountered due to redirects, as well as time from successful connection to receiving the first byte.'
         )
-        + timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
         + stylize
         + tableLegend,
 
@@ -122,7 +130,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Size of the HTTP response content.'
         )
-        + timeSeries.standardOptions.withUnit('decbytes')
+        + g.panel.timeSeries.standardOptions.withUnit('decbytes')
         + stylize,
 
       local totalContentSizePanel(network) =
@@ -134,14 +142,17 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
           description='Total size of the HTTP response content and headers.'
         )
-        + timeSeries.standardOptions.withUnit('decbytes')
+        + g.panel.timeSeries.standardOptions.withUnit('decbytes')
         + stylize
-        + timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
+      // Spelled out in full: common-lib has no generic pieChart helper, and the
+      // generic base only emits timeSeries-shaped field config, so it cannot
+      // style a pie chart.
       local contentTypesLoadedBySizePanel(content) =
-        pieChart.new('Content types loaded by size')
-        + pieChart.panelOptions.withDescription('Size of content loaded.')
-        + pieChart.queryOptions.withTargets([
+        g.panel.pieChart.new('Content types loaded by size')
+        + g.panel.pieChart.panelOptions.withDescription('Size of content loaded.')
+        + g.panel.pieChart.queryOptions.withTargets([
           content.imageContentSize.asTarget(),
           content.htmlContentSize.asTarget(),
           content.cssContentSize.asTarget(),
@@ -150,15 +161,19 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           content.xmlContentSize.asTarget(),
           content.mediaContentSize.asTarget(),
         ])
-        + pieChart.standardOptions.withUnit('decbytes')
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.tooltip.withMode('multi')
-        + pieChart.options.tooltip.withSort('desc'),
+        + g.panel.pieChart.standardOptions.withUnit('decbytes')
+        + g.panel.pieChart.options.legend.withPlacement('right')
+        + g.panel.pieChart.options.tooltip.withMode('multi')
+        + g.panel.pieChart.options.tooltip.withSort('desc'),
 
+      // Spelled out in full: common-lib has no generic barGauge helper. The
+      // nearest match, table.cold_hot_gauge, renders a table with an embedded
+      // gauge cell rather than the horizontal bar row per content type that this
+      // panel needs.
       local contentLoadedByTypePanel(content) =
-        barGauge.new('Content loaded by type')
-        + barGauge.panelOptions.withDescription('Number of elements loaded.')
-        + barGauge.queryOptions.withTargets([
+        g.panel.barGauge.new('Content loaded by type')
+        + g.panel.barGauge.panelOptions.withDescription('Number of elements loaded.')
+        + g.panel.barGauge.queryOptions.withTargets([
           content.imageCount.asTarget(),
           content.htmlCount.asTarget(),
           content.cssCount.asTarget(),
@@ -167,17 +182,18 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           content.xmlCount.asTarget(),
           content.mediaCount.asTarget(),
         ])
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.standardOptions.thresholds.withSteps([
+          g.panel.barGauge.thresholdStep.withColor('super-light-green'),
         ]),
 
-      // Every metric here is a 0/1 indicator, so the gauge tops out at 1 and
-      // turns red as soon as an error is reported.
+      // Spelled out in full for the same reason as contentLoadedByTypePanel
+      // above. Every metric here is a 0/1 indicator, so the gauge tops out at 1
+      // and turns red as soon as an error is reported.
       local errorsPanel(errors) =
-        barGauge.new('Errors')
-        + barGauge.panelOptions.withDescription('Indicates various errors that are occuring.')
-        + barGauge.queryOptions.withTargets([
+        g.panel.barGauge.new('Errors')
+        + g.panel.barGauge.panelOptions.withDescription('Indicates various errors that are occuring.')
+        + g.panel.barGauge.queryOptions.withTargets([
           errors.errorObjectsLoaded.asTarget(),
           errors.dnsError.asTarget(),
           errors.loadError.asTarget(),
@@ -185,12 +201,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           errors.connectionError.asTarget(),
           errors.transactionError.asTarget(),
         ])
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.withMax(1)
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
-          barGauge.thresholdStep.withColor('super-light-red')
-          + barGauge.thresholdStep.withValue(1),
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.standardOptions.withMax(1)
+        + g.panel.barGauge.standardOptions.thresholds.withSteps([
+          g.panel.barGauge.thresholdStep.withColor('super-light-green'),
+          g.panel.barGauge.thresholdStep.withColor('super-light-red')
+          + g.panel.barGauge.thresholdStep.withValue(1),
         ]),
 
       // Web performance by tests: one test broken down by node.
