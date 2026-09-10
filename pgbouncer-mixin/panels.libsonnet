@@ -4,23 +4,19 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   new(this):
     {
       local signals = this.signals,
-      local stat = g.panel.stat,
-      local alertList = g.panel.alertList,
 
-      // Single-signal stat panels: signal.asStat() + generic stat stylize(). Title, unit,
-      // description and query all come from the signal spec; only styling lives here.
       clientsWaitingConnections:
         signals.connections.pools_client_waiting_connections_total.asStat()
         + commonlib.panels.generic.stat.base.stylize()
-        + stat.options.withGraphMode('none')
-        + stat.standardOptions.color.withMode('thresholds')
-        + stat.standardOptions.thresholds.withSteps([
-          stat.thresholdStep.withColor('super-light-green')
-          + stat.thresholdStep.withValue(0),
-          stat.thresholdStep.withColor('super-light-orange')
-          + stat.thresholdStep.withValue(10),
-          stat.thresholdStep.withColor('super-light-red')
-          + stat.thresholdStep.withValue(20),
+        + g.panel.stat.options.withGraphMode('none')
+        + g.panel.stat.standardOptions.color.withMode('thresholds')
+        + g.panel.stat.standardOptions.thresholds.withSteps([
+          g.panel.stat.thresholdStep.withColor('super-light-green')
+          + g.panel.stat.thresholdStep.withValue(0),
+          g.panel.stat.thresholdStep.withColor('super-light-orange')
+          + g.panel.stat.thresholdStep.withValue(10),
+          g.panel.stat.thresholdStep.withColor('super-light-red')
+          + g.panel.stat.thresholdStep.withValue(20),
         ]),
       activeClientConnections:
         signals.connections.pools_client_active_connections_total.asStat()
@@ -38,7 +34,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         signals.config.config_max_client_connections.asStat()
         + commonlib.panels.generic.stat.info.stylize(),
 
-      // Single-signal timeSeries panels: signal.asTimeSeries() + generic timeSeries stylize().
       queriesPooled:
         signals.stats.stats_queries_pooled_total.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize(),
@@ -47,7 +42,26 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         signals.stats.stats_query_avg_duration.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize(),
 
-      // Multi-signal network traffic panel keeps target-based construction.
+      transactionRate:
+        signals.stats.stats_sql_transactions_pooled_total.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
+
+      transactionAverageDuration:
+        signals.stats.stats_transaction_avg_duration.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
+
+      granularActiveClientConnections:
+        signals.connections.pools_client_active_connections.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
+
+      clientsWaiting:
+        signals.connections.pools_client_waiting_connections.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
+
+      maxClientWaitTime:
+        signals.connections.pools_client_maxwait_seconds.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
+
       networkTraffic:
         commonlib.panels.network.timeSeries.traffic.new(
           'Network traffic',
@@ -63,15 +77,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
-      transactionRate:
-        signals.stats.stats_sql_transactions_pooled_total.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-
-      transactionAverageDuration:
-        signals.stats.stats_transaction_avg_duration.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-
-      // Multi-signal server connection states panel keeps target-based construction.
       serverConnections:
         commonlib.panels.generic.timeSeries.base.new(
           'Server connections',
@@ -89,22 +94,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
-      granularActiveClientConnections:
-        signals.connections.pools_client_active_connections.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-
-      clientsWaiting:
-        signals.connections.pools_client_waiting_connections.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-
-      maxClientWaitTime:
-        signals.connections.pools_client_maxwait_seconds.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-
-      alertsPanel:
-        alertList.new('PgBouncer alerts')
-        + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
-
+      // Cluster overview panels.
       topDatabaseActiveConnection:
         signals.cluster.top_database_active_connection.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize(),
@@ -114,9 +104,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       topDatabaseQueryDuration:
         signals.cluster.top_database_query_duration.asTimeSeries()
         + commonlib.panels.generic.timeSeries.base.stylize(),
-      // Multi-signal top-database network panel keeps target-based construction.
       topDatabaseNetworkTraffic:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.network.timeSeries.traffic.new(
           'Top databases by network traffic',
           targets=[
             signals.cluster.top_database_network_received.asTarget(),
@@ -129,5 +118,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withUnit('Bps')
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
+
+      alertsPanel:
+        g.panel.alertList.new('PgBouncer alerts')
+        + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(
+          this.grafana.variables.queriesGroupSelectorAdvanced
+        ),
     },
 }

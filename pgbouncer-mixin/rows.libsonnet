@@ -2,6 +2,10 @@ local g = import './g.libsonnet';
 
 // All panel positioning lives here: every panel belongs to a row and carries an
 // explicit gridPos w/h, so dashboards.libsonnet only assembles dashboards.
+//
+// Rows are layout, not data, so common-lib has no row helper (its panels/ tree ships
+// cpu, disk, generic, hardware, memory, network, requests and system panel types only).
+// g.panel.row is therefore the only option here and is spelled out in full.
 {
   new(this): {
     local panels = this.grafana.panels,
