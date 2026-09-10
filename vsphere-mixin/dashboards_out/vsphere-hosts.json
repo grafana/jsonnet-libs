@@ -1,6 +1,7 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "vSphere logs",
             "type": "link",
@@ -30,6 +31,19 @@
       ],
       "panels": [
          {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
             "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
@@ -53,15 +67,29 @@
                      "steps": [ ]
                   },
                   "unit": "rotmhz"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "CPU usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rotmhz"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 0
+               "y": 1
             },
-            "id": 1,
+            "id": 2,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -72,7 +100,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -80,7 +108,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "vcenter_host_cpu_usage_MHz{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}",
-                  "legendFormat": "{{vcenter_host_name}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}}",
+                  "refId": "CPU usage"
                }
             ],
             "title": "CPU usage",
@@ -113,15 +144,29 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "CPU utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 0
+               "y": 1
             },
-            "id": 2,
+            "id": 3,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -132,7 +177,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -140,7 +185,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "vcenter_host_cpu_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}",
-                  "legendFormat": "{{vcenter_host_name}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}}",
+                  "refId": "CPU utilization"
                }
             ],
             "title": "CPU utilization",
@@ -170,15 +218,29 @@
                      "steps": [ ]
                   },
                   "unit": "mbytes"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Memory usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "mbytes"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 6
+               "y": 7
             },
-            "id": 3,
+            "id": 4,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -189,7 +251,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -197,7 +259,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "vcenter_host_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}",
-                  "legendFormat": "{{vcenter_host_name}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}}",
+                  "refId": "Memory usage"
                }
             ],
             "title": "Memory usage",
@@ -230,15 +295,29 @@
                      "steps": [ ]
                   },
                   "unit": "percent"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Memory utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 6
+               "y": 7
             },
-            "id": 4,
+            "id": 5,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -249,7 +328,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -257,7 +336,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "vcenter_host_memory_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}",
-                  "legendFormat": "{{vcenter_host_name}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}}",
+                  "refId": "Memory utilization"
                }
             ],
             "title": "Memory utilization",
@@ -293,9 +375,9 @@
                "h": 6,
                "w": 24,
                "x": 0,
-               "y": 12
+               "y": 13
             },
-            "id": 5,
+            "id": 6,
             "options": {
                "legend": {
                   "calcs": [ ],
@@ -307,23 +389,29 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_ballooned_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}) != 0",
-                  "legendFormat": "{{vcenter_host_name}} - ballooned"
+                  "expr": "(\n  sum by (job,vcenter_datacenter_name,vcenter_cluster_name,vcenter_host_name) (\n  vcenter_vm_memory_ballooned_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}\n)\n) != 0",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}} - ballooned",
+                  "refId": "Modified memory ballooned"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_swapped_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}) != 0",
-                  "legendFormat": "{{vcenter_host_name}} - swapped"
+                  "expr": "(\n  sum by (job,vcenter_datacenter_name,vcenter_cluster_name,vcenter_host_name) (\n  vcenter_vm_memory_swapped_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}\n)\n) != 0",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}} - swapped",
+                  "refId": "Modified memory swapped"
                }
             ],
             "title": "Modified memory",
@@ -359,21 +447,20 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 18
+               "y": 19
             },
-            "id": 6,
+            "id": 7,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom"
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -381,7 +468,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "vcenter_host_network_throughput{direction=\"transmitted\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}",
-                  "legendFormat": "{{vcenter_host_name}} - transmitted"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}} - transmitted",
+                  "refId": "Network throughput transmitted"
                },
                {
                   "datasource": {
@@ -389,7 +479,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "vcenter_host_network_throughput{direction=\"received\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}",
-                  "legendFormat": "{{vcenter_host_name}} - received"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}} - received",
+                  "refId": "Network throughput received"
                }
             ],
             "title": "Avg network throughput rate",
@@ -425,21 +518,20 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 18
+               "y": 19
             },
-            "id": 7,
+            "id": 8,
             "options": {
                "legend": {
                   "calcs": [ ],
-                  "displayMode": "list",
-                  "placement": "bottom"
+                  "displayMode": "list"
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -447,7 +539,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "vcenter_host_network_packet_error_rate{direction=\"received\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"} / clamp_min(vcenter_host_network_packet_rate{direction=\"received\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}, 1) != 0",
-                  "legendFormat": "{{vcenter_host_name}} - received"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}} - received",
+                  "refId": "Packet errors received"
                },
                {
                   "datasource": {
@@ -455,7 +550,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "vcenter_host_network_packet_error_rate{direction=\"transmitted\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"} / clamp_min(vcenter_host_network_packet_rate{direction=\"transmitted\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}, 1) != 0",
-                  "legendFormat": "{{vcenter_host_name}} - transmitted"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{vcenter_host_name}} - transmitted",
+                  "refId": "Packet errors transmitted"
                }
             ],
             "title": "Avg packet errors",
@@ -466,10 +564,11 @@
             "gridPos": {
                "h": 1,
                "w": 0,
-               "x": 24,
-               "y": 24
+               "x": 0,
+               "y": 25
             },
-            "id": 8,
+            "id": 9,
+            "panels": [ ],
             "title": "VMs",
             "type": "row"
          },
@@ -741,10 +840,10 @@
                "h": 6,
                "w": 24,
                "x": 0,
-               "y": 25
+               "y": 26
             },
-            "id": 9,
-            "pluginVersion": "v11.0.0",
+            "id": 10,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -753,6 +852,8 @@
                   },
                   "expr": "label_join(vcenter_vm_cpu_usage_MHz{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_cpu_usage_MHz{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_cpu_usage_MHz{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_vm_name\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "cpu_usage"
                },
@@ -763,6 +864,8 @@
                   },
                   "expr": "label_join(vcenter_vm_cpu_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_cpu_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_cpu_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_vm_name\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "cpu_utilization"
                },
@@ -773,6 +876,8 @@
                   },
                   "expr": "label_join(vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_vm_name\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "memory_usage"
                },
@@ -783,6 +888,8 @@
                   },
                   "expr": "label_join(vcenter_vm_memory_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_memory_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_memory_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_vm_name\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "memory_utilization"
                },
@@ -793,6 +900,8 @@
                   },
                   "expr": "label_join(vcenter_vm_disk_usage_bytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_disk_usage_bytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_disk_usage_bytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_vm_name\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "disk_usage"
                },
@@ -803,6 +912,8 @@
                   },
                   "expr": "label_join(vcenter_vm_disk_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_disk_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\") or label_join(vcenter_vm_disk_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\"}, \"vm_path\", \"/\", \"vcenter_vm_name\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "disk_utilization"
                },
@@ -813,6 +924,8 @@
                   },
                   "expr": "label_join(sum without(object, direction) (vcenter_vm_network_usage{object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_virtual_app_inventory_path=\"\"}), \"vm_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\") or label_join(sum without(object, direction) (vcenter_vm_network_usage{object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\"}), \"vm_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\") or label_join(sum without(object, direction) (vcenter_vm_network_usage{object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\"}), \"vm_path\", \"/\", \"vcenter_vm_name\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "netowrk_throughput"
                },
@@ -823,6 +936,8 @@
                   },
                   "expr": "label_join(sum without(object, direction) (vcenter_vm_network_packet_drop_rate{object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_virtual_app_inventory_path=\"\"}) / clamp_min(sum without(object, direction) (vcenter_vm_network_packet_rate{object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_virtual_app_inventory_path=\"\"}), 1), \"vm_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\") or label_join(sum without(object, direction) (vcenter_vm_network_packet_drop_rate{object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\"}) / clamp_min(sum without(object, direction) (vcenter_vm_network_packet_rate{object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\"}), 1), \"vm_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\") or label_join(sum without(object, direction) (vcenter_vm_network_packet_drop_rate{object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\"}) / clamp_min(sum without(object, direction) (vcenter_vm_network_packet_rate{object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\"}), 1), \"vm_path\", \"/\", \"vcenter_vm_name\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "packet_drop_rate"
                }
@@ -891,10 +1006,11 @@
             "gridPos": {
                "h": 1,
                "w": 0,
-               "x": 24,
-               "y": 31
+               "x": 0,
+               "y": 32
             },
-            "id": 10,
+            "id": 11,
+            "panels": [ ],
             "title": "Disks",
             "type": "row"
          },
@@ -1003,10 +1119,10 @@
                "h": 6,
                "w": 24,
                "x": 0,
-               "y": 32
+               "y": 33
             },
-            "id": 11,
-            "pluginVersion": "v11.0.0",
+            "id": 12,
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1015,6 +1131,8 @@
                   },
                   "expr": "label_join(vcenter_host_disk_throughput{direction=\"read\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=\"\",vcenter_host_name=~\"$vcenter_host_name\"}, \"disk_path\", \"/\", \"vcenter_host_name\",\"object\") or label_join(vcenter_host_disk_throughput{direction=\"read\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name\",vcenter_host_name=~\"$vcenter_host_name\"}, \"disk_path\", \"/\", \"vcenter_cluster_name\",\"vcenter_host_name\",\"object\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "disk_reads"
                },
@@ -1025,6 +1143,8 @@
                   },
                   "expr": "label_join(vcenter_host_disk_latency_avg_milliseconds{direction=\"read\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=\"\",vcenter_host_name=~\"$vcenter_host_name\"}, \"disk_path\", \"/\", \"vcenter_host_name\",\"object\") or label_join(vcenter_host_disk_latency_avg_milliseconds{direction=\"read\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name\",vcenter_host_name=~\"$vcenter_host_name\"}, \"disk_path\", \"/\", \"vcenter_cluster_name\",\"vcenter_host_name\",\"object\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "disk_read_latency"
                },
@@ -1035,6 +1155,8 @@
                   },
                   "expr": "label_join(vcenter_host_disk_throughput{direction=\"write\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=\"\",vcenter_host_name=~\"$vcenter_host_name\"}, \"disk_path\", \"/\", \"vcenter_host_name\",\"object\") or label_join(vcenter_host_disk_throughput{direction=\"write\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name\",vcenter_host_name=~\"$vcenter_host_name\"}, \"disk_path\", \"/\", \"vcenter_cluster_name\",\"vcenter_host_name\",\"object\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "disk_writes"
                },
@@ -1045,6 +1167,8 @@
                   },
                   "expr": "label_join(vcenter_host_disk_latency_avg_milliseconds{direction=\"write\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=\"\",vcenter_host_name=~\"$vcenter_host_name\"}, \"disk_path\", \"/\", \"vcenter_host_name\",\"object\") or label_join(vcenter_host_disk_latency_avg_milliseconds{direction=\"write\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name\",vcenter_host_name=~\"$vcenter_host_name\"}, \"disk_path\", \"/\", \"vcenter_cluster_name\",\"vcenter_host_name\",\"object\")",
                   "format": "table",
+                  "instant": false,
+                  "legendFormat": "",
                   "range": true,
                   "refId": "disk_write_latency"
                }
@@ -1098,7 +1222,7 @@
          }
       ],
       "refresh": "1m",
-      "schemaVersion": 36,
+      "schemaVersion": 39,
       "tags": [
          "vsphere"
       ],
@@ -1133,13 +1257,21 @@
                   "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
-               "label": "Datacenter",
+               "label": "Vcenter_datacenter_name",
                "multi": true,
                "name": "vcenter_datacenter_name",
-               "query": "label_values(vcenter_vm_memory_usage_mebibytes{,job=~\"$job\"}, vcenter_datacenter_name)",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"$job\"}, vcenter_datacenter_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             },
             {
                "datasource": {
@@ -1150,7 +1282,7 @@
                "label": "vSphere cluster",
                "multi": true,
                "name": "vcenter_cluster_name",
-               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}, vcenter_cluster_name)",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}, vcenter_cluster_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
