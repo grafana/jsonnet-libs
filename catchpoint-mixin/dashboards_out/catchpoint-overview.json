@@ -1,12 +1,14 @@
 {
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Catchpoint web performance by nodes",
             "type": "link",
             "url": "/d/catchpoint-nodename-overview"
          },
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Catchpoint web performance by tests",
             "type": "link",
@@ -23,6 +25,7 @@
                "y": 0
             },
             "id": 1,
+            "panels": [ ],
             "title": "Errors",
             "type": "row"
          },
@@ -44,13 +47,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top errors by tests"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -72,15 +90,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, sum by (test_name) (sum_over_time(catchpoint_any_error{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1, \n  sum by (test_name) (\n  sum_over_time(catchpoint_any_error{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Top errors by tests"
                }
             ],
             "title": "Top errors by tests",
@@ -101,7 +122,7 @@
             "options": {
                "alertInstanceLabelFilter": "job=~\"${job:regex}\",instance=~\"${instance:regex}\""
             },
-            "pluginVersion": "v10.0.0",
+            "pluginVersion": "v11.4.0",
             "title": "Catchpoint alerts",
             "type": "alertlist"
          },
@@ -110,10 +131,11 @@
             "gridPos": {
                "h": 1,
                "w": 0,
-               "x": 24,
+               "x": 0,
                "y": 7
             },
             "id": 4,
+            "panels": [ ],
             "title": "Content handling and loading",
             "type": "row"
          },
@@ -135,14 +157,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top average total load time by tests"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -161,15 +197,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (test_name) (avg_over_time(catchpoint_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1, \n  avg by (test_name) (\n  avg_over_time(catchpoint_load_time{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Top average total load time by tests"
                }
             ],
             "title": "Top average total load time by tests",
@@ -193,14 +232,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top average total load time by nodes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -219,15 +272,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (node_name) (avg_over_time(catchpoint_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "topk(1, \n  avg by (node_name) (\n  avg_over_time(catchpoint_load_time{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Top average total load time by nodes"
                }
             ],
             "title": "Top average total load time by nodes",
@@ -251,14 +307,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top average document completion time by tests"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -277,15 +347,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (test_name) (avg_over_time(catchpoint_document_complete_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1, \n  avg by (test_name) (\n  avg_over_time(catchpoint_document_complete_time{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Top average document completion time by tests"
                }
             ],
             "title": "Top average document completion time by tests",
@@ -309,14 +382,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top average document completion time by nodes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -335,15 +422,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (node_name) (avg_over_time(catchpoint_document_complete_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "topk(1, \n  avg by (node_name) (\n  avg_over_time(catchpoint_document_complete_time{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Top average document completion time by nodes"
                }
             ],
             "title": "Top average document completion time by nodes",
@@ -354,10 +444,11 @@
             "gridPos": {
                "h": 1,
                "w": 0,
-               "x": 24,
+               "x": 0,
                "y": 20
             },
             "id": 9,
+            "panels": [ ],
             "title": "Requests",
             "type": "row"
          },
@@ -379,14 +470,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
                   "unit": "percentunit"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Bottom average success request ratio by tests"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -405,15 +510,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bottomk(1, avg by (test_name) (avg_over_time(((catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"} - catchpoint_failed_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}) / clamp_min(catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"},1))[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "bottomk(1, \n  avg by (test_name) (\n  avg_over_time(((catchpoint_requests_count{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"} - catchpoint_failed_requests_count{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}) / clamp_min(catchpoint_requests_count{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"},1))[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Bottom average success request ratio by tests"
                }
             ],
             "title": "Bottom average success request ratio by tests",
@@ -437,14 +545,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
                   "unit": "percentunit"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Bottom average success request ratio by nodes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -463,15 +585,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "bottomk(1, avg by (node_name) (avg_over_time(((catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"} - catchpoint_failed_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}) / clamp_min(catchpoint_requests_count{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"},1))[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "bottomk(1, \n  avg by (node_name) (\n  avg_over_time(((catchpoint_requests_count{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"} - catchpoint_failed_requests_count{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}) / clamp_min(catchpoint_requests_count{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"},1))[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Bottom average success request ratio by nodes"
                }
             ],
             "title": "Bottom average success request ratio by nodes",
@@ -482,10 +607,11 @@
             "gridPos": {
                "h": 1,
                "w": 0,
-               "x": 24,
+               "x": 0,
                "y": 27
             },
             "id": 12,
+            "panels": [ ],
             "title": "Connectivity",
             "type": "row"
          },
@@ -507,14 +633,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top average connection setup time by tests"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -533,15 +673,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (test_name) (avg_over_time(catchpoint_connect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1, \n  avg by (test_name) (\n  avg_over_time(catchpoint_connect_time{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Top average connection setup time by tests"
                }
             ],
             "title": "Top average connection setup time by tests",
@@ -565,14 +708,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top average connection setup time by nodes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -591,15 +748,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (node_name) (avg_over_time(catchpoint_connect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "topk(1, \n  avg by (node_name) (\n  avg_over_time(catchpoint_connect_time{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Top average connection setup time by nodes"
                }
             ],
             "title": "Top average connection setup time by nodes",
@@ -623,14 +783,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top average content loading time by tests"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -649,18 +823,21 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (test_name) (avg_over_time(catchpoint_content_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1, \n  avg by (test_name) (\n  avg_over_time(catchpoint_content_load_time{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Top average content loading time by tests"
                }
             ],
-            "title": "Top average content loading time",
+            "title": "Top average content loading time by tests",
             "type": "timeseries"
          },
          {
@@ -681,14 +858,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
                   },
                   "unit": "ms"
-               }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top average content loading time by nodes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -707,15 +898,18 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (node_name) (avg_over_time(catchpoint_content_load_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "topk(1, \n  avg by (node_name) (\n  avg_over_time(catchpoint_content_load_time{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Top average content loading time by nodes"
                }
             ],
             "title": "Top average content loading time by nodes",
@@ -726,7 +920,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The top average number of redirects among all tests over the specified interval.",
+            "description": "The top average time spent following redirects among all tests over the specified interval.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -739,13 +933,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
+                  },
+                  "unit": "ms"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top average redirect time by tests"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -764,18 +973,21 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (test_name) (avg_over_time(catchpoint_redirect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{test_name}}"
+                  "expr": "topk(1, \n  avg by (test_name) (\n  avg_over_time(catchpoint_redirect_time{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{test_name}}",
+                  "refId": "Top average redirect time by tests"
                }
             ],
-            "title": "Top average redirects by tests",
+            "title": "Top average redirect time by tests",
             "type": "timeseries"
          },
          {
@@ -783,7 +995,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "The top average number of redirects among all nodes over the specified interval.",
+            "description": "The top average time spent following redirects among all nodes over the specified interval.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -796,13 +1008,28 @@
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never",
-                     "spanNulls": "true"
+                     "spanNulls": true
                   },
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
+                  },
+                  "unit": "ms"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Top average redirect time by nodes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
                   }
-               }
+               ]
             },
             "gridPos": {
                "h": 6,
@@ -821,23 +1048,26 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(1, avg by (node_name) (avg_over_time(catchpoint_redirect_time{job=~\"$job\",instance=~\"$instance\",test_name=~\"$test_name\"}[$__interval:])))",
-                  "legendFormat": "{{node_name}}"
+                  "expr": "topk(1, \n  avg by (node_name) (\n  avg_over_time(catchpoint_redirect_time{test_name=~\"$test_name\",job=~\"$job\",instance=~\"$instance\"}[$__interval:])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{node_name}}",
+                  "refId": "Top average redirect time by nodes"
                }
             ],
-            "title": "Top average redirects by nodes",
+            "title": "Top average redirect time by nodes",
             "type": "timeseries"
          }
       ],
       "refresh": "1m",
-      "schemaVersion": 36,
+      "schemaVersion": 39,
       "tags": [
          "catchpoint"
       ],
@@ -875,7 +1105,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values(catchpoint_any_error{,job=~\"$job\"}, instance)",
+               "query": "label_values(catchpoint_any_error{job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -890,7 +1120,7 @@
                "label": "Test_name",
                "multi": true,
                "name": "test_name",
-               "query": "label_values(catchpoint_any_error{,job=~\"$job\",instance=~\"$instance\"}, test_name)",
+               "query": "label_values(catchpoint_any_error{job=~\"$job\",instance=~\"$instance\"}, test_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

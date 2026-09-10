@@ -1,476 +1,258 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
-local utils = commonlib.utils;
 
 {
   new(this):
     {
-      local t = this.grafana.targets,
-      local stat = g.panel.stat,
-      local fieldOverride = g.panel.table.fieldOverride,
-      local alertList = g.panel.alertList,
-      local pieChart = g.panel.pieChart,
-      local barGauge = g.panel.barGauge,
+      local signals = this.signals,
 
-      // Catchpoint Overview dashboard Panels
+      // Shared styling for the drilldown time series: a filled area, spanned
+      // gaps (Catchpoint reports per test run, so the series are sparse), and a
+      // right-hand table legend on the panels that carry several series.
+      //
+      // commonlib.panels.generic.timeSeries.base.stylize() applies exactly the
+      // styling that base.new() applies, so the signal-built panels below
+      // (asTimeSeries(), which keeps unit/description/overrides on the signals
+      // layer) render identically to the hand-built multi-target panels that do
+      // call base.new().
+      local stylize =
+        commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls(true),
+      local tableLegend =
+        g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull']),
+
+      // Catchpoint overview dashboard
       topAvgLoadTimeTestName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top average total load time by tests',
-          targets=[t.topAvgLoadTimeTestName],
-          description='The top average total load time among all tests over the specified interval.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+        signals.overview.loadTimeByTest.asTimeSeries() + stylize,
       topAvgTotalLoadTimeNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top average total load time by nodes',
-          targets=[t.topAvgTotalLoadTimeNodeName],
-          description='The top average total load time among all nodes over the specified interval.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
-
+        signals.overview.loadTimeByNode.asTimeSeries() + stylize,
       topAvgDocumentCompletionTimeTestName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top average document completion time by tests',
-          targets=[t.topAvgDocumentCompletionTimeTestName],
-          description='The top average document completion time among all tests over the specified interval.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
-
+        signals.overview.documentCompleteTimeByTest.asTimeSeries() + stylize,
       topAvgDocumentCompletionTimeNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top average document completion time by nodes',
-          targets=[t.topAvgDocumentCompletionTimeNodeName],
-          description='The top average document completion time among all nodes over the specified interval.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
-
+        signals.overview.documentCompleteTimeByNode.asTimeSeries() + stylize,
+      // Not timeSeries.percentage.new: these are `percentunit` ratios (0-1), and
+      // that helper hardcodes unit='percent' with min=0/max=100.
       bottomAvgRequestRatioTestName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Bottom average success request ratio by tests',
-          targets=[t.bottomAvgRequestSuccessRatioTestName],
-          description='The lowest average success request ratio among all tests over the specified interval.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
-
+        signals.overview.requestSuccessRatioByTest.asTimeSeries() + stylize,
       bottomAvgRequestSuccessRatioNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Bottom average success request ratio by nodes',
-          targets=[t.bottomAvgRequestSuccessRatioNodeName],
-          description='The lowest average success request ratio among all nodes over the specified interval.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
-
+        signals.overview.requestSuccessRatioByNode.asTimeSeries() + stylize,
       topAvgConnectionSetupTimeTestName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top average connection setup time by tests',
-          targets=[t.topAvgConnectionSetupTimeTestName],
-          description='The top average connection setup time among all tests over the specified interval.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
-
+        signals.overview.connectTimeByTest.asTimeSeries() + stylize,
       topAvgConnectionSetupTimeNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top average connection setup time by nodes',
-          targets=[t.topAvgConnectionSetupTimeNodeName],
-          description='The top average connection setup time among all nodes over the specified interval.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
-
+        signals.overview.connectTimeByNode.asTimeSeries() + stylize,
       topAvgContentLoadingTimeTestName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top average content loading time',
-          targets=[t.topAvgContentLoadingTimeTestName],
-          description='The top average content loading time among all tests over the specified interval.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
-
+        signals.overview.contentLoadTimeByTest.asTimeSeries() + stylize,
       topAvgContentLoadingTimeNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top average content loading time by nodes',
-          targets=[t.topAvgContentLoadingTimeNodeName],
-          description='The top average content loading time among all nodes over the specified interval.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
-
+        signals.overview.contentLoadTimeByNode.asTimeSeries() + stylize,
       topAvgRedirectsTestName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top average redirects by tests',
-          targets=[t.topAvgRedirectsTestName],
-          description='The top average number of redirects among all tests over the specified interval.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+        signals.overview.redirectTimeByTest.asTimeSeries() + stylize,
       topAvgRedirectsNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top average redirects by nodes',
-          targets=[t.topAvgRedirectsNodeName],
-          description='The top average number of redirects among all nodes over the specified interval.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
-      alertsPanel:
-        alertList.new('Catchpoint alerts')
-        + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
+        signals.overview.redirectTimeByNode.asTimeSeries() + stylize,
 
       topErrorsByTestName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Top errors by tests',
-          targets=[t.topErrorsByTestName],
-          description='The top number of errors encountered among all tests over the specified interval.'
-        )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+        signals.overview.anyErrorByTest.asTimeSeries() + stylize + tableLegend,
 
-      // Web Performance by Tests Dashboard Panels
-      pageCompletionTime:
+      // Spelled out in full: common-lib has no generic alertList helper
+      // (commonlib.panels.generic covers timeSeries, stat, table and
+      // statusHistory only), and an alert list has no targets for the generic
+      // base to style.
+      alertsPanel:
+        g.panel.alertList.new('Catchpoint alerts')
+        + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(
+          this.grafana.variables.queriesSelectorAdvancedSyntax
+        ),
+
+      // Web performance drilldowns. Both dashboards render the same panels; the
+      // only difference is which signal set they draw from, so each panel is
+      // built once by a local function and instantiated per pivot below.
+      local pageCompletionTimePanel(timing) =
         commonlib.panels.generic.timeSeries.base.new(
           'Page completion time',
-          targets=[t.pageCompletionTime, t.pageTotalLoadTime],
+          targets=[
+            timing.documentCompleteTime.asTarget(),
+            timing.totalTime.asTarget(),
+          ],
           description='Time taken for the browser to fully render the page after all resources are downloaded.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+        + stylize
+        + tableLegend,
 
-      DNSResolution:
+      local dnsResolutionPanel(timing) =
         commonlib.panels.generic.timeSeries.base.new(
           'Connection and DNS resolution',
-          targets=[t.DNSResolution, t.SSLTime, t.connectTime],
+          targets=[
+            timing.dnsTime.asTarget(),
+            timing.sslTime.asTarget(),
+            timing.connectTime.asTarget(),
+          ],
           description='Time taken to establish an SSL handshake, DNS resolution, and connect.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+        + stylize
+        + tableLegend,
 
-      contentHandling:
+      local contentHandlingPanel(timing) =
         commonlib.panels.generic.timeSeries.base.new(
           'Content handling',
-          targets=[t.contentHandlingLoad, t.contentHandlingRender],
+          targets=[
+            timing.contentLoadTime.asTarget(),
+            timing.renderStartTime.asTarget(),
+          ],
           description='Time taken to load and render content on the webpage.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+        + stylize
+        + tableLegend,
 
-      clientProcessing:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Client processing',
-          targets=[t.clientProcessing],
-          description='Client processing time, which reflects the time spent on client-side processing, including script execution and rendering.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
-      additionalDelay:
+      local additionalDelayPanel(timing) =
         commonlib.panels.generic.timeSeries.base.new(
           'Additional delays',
-          targets=[t.additionalDelay, t.waitTime],
+          targets=[
+            timing.redirectTime.asTarget(),
+            timing.waitTime.asTarget(),
+          ],
           description='Additional delays encountered due to redirects, as well as time from successful connection to receiving the first byte.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+        + stylize
+        + tableLegend,
 
-      responseContentSize:
+      local responseContentSizePanel(network) =
         commonlib.panels.generic.timeSeries.base.new(
           'Response content size',
-          targets=[t.responseContentSize, t.responseHeaderSize],
+          targets=[
+            network.responseContentSize.asTarget(),
+            network.responseHeaderSize.asTarget(),
+          ],
           description='Size of the HTTP response content.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+        + stylize,
 
-      totalContentSize:
+      local totalContentSizePanel(network) =
         commonlib.panels.generic.timeSeries.base.new(
           'Total content size',
-          targets=[t.totalContentSize, t.totalHeaderSize],
+          targets=[
+            network.totalContentSize.asTarget(),
+            network.totalHeaderSize.asTarget(),
+          ],
           description='Total size of the HTTP response content and headers.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' })
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+        + stylize
+        + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
+      // Spelled out in full: common-lib has no generic pieChart helper, and the
+      // generic base only emits timeSeries-shaped field config, so it cannot
+      // style a pie chart.
+      local contentTypesLoadedBySizePanel(content) =
+        g.panel.pieChart.new('Content types loaded by size')
+        + g.panel.pieChart.panelOptions.withDescription('Size of content loaded.')
+        + g.panel.pieChart.queryOptions.withTargets([
+          content.imageContentSize.asTarget(),
+          content.htmlContentSize.asTarget(),
+          content.cssContentSize.asTarget(),
+          content.scriptContentSize.asTarget(),
+          content.fontContentSize.asTarget(),
+          content.xmlContentSize.asTarget(),
+          content.mediaContentSize.asTarget(),
+        ])
+        + g.panel.pieChart.standardOptions.withUnit('decbytes')
+        + g.panel.pieChart.options.legend.withPlacement('right')
+        + g.panel.pieChart.options.tooltip.withMode('multi')
+        + g.panel.pieChart.options.tooltip.withSort('desc'),
+
+      // Spelled out in full: common-lib has no generic barGauge helper. The
+      // nearest match, table.cold_hot_gauge, renders a table with an embedded
+      // gauge cell rather than the horizontal bar row per content type that this
+      // panel needs.
+      local contentLoadedByTypePanel(content) =
+        g.panel.barGauge.new('Content loaded by type')
+        + g.panel.barGauge.panelOptions.withDescription('Number of elements loaded.')
+        + g.panel.barGauge.queryOptions.withTargets([
+          content.imageCount.asTarget(),
+          content.htmlCount.asTarget(),
+          content.cssCount.asTarget(),
+          content.scriptCount.asTarget(),
+          content.fontCount.asTarget(),
+          content.xmlCount.asTarget(),
+          content.mediaCount.asTarget(),
+        ])
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.standardOptions.thresholds.withSteps([
+          g.panel.barGauge.thresholdStep.withColor('super-light-green'),
+        ]),
+
+      // Spelled out in full for the same reason as contentLoadedByTypePanel
+      // above. Every metric here is a 0/1 indicator, so the gauge tops out at 1
+      // and turns red as soon as an error is reported.
+      local errorsPanel(errors) =
+        g.panel.barGauge.new('Errors')
+        + g.panel.barGauge.panelOptions.withDescription('Indicates various errors that are occuring.')
+        + g.panel.barGauge.queryOptions.withTargets([
+          errors.errorObjectsLoaded.asTarget(),
+          errors.dnsError.asTarget(),
+          errors.loadError.asTarget(),
+          errors.timeoutError.asTarget(),
+          errors.connectionError.asTarget(),
+          errors.transactionError.asTarget(),
+        ])
+        + g.panel.barGauge.options.withOrientation('horizontal')
+        + g.panel.barGauge.standardOptions.withMax(1)
+        + g.panel.barGauge.standardOptions.thresholds.withSteps([
+          g.panel.barGauge.thresholdStep.withColor('super-light-green'),
+          g.panel.barGauge.thresholdStep.withColor('super-light-red')
+          + g.panel.barGauge.thresholdStep.withValue(1),
+        ]),
+
+      // Web performance by tests: one test broken down by node.
+      pageCompletionTime: pageCompletionTimePanel(signals.timingByNode),
+      DNSResolution: dnsResolutionPanel(signals.timingByNode),
+      contentHandling: contentHandlingPanel(signals.timingByNode),
+      additionalDelay: additionalDelayPanel(signals.timingByNode),
+      clientProcessing:
+        signals.timingByNode.clientTime.asTimeSeries() + stylize,
+      responseContentSize: responseContentSizePanel(signals.networkByNode),
+      totalContentSize: totalContentSizePanel(signals.networkByNode),
       networkConnections:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Network connections',
-          targets=[t.networkConnections],
-          description='Number of connections made.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('conn')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+        signals.networkByNode.connectionsCount.asTimeSeries() + stylize,
       hostsContacted:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Hosts contacted',
-          targets=[t.hostsContacted],
-          description='Number of hosts contacted.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('hosts')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+        signals.networkByNode.hostsCount.asTimeSeries() + stylize,
       cacheAccess:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Cache access',
-          targets=[t.cacheAccess],
-          description='Number of cached elements accessed.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+        signals.networkByNode.cachedCount.asTimeSeries() + stylize,
       requestSucessRatio:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Requests success ratio',
-          targets=[t.requestSuccessRatio],
-          description='Success ratio of requests made.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('percentunit')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+        signals.networkByNode.requestSuccessRatio.asTimeSeries() + stylize,
       redirections:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Redirects',
-          targets=[t.redirections],
-          description='Number of HTTP redirections encountered.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+        signals.networkByNode.redirectionsCount.asTimeSeries() + stylize,
+      contentTypesLoadedBySize: contentTypesLoadedBySizePanel(signals.contentByTest),
+      contentLoadedByType: contentLoadedByTypePanel(signals.contentByTest),
+      errors: errorsPanel(signals.errorsByTest),
 
-      contentTypesLoadedBySize:
-        pieChart.new(title='Content types loaded by size')
-        + pieChart.queryOptions.withTargets([t.imageLoadedBySize, t.htmlLoadedBySize, t.cssLoadedBySize, t.scriptLoadedBySize, t.fontLoadedBySize, t.xmlLoadedBySize, t.mediaLoadedBySize])
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.withTooltipMixin({
-          mode: 'multi',
-          sort: 'desc',
-        })
-        + pieChart.panelOptions.withDescription('Size of content loaded.')
-        + pieChart.standardOptions.withUnit('decbytes'),
-
-      contentLoadedByType:
-        barGauge.new(title='Content loaded by type')
-        + barGauge.queryOptions.withTargets([t.imageLoadedByType, t.htmlLoadedByType, t.cssLoadedByType, t.scriptLoadedByType, t.fontLoadedByType, t.xmlLoadedByType, t.mediaLoadedByType])
-        + barGauge.panelOptions.withDescription('Number of elements loaded.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
-        ]),
-
-      errors:
-        barGauge.new(title='Errors')
-        + barGauge.queryOptions.withTargets([t.objectLoadedError, t.DNSError, t.loadError, t.timeoutError, t.connectionError, t.transactionError])
-        + barGauge.panelOptions.withDescription('Indicates various errors that are occuring.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.withMax(1)
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
-          barGauge.standardOptions.threshold.step.withValue(1) + barGauge.thresholdStep.withColor('super-light-red'),
-        ]),
-
-      // Web Performance by Nodes Dashboard Panels
-      pageCompletionTimeNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Page completion time',
-          targets=[t.pageCompletionTimeNodeName, t.pageTotalLoadTimeNodeName],
-          description='Time taken for the browser to fully render the page after all resources are downloaded.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
-      DNSResolutionNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Connection and DNS resolution',
-          targets=[t.DNSResolutionNodeName, t.SSLTimeNodeName, t.connectTimeNodeName],
-          description='Time taken establish an SSL handshake, DNS resolution and connect.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
-      contentHandlingNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Content handling',
-          targets=[t.contentHandlingLoad, t.contentHandlingRender],
-          description='Time taken to load and render content on the webpage.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+      // Web performance by nodes: one node broken down by test.
+      pageCompletionTimeNodeName: pageCompletionTimePanel(signals.timingByTest),
+      DNSResolutionNodeName: dnsResolutionPanel(signals.timingByTest),
+      contentHandlingNodeName: contentHandlingPanel(signals.timingByTest),
+      additionalDelayNodeName: additionalDelayPanel(signals.timingByTest),
       clientProcessingNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Client processing',
-          targets=[t.clientProcessingNodeName],
-          description='Client processing time, which reflects the time spent on client-side processing, including script execution and rendering.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
-      additionalDelayNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Additional delays',
-          targets=[t.additionalDelayNodeName, t.waitTimeNodeName],
-          description='Additional delays encountered due to redirects as well as time from successful connection to receiving the first byte.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('ms')
-        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
-      responseContentSizeNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Response content size',
-          targets=[t.responseContentSizeNodeName, t.responseHeaderSizeNodeName],
-          description='Size of the HTTP response content in bytes.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
-      totalContentSizeNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Total content size',
-          targets=[t.totalContentSizeNodeName, t.totalHeaderSizeNodeName],
-          description='Total size of the HTTP response content and headers in bytes.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' })
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+        signals.timingByTest.clientTime.asTimeSeries() + stylize,
+      responseContentSizeNodeName: responseContentSizePanel(signals.networkByTest),
+      totalContentSizeNodeName: totalContentSizePanel(signals.networkByTest),
       networkConnectionsNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Network connections',
-          targets=[t.networkConnectionsNodeName],
-          description='Number of connections made.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('conn')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+        signals.networkByTest.connectionsCount.asTimeSeries() + stylize,
       hostsContactedNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Hosts contacted',
-          targets=[t.hostsContactedNodeName],
-          description='Number of hosts contacted.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('hosts')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+        signals.networkByTest.hostsCount.asTimeSeries() + stylize,
       cacheAccessNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Cache access',
-          targets=[t.cacheAccessNodeName],
-          description='Number of cached elements accessed.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+        signals.networkByTest.cachedCount.asTimeSeries() + stylize,
       requestSucessRatioNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Requests success ratio',
-          targets=[t.requestSuccessRatioNodeName],
-          description='Success ratio of requests made.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.standardOptions.withUnit('percentunit')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
+        signals.networkByTest.requestSuccessRatio.asTimeSeries() + stylize,
       redirectionsNodeName:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Redirects',
-          targets=[t.redirectionsNodeName],
-          description='Number of HTTP redirections encountered.'
-        )
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
-
-      contentTypesLoadedBySizeNodeName:
-        pieChart.new(title='Content types loaded by size')
-        + pieChart.queryOptions.withTargets([t.imageLoadedBySizeNodeName, t.htmlLoadedBySizeNodeName, t.cssLoadedBySizeNodeName, t.scriptLoadedBySizeNodeName, t.fontLoadedBySizeNodeName, t.xmlLoadedBySizeNodeName, t.mediaLoadedBySizeNodeName])
-        + pieChart.options.legend.withPlacement('right')
-        + pieChart.options.withTooltipMixin({
-          mode: 'multi',
-          sort: 'desc',
-        })
-        + pieChart.panelOptions.withDescription('Size of content loaded in bytes')
-        + pieChart.standardOptions.withUnit('decbytes'),
-
-      contentLoadedByTypeNodeName:
-        barGauge.new(title='Content loaded by type')
-        + barGauge.queryOptions.withTargets([t.imageLoadedByTypeNodeName, t.htmlLoadedByTypeNodeName, t.cssLoadedByTypeNodeName, t.scriptLoadedByTypeNodeName, t.fontLoadedByTypeNodeName, t.xmlLoadedByTypeNodeName, t.mediaLoadedByTypeNodeName])
-        + barGauge.panelOptions.withDescription('Number of elements loaded.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
-        ]),
-
-      errorsNodeName:
-        barGauge.new(title='Errors')
-        + barGauge.queryOptions.withTargets([t.objectLoadedErrorNodeName, t.DNSErrorNodeName, t.loadErrorNodeName, t.timeoutErrorNodeName, t.connectionErrorNodeName, t.transactionErrorNodeName])
-        + barGauge.panelOptions.withDescription('Indicates various errors that are occuring.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.withMax(1)
-        + barGauge.standardOptions.thresholds.withSteps([
-          barGauge.thresholdStep.withColor('super-light-green'),
-          barGauge.standardOptions.threshold.step.withValue(1) + barGauge.thresholdStep.withColor('super-light-red'),
-        ]),
+        signals.networkByTest.redirectionsCount.asTimeSeries() + stylize,
+      contentTypesLoadedBySizeNodeName: contentTypesLoadedBySizePanel(signals.contentByNode),
+      contentLoadedByTypeNodeName: contentLoadedByTypePanel(signals.contentByNode),
+      errorsNodeName: errorsPanel(signals.errorsByNode),
     },
 }
