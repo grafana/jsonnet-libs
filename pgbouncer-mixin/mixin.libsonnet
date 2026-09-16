@@ -6,8 +6,8 @@ local pgbouncer =
   + pgbouncerlib.withConfigMixin(
     {
       filteringSelector: config.filteringSelector,
-      uid: 'pgbouncer',
-      enableLokiLogs: true,
+      uid: config.uid,
+      enableLokiLogs: config.enableLokiLogs,
     }
   );
 

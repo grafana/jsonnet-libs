@@ -1,5 +1,5 @@
 groups:
-    - name: pgbouncer
+    - name: pgbouncer-alerts
       rules:
         - alert: PGBouncerHighNumberWaitingConnections
           annotations:
