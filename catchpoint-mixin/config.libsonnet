@@ -1,4 +1,5 @@
 {
+  local this = self,
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
   filteringSelector: '',
   // Used to identify 'group' of instances.
@@ -15,14 +16,42 @@
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
 
+  // Each dashboard's own template variables, layered onto filteringSelector and
+  // consumed by the signal files as their filteringSelector. The overview ranks
+  // across every node, so it constrains test_name only; both drilldowns show a
+  // single test (or node) broken down by the other label, so they constrain both.
+  //
+  // filteringSelector goes LAST so that leaving it blank can never emit a leading
+  // comma, even if the empty-string filter below is ever dropped.
+  local scopedSelector(extra) =
+    std.join(',', std.filter(function(s) std.length(s) > 0, [extra, this.filteringSelector])),
+  overviewSelector: scopedSelector('test_name=~"$test_name"'),
+  drilldownSelector: scopedSelector('test_name=~"$test_name",node_name=~"$node_name"'),
+
+  metricsSource: ['prometheus'],
+  // The drilldown signal files are imported once per pivot label: the "by test"
+  // dashboard breaks its single test down by node_name and vice versa, while the
+  // content and error breakdowns aggregate by the dashboard's own label.
+  signals: {
+    overview: (import './signals/overview.libsonnet')(this),
+    timingByNode: (import './signals/timing.libsonnet')(this, 'node_name'),
+    timingByTest: (import './signals/timing.libsonnet')(this, 'test_name'),
+    networkByNode: (import './signals/network.libsonnet')(this, 'node_name'),
+    networkByTest: (import './signals/network.libsonnet')(this, 'test_name'),
+    contentByTest: (import './signals/content.libsonnet')(this, 'test_name'),
+    contentByNode: (import './signals/content.libsonnet')(this, 'node_name'),
+    errorsByTest: (import './signals/errors.libsonnet')(this, 'test_name'),
+    errorsByNode: (import './signals/errors.libsonnet')(this, 'node_name'),
+  },
+
   // Alert thresholds
-  alertsHighServerResponseTime: 1000,  //ms
-  alertsHighServerResponseTimePercent: 1.2,  // 120%
-  alertsTotalTimeExceeded: 5000,  //ms
-  alertsTotalTimeExceededPercent: 1.2,  // 120%
-  alertsHighDNSResolutionTime: 500,  //ms
-  alertsHighDNSResolutionTimePercent: 1.2,  // 120%
-  alertsContentLoadingDelay: 1500,  //ms
-  alertsContentLoadingDelayPercent: 1.2,  // 120%
-  alertsHighFailedRequestRatioPercent: 0.1,  // 10%
+  alertsHighServerResponseTime: 1000,  // ms
+  alertsHighServerResponseTimePercent: 1.2,  // ratio of the trailing 1h average
+  alertsTotalTimeExceeded: 5000,  // ms
+  alertsTotalTimeExceededPercent: 1.2,  // ratio of the trailing 1h average
+  alertsHighDNSResolutionTime: 500,  // ms
+  alertsHighDNSResolutionTimePercent: 1.2,  // ratio of the trailing 1h average
+  alertsContentLoadingDelay: 1500,  // ms
+  alertsContentLoadingDelayPercent: 1.2,  // ratio of the trailing 1h average
+  alertsHighFailedRequestRatioPercent: 0.1,  // ratio, 0-1
 }

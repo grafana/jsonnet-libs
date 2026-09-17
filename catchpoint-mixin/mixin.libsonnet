@@ -7,7 +7,6 @@ local catchpoint =
     {
       filteringSelector: config.filteringSelector,
       uid: 'catchpoint',
-      enableLokiLogs: true,
     }
   );
 
