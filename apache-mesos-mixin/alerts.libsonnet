@@ -7,7 +7,7 @@
           {
             alert: 'ApacheMesosHighMemoryUsage',
             expr: |||
-              min without(instance, job, type) (mesos_master_mem{type="percent"}) > %(alertsWarningMemoryUsage)s
+              100 * min without(instance, job, type) (mesos_master_mem{type="percent"}) > %(alertsWarningMemoryUsage)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -25,7 +25,7 @@
           {
             alert: 'ApacheMesosHighDiskUsage',
             expr: |||
-              min without(instance, job, type) (mesos_master_disk{type="percent"}) > %(alertsCriticalDiskUsage)s
+              100 * min without(instance, job, type) (mesos_master_disk{type="percent"}) > %(alertsCriticalDiskUsage)s
             ||| % this.config,
             'for': '5m',
             labels: {
