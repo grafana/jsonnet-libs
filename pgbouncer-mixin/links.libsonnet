@@ -1,21 +1,23 @@
 local g = import './g.libsonnet';
 {
-  local link = g.dashboard.link,
   new(this):
     {
       pgbouncerOverview:
-        link.link.new('PgBouncer overview', '/d/' + this.grafana.dashboards.overview.uid)
-        + link.link.options.withKeepTime(true),
+        g.dashboard.link.link.new('PgBouncer overview', '/d/' + this.grafana.dashboards['pgbouncer-overview.json'].uid)
+        + g.dashboard.link.link.options.withKeepTime(true)
+        + g.dashboard.link.link.options.withIncludeVars(true),
       pgbouncerClusterOverview:
-        link.link.new('PgBouncer cluster overview', '/d/' + this.grafana.dashboards.clusterOverview.uid)
-        + link.link.options.withKeepTime(true),
+        g.dashboard.link.link.new('PgBouncer cluster overview', '/d/' + this.grafana.dashboards['pgbouncer-cluster-overview.json'].uid)
+        + g.dashboard.link.link.options.withKeepTime(true)
+        + g.dashboard.link.link.options.withIncludeVars(true),
     }
     +
     if this.config.enableLokiLogs then
       {
         logs:
-          link.link.new('PgBouncer logs', '/d/' + this.grafana.dashboards.logs.uid)
-          + link.link.options.withKeepTime(true),
+          g.dashboard.link.link.new('PgBouncer logs', '/d/' + this.grafana.dashboards['pgbouncer-logs.json'].uid)
+          + g.dashboard.link.link.options.withKeepTime(true)
+          + g.dashboard.link.link.options.withIncludeVars(true),
       }
     else {},
 }

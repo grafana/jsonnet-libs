@@ -1,4 +1,5 @@
 {
+  local this = self,
   // any modular library should include as inputs:
   // 'dashboardNamePrefix' - Use as prefix for all Dashboards and (optional) rule groups
   // 'filteringSelector' - Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
@@ -10,12 +11,11 @@
   groupLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster'] else ['job', 'pgbouncer_cluster'],
   logLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster', 'instance'] else ['job', 'pgbouncer_cluster', 'instance'],
   pureInstanceLabels: ['instance'],
-  legendLabels: ['database'],
-  clusterLegendLabel: ['pgbouncer_cluster', 'instance', 'database'],
   instanceLabels: ['instance', 'database'],
   dashboardTags: [self.uid],
   uid: 'pgbouncer',
   dashboardNamePrefix: '',
+  metricsSource: ['prometheus'],
 
   // additional params can be added if needed
   dashboardPeriod: 'now-1h',
@@ -23,10 +23,10 @@
   dashboardRefresh: '1m',
 
   // alert thresholds
-  alertsHighClientWaitingConnections: 20,
-  alertsHighClientWaitTime: 15,
-  alertsHighServerConnectionSaturationWarning: 80,
-  alertsHighServerConnectionSaturationCritical: 90,
+  alertsHighClientWaitingConnections: 20,  // clients waiting, sustained for 5m
+  alertsHighClientWaitTime: 15,  // seconds, sustained for 5m
+  alertsHighServerConnectionSaturationWarning: 80,  // percent of max_user_connections, sustained for 5m
+  alertsHighServerConnectionSaturationCritical: 90,  // percent of max_user_connections, sustained for 5m
 
   // logs lib related
   enableLokiLogs: true,
@@ -34,4 +34,12 @@
   extraLogLabels: ['level'],
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,
+
+  // Signals configuration
+  signals+: {
+    connections: (import './signals/connections.libsonnet')(this),
+    stats: (import './signals/stats.libsonnet')(this),
+    config: (import './signals/config.libsonnet')(this),
+    cluster: (import './signals/cluster.libsonnet')(this),
+  },
 }
