@@ -1,10 +1,11 @@
+local config = import './config.libsonnet';
 local openldaplib = import './main.libsonnet';
 
 local openldap =
   openldaplib.new()
   + openldaplib.withConfigMixin(
     {
-      filteringSelector: 'job=~"integrations/openldap"',
+      filteringSelector: config.filteringSelector,
       uid: 'openldap',
       instanceLabels: ['instance'],
     }
