@@ -40,7 +40,7 @@ exclusions:
     - panel: "Dispatches  / $__interval"
   target-instance-rule:
     reason: "base_url is used instead of instance because of how cluster metrics are returned."
-    entires:
+    entries:
       - dashboard: "Apache Solr cluster overview"
       - dashboard: "Apache Solr query performance"
       - dashboard: "Apache Solr resource monitoring"
