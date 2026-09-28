@@ -1,4 +1,5 @@
 {
+  local this = self,
   filteringSelector: '',
   groupLabels: ['job'],
   // instance of openstack cluster
@@ -9,6 +10,7 @@
   dashboardPeriod: 'now-30m',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
+  metricsSource: ['prometheus'],
 
   alertsWarningPlacementHighMemoryUsage: 80,  // %
   alertsCriticalPlacementHighMemoryUsage: 90,  // %
@@ -39,4 +41,14 @@
   logsVolumeGroupBy: 'level',
   logsFilteringSelector: self.filteringSelector,
   showLogsVolume: true,
+
+  // Signals configuration
+  signals+: {
+    placement: (import './signals/placement.libsonnet')(this),
+    identity: (import './signals/identity.libsonnet')(this),
+    nova: (import './signals/nova.libsonnet')(this),
+    neutron: (import './signals/neutron.libsonnet')(this),
+    cinder: (import './signals/cinder.libsonnet')(this),
+    glance: (import './signals/glance.libsonnet')(this),
+  },
 }
