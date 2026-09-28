@@ -1,13 +1,14 @@
+local config = import './config.libsonnet';
 local openstacklib = import './main.libsonnet';
 
 local openstack =
   openstacklib.new()
   + openstacklib.withConfigMixin(
     {
-      filteringSelector: 'job="integrations/openstack"',
-      uid: 'openstack',
-      groupLabels: ['job'],
-      enableLokiLogs: true,
+      filteringSelector: config.filteringSelector,
+      uid: config.uid,
+      groupLabels: config.groupLabels,
+      enableLokiLogs: config.enableLokiLogs,
     }
   );
 

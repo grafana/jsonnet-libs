@@ -1,28 +1,14 @@
 {
+      "annotations": {
+         "list": [ ]
+      },
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
-            "title": "OpenStack Cinder",
+            "title": "OpenLDAP overview",
             "type": "link",
-            "url": "/d/openstack-cinder"
-         },
-         {
-            "keepTime": true,
-            "title": "OpenStack Neutron",
-            "type": "link",
-            "url": "/d/openstack-neutron"
-         },
-         {
-            "keepTime": true,
-            "title": "OpenStack Nova",
-            "type": "link",
-            "url": "/d/openstack-nova"
-         },
-         {
-            "keepTime": true,
-            "title": "OpenStack overview",
-            "type": "link",
-            "url": "/d/openstack-overview"
+            "url": "/d/openldap-overview"
          }
       ],
       "panels": [
@@ -172,7 +158,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job=\"integrations/openstack\",job=~\"$job\",level=~\"$level\",service=~\"$service\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",instance=~\"$instance\",level=~\"$level\",component=~\"$component\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
                   "legendFormat": "{{ level }}"
                }
             ],
@@ -214,7 +200,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job=\"integrations/openstack\",job=~\"$job\",level=~\"$level\",service=~\"$service\"} \n|~ \"$regex_search\"\n\n\n"
+                  "expr": "{job=~\"$job\",instance=~\"$instance\",level=~\"$level\",component=~\"$component\"} \n|~ \"$regex_search\"\n\n\n"
                }
             ],
             "title": "Logs",
@@ -224,7 +210,7 @@
       "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
-         "openstack"
+         "openldap"
       ],
       "templating": {
          "list": [
@@ -245,7 +231,22 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({job=\"integrations/openstack\"}, job)",
+               "query": "label_values({}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values({job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -260,7 +261,7 @@
                "label": "Level",
                "multi": true,
                "name": "level",
-               "query": "label_values({job=\"integrations/openstack\",job=~\"$job\"}, level)",
+               "query": "label_values({job=~\"$job\",instance=~\"$instance\"}, level)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -272,10 +273,10 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Service",
+               "label": "Component",
                "multi": true,
-               "name": "service",
-               "query": "label_values({job=\"integrations/openstack\",job=~\"$job\",level=~\"$level\"}, service)",
+               "name": "component",
+               "query": "label_values({job=~\"$job\",instance=~\"$instance\",level=~\"$level\"}, component)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -300,7 +301,7 @@
             },
             {
                "hide": 2,
-               "label": "Data source",
+               "label": "Prometheus data source",
                "name": "prometheus_datasource",
                "query": "prometheus",
                "regex": "",
@@ -309,10 +310,10 @@
          ]
       },
       "time": {
-         "from": "now-30m",
+         "from": "now-1h",
          "to": "now"
       },
       "timezone": "default",
-      "title": "OpenStack logs",
-      "uid": "openstack-logs"
+      "title": "OpenLDAP logs",
+      "uid": "openldap-logs"
    }
