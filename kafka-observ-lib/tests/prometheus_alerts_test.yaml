@@ -1,0 +1,294 @@
+# JMX Meter.Count increases on an election; the Kafka exporter uses -1 for
+# partitions without committed offsets. All series here are synthetic.
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: W1_single_unclean_election_no_restart
+  interval: 1m
+  input_series:
+  - series: kafka_controller_controllerstats_uncleanleaderelectionspersec{job="integrations/kafka",kafka_cluster="kc1",instance="broker-1:9404"}
+    values: 0x20 1x220
+  alert_rule_test:
+  - eval_time: 25m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+  - eval_time: 30m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        kafka_cluster: kc1
+        instance: broker-1:9404
+      exp_annotations:
+        description: &unclean_description 'Kafka cluster kc1 has 1 unclean partition leader elections reported in the last 10 minutes.
+
+
+          CRITICAL Impact - DATA LOSS RISK:
+
+          Unclean leader election occurs when no in-sync replica (ISR) is available to become the leader, forcing Kafka to
+          elect an out-of-sync replica. This WILL result in data loss for any messages that were committed to the previous
+          leader but not replicated to the new leader. This compromises data durability guarantees and can cause:
+
+          - Permanent loss of committed messages
+
+          - Consumer offset inconsistencies
+
+          - Duplicate message processing
+
+          - Data inconsistencies between producers and consumers
+
+          - Violation of at-least-once or exactly-once semantics
+
+
+          Common causes:
+
+          - All ISR replicas failed simultaneously (broker crashes, hardware failures)
+
+          - Network partitions isolating all ISR members
+
+          - Extended broker downtime exceeding replica lag tolerance
+
+          - Insufficient replication factor (RF < 3) combined with broker failures
+
+          - min.insync.replicas set too low relative to replication factor
+
+          - Disk failures on multiple replicas simultaneously
+
+          - Aggressive unclean.leader.election.enable=true configuration
+
+
+          Immediate actions:
+
+          1. Review broker logs to identify which partitions had unclean elections
+
+          2. Investigate root cause of ISR replica failures (check broker health, hardware, network)
+
+          3. Assess data loss impact by comparing producer and consumer offsets for affected partitions
+
+          4. Alert application teams to potential data loss in affected partitions
+
+          5. Bring failed ISR replicas back online as quickly as possible
+
+          6. Consider resetting consumer offsets if data loss is unacceptable
+
+          7. Review and increase replication factor for critical topics (minimum RF=3)
+
+          8. Set unclean.leader.election.enable=false to prevent future unclean elections (availability vs. durability trade-off)
+
+          9. Increase min.insync.replicas to strengthen durability guarantees
+
+          10. Implement better monitoring for ISR shrinkage to detect issues before unclean elections occur
+
+
+          This indicates a serious reliability event that requires immediate investigation and remediation to prevent future
+          data loss.
+
+          '
+        summary: Kafka has unclean leader elections.
+  - eval_time: 60m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+  - eval_time: 240m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+- name: N1_no_unclean_elections
+  interval: 1m
+  input_series:
+  - series: kafka_controller_controllerstats_uncleanleaderelectionspersec{job="integrations/kafka",kafka_cluster="kc1",instance="broker-1:9404"}
+    values: '0x240'
+  alert_rule_test:
+  - eval_time: 30m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+  - eval_time: 240m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+- name: Counter_reset_without_new_election
+  interval: 1m
+  input_series:
+  - series: kafka_controller_controllerstats_uncleanleaderelectionspersec{kafka_cluster="kc1",instance="broker-1:9404"}
+    values: 0x20 1x129 0x90
+  alert_rule_test:
+  - eval_time: 150m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+  - eval_time: 160m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+- name: Prometheus_total_counter_uses_the_same_ten_minute_event_window
+  interval: 1m
+  input_series:
+  - series: kafka_controller_controllerstats_uncleanleaderelections_total{kafka_cluster="kc1",instance="broker-1:9404"}
+    values: 0x20 1x40
+  alert_rule_test:
+  - eval_time: 25m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+  - eval_time: 30m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        kafka_cluster: kc1
+        instance: broker-1:9404
+      exp_annotations:
+        description: *unclean_description
+        summary: Kafka has unclean leader elections.
+  - eval_time: 60m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+- name: Grafana_event_takes_precedence_over_flat_Prometheus_counter
+  interval: 1m
+  input_series:
+  - series: kafka_controller_controllerstats_uncleanleaderelectionspersec{kafka_cluster="kc1",instance="broker-1:9404"}
+    values: 0x20 1x14 0x90
+  - series: kafka_controller_controllerstats_uncleanleaderelections_total{kafka_cluster="kc1",instance="broker-1:9404"}
+    values: 0x125
+  alert_rule_test:
+  - eval_time: 25m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+  - eval_time: 30m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        kafka_cluster: kc1
+        instance: broker-1:9404
+      exp_annotations:
+        description: *unclean_description
+        summary: Kafka has unclean leader elections.
+  - eval_time: 60m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+- name: Grafana_zero_takes_precedence_when_both_sources_share_labels
+  interval: 1m
+  input_series:
+  - series: kafka_controller_controllerstats_uncleanleaderelectionspersec{kafka_cluster="kc1",instance="broker-1:9404"}
+    values: 0x60
+  - series: kafka_controller_controllerstats_uncleanleaderelections_total{kafka_cluster="kc1",instance="broker-1:9404"}
+    values: 0x20 1x40
+  alert_rule_test:
+  - eval_time: 30m
+    alertname: KafkaUncleanLeaderElection
+    exp_alerts: []
+- name: Uncommitted_partitions_do_not_reduce_topic_lag
+  interval: 1m
+  input_series:
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="orders-svc", topic="orders", partition="0"}
+    values: 60x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="orders-svc", topic="orders", partition="1"}
+    values: 44x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="orders-svc", topic="orders", partition="2"}
+    values: -1x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="orders-svc", topic="orders", partition="3"}
+    values: -1x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="orders-svc", topic="orders", partition="4"}
+    values: -1x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="orders-svc", topic="orders", partition="5"}
+    values: -1x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="orders-svc", topic="orders", partition="6"}
+    values: -1x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="orders-svc", topic="orders", partition="7"}
+    values: -1x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="billing-svc", topic="orders", partition="0"}
+    values: 60x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="billing-svc", topic="orders", partition="1"}
+    values: 44x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="billing-svc", topic="orders", partition="2"}
+    values: '0x30'
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="billing-svc", topic="orders", partition="3"}
+    values: '0x30'
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="billing-svc", topic="orders", partition="4"}
+    values: '0x30'
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="billing-svc", topic="orders", partition="5"}
+    values: '0x30'
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="billing-svc", topic="orders", partition="6"}
+    values: '0x30'
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="billing-svc", topic="orders", partition="7"}
+    values: '0x30'
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="audit-svc", topic="orders", partition="0"}
+    values: 50x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="audit-svc", topic="orders", partition="1"}
+    values: 40x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="audit-svc", topic="orders", partition="2"}
+    values: -1x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="audit-svc", topic="orders", partition="3"}
+    values: -1x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="audit-svc", topic="orders", partition="4"}
+    values: -1x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="audit-svc", topic="orders", partition="5"}
+    values: -1x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="audit-svc", topic="orders", partition="6"}
+    values: -1x30
+  - series: kafka_consumergroup_uncommitted_offsets{job="integrations/kafka", kafka_cluster="prod", instance="kafka-exporter:9308",
+      consumergroup="audit-svc", topic="orders", partition="7"}
+    values: -1x30
+  alert_rule_test:
+  - eval_time: 14m
+    alertname: KafkaLagIsTooHigh
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: KafkaLagIsTooHigh
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        kafka_cluster: prod
+        topic: orders
+        consumergroup: orders-svc
+      exp_annotations:
+        description: 'Total kafka lag across all partitions is too high (104) for consumer group: orders-svc, topic: orders.'
+        summary: Kafka lag is too high.
+    - exp_labels:
+        severity: critical
+        kafka_cluster: prod
+        topic: orders
+        consumergroup: billing-svc
+      exp_annotations:
+        description: 'Total kafka lag across all partitions is too high (104) for consumer group: billing-svc, topic: orders.'
+        summary: Kafka lag is too high.
+- name: Only_the_documented_sentinel_is_excluded
+  interval: 1m
+  input_series:
+  - series: kafka_consumergroup_uncommitted_offsets{kafka_cluster="prod",consumergroup="other",topic="orders",partition="0"}
+    values: 104x30
+  - series: kafka_consumergroup_uncommitted_offsets{kafka_cluster="prod",consumergroup="other",topic="orders",partition="1"}
+    values: -2x30
+  - series: kafka_consumergroup_uncommitted_offsets{kafka_cluster="prod",consumergroup="other",topic="orders",partition="2"}
+    values: -1x30
+  alert_rule_test:
+  - eval_time: 15m
+    alertname: KafkaLagIsTooHigh
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        kafka_cluster: prod
+        topic: orders
+        consumergroup: other
+      exp_annotations:
+        description: 'Total kafka lag across all partitions is too high (102) for consumer group: other, topic: orders.'
+        summary: Kafka lag is too high.

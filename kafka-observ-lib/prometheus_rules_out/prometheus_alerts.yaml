@@ -20,7 +20,7 @@ groups:
           expr: |-
             sum by (kafka_cluster, topic, consumergroup) (kafka_consumergroup_lag{topic!="__consumer_offsets",consumergroup!="",}
             or
-            kafka_consumergroup_uncommitted_offsets{topic!="__consumer_offsets",consumergroup!="",}) > 100
+            kafka_consumergroup_uncommitted_offsets{topic!="__consumer_offsets",consumergroup!="",} != -1) > 100
           for: 15m
           keep_firing_for: 5m
           labels:
@@ -240,7 +240,7 @@ groups:
         - alert: KafkaUncleanLeaderElection
           annotations:
             description: |
-                Kafka cluster {{ $labels.kafka_cluster }} has {{ $value }} unclean partition leader elections reported in the last 5 minutes.
+                Kafka cluster {{ $labels.kafka_cluster }} has {{ $value }} unclean partition leader elections reported in the last 10 minutes.
 
                 CRITICAL Impact - DATA LOSS RISK:
                 Unclean leader election occurs when no in-sync replica (ISR) is available to become the leader, forcing Kafka to elect an out-of-sync replica. This WILL result in data loss for any messages that were committed to the previous leader but not replicated to the new leader. This compromises data durability guarantees and can cause:
@@ -274,9 +274,9 @@ groups:
                 This indicates a serious reliability event that requires immediate investigation and remediation to prevent future data loss.
             summary: Kafka has unclean leader elections.
           expr: |-
-            (sum by (kafka_cluster,instance) (kafka_controller_controllerstats_uncleanleaderelectionspersec{})
+            (sum by (kafka_cluster,instance) (increase(kafka_controller_controllerstats_uncleanleaderelectionspersec{}[10m]))
             or
-            sum by (kafka_cluster,instance) (rate(kafka_controller_controllerstats_uncleanleaderelections_total{}[5m]))) != 0
+            sum by (kafka_cluster,instance) (increase(kafka_controller_controllerstats_uncleanleaderelections_total{}[10m]))) != 0
           for: 5m
           keep_firing_for: 5m
           labels:
