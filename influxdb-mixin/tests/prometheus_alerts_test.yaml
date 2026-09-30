@@ -1,0 +1,89 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: Worker utilization is a fraction; preserve inclusive threshold, labels, duration and percentage
+    annotations
+  interval: 1m
+  input_series:
+  - series: task_executor_workers_busy{job="influxdb",influxdb_cluster="prod",instance="high"}
+    values: 0.9x12
+  - series: task_executor_workers_busy{job="influxdb",influxdb_cluster="prod",instance="full"}
+    values: 1x12
+  - series: task_executor_workers_busy{job="influxdb",influxdb_cluster="prod",instance="below"}
+    values: 0.79x12
+  - series: task_executor_workers_busy{job="influxdb",influxdb_cluster="prod",instance="boundary"}
+    values: 0.8x12
+  - series: task_executor_workers_busy{job="influxdb",influxdb_cluster="prod",instance="idle"}
+    values: '0x12'
+  alert_rule_test:
+  - eval_time: 4m
+    alertname: InfluxDBHighBusyWorkerPercentage
+    exp_alerts: []
+  - eval_time: 5m
+    alertname: InfluxDBHighBusyWorkerPercentage
+    exp_alerts:
+    - exp_labels:
+        job: influxdb
+        influxdb_cluster: prod
+        instance: high
+        severity: critical
+      exp_annotations:
+        summary: There is a high percentage of busy workers.
+        description: The busy worker percentage for instance high on cluster prod is 90 percent, which
+          is above the threshold of 80 percent.
+    - exp_labels:
+        job: influxdb
+        influxdb_cluster: prod
+        instance: full
+        severity: critical
+      exp_annotations:
+        summary: There is a high percentage of busy workers.
+        description: The busy worker percentage for instance full on cluster prod is 100 percent, which
+          is above the threshold of 80 percent.
+    - exp_labels:
+        job: influxdb
+        influxdb_cluster: prod
+        instance: boundary
+        severity: critical
+      exp_annotations:
+        summary: There is a high percentage of busy workers.
+        description: The busy worker percentage for instance boundary on cluster prod is 80 percent, which
+          is above the threshold of 80 percent.
+- name: Worker utilization resolves when it falls below the threshold
+  interval: 1m
+  input_series:
+  - series: task_executor_workers_busy{job="influxdb",influxdb_cluster="prod",instance="recovery"}
+    values: 0.9x5 0.79x6
+  alert_rule_test:
+  - eval_time: 5m
+    alertname: InfluxDBHighBusyWorkerPercentage
+    exp_alerts:
+    - exp_labels:
+        job: influxdb
+        influxdb_cluster: prod
+        instance: recovery
+        severity: critical
+      exp_annotations:
+        summary: There is a high percentage of busy workers.
+        description: The busy worker percentage for instance recovery on cluster prod is 90 percent, which
+          is above the threshold of 80 percent.
+  - eval_time: 6m
+    alertname: InfluxDBHighBusyWorkerPercentage
+    exp_alerts: []
+- name: A brief saturation does not fire
+  interval: 1m
+  input_series:
+  - series: task_executor_workers_busy{job="influxdb",influxdb_cluster="prod",instance="brief"}
+    values: 1x3 0x8
+  alert_rule_test:
+  - eval_time: 5m
+    alertname: InfluxDBHighBusyWorkerPercentage
+    exp_alerts: []
+- name: Missing worker metrics do not fire
+  interval: 1m
+  input_series: []
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: InfluxDBHighBusyWorkerPercentage
+    exp_alerts: []
