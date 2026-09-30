@@ -15,6 +15,9 @@ and the following alerts:
 - CouchbaseMemoryEvictionRate
 - CouchbaseInvalidRequestVolume
 
+## Eviction alert window
+`CouchbaseMemoryEvictionRate` measures evictions in a rolling five-minute window, not lifetime evictions or evictions per second. The default threshold is 10 evictions and the condition must persist for five minutes. Short bursts may clear before that pending period ends.
+
 ## Couchbase Cluster Overview
 
 The Couchbase cluster overview dashboard provides details on the top nodes and buckets for a cluster, including memory and disk usage, network requests, key service metrics, rate of operations, along with replication metrics at all levels of a Couchbase cluster.

@@ -1,0 +1,186 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: repaired latency rules fire on the spike with a correct annotation
+  interval: 1m
+  input_series:
+  - series: cassandra_keyspace_writelatency_seconds_count{instance="cass-1",keyspace="ks1"}
+    values: 604800000+60000x40
+  - series: cassandra_keyspace_writelatency_seconds_sum{instance="cass-1",keyspace="ks1"}
+    values: 604800+60x10 635400+30000x29
+  - series: cassandra_table_readlatency_seconds_count{instance="cass-1",keyspace="ks1",table="t1"}
+    values: 604800000+60000x40
+  - series: cassandra_table_readlatency_seconds_sum{instance="cass-1",keyspace="ks1",table="t1"}
+    values: 604800+60x10 635400+30000x29
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: HighWriteLatency
+    exp_alerts: []
+  - eval_time: 25m
+    alertname: HighWriteLatency
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        instance: cass-1
+      exp_annotations:
+        summary: There is a high level of write latency within the node.
+        description: 'An average of 500ms of write latency has occurred over the last 5 minutes on cass-1, which
+          is above the threshold of 200ms. '
+  - eval_time: 25m
+    alertname: HighReadLatency
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        instance: cass-1
+      exp_annotations:
+        summary: There is a high level of read latency within the node.
+        description: 'An average of 500ms of read latency has occurred over the last 5 minutes on cass-1, which
+          is above the threshold of 200ms. '
+- name: control at 1 ms stays silent
+  interval: 1m
+  input_series:
+  - series: cassandra_keyspace_writelatency_seconds_count{instance="cass-2",keyspace="ks1"}
+    values: 604800000+60000x40
+  - series: cassandra_keyspace_writelatency_seconds_sum{instance="cass-2",keyspace="ks1"}
+    values: 604800+60x40
+  alert_rule_test:
+  - eval_time: 40m
+    alertname: HighWriteLatency
+    exp_alerts: []
+- name: two unavailable writes no longer latch the alert
+  interval: 1m
+  input_series:
+  - series: cassandra_clientrequest_unavailables_count{instance="cass-1",clientrequest="Write",cassandra_cluster="c1"}
+    values: 0 1 2x58
+  alert_rule_test:
+  - eval_time: 60m
+    alertname: UnavailableWriteRequestsFound
+    exp_alerts: []
+- name: a sustained burst of unavailable writes fires and then clears
+  interval: 1m
+  input_series:
+  - series: cassandra_clientrequest_unavailables_count{instance="cass-3",clientrequest="Write",cassandra_cluster="c1"}
+    values: 0+1x15 15x45
+  alert_rule_test:
+  - eval_time: 12m
+    alertname: UnavailableWriteRequestsFound
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        instance: cass-3
+        clientrequest: Write
+      exp_annotations:
+        summary: Unavailable exceptions have been encountered while performing writes in this cluster.
+        description: '5 unavailable write requests have been found over the last 5 minutes on cass-3, which is above
+          the threshold of 1. '
+  - eval_time: 30m
+    alertname: UnavailableWriteRequestsFound
+    exp_alerts: []
+- name: control without unavailable writes stays silent
+  interval: 1m
+  input_series:
+  - series: cassandra_clientrequest_unavailables_count{instance="cass-4",clientrequest="Write",cassandra_cluster="c1"}
+    values: '0x60'
+  alert_rule_test:
+  - eval_time: 60m
+    alertname: UnavailableWriteRequestsFound
+    exp_alerts: []
+- name: missing series do not invent an alert
+  interval: 1m
+  input_series: []
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: HighReadLatency
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: HighWriteLatency
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: UnavailableWriteRequestsFound
+    exp_alerts: []
+- name: latency spike remains pending before five minutes
+  interval: 1m
+  input_series:
+  - series: cassandra_keyspace_writelatency_seconds_count{instance="cass-1",keyspace="ks1"}
+    values: 604800000+60000x40
+  - series: cassandra_keyspace_writelatency_seconds_sum{instance="cass-1",keyspace="ks1"}
+    values: 604800+60x10 635400+30000x29
+  - series: cassandra_table_readlatency_seconds_count{instance="cass-1",keyspace="ks1",table="t1"}
+    values: 604800000+60000x40
+  - series: cassandra_table_readlatency_seconds_sum{instance="cass-1",keyspace="ks1",table="t1"}
+    values: 604800+60x10 635400+30000x29
+  alert_rule_test:
+  - eval_time: 14m
+    alertname: HighReadLatency
+    exp_alerts: []
+  - eval_time: 14m
+    alertname: HighWriteLatency
+    exp_alerts: []
+- name: latency exactly at two hundred milliseconds stays silent
+  interval: 1m
+  input_series:
+  - series: cassandra_table_readlatency_seconds_count{instance="boundary"}
+    values: 0+100x30
+  - series: cassandra_table_readlatency_seconds_sum{instance="boundary"}
+    values: 0+20x30
+  - series: cassandra_keyspace_writelatency_seconds_count{instance="boundary"}
+    values: 0+100x30
+  - series: cassandra_keyspace_writelatency_seconds_sum{instance="boundary"}
+    values: 0+20x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: HighReadLatency
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: HighWriteLatency
+    exp_alerts: []
+- name: idle lifetime latency is not current latency
+  interval: 1m
+  input_series:
+  - series: cassandra_table_readlatency_seconds_count{instance="boundary"}
+    values: '0x30'
+  - series: cassandra_table_readlatency_seconds_sum{instance="boundary"}
+    values: '0x30'
+  - series: cassandra_keyspace_writelatency_seconds_count{instance="boundary"}
+    values: '0x30'
+  - series: cassandra_keyspace_writelatency_seconds_sum{instance="boundary"}
+    values: '0x30'
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: HighReadLatency
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: HighWriteLatency
+    exp_alerts: []
+- name: read unavailables do not count as unavailable writes
+  interval: 1m
+  input_series:
+  - series: cassandra_clientrequest_unavailables_count{instance="cass-read",clientrequest="Read"}
+    values: 0+10x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: UnavailableWriteRequestsFound
+    exp_alerts: []
+- name: rate handles a table reset before weighted aggregation
+  interval: 1m
+  input_series:
+  - series: cassandra_table_readlatency_seconds_count{instance="cass-reset",table="reset"}
+    values: 1000+10x9 0+10x20
+  - series: cassandra_table_readlatency_seconds_sum{instance="cass-reset",table="reset"}
+    values: 500+5x9 0+5x20
+  - series: cassandra_table_readlatency_seconds_count{instance="cass-reset",table="steady"}
+    values: 0+30x30
+  - series: cassandra_table_readlatency_seconds_sum{instance="cass-reset",table="steady"}
+    values: 0+9x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: HighReadLatency
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        instance: cass-reset
+      exp_annotations:
+        summary: There is a high level of read latency within the node.
+        description: 'An average of 350ms of read latency has occurred over the last 5 minutes on cass-reset, which
+          is above the threshold of 200ms. '
