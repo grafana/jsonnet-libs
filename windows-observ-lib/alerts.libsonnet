@@ -172,7 +172,7 @@
                    },
                    annotations: {
                      summary: 'Windows physical disk is not healthy.',
-                     description: "Windows disk {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}' status.",
+                     description: 'Windows disk {{ $labels.name }} is not in healthy state.',
                    },
                  },
                  {
