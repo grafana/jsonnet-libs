@@ -1,0 +1,132 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: second failure fires and expires even with a successful sync
+  interval: 1m
+  input_series:
+  - series: argocd_app_sync_total{namespace="argocd",name="app",phase="Failed"}
+    values: 1x9 2x20
+  - series: argocd_app_sync_total{namespace="argocd",name="app",phase="Succeeded"}
+    values: 0x11 1x18
+  alert_rule_test:
+  - eval_time: 9m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
+  - eval_time: 10m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
+  - eval_time: 12m
+    alertname: ArgoAppSyncFailed
+    exp_alerts:
+    - exp_labels: &id001
+        severity: warning
+        namespace: argocd
+        name: app
+        phase: Failed
+      exp_annotations: &id002
+        summary: Application Sync Failed.
+        description: Application app had a sync with phase Failed observed in the last 5 minutes.
+  - eval_time: 20m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
+- name: first nonzero sample has no event timestamp and is not treated as new
+  interval: 1m
+  input_series:
+  - series: argocd_app_sync_total{namespace="argocd",name="app",phase="Failed"}
+    values: _ _ 1x28
+  alert_rule_test:
+  - eval_time: 4m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
+- name: historical counter discovered after restart stays silent
+  interval: 1m
+  input_series:
+  - series: argocd_app_sync_total{namespace="argocd",name="app",phase="Failed"}
+    values: _ _ 10x28
+  alert_rule_test:
+  - eval_time: 4m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
+- name: initial zero allows the first failure to be observed
+  interval: 1m
+  input_series:
+  - series: argocd_app_sync_total{namespace="argocd",name="app",phase="Failed"}
+    values: 0x9 1x20
+  alert_rule_test:
+  - eval_time: 12m
+    alertname: ArgoAppSyncFailed
+    exp_alerts:
+    - exp_labels: *id001
+      exp_annotations: *id002
+  - eval_time: 20m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
+- name: only successful syncs stay silent
+  interval: 1m
+  input_series:
+  - series: argocd_app_sync_total{namespace="argocd",name="app",phase="Succeeded"}
+    values: 0+1x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
+- name: counter reset with no new failure stays silent
+  interval: 1m
+  input_series:
+  - series: argocd_app_sync_total{namespace="argocd",name="app",phase="Failed"}
+    values: 10x9 0x20
+  alert_rule_test:
+  - eval_time: 12m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
+- name: failure after counter reset fires
+  interval: 1m
+  input_series:
+  - series: argocd_app_sync_total{namespace="argocd",name="app",phase="Failed"}
+    values: 10x9 0x4 1x15
+  alert_rule_test:
+  - eval_time: 17m
+    alertname: ArgoAppSyncFailed
+    exp_alerts:
+    - exp_labels: *id001
+      exp_annotations: *id002
+- name: missing series stay silent
+  interval: 1m
+  input_series: []
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
+- name: error phase is also an observed unsuccessful sync
+  interval: 1m
+  input_series:
+  - series: argocd_app_sync_total{namespace="argocd",name="app",phase="Error"}
+    values: 2x9 3x20
+  alert_rule_test:
+  - eval_time: 12m
+    alertname: ArgoAppSyncFailed
+    exp_alerts:
+    - exp_labels:
+        severity: warning
+        namespace: argocd
+        name: app
+        phase: Error
+      exp_annotations:
+        summary: Application Sync Failed.
+        description: Application app had a sync with phase Error observed in the last 5 minutes.
+- name: stale failed series has no current event
+  interval: 1m
+  input_series:
+  - series: argocd_app_sync_total{namespace="argocd",name="app",phase="Failed"}
+    values: 1x9 2x2 stale _x20
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: ArgoAppSyncFailed
+    exp_alerts: []
