@@ -7,7 +7,7 @@
           {
             alert: 'OpenLDAPConnectionSpike',
             expr: |||
-              increase(openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor", %(filteringSelector)s}[5m]) > %(alertsWarningConnectionSpike)s
+              delta(openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor", %(filteringSelector)s}[5m]) > %(alertsWarningConnectionSpike)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -17,7 +17,7 @@
               summary: 'A sudden spike in OpenLDAP connections indicates potential high usage or security issues.',
               description:
                 (
-                  'There are {{ printf "%%.0f" $value }} OpenLDAP connections on instance {{$labels.instance}}, ' +
+                  'OpenLDAP connections on instance {{$labels.instance}} have a net increase of {{ printf "%%.0f" $value }} over the last 5 minutes, ' +
                   'which is above the threshold of %(alertsWarningConnectionSpike)s.'
                 ) % this.config,
             },
