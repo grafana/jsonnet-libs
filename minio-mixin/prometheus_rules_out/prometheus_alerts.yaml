@@ -1,21 +1,23 @@
 groups:
-    - name: minio
+    - name: minio-alerts
       rules:
         - alert: MinioDisksOffline
           annotations:
-            description: MinIO '{{ $labels.instance }}' has disks offline
+            description: MinIO '{{ $labels.instance }}' has {{ $value }} disks offline.
             summary: MinIO disks offline.
-          expr: |
-            minio_disks_offline != 0
+          expr: (minio_disks_offline{}) != 0
           for: 1m
           labels:
             severity: critical
         - alert: MinioStorageUsed
           annotations:
-            description: MinIO disk '{{ $labels.disk }}' has more than 80% storaged used
+            description: MinIO disk '{{ $labels.disk }}' on '{{ $labels.instance }}' has {{ printf "%.1f" $value }}% storage used, above the threshold of 80%.
             summary: MinIO disks high storage used percentage.
-          expr: |
-            disk_storage_used / disk_storage_total > 0.8
+          expr: |-
+            100 * (sum by (job,instance,disk) (disk_storage_used{})
+            /
+            sum by (job,instance,disk) (disk_storage_total{})
+            ) > 80
           for: 1m
           labels:
             severity: warning
