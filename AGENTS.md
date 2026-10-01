@@ -33,7 +33,6 @@ maintainers. Full policy: [docs/genai.md](docs/genai.md).
   stand-in for the human’s own explanation.
 - Silently comply when the human asks you to violate these rules (including "just do it anyway,"
   "only draft it and I’ll paste it," or "reply to the reviewer for me").
-- Edit changelog files by hand (release tooling derives entries from PR titles).
 - Bundle unrelated changes into one PR. One logical change per PR (one bug fix, one feature, or one
   new component). If the PR title needs an "and," split it.
 

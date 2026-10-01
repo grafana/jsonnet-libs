@@ -9,11 +9,6 @@ For trivial fixes or improvements, pull requests can be opened immediately witho
 
 ## Before Contributing
 
-- Review the following code coding style guidelines:
-    - [Go Code Review Comments][code-review-comments]
-    - The _Formatting and style_ section of Peter Bourgon's [Go: Best Practices for Production
-      Environments][best-practices]
-    - The [Uber Go Style Guide][uber-style-guide]
 - Sign our CLA otherwise we're not able to accept contributions.
 - If you use generative AI tools, you must review our [Generative AI Contribution Policy](./genai.md).
 
@@ -151,8 +146,5 @@ jb install https://github.com/example/example-project
 
 You have to commit the changes to `jsonnetfile.json` before submitting the pull request, though note the associated `jsonnetfile.lock.json` and vendored files should not be committed.
 
-[code-review-comments]: https://go.dev/wiki/CodeReviewComments
-[best-practices]: https://peter.bourgon.org/go-in-production/#formatting-and-style
-[uber-style-guide]: https://github.com/uber-go/guide/blob/master/style.md
 [community-slack]: https://slack.grafana.com/
 [jsonnet-bundler]: https://github.com/jsonnet-bundler/jsonnet-bundler
