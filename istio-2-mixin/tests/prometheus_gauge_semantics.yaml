@@ -1,0 +1,116 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: persistent conflicts fire
+  interval: 1m
+  input_series:
+  - series: pilot_conflict_inbound_listener{pod="istiod-7d9f",job="integrations/istio",cluster="c1"}
+    values: 3x30
+  - series: pilot_conflict_outbound_listener_tcp_over_current_tcp{pod="istiod-7d9f",job="integrations/istio",cluster="c1"}
+    values: 2x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: IstioListenerConfigConflictsCritical
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        pod: istiod-7d9f
+        job: integrations/istio
+        cluster: c1
+      exp_annotations:
+        description: 'istiod-7d9f on cluster c1 reports 5 inbound and or outbound listener conflict entries in the
+          current push, which is above the threshold of 0.
+
+          '
+        summary: Istio Pilot is seeing a number of inbound and or outbound listener conflicts by envoy proxies.
+- name: control, no conflicts stays silent
+  interval: 1m
+  input_series:
+  - series: pilot_conflict_inbound_listener{pod="istiod-7d9f",job="integrations/istio",cluster="c1"}
+    values: '0x30'
+  - series: pilot_conflict_outbound_listener_tcp_over_current_tcp{pod="istiod-7d9f",job="integrations/istio",cluster="c1"}
+    values: '0x30'
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: IstioListenerConfigConflictsCritical
+    exp_alerts: []
+- name: missing series do not invent an alert
+  interval: 1m
+  input_series: []
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: IstioListenerConfigConflictsCritical
+    exp_alerts: []
+- name: conflicts remain pending before one minute
+  interval: 1m
+  input_series:
+  - series: pilot_conflict_inbound_listener{pod="istiod-7d9f",job="integrations/istio",cluster="c1"}
+    values: 3x30
+  - series: pilot_conflict_outbound_listener_tcp_over_current_tcp{pod="istiod-7d9f",job="integrations/istio",cluster="c1"}
+    values: 2x30
+  alert_rule_test:
+  - eval_time: 0m
+    alertname: IstioListenerConfigConflictsCritical
+    exp_alerts: []
+- name: conflicts clear when the current push reports zero
+  interval: 1m
+  input_series:
+  - series: pilot_conflict_inbound_listener{pod="istiod-7d9f",job="integrations/istio",cluster="c1"}
+    values: 3x5 0x24
+  - series: pilot_conflict_outbound_listener_tcp_over_current_tcp{pod="istiod-7d9f",job="integrations/istio",cluster="c1"}
+    values: 3x5 0x24
+  alert_rule_test:
+  - eval_time: 8m
+    alertname: IstioListenerConfigConflictsCritical
+    exp_alerts: []
+- name: non istiod pods are excluded
+  interval: 1m
+  input_series:
+  - series: pilot_conflict_inbound_listener{pod="envoy-7d9f",job="integrations/istio",cluster="c1"}
+    values: 3x30
+  - series: pilot_conflict_outbound_listener_tcp_over_current_tcp{pod="envoy-7d9f",job="integrations/istio",cluster="c1"}
+    values: 2x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: IstioListenerConfigConflictsCritical
+    exp_alerts: []
+- name: current conflict counts stay isolated by pod and cluster
+  interval: 1m
+  input_series:
+  - series: pilot_conflict_inbound_listener{pod="istiod-7d9f",job="integrations/istio",cluster="c1"}
+    values: 3x30
+  - series: pilot_conflict_outbound_listener_tcp_over_current_tcp{pod="istiod-7d9f",job="integrations/istio",cluster="c1"}
+    values: 2x30
+  - series: pilot_conflict_inbound_listener{pod="istiod-healthy",job="integrations/istio",cluster="c1"}
+    values: '0x30'
+  - series: pilot_conflict_outbound_listener_tcp_over_current_tcp{pod="istiod-healthy",job="integrations/istio",cluster="c1"}
+    values: '0x30'
+  - series: pilot_conflict_inbound_listener{pod="istiod-7d9f",job="integrations/istio",cluster="c2"}
+    values: '0x30'
+  - series: pilot_conflict_outbound_listener_tcp_over_current_tcp{pod="istiod-7d9f",job="integrations/istio",cluster="c2"}
+    values: '0x30'
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: IstioListenerConfigConflictsCritical
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        pod: istiod-7d9f
+        job: integrations/istio
+        cluster: c1
+      exp_annotations:
+        description: 'istiod-7d9f on cluster c1 reports 5 inbound and or outbound listener conflict entries in the
+          current push, which is above the threshold of 0.
+
+          '
+        summary: Istio Pilot is seeing a number of inbound and or outbound listener conflicts by envoy proxies.
+- name: missing counterpart gauge retains existing no-data behavior
+  interval: 1m
+  input_series:
+  - series: pilot_conflict_inbound_listener{pod="istiod-7d9f",job="integrations/istio",cluster="c1"}
+    values: 3x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: IstioListenerConfigConflictsCritical
+    exp_alerts: []
