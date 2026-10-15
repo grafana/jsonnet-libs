@@ -124,7 +124,7 @@ local incomingByProcessorStyle =
         g.panel.table.queryOptions.transformation.withId('joinByField')
         + g.panel.table.queryOptions.transformation.withOptions({
           byField: instanceLabel,
-          mode: 'inner',
+          mode: 'outer',
         }),
         g.panel.table.queryOptions.transformation.withId('renameByRegex')
         + g.panel.table.queryOptions.transformation.withOptions({
