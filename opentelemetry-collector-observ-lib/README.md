@@ -51,10 +51,13 @@ local otelcol =
   + otelcollib.withConfigMixin(
     {
         filteringSelector: 'job!=""',
+        instanceLabels: ['service_instance_id'],
     }
   );
 otelcollib.asMonitoringMixin()
 ```
+
+`instanceLabels` configures the metric labels that identify a collector instance. It defaults to `['service_instance_id']`; set it to the labels present on your metrics. The first label is used as the instance identifier in the fleet overview and alert filtering, and the full list is used when grouping exporter metrics and alerts.
 
 ## Implementation notes
 

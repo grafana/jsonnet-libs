@@ -1,7 +1,7 @@
 {
   local this = self,
   filteringSelector: 'service_name!=""',
-  alertsFilteringSelector: 'service_name=~".+", service_instance_id=~".+"',
+  alertsFilteringSelector: 'service_name=~".+", %(instanceLabel)s=~".+"' % { instanceLabel: this.instanceLabels[-1] },
   groupLabels: ['service_name'],
   instanceLabels: ['service_instance_id'],
   uid: 'otelcol',

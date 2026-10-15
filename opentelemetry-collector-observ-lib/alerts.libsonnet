@@ -3,6 +3,8 @@ local common = import './signals/common.libsonnet';
 {
   new(this): {
     local alertConfig = this.config { filteringSelector: this.config.alertsFilteringSelector },
+    local instanceLabels = std.join(',', this.config.instanceLabels),
+    local instanceLabel = this.config.instanceLabels[-1],
 
     groups: [
       {
@@ -11,7 +13,8 @@ local common = import './signals/common.libsonnet';
           [
             {
               alert: 'ExporterQueueSaturated',
-              expr: 'sum(otelcol_exporter_queue_size{%(filteringSelector)s}) by (data_type,service_instance_id,exporter) / sum(otelcol_exporter_queue_capacity{%(filteringSelector)s}) by (data_type,service_instance_id,exporter) > %(threshold)s' % alertConfig {
+              expr: 'sum(otelcol_exporter_queue_size{%(filteringSelector)s}) by (data_type,%(instanceLabels)s,exporter) / sum(otelcol_exporter_queue_capacity{%(filteringSelector)s}) by (data_type,%(instanceLabels)s,exporter) > %(threshold)s' % alertConfig {
+                instanceLabels: instanceLabels,
                 threshold: alertConfig.alerts.queueSaturation.warn,
               },
               'for': '5m',
@@ -29,7 +32,7 @@ local common = import './signals/common.libsonnet';
           + [
             {
               alert: '%(capitalized)sFailedToSend' % signal,
-              expr: 'sum(rate(otelcol_exporter_enqueue_failed_%(metric_id)s_total{%(filteringSelector)s}[5m])) by (exporter,service_instance_id) > 0' % (signal + alertConfig),
+              expr: 'sum(rate(otelcol_exporter_enqueue_failed_%(metric_id)s_total{%(filteringSelector)s}[5m])) by (exporter,%(instanceLabels)s) > 0' % (signal + alertConfig { instanceLabels: instanceLabels }),
               'for': '5m',
               keep_firing_for: '5m',
               labels: {
@@ -38,7 +41,7 @@ local common = import './signals/common.libsonnet';
               },
               annotations: {
                 summary: 'Failed to enqueue %(plural)s for export.' % signal,
-                description: 'Collector {{ $labels.service_instance_id }} failed to enqueue %(plural)s for the {{ $labels.exporter }}' % signal,
+                description: 'Collector {{ $labels.%(instanceLabel)s }} failed to enqueue %(plural)s for the {{ $labels.exporter }}' % (signal { instanceLabel: instanceLabel }),
               },
             }
             for signal in common.signalTypes
