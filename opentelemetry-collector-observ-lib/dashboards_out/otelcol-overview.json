@@ -138,7 +138,7 @@
                   "id": "joinByField",
                   "options": {
                      "byField": "service_instance_id",
-                     "mode": "inner"
+                     "mode": "outer"
                   }
                },
                {
