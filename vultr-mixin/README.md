@@ -23,7 +23,7 @@ Alert thresholds can be configured in `config.libsonnet`. See the generated `pro
 
 Vultr attaches `uuid`, `label`, `hostname`, `region`, `plan` and `os` labels to every instance series. Dashboards are filtered by `job`, `region` and `label`, where `label` is the instance name shown in the Vultr console.
 
-Set `filteringSelector` in `config.libsonnet` to scope all dashboards and alerts to the job that collects the Vultr metrics, for example `job="integrations/vultr"`.
+Set `filteringSelector` in `config.libsonnet` to scope all dashboards and alerts to the job that collects the Vultr metrics, for example `job="integrations/vultr"`. It is empty by default, and `VultrMetricsDown` alerts on `up{<filteringSelector>} == 0`, so leaving it empty makes the alert fire for every failing scrape target in the data source.
 
 ## Install Tools
 
