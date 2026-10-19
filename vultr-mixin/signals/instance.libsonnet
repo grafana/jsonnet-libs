@@ -28,6 +28,18 @@ function(this)
         },
       },
 
+      instanceInfo: {
+        name: 'Instances',
+        nameShort: 'Instances',
+        type: 'raw',
+        unit: 'short',
+        sources: {
+          prometheus: {
+            expr: 'vultr_instance_bandwidth_allowed_bytes{%(queriesSelector)s} * 0',
+          },
+        },
+      },
+
       cpuUsage: {
         name: 'CPU usage',
         nameShort: 'CPU',

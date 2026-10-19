@@ -10,6 +10,7 @@ local g = import './g.libsonnet';
       + g.panel.row.withPanels([
         panels.instanceCountStat { gridPos+: { h: 6, w: 6 } },
         panels.bandwidthUsageStat { gridPos+: { h: 6, w: 18 } },
+        panels.instanceList { gridPos+: { h: 12, w: 24 } },
       ]),
 
     compute:

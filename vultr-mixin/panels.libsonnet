@@ -4,10 +4,65 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(this): {
     local signals = this.signals.instance,
+    local fieldOverride = g.panel.table.fieldOverride,
+
 
     instanceCountStat:
       signals.instanceCount.asStat()
       + commonlib.panels.generic.stat.info.stylize(),
+
+    instanceList:
+      signals.instanceInfo.asTable()
+      + commonlib.panels.generic.table.percentage.stylizeByName('CPU usage')
+      + commonlib.panels.generic.table.percentage.stylizeByName('GPU utilization')
+      + g.panel.table.queryOptions.withTargetsMixin([
+        signals.cpuUsage.asTableTarget(),
+        signals.gpuUtilization.asTableTarget(),
+      ])
+      + g.panel.table.standardOptions.withOverridesMixin([
+        fieldOverride.byName.new('Instance Label')
+        + fieldOverride.byName.withProperty('custom.filterable', true)
+        + fieldOverride.byName.withProperty('links', [
+          {
+            targetBlank: false,
+            title: 'Drill down to ${__value.text}',
+            url: 'd/%s?var-%s=${__data.fields.%s}&${__url_time_range}&${datasource:queryparam}' % [this.grafana.dashboards['vultr-instance-details.json'].uid, 'label', 'label'],
+          },
+        ]),
+
+      ])
+      + g.panel.table.queryOptions.withTransformationsMixin([
+        g.panel.table.queryOptions.transformation.withId('joinByField')
+        + g.panel.table.queryOptions.transformation.withOptions({
+          byField: 'label',
+          mode: 'inner',
+        }),
+        g.panel.table.queryOptions.transformation.withId('organize')
+        + g.panel.table.queryOptions.transformation.withOptions({
+          excludeByName: {},
+          indexByName: {
+            Label: 0,
+            Region: 1,
+            plan: 2,
+            os: 3,
+            'CPU usage': 4,
+            'GPU utilization': 5,
+          },
+          includeByName: {
+            label: true,
+            region: true,
+            os: true,
+            plan: true,
+            'CPU usage': true,
+            'GPU utilization': true,
+          },
+          renameByName: {
+            Label: 'Instance Label',
+            os: 'Operating System',
+            plan: 'Plan',
+          },
+        }),
+      ]),
 
     cpuUsage:
       signals.cpuUsage.asTimeSeries()

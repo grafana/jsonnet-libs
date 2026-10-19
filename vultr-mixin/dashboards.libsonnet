@@ -20,13 +20,22 @@ local g = import './g.libsonnet';
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels([
               rows.overview,
+            ])
+          )
+        )
+        + root.applyCommon(vars.multiInstance, uid + '-instances', tags, links, annotations, timezone, refresh, period),
+      'vultr-instance-details.json':
+        g.dashboard.new(prefix + ' instance details')
+        + g.dashboard.withPanels(
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels([
               rows.compute,
               rows.network,
               rows.gpu,
             ])
           )
         )
-        + root.applyCommon(vars.multiInstance, uid + '-instances', tags, links, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.multiInstance, uid + '-instance-details', tags, links, annotations, timezone, refresh, period),
     },
 
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
