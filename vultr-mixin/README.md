@@ -4,7 +4,8 @@ The Vultr mixin is a set of configurable Grafana dashboards and alerts based on 
 
 ## Dashboards
 
-- **Vultr instances** - Provides details on instance count, CPU usage, disk operations, network traffic, bandwidth used against the billing period allowance and, for GPU plans, GPU utilization, memory, temperature and power.
+- **Vultr instances** - Provides an overview of instance count, bandwidth used against the billing period allowance and a list of instances with their region, plan, operating system, CPU usage and GPU utilization.
+- **Vultr instance details** - Provides details on CPU usage, disk operations, network traffic, bandwidth used against the billing period allowance and, for GPU plans, GPU utilization, memory, temperature and power.
 
 ## Alerts
 
