@@ -10,8 +10,8 @@
   // Filtering and labels. Vultr attaches uuid, label, hostname, region, plan and os
   // to every instance series; label is the instance name shown in the Vultr console.
   filteringSelector: '',
-  groupLabels: ['job', 'region'],
-  instanceLabels: ['label'],
+  groupLabels: ['job'],
+  instanceLabels: ['region', 'label'],
 
   // Metrics source
   metricsSource: ['prometheus'],

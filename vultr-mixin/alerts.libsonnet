@@ -1,5 +1,6 @@
 {
   new(this): {
+    local signals = this.signals.instance,
     groups: [
       {
         name: this.config.uid + '-alerts',
@@ -20,7 +21,7 @@
           },
           {
             alert: 'VultrInstanceHighCPUUsage',
-            expr: 'vultr_instance_cpu_usage_percent{%(filteringSelector)s} > %(alertsCPUUsageWarning)s' % this.config,
+            expr: '%s > %s' % [signals.cpuUsage.asRuleExpression(), this.config.alertsCPUUsageWarning],
             'for': '15m',
             labels: {
               severity: 'warning',
@@ -32,7 +33,7 @@
           },
           {
             alert: 'VultrBandwidthAllowanceWarning',
-            expr: '100 * sum by (job) (vultr_instance_bandwidth_tx_bytes_total{%(filteringSelector)s}) / (sum by (job) (vultr_instance_bandwidth_allowed_bytes{%(filteringSelector)s}) > 0) > %(alertsBandwidthUsageWarning)s' % this.config,
+            expr: '%s > %s' % [signals.bandwidthUsage.asRuleExpression(), this.config.alertsBandwidthUsageWarning],
             'for': '5m',
             labels: {
               severity: 'warning',
@@ -44,7 +45,7 @@
           },
           {
             alert: 'VultrBandwidthAllowanceCritical',
-            expr: '100 * sum by (job) (vultr_instance_bandwidth_tx_bytes_total{%(filteringSelector)s}) / (sum by (job) (vultr_instance_bandwidth_allowed_bytes{%(filteringSelector)s}) > 0) > %(alertsBandwidthUsageCritical)s' % this.config,
+            expr: '%s > %s' % [signals.bandwidthUsage.asRuleExpression(), this.config.alertsBandwidthUsageCritical],
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -56,7 +57,7 @@
           },
           {
             alert: 'VultrInstanceGPUHighTemperature',
-            expr: 'vultr_instance_gpu_temperature_celsius{%(filteringSelector)s} > %(alertsGPUTemperatureWarning)s' % this.config,
+            expr: '%s > %s' % [signals.gpuTemperature.asRuleExpression(), this.config.alertsGPUTemperatureWarning],
             'for': '10m',
             labels: {
               severity: 'warning',

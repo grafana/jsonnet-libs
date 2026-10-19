@@ -155,11 +155,12 @@ function(this)
         nameShort: 'Allowance used',
         type: 'raw',
         unit: 'percent',
-        description: 'Outbound bandwidth used in the current billing period as a percentage of the instance allowance. Vultr only counts outbound bandwidth, and pools allowances across the account, so an instance above 100% does not by itself mean overage charges.',
+        aggLevel: 'group',
+        description: 'Outbound bandwidth used in the current billing period as a percentage of the pooled allowance. Vultr only counts outbound bandwidth and pools allowances across all instances in the account.',
         sources: {
           prometheus: {
-            expr: '100 * max by (%(agg)s) (vultr_instance_bandwidth_tx_bytes_total{%(queriesSelector)s}) / max by (%(agg)s) (vultr_instance_bandwidth_allowed_bytes{%(queriesSelector)s} > 0)',
-            legendCustomTemplate: '{{label}}',
+            expr: '100 * sum by (%(agg)s) (vultr_instance_bandwidth_tx_bytes_total{%(queriesSelector)s}) / (sum by (%(agg)s) (vultr_instance_bandwidth_allowed_bytes{%(queriesSelector)s}) > 0)',
+            legendCustomTemplate: '{{job}}',
           },
         },
       },
