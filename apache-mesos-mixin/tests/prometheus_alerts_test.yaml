@@ -1,0 +1,148 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: ApacheMesosHighMemoryUsage-high
+  interval: 1m
+  input_series:
+  - series: mesos_master_mem{type="percent",instance="master",job="integrations/apache-mesos",mesos_cluster="cluster"}
+    values: 0.95+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: ApacheMesosHighMemoryUsage
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: ApacheMesosHighMemoryUsage
+    exp_alerts:
+    - exp_labels:
+        mesos_cluster: cluster
+        severity: warning
+      exp_annotations:
+        description: 95 percent memory usage on cluster, which is above the threshold of 90.
+        summary: There is a high memory usage for the cluster.
+- name: ApacheMesosHighMemoryUsage-full
+  interval: 1m
+  input_series:
+  - series: mesos_master_mem{type="percent",instance="master",job="integrations/apache-mesos",mesos_cluster="cluster"}
+    values: 1+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: ApacheMesosHighMemoryUsage
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: ApacheMesosHighMemoryUsage
+    exp_alerts:
+    - exp_labels:
+        mesos_cluster: cluster
+        severity: warning
+      exp_annotations:
+        description: 100 percent memory usage on cluster, which is above the threshold of 90.
+        summary: There is a high memory usage for the cluster.
+- name: ApacheMesosHighMemoryUsage-low
+  interval: 1m
+  input_series:
+  - series: mesos_master_mem{type="percent",instance="master",job="integrations/apache-mesos",mesos_cluster="cluster"}
+    values: 0.5+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: ApacheMesosHighMemoryUsage
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: ApacheMesosHighMemoryUsage
+    exp_alerts: []
+- name: ApacheMesosHighMemoryUsage-boundary
+  interval: 1m
+  input_series:
+  - series: mesos_master_mem{type="percent",instance="master",job="integrations/apache-mesos",mesos_cluster="cluster"}
+    values: 0.9+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: ApacheMesosHighMemoryUsage
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: ApacheMesosHighMemoryUsage
+    exp_alerts: []
+- name: ApacheMesosHighMemoryUsage-zero
+  interval: 1m
+  input_series:
+  - series: mesos_master_mem{type="percent",instance="master",job="integrations/apache-mesos",mesos_cluster="cluster"}
+    values: 0+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: ApacheMesosHighMemoryUsage
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: ApacheMesosHighMemoryUsage
+    exp_alerts: []
+- name: ApacheMesosHighDiskUsage-high
+  interval: 1m
+  input_series:
+  - series: mesos_master_disk{type="percent",instance="master",job="integrations/apache-mesos",mesos_cluster="cluster"}
+    values: 0.95+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: ApacheMesosHighDiskUsage
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: ApacheMesosHighDiskUsage
+    exp_alerts:
+    - exp_labels:
+        mesos_cluster: cluster
+        severity: critical
+      exp_annotations:
+        description: 95 percent disk usage on cluster, which is above the threshold of 90.
+        summary: There is a high disk usage for the cluster.
+- name: ApacheMesosHighDiskUsage-full
+  interval: 1m
+  input_series:
+  - series: mesos_master_disk{type="percent",instance="master",job="integrations/apache-mesos",mesos_cluster="cluster"}
+    values: 1+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: ApacheMesosHighDiskUsage
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: ApacheMesosHighDiskUsage
+    exp_alerts:
+    - exp_labels:
+        mesos_cluster: cluster
+        severity: critical
+      exp_annotations:
+        description: 100 percent disk usage on cluster, which is above the threshold of 90.
+        summary: There is a high disk usage for the cluster.
+- name: ApacheMesosHighDiskUsage-low
+  interval: 1m
+  input_series:
+  - series: mesos_master_disk{type="percent",instance="master",job="integrations/apache-mesos",mesos_cluster="cluster"}
+    values: 0.5+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: ApacheMesosHighDiskUsage
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: ApacheMesosHighDiskUsage
+    exp_alerts: []
+- name: ApacheMesosHighDiskUsage-boundary
+  interval: 1m
+  input_series:
+  - series: mesos_master_disk{type="percent",instance="master",job="integrations/apache-mesos",mesos_cluster="cluster"}
+    values: 0.9+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: ApacheMesosHighDiskUsage
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: ApacheMesosHighDiskUsage
+    exp_alerts: []
+- name: ApacheMesosHighDiskUsage-zero
+  interval: 1m
+  input_series:
+  - series: mesos_master_disk{type="percent",instance="master",job="integrations/apache-mesos",mesos_cluster="cluster"}
+    values: 0+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: ApacheMesosHighDiskUsage
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: ApacheMesosHighDiskUsage
+    exp_alerts: []
