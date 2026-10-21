@@ -33,7 +33,12 @@ groups:
             description: |
                 agent {{ $labels.job }} {{ $labels.instance }} is dropping {{ printf "%.2f" $value }}% spans.
             summary: Jaeger agent is dropping spans.
-          expr: 100 * sum(rate(jaeger_agent_reporter_batches_failures_total[1m])) by (instance, job, namespace) / sum(rate(jaeger_agent_reporter_batches_submitted_total[1m])) by (instance, job, namespace)> 1
+          expr: |
+            100 * sum by (instance, job, namespace) (rate(jaeger_agent_reporter_spans_failures_total[1m]))
+            / (
+              sum by (instance, job, namespace) (rate(jaeger_agent_reporter_spans_failures_total[1m]))
+              + sum by (instance, job, namespace) (rate(jaeger_agent_reporter_spans_submitted_total[1m]))
+            ) > 1
           for: 15m
           labels:
             severity: warning

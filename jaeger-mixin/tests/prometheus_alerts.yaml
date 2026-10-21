@@ -1,0 +1,359 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 15s
+tests:
+- name: exact one percent
+  interval: 15s
+  input_series:
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+1x100
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+99x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+1x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+99x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+- name: two percent
+  interval: 15s
+  input_series:
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+2x100
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+98x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+2x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+98x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts:
+    - exp_labels:
+        instance: agent-a:14271
+        job: jaeger-agent
+        namespace: tracing
+        severity: warning
+      exp_annotations:
+        description: 'agent jaeger-agent agent-a:14271 is dropping 2.00% spans.
+
+          '
+        summary: Jaeger agent is dropping spans.
+- name: half percent
+  interval: 15s
+  input_series:
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+1x100
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+199x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+1x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+199x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+- name: no failures
+  interval: 15s
+  input_series:
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+100x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+100x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+- name: all failed
+  interval: 15s
+  input_series:
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+100x100
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+100x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts:
+    - exp_labels:
+        instance: agent-a:14271
+        job: jaeger-agent
+        namespace: tracing
+        severity: warning
+      exp_annotations:
+        description: 'agent jaeger-agent agent-a:14271 is dropping 100.00% spans.
+
+          '
+        summary: Jaeger agent is dropping spans.
+- name: large failed batch masked
+  interval: 15s
+  input_series:
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+1x100
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+199x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+100x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+199x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts:
+    - exp_labels:
+        instance: agent-a:14271
+        job: jaeger-agent
+        namespace: tracing
+        severity: warning
+      exp_annotations:
+        description: 'agent jaeger-agent agent-a:14271 is dropping 33.44% spans.
+
+          '
+        summary: Jaeger agent is dropping spans.
+- name: no data
+  interval: 15s
+  input_series: []
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+- name: recovery after failures
+  interval: 15s
+  input_series:
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48
+      50 52 54 56 58 60 62 64 66 68 70 72 74 76 78 80 82 84 86 88 90 92 94 96 98 100
+      102 104 106 108 110 112 114 116 118 120 122 124 126 128 130 132 134 136 138
+      140 142 144 146 148 150 152 154 156 158 160 160 160 160 160 160 160 160 160
+      160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160
+      160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160
+      160 160 160 160 160 160 160 160 160 160 160 160 160 160
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+98x140
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48
+      50 52 54 56 58 60 62 64 66 68 70 72 74 76 78 80 82 84 86 88 90 92 94 96 98 100
+      102 104 106 108 110 112 114 116 118 120 122 124 126 128 130 132 134 136 138
+      140 142 144 146 148 150 152 154 156 158 160 160 160 160 160 160 160 160 160
+      160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160
+      160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160 160
+      160 160 160 160 160 160 160 160 160 160 160 160 160 160
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+98x140
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts:
+    - exp_labels:
+        instance: agent-a:14271
+        job: jaeger-agent
+        namespace: tracing
+        severity: warning
+      exp_annotations:
+        description: 'agent jaeger-agent agent-a:14271 is dropping 2.00% spans.
+
+          '
+        summary: Jaeger agent is dropping spans.
+  - eval_time: 25m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+- name: aggregate span weights across formats and keep targets separate
+  interval: 15s
+  input_series:
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+2x100
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+8x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+90x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+2x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+8x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+90x100
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-b:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-b:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-b:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+1000x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-b:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+1000x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-b:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-b:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-b:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+1000x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-b:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+1000x100
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts:
+    - exp_labels:
+        instance: agent-a:14271
+        job: jaeger-agent
+        namespace: tracing
+        severity: warning
+      exp_annotations:
+        description: 'agent jaeger-agent agent-a:14271 is dropping 2.00% spans.
+
+          '
+        summary: Jaeger agent is dropping spans.
+- name: counter resets preserve the failed span share
+  interval: 15s
+  input_series:
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+2x39 0+2x39 0+2x39
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x39 0+0x39 0+0x39
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+98x39 0+98x39 0+98x39
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x39 0+0x39 0+0x39
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+2x39 0+2x39 0+2x39
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x39 0+0x39 0+0x39
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+98x39 0+98x39 0+98x39
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x39 0+0x39 0+0x39
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts:
+    - exp_labels:
+        instance: agent-a:14271
+        job: jaeger-agent
+        namespace: tracing
+        severity: warning
+      exp_annotations:
+        description: 'agent jaeger-agent agent-a:14271 is dropping 2.00% spans.
+
+          '
+        summary: Jaeger agent is dropping spans.
+- name: idle agent does not divide zero traffic into an alert
+  interval: 15s
+  input_series:
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
+    values: 0+0x100
+  - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
+    values: 0+0x100
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: JaegerAgentSpansDropped
+    exp_alerts: []
