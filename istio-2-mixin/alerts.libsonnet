@@ -50,7 +50,7 @@ local selectorsLib = import './signals/selectors.libsonnet';
           {
             alert: 'IstioListenerConfigConflictsCritical',
             expr: |||
-              sum by (%(groupBy)s, pod) (increase(pilot_conflict_inbound_listener{%(istiodPodFilter)s, %(filteringSelector)s}[5m])) + sum by (%(groupBy)s, pod) (increase(pilot_conflict_outbound_listener_tcp_over_current_tcp{%(istiodPodFilter)s, %(filteringSelector)s}[5m])) > %(alertsCriticalListenerConfigConflicts)s
+              sum by (%(groupBy)s, pod) (pilot_conflict_inbound_listener{%(istiodPodFilter)s, %(filteringSelector)s}) + sum by (%(groupBy)s, pod) (pilot_conflict_outbound_listener_tcp_over_current_tcp{%(istiodPodFilter)s, %(filteringSelector)s}) > %(alertsCriticalListenerConfigConflicts)s
             ||| % this.config { istiodPodFilter: istiodPodFilter, groupBy: selectors.groupBy },
             'for': '1m',
             labels: {
@@ -59,7 +59,7 @@ local selectorsLib = import './signals/selectors.libsonnet';
             annotations: {
               summary: 'Istio Pilot is seeing a number of inbound and or outbound listener conflicts by envoy proxies.',
               description: |||
-                {{$labels.pod}} on cluster {{$labels.cluster}} has had {{ printf "%%.0f" $value }} inbound and or outbound listener conflicts reported from envoy proxies, which is above the threshold of %(alertsCriticalListenerConfigConflicts)s.
+                {{$labels.pod}} on cluster {{$labels.cluster}} reports {{ printf "%%.0f" $value }} inbound and or outbound listener conflict entries in the current push, which is above the threshold of %(alertsCriticalListenerConfigConflicts)s.
               ||| % this.config,
             },
           },

@@ -26,10 +26,10 @@ groups:
         - alert: IstioListenerConfigConflictsCritical
           annotations:
             description: |
-                {{$labels.pod}} on cluster {{$labels.cluster}} has had {{ printf "%.0f" $value }} inbound and or outbound listener conflicts reported from envoy proxies, which is above the threshold of 0.
+                {{$labels.pod}} on cluster {{$labels.cluster}} reports {{ printf "%.0f" $value }} inbound and or outbound listener conflict entries in the current push, which is above the threshold of 0.
             summary: Istio Pilot is seeing a number of inbound and or outbound listener conflicts by envoy proxies.
           expr: |
-            sum by (job, cluster, pod) (increase(pilot_conflict_inbound_listener{pod=~"istiod.*", }[5m])) + sum by (job, cluster, pod) (increase(pilot_conflict_outbound_listener_tcp_over_current_tcp{pod=~"istiod.*", }[5m])) > 0
+            sum by (job, cluster, pod) (pilot_conflict_inbound_listener{pod=~"istiod.*", }) + sum by (job, cluster, pod) (pilot_conflict_outbound_listener_tcp_over_current_tcp{pod=~"istiod.*", }) > 0
           for: 1m
           labels:
             severity: critical
