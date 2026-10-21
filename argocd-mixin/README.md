@@ -19,8 +19,11 @@ ArgoCD dashbaord provides details on the overall status of the ArgoCD applicatio
 
 ## Alerts Overview
 - ArgoAppOutOfSync: An ArgoCD application has status OutOfSync.
-- ArgoAppSyncFailed: Sync Operation has failed for an ArgoCD Application.
+- ArgoAppSyncFailed: An increase in unsuccessful syncs was observed in the last five minutes, with a one-minute pending period. This is a recent-event alert, not the application's current operation phase. A later successful sync does not erase failures still in that window.
 - ArgoAppMissing: An ArgoCD application has status missing.
+
+## Sync failure alert limitations
+`argocd_app_sync_total` is cumulative and its phase-labeled series can first appear at a nonzero value. The alert only counts changes between observed samples: it cannot detect the first failure if the series was not previously scraped at zero, or failures hidden by a scrape gap or counter reset. It deliberately does not treat a newly discovered nonzero series as a new event, since that value may be old history after Prometheus starts or relabeling changes. Detecting every first failure requires producer-side zero initialization or a current-operation-state signal; this rule does not provide that guarantee.
 
 ## Tools
 To use them, you need to have `mixtool` and `jsonnetfmt` installed. If you have a working Go development environment, it's easiest to run the following:
