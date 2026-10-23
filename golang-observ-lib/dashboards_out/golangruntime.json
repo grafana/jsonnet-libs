@@ -28,7 +28,17 @@
                   "color": {
                      "fixedColor": "text",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -53,7 +63,6 @@
             },
             "id": 2,
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -62,7 +71,7 @@
                   "fields": "/^(version)$/"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -88,7 +97,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "decimals": 1,
@@ -133,7 +142,7 @@
                "colorMode": "value",
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -159,10 +168,20 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
                   },
-                  "noValue": "0"
+                  "noValue": "0",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": ""
                },
                "overrides": [
                   {
@@ -186,7 +205,7 @@
                "y": 1
             },
             "id": 4,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -212,9 +231,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "fixed"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": ""
                },
                "overrides": [
                   {
@@ -238,7 +267,7 @@
                "y": 1
             },
             "id": 5,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -263,6 +292,10 @@
             "description": "Number of goroutines.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -270,7 +303,12 @@
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
-                  "decimals": 0
+                  "decimals": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -304,7 +342,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -326,16 +364,25 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Amount of time in GC stop-the-world pauses.\nDuring a stop-the-world pause, all goroutines are paused and only the garbage collector can run\n",
+            "description": "GC duration (max) (avg): Maximum amount of time in GC stop-the-world pauses.\nDuring a stop-the-world pause, all goroutines are paused and only the garbage collector can run.\n  \n\nGC duration (min) (avg): Minimum amount of time in GC stop-the-world pauses. \nDuring a stop-the-world pause, all goroutines are paused and only the garbage collector can run.\n  \n\nGC duration (p95): Amount of time in GC stop-the-world pauses (95th percentile).\nDuring a stop-the-world pause, all goroutines are paused and only the garbage collector can run.\n  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "ns"
                },
                "overrides": [
                   {
@@ -365,7 +412,7 @@
                   {
                      "matcher": {
                         "id": "byFrameRefID",
-                        "options": "GC duration"
+                        "options": "GC duration (p95)"
                      },
                      "properties": [
                         {
@@ -422,11 +469,11 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  histogram_quantile(0.95, sum(rate(process_runtime_go_gc_pause_ns_bucket{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by (le,job,instance))\n)",
+                  "expr": "histogram_quantile(0.95, sum(rate(process_runtime_go_gc_pause_ns_bucket{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by (le,job,instance))",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{instance}}: GC duration",
-                  "refId": "GC duration"
+                  "legendFormat": "{{instance}}: GC duration (p95)",
+                  "refId": "GC duration (p95)"
                }
             ],
             "title": "GC duration",
@@ -450,9 +497,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Memory reserved from system.",
+            "description": "Memory reserved from system (avg): Memory reserved from system.\n  \n\nMemory allocated from system (avg): ",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -461,6 +512,10 @@
                      "showPoints": "never"
                   },
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bytes"
                },
                "overrides": [
@@ -497,7 +552,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-orange",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -569,9 +624,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Memory used heap.",
+            "description": "Memory reserved from system by heap (avg): Memory reserved from system by heap.\n  \n\nHeap objects, bytes (avg): Bytes of allocated heap objects.\n  \n\nHeap idle spans, bytes (avg): Bytes in idle (unused) spans.\n  \n\nHeap in-use spans, bytes (avg): Bytes in in-use spans.\n  \n\nHeap released, bytes (avg): Bytes of idle spans whose physical memory has been returned to the OS.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -580,6 +639,10 @@
                      "showPoints": "never"
                   },
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bytes"
                },
                "overrides": [
@@ -652,7 +715,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-orange",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -757,16 +820,25 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Number of allocated heap objects.\nThis changes as GC is performed and new objects are allocated.\n",
+            "description": "Heap allocated objects (avg): Number of allocated heap objects.\nThis changes as GC is performed and new objects are allocated.\n  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
-                  }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -822,8 +894,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
+            "description": "Memory mspan (avg): Memory reserved by mspan  \n\nMemory mcache (avg): Memory reserved by mcache  \n\nMemory buck hash (avg): Memory reserved by mcache  \n\nMemory gc metadata (avg): Memory reserved by gc metadata  \n\nMemory other (avg): Memory reserved for other needs",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -832,6 +909,10 @@
                      "showPoints": "never"
                   },
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bytes"
                },
                "overrides": [
@@ -904,7 +985,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-orange",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -1009,8 +1090,13 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
+            "description": "Memory reserved by stack (avg): Memory reserved by stack.\n  \n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1019,6 +1105,10 @@
                      "showPoints": "never"
                   },
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "bytes"
                },
                "overrides": [
@@ -1043,7 +1133,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-orange",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
