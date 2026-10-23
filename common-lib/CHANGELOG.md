@@ -1,3 +1,6 @@
+# 0.6.3
+- [Dashboards] feat: add dashboards.defaultTimezone.
+
 # 0.6.2
 - [Panels] chore: panel requests.stat.errors use default palette color if there are no errors and red color if erorrs > 0.
 
