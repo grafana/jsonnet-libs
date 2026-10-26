@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
@@ -13,7 +15,7 @@
   dashboardNamePrefix: 'Catchpoint',
   dashboardTags: [self.uid],
   dashboardPeriod: 'now-30m',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   // Each dashboard's own template variables, layered onto filteringSelector and

@@ -620,7 +620,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "GitLab overview",
       "uid": "gitlab_overview"
    }

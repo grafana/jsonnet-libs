@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   enableDatacenterLabel: false,
@@ -10,7 +12,7 @@
   dashboardNamePrefix: 'Apache Cassandra',
   dashboardTags: [self.uid + '-mixin'],
   dashboardPeriod: 'now-30m',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   //alert thresholds

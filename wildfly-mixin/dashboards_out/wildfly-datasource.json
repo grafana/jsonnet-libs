@@ -484,7 +484,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Wildfly datasource",
       "uid": "wildfly-datasource"
    }

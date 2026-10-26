@@ -694,7 +694,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "TensorFlow overview",
       "uid": "tensorflow_tensorflow_overview"
    }

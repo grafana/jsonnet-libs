@@ -1121,7 +1121,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Apache Cassandra nodes",
       "uid": "cassandra_nodes"
    }

@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   enableMultiCluster: false,
@@ -9,7 +11,7 @@
   dashboardTags: ['apache-solr-mixin'],
   dashboardNamePrefix: 'Apache Solr',
   dashboardPeriod: 'now-30m',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   // alerts thresholds

@@ -1,8 +1,10 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   _config+:: {
     local this = self,
     dashboardPeriod: 'now-1h',
-    dashboardTimezone: 'default',
+    dashboardTimezone: commonlib.dashboards.defaultTimezone,
     dashboardRefresh: '1m',
     signals:
       {

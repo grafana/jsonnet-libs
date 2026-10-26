@@ -1103,7 +1103,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Cloudflare zone overview",
       "uid": "cloudflare_cloudflare_zone_overview"
    }

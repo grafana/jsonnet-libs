@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   // any modular library should include as inputs:
   // 'dashboardNamePrefix' - Use as prefix for all Dashboards and (optional) rule groups
@@ -15,7 +17,7 @@
 
   // additional params can be added if needed
   dashboardPeriod: 'now-1h',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   metricsSource: ['prometheus'],  // or any combination of: prometheus, otel, otel_with_suffixes, java_otel, java_otel_with_suffixes, java_micrometer.

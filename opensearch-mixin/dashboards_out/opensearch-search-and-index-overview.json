@@ -1667,7 +1667,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "OpenSearch search and index overview",
       "uid": "opensearch-search-and-index-overview"
    }

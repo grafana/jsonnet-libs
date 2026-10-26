@@ -393,7 +393,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Cloudflare worker overview",
       "uid": "cloudflare_cloudflare_worker_overview"
    }

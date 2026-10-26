@@ -1469,7 +1469,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Azure Front Door",
       "uid": "azure-frontdoor"
    }

@@ -336,7 +336,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Aerospike logs",
       "uid": "aerospike-logs"
    }

@@ -316,7 +316,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "OpenStack logs",
       "uid": "openstack-logs"
    }
