@@ -910,7 +910,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Apache ActiveMQ queue overview",
       "uid": "apacheactivemq_queues"
    }

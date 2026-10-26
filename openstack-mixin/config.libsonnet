@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   filteringSelector: '',
@@ -8,7 +10,7 @@
   uid: 'openstack',
   dashboardTags: [self.uid],
   dashboardPeriod: 'now-30m',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
   metricsSource: ['prometheus'],
 

@@ -2266,7 +2266,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "vSphere overview",
       "uid": "vsphere-overview"
    }

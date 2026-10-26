@@ -485,7 +485,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Vultr instances",
       "uid": "vultr-instances"
    }

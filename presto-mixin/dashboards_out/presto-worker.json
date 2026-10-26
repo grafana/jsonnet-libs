@@ -947,7 +947,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Presto worker",
       "uid": "presto_worker"
    }

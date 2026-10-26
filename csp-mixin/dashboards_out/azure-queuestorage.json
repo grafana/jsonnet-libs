@@ -926,7 +926,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Azure Queue storage",
       "uid": "azure-queuestoreage"
    }

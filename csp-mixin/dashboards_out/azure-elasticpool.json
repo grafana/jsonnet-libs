@@ -543,7 +543,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Azure Elastic pool",
       "uid": "azure-elasticpool"
    }

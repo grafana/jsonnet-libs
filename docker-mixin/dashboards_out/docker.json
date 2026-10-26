@@ -1150,7 +1150,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Docker overview",
       "uid": "integration-docker-overview"
    }

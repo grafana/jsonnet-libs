@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   // any modular library should include as inputs:
@@ -19,7 +21,7 @@
 
   // additional params can be added if needed
   dashboardPeriod: 'now-1h',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   // alert thresholds

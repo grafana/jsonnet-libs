@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
@@ -14,7 +16,7 @@
   dashboardNamePrefix: 'vSphere',
   dashboardTags: [self.uid],
   dashboardPeriod: 'now-30m',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
   customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
 

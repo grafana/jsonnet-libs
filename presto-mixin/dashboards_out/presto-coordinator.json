@@ -1117,7 +1117,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Presto coordinator",
       "uid": "presto_coordinator"
    }

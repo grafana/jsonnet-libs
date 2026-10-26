@@ -49,7 +49,7 @@ Default thresholds can be configured in `config.libsonnet`.
   _config+:: {
     dashboardTags: ['cloudflare-mixin'],
     dashboardPeriod: 'now-30m',
-    dashboardTimezone: 'default',
+    dashboardTimezone: '',
     dashboardRefresh: '1m',
 
     // CloudflareMetricsDown alert filter variable

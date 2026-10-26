@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
 
@@ -12,7 +14,7 @@
   dashboardNamePrefix: 'SAP HANA',
   dashboardTags: ['sap-hana-mixin'],
   dashboardPeriod: 'now-1h',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   // Alert thresholds

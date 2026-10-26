@@ -1218,7 +1218,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "GCP Virtual private cloud",
       "uid": "gcp-vpc"
    }

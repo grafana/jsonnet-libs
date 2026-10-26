@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   filteringSelector: '',
@@ -10,7 +12,7 @@
 
   // additional params can be added if needed
   dashboardPeriod: 'now-30m',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   // alert thresholds

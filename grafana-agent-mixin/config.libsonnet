@@ -3,7 +3,7 @@
     dashboardTags: ['grafana-agent'],
     dashboardPeriod: 'now-1h',
     dashboardRefresh: '1m',
-    dashboardTimezone: 'default',
+    dashboardTimezone: '',
 
     //alert thresholds
     alertsCriticalCpuUsage5m: 80,  //percent

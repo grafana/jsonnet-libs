@@ -317,7 +317,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "PgBouncer logs",
       "uid": "pgbouncer-logs"
    }

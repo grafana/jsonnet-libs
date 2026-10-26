@@ -539,7 +539,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Discourse overview",
       "uid": "discourse-overview"
    }

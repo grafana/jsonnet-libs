@@ -458,7 +458,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Clickhouse latency",
       "uid": "clickhouse_latency"
    }

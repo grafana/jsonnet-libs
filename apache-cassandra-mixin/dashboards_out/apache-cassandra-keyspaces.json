@@ -726,7 +726,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Apache Cassandra keyspaces",
       "uid": "cassandra_keyspaces"
    }

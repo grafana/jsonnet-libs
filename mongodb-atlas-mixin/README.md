@@ -100,7 +100,7 @@ Default thresholds can be configured in `config.libsonnet`.
 
     dashboardTags: ['mongodb-atlas-mixin'],
     dashboardPeriod: 'now-1h',
-    dashboardTimezone: 'default',
+    dashboardTimezone: '',
     dashboardRefresh: '1m',
 
     // alerts thresholds
