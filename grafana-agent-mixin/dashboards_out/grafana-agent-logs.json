@@ -786,7 +786,7 @@
             "30d"
          ]
       },
-      "timezone": "",
+      "timezone": "default",
       "title": "Grafana Agent Logs",
       "uid": "integration-grafana-agent-logs",
       "version": 0
