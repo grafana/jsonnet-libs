@@ -9,7 +9,7 @@
                "enable": true,
                "expr": "{job=~\"$job\",instance=~\"$instance\", channel=\"System\", level=\"Critical\"} | json",
                "hide": true,
-               "iconColor": "light-purple",
+               "iconColor": "#ff7383",
                "name": "Critical system event",
                "tagKeys": "job,instance,level",
                "textFormat": "{{message}}",
@@ -21,9 +21,9 @@
                   "uid": "${prometheus_datasource}"
                },
                "enable": true,
-               "expr": "windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
+               "expr": "windows_system_boot_time_timestamp_seconds{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_system_boot_time_timestamp{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
                "hide": true,
-               "iconColor": "light-yellow",
+               "iconColor": "#fade2a",
                "name": "Reboot",
                "tagKeys": "job,instance",
                "titleFormat": "Reboot",
@@ -37,7 +37,7 @@
                "enable": true,
                "expr": "{job=~\"$job\",instance=~\"$instance\", source=\"Service Control Manager\", level=\"Error\"} |= \"terminated\" | json",
                "hide": true,
-               "iconColor": "light-orange",
+               "iconColor": "#fade2a",
                "name": "Service failed",
                "tagKeys": "job,instance,level",
                "textFormat": "{{message}}",
@@ -65,6 +65,16 @@
             },
             "description": "All Windows instances' perfomance at a glance.",
             "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -195,6 +205,7 @@
                         {
                            "id": "color",
                            "value": {
+                              "fixedColor": "#5794f2",
                               "mode": "continuous-BlYlRd"
                            }
                         },
@@ -229,6 +240,13 @@
                         {
                            "id": "min",
                            "value": 0
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [ ]
+                           }
                         },
                         {
                            "id": "unit",
@@ -269,6 +287,7 @@
                         {
                            "id": "color",
                            "value": {
+                              "fixedColor": "#5794f2",
                               "mode": "continuous-BlYlRd"
                            }
                         },
@@ -303,6 +322,13 @@
                         {
                            "id": "min",
                            "value": 0
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [ ]
+                           }
                         },
                         {
                            "id": "unit",
@@ -347,6 +373,7 @@
                         {
                            "id": "color",
                            "value": {
+                              "fixedColor": "#5794f2",
                               "mode": "continuous-BlYlRd"
                            }
                         },
@@ -383,6 +410,13 @@
                            "value": 0
                         },
                         {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [ ]
+                           }
+                        },
+                        {
                            "id": "unit",
                            "value": "percent"
                         }
@@ -411,7 +445,7 @@
                   "show": true
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -421,6 +455,7 @@
                   "expr": "windows_os_info{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": true,
+                  "legendFormat": "{{instance}}: OS info",
                   "refId": "OS Info"
                },
                {
@@ -428,9 +463,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "time() - windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "time() - windows_system_boot_time_timestamp_seconds{job=~\"$job\",instance=~\"$instance\"}\nor\ntime() - windows_system_boot_time_timestamp{job=~\"$job\",instance=~\"$instance\"}\nor\ntime() - windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": true,
+                  "legendFormat": "{{instance}}: Uptime",
                   "refId": "Uptime"
                },
                {
@@ -438,9 +474,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_cs_logical_processors{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "windows_cpu_logical_processor{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_cs_logical_processors{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": true,
+                  "legendFormat": "{{instance}}: Cores",
                   "refId": "Cores"
                },
                {
@@ -459,7 +496,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"}\nor\nwindows_memory_physical_total_bytes{job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "Memory total",
@@ -470,9 +507,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100",
+                  "expr": "100 - windows_memory_physical_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_memory_physical_total_bytes{job=~\"$job\",instance=~\"$instance\"} * 100\nor\n100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100",
                   "format": "table",
                   "instant": true,
+                  "legendFormat": "{{instance}}: Usage",
                   "refId": "Memory usage"
                },
                {
@@ -483,6 +521,7 @@
                   "expr": "windows_logical_disk_size_bytes{volume=\"C:\", job=~\"$job\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": true,
+                  "legendFormat": "{{instance}}: C: ({{volume}})",
                   "refId": "Disk C: total"
                },
                {
@@ -493,6 +532,7 @@
                   "expr": "100 - windows_logical_disk_free_bytes{volume=\"C:\", job=~\"$job\",instance=~\"$instance\"}/windows_logical_disk_size_bytes{volume=\"C:\", job=~\"$job\",instance=~\"$instance\"}*100",
                   "format": "table",
                   "instant": true,
+                  "legendFormat": "{{instance}}: C: Used ({{volume}})",
                   "refId": "Disk C: used"
                },
                {
@@ -500,9 +540,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count by (instance) (max_over_time(ALERTS{job=~\"$job\",instance=~\"$instance\", alertstate=\"firing\", severity=\"critical\"}[1m])) * group by (instance) (windows_os_info{job=~\"$job\",instance=~\"$instance\"})",
+                  "expr": "count by (job,instance) (max_over_time(ALERTS{job=~\"$job\",instance=~\"$instance\", alertstate=\"firing\", severity=\"critical\"}[1m])) * group by (job,instance) (windows_os_info{job=~\"$job\",instance=~\"$instance\"})",
                   "format": "table",
                   "instant": true,
+                  "legendFormat": "{{instance}}: Critical",
                   "refId": "CRITICAL"
                },
                {
@@ -510,9 +551,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "count by (instance) (max_over_time(ALERTS{job=~\"$job\",instance=~\"$instance\", alertstate=\"firing\", severity=\"warning\"}[1m])) * group by (instance) (windows_os_info{job=~\"$job\",instance=~\"$instance\"})",
+                  "expr": "count by (job,instance) (max_over_time(ALERTS{job=~\"$job\",instance=~\"$instance\", alertstate=\"firing\", severity=\"warning\"}[1m])) * group by (job,instance) (windows_os_info{job=~\"$job\",instance=~\"$instance\"})",
                   "format": "table",
                   "instant": true,
+                  "legendFormat": "{{instance}}: Warning",
                   "refId": "WARNING"
                }
             ],
@@ -567,6 +609,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -585,6 +628,10 @@
                   ],
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -597,7 +644,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-purple",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -641,7 +688,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -649,7 +696,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk(25,100 - (avg without (mode,core) (rate(windows_cpu_time_total{mode=\"idle\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])*100)))",
-                  "legendFormat": "{{instance}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "CPU usage"
                },
                {
                   "datasource": {
@@ -657,7 +707,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "avg(100 - (avg without (mode,core) (rate(windows_cpu_time_total{mode=\"idle\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])*100)))",
-                  "legendFormat": "Mean"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Mean",
+                  "refId": "Mean"
                }
             ],
             "title": "CPU usage",
@@ -672,6 +725,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -690,6 +744,10 @@
                   ],
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -702,7 +760,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-purple",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -746,23 +804,29 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100)",
-                  "legendFormat": "{{instance}}"
+                  "expr": "topk(25,100 - windows_memory_physical_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_memory_physical_total_bytes{job=~\"$job\",instance=~\"$instance\"} * 100\nor\n100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Memory usage"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg(100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100)",
-                  "legendFormat": "Mean"
+                  "expr": "avg(100 - windows_memory_physical_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_memory_physical_total_bytes{job=~\"$job\",instance=~\"$instance\"} * 100\nor\n100 - windows_os_physical_memory_free_bytes{job=~\"$job\",instance=~\"$instance\"} / windows_cs_physical_memory_bytes{job=~\"$job\",instance=~\"$instance\"} * 100)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Mean",
+                  "refId": "Mean"
                }
             ],
             "title": "Memory usage",
@@ -777,6 +841,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -795,6 +860,10 @@
                   ],
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -807,7 +876,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-purple",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -851,7 +920,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -859,7 +928,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk(25,(1-clamp_max(irate(windows_logical_disk_idle_seconds_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]),1)) * 100)",
-                  "legendFormat": "{{instance}}: {{volume}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: {{volume}}",
+                  "refId": "Disk I/O utilization"
                },
                {
                   "datasource": {
@@ -867,7 +939,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "avg((1-clamp_max(irate(windows_logical_disk_idle_seconds_total{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]),1)) * 100)",
-                  "legendFormat": "Mean"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Mean",
+                  "refId": "Mean"
                }
             ],
             "title": "Disk IO",
@@ -882,6 +957,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "continuous-BlYlRd"
                   },
                   "custom": {
@@ -900,6 +976,10 @@
                   ],
                   "max": 100,
                   "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "percent"
                },
                "overrides": [
@@ -912,7 +992,7 @@
                         {
                            "id": "color",
                            "value": {
-                              "fixedColor": "light-purple",
+                              "fixedColor": "#ffb357",
                               "mode": "fixed"
                            }
                         },
@@ -956,7 +1036,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -964,7 +1044,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk(25,100 - windows_logical_disk_free_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}/windows_logical_disk_size_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}*100)",
-                  "legendFormat": "{{instance}}: {{volume}}"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: {{volume}}",
+                  "refId": "Disk usage"
                },
                {
                   "datasource": {
@@ -972,7 +1055,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "avg(100 - windows_logical_disk_free_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}/windows_logical_disk_size_bytes{volume!~\"HarddiskVolume.*\", job=~\"$job\",instance=~\"$instance\"}*100)",
-                  "legendFormat": "Mean"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Mean",
+                  "refId": "Mean"
                }
             ],
             "title": "Disk space usage",
@@ -986,6 +1072,10 @@
             "description": "Top 25.\n\n**Network errors**:\n\nNetwork errors refer to issues that occur during the transmission of data across a network. \n\nThese errors can result from various factors, including physical issues, jitter, collisions, noise and interference.\n\nMonitoring network errors is essential for diagnosing and resolving issues, as they can indicate problems with network hardware or environmental factors affecting network quality.\n\n**Dropped packets**:\n\nDropped packets occur when data packets traveling through a network are intentionally discarded or lost due to congestion, resource limitations, or network configuration issues. \n\nCommon causes include network congestion, buffer overflows, QoS settings, and network errors, as corrupted or incomplete packets may be discarded by receiving devices.\n\nDropped packets can impact network performance and lead to issues such as degraded voice or video quality in real-time applications.\n",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "drawStyle": "points",
                      "fillOpacity": 30,
@@ -997,6 +1087,10 @@
                   },
                   "decimals": 1,
                   "noValue": "No errors",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
                   "unit": "pps"
                }
             },
@@ -1017,7 +1111,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1025,7 +1119,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk(25, irate(windows_net_packets_outbound_errors_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))>0.5",
-                  "legendFormat": "{{instance}}: {{ nic }} transmitted"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: {{ nic }} errors out",
+                  "refId": "Network errors transmitted"
                },
                {
                   "datasource": {
@@ -1033,7 +1130,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk(25, irate(windows_net_packets_received_errors_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))>0.5",
-                  "legendFormat": "{{instance}}: {{ nic }} received"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: {{ nic }} errors in",
+                  "refId": "Network errors received"
                },
                {
                   "datasource": {
@@ -1041,7 +1141,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk(25, irate(windows_net_packets_received_unknown_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))>0.5",
-                  "legendFormat": "{{instance}}: {{ nic }} received (unknown)"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: {{ nic }} unknown in",
+                  "refId": "Network unknown packets received"
                },
                {
                   "datasource": {
@@ -1049,7 +1152,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk(25, irate(windows_net_packets_outbound_discarded_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))>0.5",
-                  "legendFormat": "{{instance}}: {{ nic }} transmitted packets dropped"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: {{ nic }} discards out",
+                  "refId": "Network discards transmitted"
                },
                {
                   "datasource": {
@@ -1057,7 +1163,10 @@
                      "uid": "${prometheus_datasource}"
                   },
                   "expr": "topk(25, irate(windows_net_packets_received_discarded_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))>0.5",
-                  "legendFormat": "{{instance}}: {{ nic }} received packets dropped"
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: {{ nic }} discards in",
+                  "refId": "Network discards received"
                }
             ],
             "title": "Network errors and dropped packets",
