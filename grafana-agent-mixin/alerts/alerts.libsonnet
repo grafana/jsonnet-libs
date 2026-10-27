@@ -41,7 +41,7 @@
             expr: |||
               (
                 rate(process_cpu_seconds_total{
-                  job=~"integrations/agent"
+                  job="integrations/agent"
                 }[5m]) > %(alertsCriticalCpuUsage5m)s / 100
               )
             ||| % $._config,
@@ -58,8 +58,8 @@
             alert: 'GrafanaAgentMemHigh',
             expr: |||
               (
-                sum without (instance) (go_memstats_heap_inuse_bytes{job=~"integrations/agent"}) /
-                sum without (instance, instance_group_name) (agent_wal_storage_active_series{job=~"integrations/agent"}) / 1e3 > %(alertsCriticalMemUsage5m)s
+                sum without (instance) (go_memstats_heap_inuse_bytes{job="integrations/agent"}) /
+                sum without (instance, instance_group_name) (agent_wal_storage_active_series{job="integrations/agent"}) / 1e3 > %(alertsCriticalMemUsage5m)s
               )
             ||| % $._config,
             'for': '5m',
@@ -68,7 +68,7 @@
             },
             annotations: {
               summary: 'Grafana agent high memory usage.',
-              description: 'Grafana agent is using more than %(alertsCriticalMemUsage5m)s of memory on {{ $labels.instance }} for the last 5 minutes' % $._config,
+              description: 'Grafana agent is using more than %(alertsCriticalMemUsage5m)s of memory on job {{ $labels.job }} for the last 5 minutes' % $._config,
             },
           },
         ],
