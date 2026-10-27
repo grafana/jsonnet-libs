@@ -43,7 +43,7 @@
           {
             alert: 'ApacheActiveMQHighStoreMemoryUsage',
             expr: |||
-              activemq_store_usage_ratio > %(alertsHighStoreMemoryUsage)s
+              100 * activemq_store_usage_ratio > %(alertsHighStoreMemoryUsage)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -61,7 +61,7 @@
           {
             alert: 'ApacheActiveMQHighTemporaryMemoryUsage',
             expr: |||
-              activemq_temp_usage_ratio > %(alertsHighTemporaryMemoryUsage)s
+              100 * activemq_temp_usage_ratio > %(alertsHighTemporaryMemoryUsage)s
             ||| % this.config,
             'for': '5m',
             labels: {
