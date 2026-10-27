@@ -1,0 +1,142 @@
+{
+  new(this): {
+    groups: [
+      {
+        name: this.config.uid + '-alerts',
+        rules: [
+          {
+            alert: 'ApacheSolrZookeeperChangeInEnsembleSize',
+            expr: |||
+              changes(solr_zookeeper_ensemble_size{%(filteringSelector)s}[5m]) > 0
+            ||| % this.config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'Changes in the ZooKeeper ensemble size can affect the stability and performance of the cluster.',
+              description:
+                (
+                  'Zookeeper host {{$labels.zk_host}} has had an ensemble change of {{ printf "%%.0f" $value }} over the last 5 minutes'
+                ) % this.config,
+            },
+          },
+          {
+            alert: 'ApacheSolrHighCPUUsageCritical',
+            expr: |||
+              100 * sum without (item) (avg_over_time(solr_metrics_jvm_os_cpu_load{item="systemCpuLoad", %(filteringSelector)s}[5m])) > %(alertsCriticalCPUUsage)s
+            ||| % this.config,
+            'for': '5m',
+            labels: {
+              severity: 'critical',
+            },
+            annotations: {
+              summary: 'High CPU load can indicate that Solr nodes are under heavy load, potentially impacting performance.',
+              description:
+                (
+                  '{{$labels.base_url}} on cluster {{$labels.solr_cluster}} has had a system CPU load of {{ printf "%%.0f" $value }}%%, which is above the threshold of %(alertsCriticalCPUUsage)s.'
+                ) % this.config,
+            },
+          },
+          {
+            alert: 'ApacheSolrHighCPUUsageWarning',
+            expr: |||
+              100 * sum without (item) (avg_over_time(solr_metrics_jvm_os_cpu_load{item="systemCpuLoad", %(filteringSelector)s}[5m])) > %(alertsWarningCPUUsage)s
+            ||| % this.config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'High CPU load can indicate that Solr nodes are under heavy load, potentially impacting performance.',
+              description:
+                (
+                  '{{$labels.base_url}} on cluster {{$labels.solr_cluster}} has had a system CPU load of {{ printf "%%.0f" $value }}%%, which is above the threshold of %(alertsWarningCPUUsage)s.'
+                ) % this.config,
+            },
+          },
+          {
+            alert: 'ApacheSolrHighHeapMemoryUsageCritical',
+            expr: |||
+              100 * sum without(item)(solr_metrics_jvm_memory_heap_bytes{item="used", %(filteringSelector)s}) / clamp_min(sum without(item)(solr_metrics_jvm_memory_heap_bytes{item="max", %(filteringSelector)s}), 1) > %(alertsCriticalMemoryUsage)s
+            ||| % this.config,
+            'for': '5m',
+            labels: {
+              severity: 'critical',
+            },
+            annotations: {
+              summary: 'High heap memory usage can lead to garbage collection issues, out-of-memory errors, and overall system instability.',
+              description: |||
+                {{$labels.base_url}} on cluster {{$labels.solr_cluster}} has had high memory usage of {{ printf "%%.0f" $value }}%%, which is above the thresold of %(alertsCriticalMemoryUsage)s.
+              ||| % this.config,
+            },
+          },
+          {
+            alert: 'ApacheSolrHighHeapMemoryUsageWarning',
+            expr: |||
+              100 * sum without(item)(solr_metrics_jvm_memory_heap_bytes{item="used", %(filteringSelector)s}) / clamp_min(sum without(item)(solr_metrics_jvm_memory_heap_bytes{item="max", %(filteringSelector)s}), 1) > %(alertsWarningMemoryUsage)s
+            ||| % this.config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'High heap memory usage can lead to garbage collection issues, out-of-memory errors, and overall system instability.',
+              description: |||
+                {{$labels.base_url}} on cluster {{$labels.solr_cluster}} has had high memory usage of {{ printf "%%.0f" $value }}%%, which is above the thresold of %(alertsWarningMemoryUsage)s.
+              ||| % this.config,
+            },
+          },
+          {
+            alert: 'ApacheSolrLowCacheHitRatio',
+            expr: |||
+              100 * sum without(base_url, category, collection, item, replica, shard) (solr_metrics_core_searcher_cache_ratio{item="hitratio", type=~"documentCache|filterCache|queryResultCache", %(filteringSelector)s}) < %(alertsWarningCacheUsage)s
+            ||| % this.config,
+            'for': '10m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'Low cache hit ratios can lead to increased disk I/O and slower query response times.',
+              description: |||
+                {{$labels.instance}} on cluster {{$labels.solr_cluster}} has had a low cache hit ratio of {{ printf "%%.0f" $value }}%% on core {{$labels.core}} of type {{$labels.type}}, which is under the threshold of %(alertsWarningCacheUsage)s.
+              ||| % this.config,
+            },
+          },
+          {
+            alert: 'ApacheSolrHighCoreErrors',
+            expr: |||
+              100 * sum without(base_url, category, collection, handler, replica, shard) (increase(solr_metrics_core_errors_total{%(filteringSelector)s}[10m]) / clamp_min(avg_over_time(solr_metrics_core_errors_total{%(filteringSelector)s}[10m]), 1)) > %(alertsWarningCoreErrors)s
+            ||| % this.config,
+            'for': '10m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'A spike in core errors can indicate serious issues at the core level, affecting data integrity and availability.',
+              description: |||
+                {{$labels.instance}} on cluster {{$labels.solr_cluster}} has had a high amount of core errors {{ printf "%%.0f" $value }}%% on core {{$labels.core}}, which is above the threshold of %(alertsWarningCoreErrors)s.
+              ||| % this.config,
+            },
+          },
+          {
+            alert: 'ApacheSolrHighDocumentIndexing',
+            expr: |||
+              100 * sum without(base_url, category, collection, handler, replica, shard) (increase(solr_metrics_core_update_handler_adds_total{%(filteringSelector)s}[15m]) / clamp_min(avg_over_time(solr_metrics_core_update_handler_adds_total{%(filteringSelector)s}[15m]), 1)) > %(alertsWarningDocumentIndexing)s
+            ||| % this.config,
+            'for': '15m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'A sudden spike in document indexing could indicate unintended or malicious bulk updates.',
+              description: |||
+                {{$labels.instance}} on cluster {{$labels.solr_cluster}} has had a high document indexing value of {{ printf "%%.0f" $value }}%% on core {{$labels.core}}, which is above the threshold of %(alertsWarningDocumentIndexing)s.
+              ||| % this.config,
+            },
+          },
+        ],
+      },
+    ],
+  },
+}

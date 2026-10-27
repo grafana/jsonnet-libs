@@ -68,7 +68,7 @@ Default thresholds can be configured in `config.libsonnet`.
 
     // additional params
     dashboardPeriod: 'now-30m',
-    dashboardTimezone: 'default',
+    dashboardTimezone: '',
     dashboardRefresh: '1m',
     metricsSource: 'prometheus',
 

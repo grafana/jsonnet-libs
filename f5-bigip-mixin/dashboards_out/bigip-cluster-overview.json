@@ -645,7 +645,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "F5 BIG-IP cluster overview",
       "uid": "f5bigip_cluster_overview"
    }

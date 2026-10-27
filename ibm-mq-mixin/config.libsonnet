@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
@@ -8,7 +10,7 @@
   dashboardNamePrefix: 'IBM MQ',
   dashboardTags: ['ibm-mq-mixin'],
   dashboardPeriod: 'now-1h',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   // Data source configuration

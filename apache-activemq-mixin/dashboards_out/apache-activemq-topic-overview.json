@@ -994,7 +994,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Apache ActiveMQ topic overview",
       "uid": "apacheactivemq_topics"
    }

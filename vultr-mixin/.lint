@@ -1,0 +1,5 @@
+exclusions:
+  template-instance-rule:
+    reason: "Vultr metrics come from the Vultr API, so instances are filtered by label instead."
+  target-instance-rule:
+    reason: "Vultr metrics come from the Vultr API, so instances are filtered by label instead."

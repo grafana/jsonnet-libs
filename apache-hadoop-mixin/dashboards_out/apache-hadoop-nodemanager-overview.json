@@ -1236,7 +1236,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Apache Hadoop NodeManager overview",
       "uid": "apachehadoop_nodemanager_overview"
    }

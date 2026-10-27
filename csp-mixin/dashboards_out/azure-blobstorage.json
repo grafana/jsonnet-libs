@@ -877,7 +877,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Azure Blob storage",
       "uid": "azure-blobstorage"
    }

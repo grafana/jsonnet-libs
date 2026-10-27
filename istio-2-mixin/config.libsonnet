@@ -1,8 +1,15 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
+  local this = self,
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
   filteringSelector: '',
   // Used to identify 'group' of instances.
   groupLabels: ['job', 'cluster'],
+  // Istio dashboards are always scoped to a job/cluster rather than to a single
+  // scrape target, so there is no instance-level breakdown.
+  instanceLabels: [],
+  metricsSource: ['prometheus'],
 
   // Prefix all dashboards uids and alert groups
   uid: 'istio',
@@ -10,16 +17,24 @@
   dashboardNamePrefix: '',
   dashboardTags: [self.uid],
   dashboardPeriod: 'now-1h',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   // Alert thresholds
-  alertsWarningHighRequestLatency: 4000,
-  alertsWarningGalleyValidationFailures: 0,
-  alertsCriticalListenerConfigConflicts: 0,
-  alertsWarningXDSConfigRejections: 0,
-  alertsCriticalHTTPRequestErrorPercentage: 5,  //%
-  alertsCriticalGRPCRequestErrorPercentage: 5,  //%
+  alertsWarningHighRequestLatency: 4000,  // ms
+  alertsWarningGalleyValidationFailures: 0,  // failures per 5m
+  alertsCriticalListenerConfigConflicts: 0,  // conflicts per 5m
+  alertsWarningXDSConfigRejections: 0,  // rejections per 5m
+  alertsCriticalHTTPRequestErrorPercentage: 5,  // %
+  alertsCriticalGRPCRequestErrorPercentage: 5,  // %
+
+  // Signal definitions
+  signals: {
+    overview: (import './signals/overview.libsonnet')(this),
+    controlplane: (import './signals/controlplane.libsonnet')(this),
+    services: (import './signals/services.libsonnet')(this),
+    workloads: (import './signals/workloads.libsonnet')(this),
+  },
 
   // Logs lib related
   // Set to false to disable logs dashboard and logs annotations

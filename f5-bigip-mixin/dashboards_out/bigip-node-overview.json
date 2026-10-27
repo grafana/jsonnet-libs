@@ -703,7 +703,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "F5 BIG-IP node overview",
       "uid": "f5bigip_node_overview"
    }

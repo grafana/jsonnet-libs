@@ -12,7 +12,7 @@
     dashboardNamePrefix: '',
     dashboardTags: ['windows'],
     dashboardPeriod: 'now-1h',
-    dashboardTimezone: 'default',
+    dashboardTimezone: '',
     dashboardRefresh: '1m',
 
     alertsCPUThresholdWarning: '90',

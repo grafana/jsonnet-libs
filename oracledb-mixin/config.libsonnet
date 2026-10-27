@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   filteringSelector: '',
@@ -10,7 +12,7 @@
   dashboardNamePrefix: 'Oracle Database',
   dashboardTags: ['oracledb-mixin'],
   dashboardPeriod: 'now-1h',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   // Data source configuration

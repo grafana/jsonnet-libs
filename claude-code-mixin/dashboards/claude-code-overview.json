@@ -4731,7 +4731,7 @@
     "to": "now"
   },
   "timepicker": {},
-  "timezone": "default",
+  "timezone": "",
   "title": "Claude Code",
   "uid": "claude-code-overview",
   "version": 4,

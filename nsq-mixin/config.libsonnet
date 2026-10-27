@@ -4,7 +4,7 @@
     dashboardNamePrefix: 'NSQ',
     dashboardTags: ['nsq'],
     dashboardPeriod: 'now-1h',
-    dashboardTimezone: 'default',
+    dashboardTimezone: '',
     dashboardRefresh: '1m',
 
     // alerts thresholds
