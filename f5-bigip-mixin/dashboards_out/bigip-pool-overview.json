@@ -836,7 +836,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "F5 BIG-IP pool overview",
       "uid": "f5bigip_pool_overview"
    }

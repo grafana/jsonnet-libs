@@ -2272,7 +2272,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Azure Virtual Machines",
       "uid": "azure-virtualmachines"
    }

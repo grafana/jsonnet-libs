@@ -330,7 +330,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Apache HBase logs",
       "uid": "apachehbase-logs"
    }

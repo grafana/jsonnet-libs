@@ -1963,7 +1963,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "MongoDB Atlas cluster overview",
       "uid": "mongodb-atlas-cluster-overview"
    }

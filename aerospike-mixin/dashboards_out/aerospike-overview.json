@@ -1227,7 +1227,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Aerospike overview",
       "uid": "aerospike_overview"
    }
