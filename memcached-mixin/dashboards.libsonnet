@@ -8,6 +8,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
         {
           uid: '124d5222454213f748dbfaf69b77ec48',
           graphTooltip: $._config.graphTooltip,
+          tags: $._config.tags,
         }
       )
       .addMultiTemplate('cluster', 'memcached_commands_total', $._config.clusterLabel, allValue='.*')
