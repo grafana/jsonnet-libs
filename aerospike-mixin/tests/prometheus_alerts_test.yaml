@@ -1,0 +1,262 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: AerospikeHighClientReadErrorRate-high
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_read_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+300x15
+  - series: aerospike_namespace_client_read_success{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+300x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientReadErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientReadErrorRate
+    exp_alerts:
+    - exp_labels:
+        instance: node
+        aerospike_cluster: cluster
+        ns: test
+        severity: warning
+      exp_annotations:
+        description: 50 percent of client read transactions are resulting in errors for namespace test, on node node, on cluster cluster, which is above the threshold of 25.
+        summary: There is a high rate of errors for client read transactions.
+- name: AerospikeHighClientReadErrorRate-all_errors
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_read_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+600x15
+  - series: aerospike_namespace_client_read_success{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientReadErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientReadErrorRate
+    exp_alerts:
+    - exp_labels:
+        instance: node
+        aerospike_cluster: cluster
+        ns: test
+        severity: warning
+      exp_annotations:
+        description: 100 percent of client read transactions are resulting in errors for namespace test, on node node, on cluster cluster, which is above the threshold of 25.
+        summary: There is a high rate of errors for client read transactions.
+- name: AerospikeHighClientReadErrorRate-low
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_read_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+60x15
+  - series: aerospike_namespace_client_read_success{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+540x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientReadErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientReadErrorRate
+    exp_alerts: []
+- name: AerospikeHighClientReadErrorRate-boundary
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_read_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+150x15
+  - series: aerospike_namespace_client_read_success{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+450x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientReadErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientReadErrorRate
+    exp_alerts: []
+- name: AerospikeHighClientReadErrorRate-idle
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_read_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+0x15
+  - series: aerospike_namespace_client_read_success{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientReadErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientReadErrorRate
+    exp_alerts: []
+- name: AerospikeHighClientWriteErrorRate-high
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_write_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+300x15
+  - series: aerospike_namespace_client_write_success{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+300x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientWriteErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientWriteErrorRate
+    exp_alerts:
+    - exp_labels:
+        instance: node
+        aerospike_cluster: cluster
+        ns: test
+        severity: warning
+      exp_annotations:
+        description: 50 percent of client write transactions are resulting in errors for namespace test, on node node, on cluster cluster, which is above the threshold of 25.
+        summary: There is a high rate of errors for client write transactions.
+- name: AerospikeHighClientWriteErrorRate-all_errors
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_write_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+600x15
+  - series: aerospike_namespace_client_write_success{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientWriteErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientWriteErrorRate
+    exp_alerts:
+    - exp_labels:
+        instance: node
+        aerospike_cluster: cluster
+        ns: test
+        severity: warning
+      exp_annotations:
+        description: 100 percent of client write transactions are resulting in errors for namespace test, on node node, on cluster cluster, which is above the threshold of 25.
+        summary: There is a high rate of errors for client write transactions.
+- name: AerospikeHighClientWriteErrorRate-low
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_write_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+60x15
+  - series: aerospike_namespace_client_write_success{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+540x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientWriteErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientWriteErrorRate
+    exp_alerts: []
+- name: AerospikeHighClientWriteErrorRate-boundary
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_write_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+150x15
+  - series: aerospike_namespace_client_write_success{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+450x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientWriteErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientWriteErrorRate
+    exp_alerts: []
+- name: AerospikeHighClientWriteErrorRate-idle
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_write_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+0x15
+  - series: aerospike_namespace_client_write_success{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientWriteErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientWriteErrorRate
+    exp_alerts: []
+- name: AerospikeHighClientUDFErrorRate-high
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_udf_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+300x15
+  - series: aerospike_namespace_client_udf_complete{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+300x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientUDFErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientUDFErrorRate
+    exp_alerts:
+    - exp_labels:
+        instance: node
+        aerospike_cluster: cluster
+        ns: test
+        severity: warning
+      exp_annotations:
+        description: 50 percent of client UDF transactions are resulting in errors for namespace test, on node node, on cluster cluster, which is above the threshold of 25.
+        summary: There is a high rate of errors for client UDF transactions.
+- name: AerospikeHighClientUDFErrorRate-all_errors
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_udf_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+600x15
+  - series: aerospike_namespace_client_udf_complete{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientUDFErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientUDFErrorRate
+    exp_alerts:
+    - exp_labels:
+        instance: node
+        aerospike_cluster: cluster
+        ns: test
+        severity: warning
+      exp_annotations:
+        description: 100 percent of client UDF transactions are resulting in errors for namespace test, on node node, on cluster cluster, which is above the threshold of 25.
+        summary: There is a high rate of errors for client UDF transactions.
+- name: AerospikeHighClientUDFErrorRate-low
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_udf_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+60x15
+  - series: aerospike_namespace_client_udf_complete{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+540x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientUDFErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientUDFErrorRate
+    exp_alerts: []
+- name: AerospikeHighClientUDFErrorRate-boundary
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_udf_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+150x15
+  - series: aerospike_namespace_client_udf_complete{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+450x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientUDFErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientUDFErrorRate
+    exp_alerts: []
+- name: AerospikeHighClientUDFErrorRate-idle
+  interval: 1m
+  input_series:
+  - series: aerospike_namespace_client_udf_error{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+0x15
+  - series: aerospike_namespace_client_udf_complete{instance="node",aerospike_cluster="cluster",ns="test",cluster_name="cluster",service="node:3000",storage_engine="memory",job="integrations/aerospike"}
+    values: 0+0x15
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: AerospikeHighClientUDFErrorRate
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: AerospikeHighClientUDFErrorRate
+    exp_alerts: []
