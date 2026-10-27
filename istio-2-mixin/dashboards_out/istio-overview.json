@@ -1,0 +1,2116 @@
+{
+      "links": [
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "Istio logs",
+            "type": "link",
+            "url": "/d/istio-logs"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "Istio services overview",
+            "type": "link",
+            "url": "/d/istio-services-overview"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "Istio workloads overview",
+            "type": "link",
+            "url": "/d/istio-workloads-overview"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of proxies in the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "super-light-red",
+                           "value": null
+                        },
+                        {
+                           "color": "super-light-green",
+                           "value": 1
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Proxies"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "graphMode": "none"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count by (job,cluster) (\n  istio_build{job=~\"$job\",cluster=~\"$cluster\", component=\"proxy\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Proxies"
+               }
+            ],
+            "title": "Proxies",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of gateways in the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "text",
+                           "value": null
+                        },
+                        {
+                           "color": "super-light-green",
+                           "value": 1
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Gateways"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 4,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "graphMode": "none"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"Gateway\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"Gateway\", event=\"delete\"}) or (max(up) * 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Gateways"
+               }
+            ],
+            "title": "Gateways",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of virtual services in the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "text",
+                           "value": null
+                        },
+                        {
+                           "color": "super-light-green",
+                           "value": 1
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Virtual services"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 8,
+               "y": 1
+            },
+            "id": 4,
+            "options": {
+               "graphMode": "none"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"VirtualService\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"VirtualService\", event=\"delete\"}) or (max(up) * 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Virtual services"
+               }
+            ],
+            "title": "Virtual services",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 1
+            },
+            "id": 5,
+            "options": {
+               "alertInstanceLabelFilter": "job=~\"${job:regex}\",cluster=~\"${cluster:regex}\""
+            },
+            "pluginVersion": "v11.4.0",
+            "title": "Istio alerts",
+            "type": "alertlist"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of destination rules in the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "super-light-orange",
+                           "value": null
+                        },
+                        {
+                           "color": "super-light-green",
+                           "value": 1
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Destination rules"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 0,
+               "y": 5
+            },
+            "id": 6,
+            "options": {
+               "graphMode": "none"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"DestinationRule\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"DestinationRule\", event=\"delete\"}) or (max(up) * 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Destination rules"
+               }
+            ],
+            "title": "Destination rules",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of service entries in the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "text",
+                           "value": null
+                        },
+                        {
+                           "color": "super-light-green",
+                           "value": 1
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Service entries"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 4,
+               "y": 5
+            },
+            "id": 7,
+            "options": {
+               "graphMode": "none"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"ServiceEntry\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"ServiceEntry\", event=\"delete\"}) or (max(up) * 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Service entries"
+               }
+            ],
+            "title": "Service entries",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of workload entries in the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "text",
+                           "value": null
+                        },
+                        {
+                           "color": "super-light-green",
+                           "value": 1
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Workload entries"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 8,
+               "y": 5
+            },
+            "id": 8,
+            "options": {
+               "graphMode": "none"
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"WorkloadEntry\", event=\"add\"}) - (max(pilot_k8s_cfg_events{job=~\"$job\",cluster=~\"$cluster\", type=\"WorkloadEntry\", event=\"delete\"}) or (max(up) * 0))",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "",
+                  "refId": "Workload entries"
+               }
+            ],
+            "title": "Workload entries",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of open file descriptors for various components of the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 5
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  process_open_fds{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod",
+                  "refId": "Istiod open file descriptors"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_process_open_fds{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway",
+                  "refId": "Gateway open file descriptors"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_process_open_fds{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy",
+                  "refId": "Proxy open file descriptors"
+               }
+            ],
+            "title": "Open file descriptors",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "vCPU usage for various components of the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "percentunit"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 11
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(process_cpu_seconds_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod",
+                  "refId": "Istiod CPU usage"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(istio_agent_process_cpu_seconds_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway",
+                  "refId": "Gateway CPU usage"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(istio_agent_process_cpu_seconds_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy",
+                  "refId": "Proxy CPU usage"
+               }
+            ],
+            "title": "vCPU usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Heap memory information for the various components of the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*(T|t)otal.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#ffb357",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 11
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean"
+                  ],
+                  "displayMode": "table"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  go_memstats_heap_alloc_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod - alloc",
+                  "refId": "Istiod heap allocated"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  go_memstats_heap_inuse_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod - inuse",
+                  "refId": "Istiod heap in use"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  go_memstats_heap_sys_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod - sys",
+                  "refId": "Istiod heap system"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_go_memstats_heap_alloc_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway - alloc",
+                  "refId": "Gateway heap allocated"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_go_memstats_heap_inuse_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway - inuse",
+                  "refId": "Gateway heap in use"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_go_memstats_heap_sys_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway - sys",
+                  "refId": "Gateway heap system"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_go_memstats_heap_alloc_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy - alloc",
+                  "refId": "Proxy heap allocated"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_go_memstats_heap_inuse_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy - inuse",
+                  "refId": "Proxy heap in use"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_go_memstats_heap_sys_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy - sys",
+                  "refId": "Proxy heap system"
+               }
+            ],
+            "title": "Heap memory",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Available virtual memory compared to the resident memory for the various components of the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "scaleDistribution": {
+                        "log": 2,
+                        "type": "log"
+                     },
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*(T|t)otal.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#ffb357",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 17
+            },
+            "id": 12,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  process_virtual_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod - virtual",
+                  "refId": "Istiod virtual memory"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  process_resident_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - istiod - resident",
+                  "refId": "Istiod resident memory"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_process_virtual_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway - virtual",
+                  "refId": "Gateway virtual memory"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_process_resident_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway - resident",
+                  "refId": "Gateway resident memory"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_process_virtual_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy - virtual",
+                  "refId": "Proxy virtual memory"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  istio_agent_process_resident_memory_bytes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy - resident",
+                  "refId": "Proxy resident memory"
+               }
+            ],
+            "title": "Virtual & resident memory",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "HTTP/GRPC request rate for the components of the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never",
+                     "stacking": {
+                        "group": "A",
+                        "mode": "normal"
+                     }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "reqps"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 16,
+               "x": 0,
+               "y": 23
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\", reporter=\"source\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - gateway",
+                  "refId": "Gateway HTTP/GRPC request rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\", reporter=\"source\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - proxy",
+                  "refId": "Proxy HTTP/GRPC request rate"
+               }
+            ],
+            "title": "HTTP/GRPC requests",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.",
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 23
+            },
+            "id": 14,
+            "options": {
+               "legend": {
+                  "placement": "right"
+               },
+               "reduceOptions": {
+                  "calcs": [
+                     "sum"
+                  ]
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - gateway - ok",
+                  "refId": "Gateway HTTP OK responses"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$gateway\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[45].+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - gateway - error",
+                  "refId": "Gateway HTTP error responses"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - proxy - ok",
+                  "refId": "Proxy HTTP OK responses"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$proxy\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[45].+\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - proxy - error",
+                  "refId": "Proxy HTTP error responses"
+               }
+            ],
+            "title": "HTTP response overview",
+            "type": "piechart"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 31
+            },
+            "id": 15,
+            "panels": [ ],
+            "title": "Control plane",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of xDS pushes by Istiod over the entire time range for the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "super-light-green"
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 32
+            },
+            "id": 16,
+            "options": {
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
+                     "sum"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"cds\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - CDS",
+                  "refId": "CDS xDS pushes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"eds\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - EDS",
+                  "refId": "EDS xDS pushes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"lds\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - LDS",
+                  "refId": "LDS xDS pushes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"rds\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - RDS",
+                  "refId": "RDS xDS pushes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"sds\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - SDS",
+                  "refId": "SDS xDS pushes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_xds_pushes{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\", type=\"nds\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - NDS",
+                  "refId": "NDS xDS pushes"
+               }
+            ],
+            "title": "xDS pushes",
+            "type": "bargauge"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The latency of xDS pushes by Istiod over the entire time range for the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "super-light-green"
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 32
+            },
+            "id": 17,
+            "options": {
+               "legend": {
+                  "placement": "right"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by(le, job, cluster) (increase(pilot_proxy_convergence_time_bucket{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__range:]))",
+                  "format": "heatmap",
+                  "instant": true,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}}",
+                  "refId": "xDS proxy push latency"
+               }
+            ],
+            "title": "xDS push delay (s)",
+            "type": "histogram"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of galley validations over the entire time range for the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "super-light-green"
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 32
+            },
+            "id": 18,
+            "options": {
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
+                     "sum"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(galley_validation_passed{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - passed",
+                  "refId": "Galley validations passed"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(galley_validation_failed{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - failed",
+                  "refId": "Galley validations failed"
+               }
+            ],
+            "title": "Galley validations",
+            "type": "bargauge"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The send and receive data rates from all envoy proxies in the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "Bps"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 38
+            },
+            "id": 19,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(envoy_cluster_upstream_cx_rx_bytes_total{job=~\"$job\",cluster=~\"$cluster\", cluster_name=\"xds-grpc\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - sent",
+                  "refId": "Envoy xDS bytes sent"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  rate(envoy_cluster_upstream_cx_tx_bytes_total{job=~\"$job\",cluster=~\"$cluster\", cluster_name=\"xds-grpc\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{cluster}} - received",
+                  "refId": "Envoy xDS bytes received"
+               }
+            ],
+            "title": "xDS envoy throughput",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The xDS related errors across the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 38
+            },
+            "id": 20,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "min",
+                     "max",
+                     "mean"
+                  ],
+                  "displayMode": "table"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_xds_cds_reject{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - CDS reject",
+                  "refId": "CDS xDS rejections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_xds_eds_reject{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - EDS reject",
+                  "refId": "EDS xDS rejections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_xds_rds_reject{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - RDS reject",
+                  "refId": "RDS xDS rejections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_xds_lds_reject{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - LDS reject",
+                  "refId": "LDS xDS rejections"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_xds_write_timeout{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - write timeout",
+                  "refId": "xDS write timeouts"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_total_xds_internal_errors{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - internal",
+                  "refId": "xDS internal errors"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_total_xds_rejects{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - proxy rejects",
+                  "refId": "xDS proxy rejects"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_conflict_inbound_listener{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - in listener conflict",
+                  "refId": "xDS inbound listener conflicts"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(pilot_conflict_outbound_listener_tcp_over_current_tcp{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - out listener tcp conflict",
+                  "refId": "xDS outbound listener TCP conflicts"
+               }
+            ],
+            "title": "xDS errors / $__interval",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of sidecar injections over the entire time range for the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "thresholds": {
+                     "steps": [
+                        {
+                           "color": "super-light-green"
+                        }
+                     ]
+                  }
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 38
+            },
+            "id": 21,
+            "options": {
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
+                     "sum"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(sidecar_injection_success_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - success",
+                  "refId": "Sidecar injection successes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster) (\n  increase(sidecar_injection_failure_total{job=~\"$job\",cluster=~\"$cluster\",pod=~\"$istiod\"}[$__interval:] offset -$__interval)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "1m",
+                  "legendFormat": "{{cluster}} - failure",
+                  "refId": "Sidecar injection failures"
+               }
+            ],
+            "title": "Sidecar injections",
+            "type": "bargauge"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 44
+            },
+            "id": 22,
+            "panels": [ ],
+            "title": "Services",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Service details for the Istio system.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "noValue": "NA",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "job"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": "true"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Service"
+                     },
+                     "properties": [
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "title": "",
+                                 "url": "d/istio-services-overview?var-datasource=${datasource}&var-job=${__data.fields[\"Job\"]}&var-cluster=${__data.fields[\"Cluster\"]}&var-service=${__value.raw}&${__url_time_range}"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "HTTP/GRPC tx delay"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 157
+                        },
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "HTTP/GRPC rx delay"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.width",
+                           "value": 157
+                        },
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "HTTP/GRPC tx"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "reqps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "HTTP/GRPC rx"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "reqps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "HTTP tx success"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "HTTP rx success"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "TCP tx"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "TCP rx"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "Bps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 45
+            },
+            "id": 23,
+            "options": {
+               "footer": {
+                  "reducer": [
+                     "sum"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by(job, cluster, service) (\n  label_replace(\n  rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval])\n, \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Source service HTTP/GRPC request rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by(job, cluster, service) (\n  label_replace(\n  rate(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval])\n, \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Destination service HTTP/GRPC request rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")), 1)\n",
+                  "format": "table",
+                  "instant": true,
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Source service HTTP/GRPC request latency"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_sum{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_request_duration_milliseconds_count{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")), 1)\n",
+                  "format": "table",
+                  "instant": true,
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Destination service HTTP/GRPC request latency"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\", request_protocol=\"http\"}[$__rate_interval]), \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")), 1)\n",
+                  "format": "table",
+                  "instant": true,
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Source service HTTP request success rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "100 * sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\", request_protocol=\"http\", response_code=~\"[123].+\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\"))\n/\nclamp_min(sum by(job, cluster, service) (label_replace(increase(istio_requests_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\", request_protocol=\"http\"}[$__rate_interval]), \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")), 1)\n",
+                  "format": "table",
+                  "instant": true,
+                  "interval": "1m",
+                  "legendFormat": "",
+                  "refId": "Destination service HTTP request success rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by(job, cluster, service) (\n  label_replace(\n  rate(istio_tcp_received_bytes_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"source\"}[$__rate_interval])\n, \"service\", \"$1\", \"source_canonical_service\", \"(.*)\")\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Source service TCP receive rate"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by(job, cluster, service) (\n  label_replace(\n  rate(istio_tcp_sent_bytes_total{job=~\"$job\",cluster=~\"$cluster\", reporter=\"destination\"}[$__rate_interval])\n, \"service\", \"$1\", \"destination_canonical_service\", \"(.*)\")\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "",
+                  "refId": "Source service TCP send rate"
+               }
+            ],
+            "title": "Services",
+            "transformations": [
+               {
+                  "id": "merge",
+                  "options": { }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": {
+                        "Time": true
+                     },
+                     "includeByName": { },
+                     "indexByName": {
+                        "Time": 0,
+                        "Value #Destination service HTTP request success rate": 9,
+                        "Value #Destination service HTTP/GRPC request latency": 8,
+                        "Value #Destination service HTTP/GRPC request rate": 7,
+                        "Value #Source service HTTP request success rate": 6,
+                        "Value #Source service HTTP/GRPC request latency": 5,
+                        "Value #Source service HTTP/GRPC request rate": 4,
+                        "Value #Source service TCP receive rate": 10,
+                        "Value #Source service TCP send rate": 11,
+                        "cluster": 1,
+                        "job": 2,
+                        "service": 3
+                     },
+                     "renameByName": {
+                        "Value #Destination service HTTP request success rate": "HTTP rx success",
+                        "Value #Destination service HTTP/GRPC request latency": "HTTP/GRPC rx delay",
+                        "Value #Destination service HTTP/GRPC request rate": "HTTP/GRPC rx",
+                        "Value #Source service HTTP request success rate": "HTTP tx success",
+                        "Value #Source service HTTP/GRPC request latency": "HTTP/GRPC tx delay",
+                        "Value #Source service HTTP/GRPC request rate": "HTTP/GRPC tx",
+                        "Value #Source service TCP receive rate": "TCP tx",
+                        "Value #Source service TCP send rate": "TCP rx",
+                        "cluster": "Cluster",
+                        "job": "Job",
+                        "service": "Service"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "istio"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(istiod_uptime_seconds{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "cluster",
+               "query": "label_values(istiod_uptime_seconds{job=~\"$job\"}, cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Istiod",
+               "multi": true,
+               "name": "istiod",
+               "query": "label_values(pilot_info{job=~\"$job\", cluster=~\"$cluster\"}, pod)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Gateway",
+               "multi": true,
+               "name": "gateway",
+               "query": "label_values(istio_agent_process_cpu_seconds_total{job=~\"$job\", cluster=~\"$cluster\", pod=~\"istio-egress.*|istio-ingress.*\"}, pod)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Proxy",
+               "multi": true,
+               "name": "proxy",
+               "query": "label_values(istio_agent_process_cpu_seconds_total{job=~\"$job\", cluster=~\"$cluster\", pod!~\"istio-egress.*|istio-ingress.*\"}, pod)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "",
+      "title": "Istio overview",
+      "uid": "istio-overview"
+   }

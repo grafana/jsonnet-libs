@@ -66,7 +66,7 @@ local config = (import 'config.libsonnet')._config;
     metricSource: ['prometheus', 'prometheus_pre_0_30'],
     dashboardTags: ['windows'],
     dashboardPeriod: 'now-1h',
-    dashboardTimezone: 'default',
+    dashboardTimezone: '',
     dashboardRefresh: '1m',
 
     alertsCPUThresholdWarning: '90',

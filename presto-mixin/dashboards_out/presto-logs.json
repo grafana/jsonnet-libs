@@ -319,7 +319,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Presto logs",
       "uid": "presto-logs"
    }

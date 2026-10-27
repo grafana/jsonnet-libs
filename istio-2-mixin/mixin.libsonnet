@@ -6,10 +6,8 @@ local istio =
   + istiolib.withConfigMixin(
     {
       filteringSelector: config.filteringSelector,
-      uid: 'istio',
-      groupLabels: ['job', 'cluster'],
-      // disable loki logs
-      enableLokiLogs: true,
+      uid: config.uid,
+      enableLokiLogs: config.enableLokiLogs,
     }
   );
 

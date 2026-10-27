@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   // any modular library should include as inputs:
@@ -25,7 +27,7 @@
   alertMemoryUsageThresholdCritical: '90',
   alertDiskUsageThresholdCritical: '90',
   dashboardPeriod: 'now-1h',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   // optional Windows AD

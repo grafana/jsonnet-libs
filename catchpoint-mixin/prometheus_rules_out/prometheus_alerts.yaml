@@ -1,5 +1,5 @@
 groups:
-    - name: catchpoint
+    - name: catchpoint-alerts
       rules:
         - alert: CatchpointHighServerResponseTime
           annotations:

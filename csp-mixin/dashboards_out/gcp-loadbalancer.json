@@ -1089,7 +1089,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "GCP Load Balancing",
       "uid": "gcp-loadbalancer"
    }

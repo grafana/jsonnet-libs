@@ -1041,7 +1041,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "F5 BIG-IP virtual server overview",
       "uid": "f5bigip_virtual_server_overview"
    }

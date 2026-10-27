@@ -3,7 +3,7 @@
 
     groups: [
       {
-        name: this.config.uid,
+        name: this.config.uid + '-alerts',
         rules: [
           {
             alert: 'VSphereHostInfoCpuUtilization',
@@ -72,8 +72,11 @@
           {
             alert: 'VSphereHostWarningHighPacketErrors',
             expr: |||
-              100 * sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_network_packet_error_rate{%(packetErrorSelector)s}) / clamp_min(sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_network_packet_rate{%(packetErrorSelector)s}), 1) > %(alertsHighPacketErrors)s
-            ||| % this.config { packetErrorSelector: if this.config.filteringSelector != '' then 'object="",' + this.config.filteringSelector else 'object=""' },
+              100 * %(hostSumBy)s (vcenter_host_network_packet_error_rate{%(packetErrorSelector)s}) / clamp_min(%(hostSumBy)s (vcenter_host_network_packet_rate{%(packetErrorSelector)s}), 1) > %(alertsHighPacketErrors)s
+            ||| % this.config {
+              packetErrorSelector: if this.config.filteringSelector != '' then 'object="",' + this.config.filteringSelector else 'object=""',
+              hostSumBy: 'sum by (' + std.join(', ', this.config.groupLabels + this.config.datacenterLabels + this.config.hostLabels) + ')',
+            },
             'for': '5m',
             labels: {
               severity: 'warning',

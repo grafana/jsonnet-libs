@@ -723,7 +723,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Azure Load Balancing",
       "uid": "azure-loadbalancer"
    }

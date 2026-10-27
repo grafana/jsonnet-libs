@@ -1697,7 +1697,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "InfluxDB instance overview",
       "uid": "influxdb_instance_overview"
    }
