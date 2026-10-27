@@ -32,7 +32,7 @@
             annotations: {
               summary: 'Topic channel depth is increasing.',
               description: |||
-                Channel {{ $labels.channel }} depth in topic {{ $labels.topic }} is higher than %(alertsCriticalChannelDepth)s. The current queue is {{ $value }}.
+                Channel depth in topic {{ $labels.topic }} is higher than %(alertsCriticalChannelDepth)s. The current queue is {{ $value }}.
               ||| % $._config,
             },
           },
