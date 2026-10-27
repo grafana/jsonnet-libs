@@ -1093,7 +1093,7 @@
             "30d"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "SNMP Overview",
       "uid": "integration-snmp-overview",
       "version": 3,

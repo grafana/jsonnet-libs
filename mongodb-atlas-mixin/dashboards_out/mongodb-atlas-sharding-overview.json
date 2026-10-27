@@ -1233,7 +1233,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "MongoDB Atlas sharding overview",
       "uid": "mongodb-atlas-sharding-overview"
    }

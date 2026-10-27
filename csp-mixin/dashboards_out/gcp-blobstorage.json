@@ -792,7 +792,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "GCP Blob storage",
       "uid": "gcp-blobstorage"
    }

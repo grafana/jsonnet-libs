@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
 
@@ -9,7 +11,7 @@
   // Dashboard settings
   dashboardTags: ['discourse-mixin'],
   dashboardPeriod: 'now-1h',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
   dashboardNamePrefix: 'Discourse',
   uid: 'discourse',

@@ -298,7 +298,7 @@
          "from": "now-1h",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "MSSQL logs",
       "uid": "mssql-logs"
    }

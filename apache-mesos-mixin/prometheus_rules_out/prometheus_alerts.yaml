@@ -6,7 +6,7 @@ groups:
             description: '{{ printf "%.0f" $value }} percent memory usage on {{$labels.mesos_cluster}}, which is above the threshold of 90.'
             summary: There is a high memory usage for the cluster.
           expr: |
-            min without(instance, job, type) (mesos_master_mem{type="percent"}) > 90
+            100 * min without(instance, job, type) (mesos_master_mem{type="percent"}) > 90
           for: 5m
           labels:
             severity: warning
@@ -15,7 +15,7 @@ groups:
             description: '{{ printf "%.0f" $value }} percent disk usage on {{$labels.mesos_cluster}}, which is above the threshold of 90.'
             summary: There is a high disk usage for the cluster.
           expr: |
-            min without(instance, job, type) (mesos_master_disk{type="percent"}) > 90
+            100 * min without(instance, job, type) (mesos_master_disk{type="percent"}) > 90
           for: 5m
           labels:
             severity: critical

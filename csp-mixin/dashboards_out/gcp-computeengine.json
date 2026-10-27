@@ -1803,7 +1803,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "GCP Compute Engine",
       "uid": "gcp-computeengine"
    }

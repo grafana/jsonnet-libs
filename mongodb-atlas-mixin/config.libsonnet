@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
 
@@ -13,7 +15,7 @@
   dashboardNamePrefix: 'MongoDB Atlas',
   dashboardRefresh: '1m',
   dashboardPeriod: 'now-30m',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
 
   // Sharding dashboard flag, enable this to generate the sharding overview dashboard
   enableShardingOverview: true,

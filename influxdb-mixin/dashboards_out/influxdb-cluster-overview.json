@@ -1287,7 +1287,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "InfluxDB cluster overview",
       "uid": "influxdb_cluster_overview"
    }

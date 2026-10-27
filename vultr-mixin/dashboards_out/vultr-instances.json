@@ -1,0 +1,491 @@
+{
+      "annotations": {
+         "list": [ ]
+      },
+      "links": [
+         {
+            "asDropdown": false,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "vultr-mixin"
+            ],
+            "title": "Other Vultr dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "panels": [ ],
+            "title": "Overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Number of Vultr instances reporting metrics.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Instances"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 0,
+               "y": 1
+            },
+            "id": 2,
+            "options": {
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count(vultr_instance_cpu_usage_percent{job=~\"$job\",region=~\"$region\",label=~\"$label\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "Instances",
+                  "refId": "Instances"
+               }
+            ],
+            "title": "Instances",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Outbound bandwidth used in the current billing period as a percentage of the pooled allowance. Vultr only counts outbound bandwidth and pools allowances across all instances in the account.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Bandwidth allowance used"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 18,
+               "x": 6,
+               "y": 1
+            },
+            "id": 3,
+            "options": {
+               "colorMode": "value",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "100 * sum by (job) (vultr_instance_bandwidth_tx_bytes_total{job=~\"$job\",region=~\"$region\",label=~\"$label\"}) / (sum by (job) (vultr_instance_bandwidth_allowed_bytes{job=~\"$job\",region=~\"$region\",label=~\"$label\"}) > 0)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}",
+                  "refId": "Bandwidth allowance used"
+               }
+            ],
+            "title": "Bandwidth allowance used",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Instances (avg):   \n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instances"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "CPU usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "GPU utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance Label"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        },
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "targetBlank": false,
+                                 "title": "Drill down to ${__value.text}",
+                                 "url": "d/vultr-instance-details?var-label=${__data.fields.label}&${__url_time_range}&${datasource:queryparam}"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 12,
+               "w": 24,
+               "x": 0,
+               "y": 13
+            },
+            "id": 4,
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "vultr_instance_bandwidth_allowed_bytes{job=~\"$job\",region=~\"$region\",label=~\"$label\"} * 0",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{label}}: Instances",
+                  "refId": "Instances"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,region,label) (\n  vultr_instance_cpu_usage_percent{job=~\"$job\",region=~\"$region\",label=~\"$label\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{label}}: CPU",
+                  "refId": "CPU usage"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,region,label) (\n  vultr_instance_gpu_utilization_percent{job=~\"$job\",region=~\"$region\",label=~\"$label\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{label}}: GPU",
+                  "refId": "GPU utilization"
+               }
+            ],
+            "title": "Instances",
+            "transformations": [
+               {
+                  "id": "merge"
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value #(.*)",
+                     "renamePattern": "$1"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "^(?!Time).*$"
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "indexByName": {
+                        "job": 0,
+                        "label": 2,
+                        "region": 1
+                     },
+                     "renameByName": {
+                        "Value": "Instances",
+                        "job": "Job",
+                        "label": "Label",
+                        "region": "Region"
+                     }
+                  }
+               },
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "label",
+                     "mode": "inner"
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "includeByName": {
+                        "CPU usage": true,
+                        "GPU utilization": true,
+                        "label": true,
+                        "os": true,
+                        "plan": true,
+                        "region": true
+                     },
+                     "indexByName": {
+                        "CPU usage": 4,
+                        "GPU utilization": 5,
+                        "Label": 0,
+                        "Region": 1,
+                        "os": 3,
+                        "plan": 2
+                     },
+                     "renameByName": {
+                        "Label": "Instance Label",
+                        "os": "Operating System",
+                        "plan": "Plan"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "vultr-mixin"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(vultr_instance_cpu_usage_percent{}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Region",
+               "multi": true,
+               "name": "region",
+               "query": "label_values(vultr_instance_cpu_usage_percent{job=~\"$job\"}, region)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Label",
+               "multi": true,
+               "name": "label",
+               "query": "label_values(vultr_instance_cpu_usage_percent{job=~\"$job\",region=~\"$region\"}, label)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "",
+      "title": "Vultr instances",
+      "uid": "vultr-instances"
+   }

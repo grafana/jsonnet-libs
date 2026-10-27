@@ -821,7 +821,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "MongoDB Atlas performance overview",
       "uid": "mongodb-atlas-performance-overview"
    }

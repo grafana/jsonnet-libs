@@ -839,7 +839,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Velero cluster view",
       "uid": "velero-cluster-view"
    }

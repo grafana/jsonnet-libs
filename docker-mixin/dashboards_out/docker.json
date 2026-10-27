@@ -45,7 +45,8 @@
                            "value": null
                         }
                      ]
-                  }
+                  },
+                  "unit": ""
                },
                "overrides": [
                   {
@@ -69,7 +70,7 @@
                "y": 1
             },
             "id": 2,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -106,7 +107,8 @@
                            "value": null
                         }
                      ]
-                  }
+                  },
+                  "unit": ""
                },
                "overrides": [
                   {
@@ -130,7 +132,7 @@
                "y": 1
             },
             "id": 3,
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -152,7 +154,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Total CPU utilization percent is a metric that indicates the overall level of central processing unit (CPU) usage in a computer system.\nIt represents the combined load placed on all CPU cores or processors.\n\nFor instance, if the total CPU utilization percent is 50%, it means that,\non average, half of the CPU's processing capacity is being used to execute tasks. A higher percentage indicates that the CPU is working more intensively, potentially leading to system slowdowns if it remains consistently high.\n",
+            "description": "CPU usage (avg): Cpu time consumed in seconds by container.  \n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -203,7 +205,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -288,7 +290,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -373,7 +375,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -442,7 +444,8 @@
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [ ]
-                  }
+                  },
+                  "unit": "percent"
                },
                "overrides": [
                   {
@@ -476,7 +479,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -583,7 +586,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -618,7 +621,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Network traffic (bits per sec) measures data transmitted and received.",
+            "description": "received (avg): Cumulative count of bytes received.  \n\ntransmitted (avg): Cumulative count of bytes transmitted.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -649,7 +652,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -701,7 +704,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -734,7 +737,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Network errors refer to issues that occur during the transmission of data across a network. \n\nThese errors can result from various factors, including physical issues, jitter, collisions, noise and interference.\n\nMonitoring network errors is essential for diagnosing and resolving issues, as they can indicate problems with network hardware or environmental factors affecting network quality.\n",
+            "description": "drops received (avg): Number of packets received and dropped.  \n\ndrops transmitted (avg): Number of packets dropped while transmitting.  \n\nerrors received (avg): Number of packets received with errors.  \n\nerrors transmitted (avg): Number of packets transmitted with errors.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -827,7 +830,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -895,7 +898,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Disk space usage is the amount of storage being used on a device's hard drive or storage medium, in bytes.\n",
+            "description": "Disk space usage (avg): Disk space usage in bytes.  \n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -914,7 +917,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "bytes"
+                  "unit": "decbytes"
                },
                "overrides": [
                   {
@@ -948,7 +951,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -970,7 +973,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "The number of I/O requests per second for the device/volume.",
+            "description": "Disk reads (avg): The number of read requests per second for the device/volume.  \n\nDisk writes (avg): The number of write requests per second for the device/volume.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -990,7 +993,7 @@
                      "mode": "absolute",
                      "steps": [ ]
                   },
-                  "unit": "iops"
+                  "unit": "reqps"
                },
                "overrides": [
                   {
@@ -1048,7 +1051,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1147,7 +1150,7 @@
             "now-1h"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Docker overview",
       "uid": "integration-docker-overview"
    }
