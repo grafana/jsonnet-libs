@@ -1286,7 +1286,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "MongoDB Atlas operations overview",
       "uid": "mongodb-atlas-operations-overview"
    }

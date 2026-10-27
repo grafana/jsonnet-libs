@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
@@ -9,7 +11,7 @@
   uid: 'apache-hbase',
   dashboardNamePrefix: 'Apache HBase',
   dashboardPeriod: 'now-30m',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
   metricsSource: ['prometheus'],
 

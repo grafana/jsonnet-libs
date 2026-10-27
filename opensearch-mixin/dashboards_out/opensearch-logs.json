@@ -344,7 +344,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "OpenSearch logs",
       "uid": "opensearch-logs"
    }

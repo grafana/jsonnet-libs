@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   filteringSelector: '',
@@ -12,7 +14,7 @@
   dashboardNamePrefix: '',
   dashboardTags: [self.uid],
   dashboardPeriod: 'now-1h',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   alertsWarningConnectionSpike: 100,  // OpenLDAPConnectionSpike: new connections opened in 5m.

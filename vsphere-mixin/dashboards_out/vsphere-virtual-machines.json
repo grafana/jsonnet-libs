@@ -1063,7 +1063,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "vSphere virtual machines",
       "uid": "vsphere-virtual-machines"
    }

@@ -1393,7 +1393,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Catchpoint web performance by node",
       "uid": "catchpoint-nodename-overview"
    }

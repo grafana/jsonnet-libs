@@ -2,7 +2,7 @@
   _config+:: {
     dashboardTags: ['apache-http-mixin'],
     dashboardPeriod: 'now-1h',
-    dashboardTimezone: 'default',
+    dashboardTimezone: '',
     dashboardRefresh: '1m',
 
     // for alerts

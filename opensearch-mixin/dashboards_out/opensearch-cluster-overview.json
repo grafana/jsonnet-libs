@@ -1888,7 +1888,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "OpenSearch cluster overview",
       "uid": "opensearch-cluster-overview"
    }

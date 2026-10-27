@@ -865,7 +865,7 @@
             "30d"
          ]
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Apache HTTP server",
       "uid": "apache-http",
       "version": 0

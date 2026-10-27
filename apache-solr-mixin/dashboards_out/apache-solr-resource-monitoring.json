@@ -1101,7 +1101,7 @@
          "from": "now-30m",
          "to": "now"
       },
-      "timezone": "default",
+      "timezone": "",
       "title": "Apache Solr resource monitoring",
       "uid": "apache-solr-resource-monitoring"
    }

@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
@@ -15,7 +17,7 @@
   dashboardNamePrefix: '',
   dashboardTags: [self.uid],
   dashboardPeriod: 'now-1h',
-  dashboardTimezone: 'default',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
   // Alert thresholds
