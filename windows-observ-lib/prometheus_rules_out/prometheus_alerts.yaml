@@ -17,12 +17,12 @@ groups:
             description: |
                 Memory usage on host {{ $labels.instance }} is critically high, with {{ printf "%.2f" $value }}% of total memory used.
                 This exceeds the threshold of 90%.
-                Current memory free: {{ with printf `windows_memory_physical_free_bytes{}
+                Current memory free: {{ with printf `windows_memory_physical_free_bytes{instance="%[1]s"}
                 or
-                windows_os_physical_memory_free_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
-                Total memory: {{ with printf `windows_cs_physical_memory_bytes{}
+                windows_os_physical_memory_free_bytes{instance="%[1]s"}` $labels.instance | query | first | value | humanize }}{{ . }}{{ end }}.
+                Total memory: {{ with printf `windows_cs_physical_memory_bytes{instance="%[1]s"}
                 or
-                windows_memory_physical_total_bytes{}` | query | first | value | humanize }}{{ . }}{{ end }}.
+                windows_memory_physical_total_bytes{instance="%[1]s"}` $labels.instance | query | first | value | humanize }}{{ . }}{{ end }}.
                 Consider investigating processes consuming high memory or increasing available memory.
             summary: High memory usage on Windows host.
           expr: |
@@ -38,8 +38,8 @@ groups:
             description: |
                 Disk space on volume {{ $labels.volume }} of host {{ $labels.instance }} is critically low, with {{ printf "%.2f" $value }}% of total space used.
                 This exceeds the threshold of 90%.
-                Current disk free: {{ with printf `windows_logical_disk_free_bytes{volume="%s", }` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
-                Total disk size: {{ with printf `windows_logical_disk_size_bytes{volume="%s", }` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
+                Current disk free: {{ with printf `windows_logical_disk_free_bytes{volume="%s", instance="%s", }` $labels.volume $labels.instance | query | first | value | humanize }}{{ . }}{{ end }}.
+                Total disk size: {{ with printf `windows_logical_disk_size_bytes{volume="%s", instance="%s", }` $labels.volume $labels.instance | query | first | value | humanize }}{{ . }}{{ end }}.
                 Consider cleaning up unnecessary files or increasing disk capacity.
             summary: Disk is almost full on Windows host.
           expr: |
