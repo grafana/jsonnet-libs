@@ -26,6 +26,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   alertsCPUThresholdWarning: '90',
   alertMemoryUsageThresholdCritical: '90',
   alertDiskUsageThresholdCritical: '90',
+  // The `query` template function is only supported by Prometheus/Mimir (datasource-managed) rule evaluation.
+  // Set to false when alerts are installed as Grafana-managed rules, which do not support it.
+  alertsQueryTemplateEnabled: true,
   dashboardPeriod: 'now-1h',
   dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',

@@ -35,6 +35,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   // regex to match network names where we should track IP address utilization:
   alertsIPutilizationNetworksMatcher: '.+',
 
+  // The `query` template function is only supported by Prometheus/Mimir (datasource-managed) rule evaluation.
+  // Set to false when alerts are installed as Grafana-managed rules, which do not support it.
+  alertsQueryTemplateEnabled: true,
+
   // logs lib related
   enableLokiLogs: true,
   customAllValue: '.*',  // Override this as desired. '.+' is a good option if you want to ensure a label is present.
