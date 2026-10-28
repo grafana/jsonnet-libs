@@ -146,7 +146,7 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
           annotations: {
             summary: 'Jaeger queries are failing.',
             description: |||
-              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
+              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors.
             |||,
           },
         }, {
@@ -159,7 +159,7 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
           annotations: {
             summary: 'Jaeger writes to Cassandra are failing.',
             description: |||
-              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
+              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors.
             |||,
           },
         }, {
@@ -172,7 +172,7 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
           annotations: {
             summary: 'Jaeger reads from Cassandra are failing.',
             description: |||
-              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
+              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors.
             |||,
           },
         }],
