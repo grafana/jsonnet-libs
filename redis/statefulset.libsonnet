@@ -105,8 +105,6 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     container.withVolumeMounts(
       [
         mount.new('etcredis', '/etc/redis'),
-        mount.new('config', '/label.sh') + mount.withSubPath('label.sh'),
-        mount.new('kubectl', '/k8s'),
       ]
     ) +
     container.withImagePullPolicy('IfNotPresent') +
@@ -176,6 +174,37 @@ local k = import 'ksonnet-util/kausal.libsonnet';
       cpu: '100m',
     }),
 
+  // Sidecar that continuously labels its own pod (redis-role=master|slave) from
+  // the ground-truth `redis-cli role`, so the redis-master/redis-slave Services
+  // always select the real master. Replaces the fragile init-time + sentinel
+  // client-reconfig-script labeling that could strand the Service.
+  redis_label_reconciler_container::
+    container.new('redis-label-reconciler', $._images.redis) +
+    container.withVolumeMounts(
+      [
+        mount.new('config', '/label-reconciler.sh') + mount.withSubPath('label-reconciler.sh'),
+        mount.new('kubectl', '/k8s'),
+      ]
+    ) +
+    container.withImagePullPolicy('IfNotPresent') +
+    container.withEnvMixin([
+      envVar.fromSecretRef('REDIS_PASSWORD', $.redis_secrets_name, $.redis_secrets_key),
+      // The reconciler labels *its own* pod; discover the name via the downward API.
+      {
+        name: 'POD_NAME',
+        valueFrom: { fieldRef: { fieldPath: 'metadata.name' } },
+      },
+    ]) +
+    container.withCommand(['/bin/bash', '-c', '/label-reconciler.sh']) +
+    container.mixin.resources.withLimitsMixin({
+      memory: '64Mi',
+      cpu: '100m',
+    }) +
+    container.mixin.resources.withRequestsMixin({
+      memory: '32Mi',
+      cpu: '10m',
+    }),
+
   redis_statefulset:
     local sfsVolumes = [
       {
@@ -203,6 +232,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
         $.redis_sentinel_container,
         $.redis_server_exporter_container,
         $.redis_sentinel_exporter_container,
+        $.redis_label_reconciler_container,
       ],
       [$.redis_pvc],
       {
