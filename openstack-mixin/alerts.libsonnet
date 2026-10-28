@@ -1,5 +1,18 @@
 {
   new(this): {
+    // query() is unsupported by Grafana-managed alerting. IP count is opt-in via alertsQueryTemplateEnabled.
+    local neutronHighIPsUsageDescription = |||
+      Network {{$labels.network_name}} is running out of free IP addresses on OpenStack {{$labels.%(instanceFirstLabel)s}},
+      {{ printf "%%.0f" $value }} percent of the pool used%(endOfSentence)s
+    ||| % this.config {
+      instanceFirstLabel: this.config.instanceLabels[0],
+      endOfSentence: if this.config.alertsQueryTemplateEnabled then ',' else '.',
+    } + (
+      if this.config.alertsQueryTemplateEnabled then |||
+        {{ with printf `sum(openstack_neutron_network_ip_availabilities_total{%(instanceFirstLabel)s=~"%%s", network_name=~"%%s", %(filteringSelector)s}) - (sum(openstack_neutron_network_ip_availabilities_used{%(instanceFirstLabel)s=~"%%s", network_name=~"%%s", %(filteringSelector)s}))` .Labels.%(instanceFirstLabel)s .Labels.network_name .Labels.%(instanceFirstLabel)s .Labels.network_name | query -}}{{ . | first | value | humanize }}{{ end }} IP addresses available.
+      ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] }
+      else ''
+    ),
     groups: [
       {
         name: this.config.uid + '-alerts',
@@ -170,11 +183,7 @@
             },
             annotations: {
               summary: 'Free IP addresses are running out.',
-              description: |||
-                Network {{$labels.network_name}} is running out of free IP addresses on OpenStack {{$labels.%(instanceFirstLabel)s}},
-                {{ printf "%%.0f" $value }} percent of the pool used,
-                {{ with printf `sum(openstack_neutron_network_ip_availabilities_total{%(instanceFirstLabel)s=~"%%s", network_name=~"%%s", %(filteringSelector)s}) - (sum(openstack_neutron_network_ip_availabilities_used{%(instanceFirstLabel)s=~"%%s", network_name=~"%%s", %(filteringSelector)s}))` .Labels.%(instanceFirstLabel)s .Labels.network_name .Labels.%(instanceFirstLabel)s .Labels.network_name | query -}}{{ . | first | value | humanize }}{{ end }} IP addresses available.
-              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+              description: neutronHighIPsUsageDescription,
             },
           },
           {
@@ -194,11 +203,7 @@
             },
             annotations: {
               summary: 'There are practically no free IP addresses left.',
-              description: |||
-                Network {{$labels.network_name}} is running out of free IP addresses on OpenStack {{$labels.%(instanceFirstLabel)s}},
-                {{ printf "%%.0f" $value }} percent of the pool used,
-                {{ with printf `sum(openstack_neutron_network_ip_availabilities_total{%(instanceFirstLabel)s=~"%%s", network_name=~"%%s", %(filteringSelector)s}) - (sum(openstack_neutron_network_ip_availabilities_used{%(instanceFirstLabel)s=~"%%s", network_name=~"%%s", %(filteringSelector)s}))` .Labels.%(instanceFirstLabel)s .Labels.network_name .Labels.%(instanceFirstLabel)s .Labels.network_name | query -}}{{ . | first | value | humanize }}{{ end }} IP addresses available.
-              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+              description: neutronHighIPsUsageDescription,
             },
           },
         ],
