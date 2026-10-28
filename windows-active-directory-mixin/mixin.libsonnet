@@ -2,15 +2,12 @@ local windowsobservlib = import '../windows-observ-lib/main.libsonnet';
 local alerts = import './alerts/alerts.libsonnet';
 local g = import './g.libsonnet';
 local var = g.dashboard.variable;
+local config = (import './config.libsonnet')._config;
 local activedirectorymixin =
   windowsobservlib.new()
 
   {
-    config+: {
-      enableADDashboard: true,
-      groupLabels: ['job'],
-      uid: 'active-directory',
-    },
+    config+: config,
   }
 
   {
