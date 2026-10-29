@@ -32,9 +32,7 @@ function(this)
         // aggFunction: 'sum' is default, let it handle aggregation
         sources: {
           postgres_exporter: {
-            expr: |||
-              pg_locks_count{%(queriesSelector)s, mode="exclusivelock"}              
-            |||,
+            expr: 'pg_stat_activity_count{%(queriesSelector)s, wait_event_type="Lock"} or pg_stat_activity_count{%(queriesSelector)s} * 0',
             legendCustomTemplate: ' Blocked queries',
           },
         },
@@ -58,11 +56,11 @@ function(this)
       walArchiveFailures: {
         name: 'WAL archive failures',
         description: 'Failed WAL archive attempts. Non-zero means backups may be incomplete.',
-        type: 'counter',
+        type: 'raw',
         unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: 'pg_stat_archiver_failed_count{%(queriesSelector)s}',
+            expr: 'sum by (%(agg)s) (increase(pg_stat_archiver_failed_count{%(queriesSelector)s}[$__range]))',
             legendCustomTemplate: ' WAL archive failures',
           },
         },
@@ -85,10 +83,23 @@ function(this)
         },
       },
 
+      deadlocks: {
+        name: 'Deadlocks',
+        description: 'Deadlocks detected per second.',
+        type: 'counter',
+        unit: 'short',
+        sources: {
+          postgres_exporter: {
+            expr: 'pg_stat_database_deadlocks{%(queriesSelector)s}',
+            legendCustomTemplate: ' Deadlocks',
+          },
+        },
+      },
+
       conflicts: {
         name: 'Conflicts',
         description: 'Number of queries cancelled due to conflicts with recovery on standby servers.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'short',
         sources: {
           postgres_exporter: {

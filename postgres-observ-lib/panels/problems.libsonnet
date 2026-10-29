@@ -71,7 +71,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.problems.walArchiveFailures.asStat()
       + withInstantQuery
       + statBase
-      + g.panel.stat.options.withReduceOptions({ calcs: ['diff'] })
+      + g.panel.stat.standardOptions.withDecimals(0)
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
@@ -103,7 +103,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       g.panel.timeSeries.new('Conflicts & Deadlocks')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('short')
-      + signals.health.deadlocks.asPanelMixin()
+      + signals.problems.deadlocks.asPanelMixin()
       + signals.problems.conflicts.asPanelMixin()
       + g.panel.timeSeries.panelOptions.withDescription(
         'Deadlocks and conflicts (replica recovery cancellations).'

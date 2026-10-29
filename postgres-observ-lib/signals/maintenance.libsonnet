@@ -131,15 +131,13 @@ function(this)
         description: 'Count of indexes with zero reads. Candidates for removal.',
         type: 'gauge',
         unit: 'short',
-        aggFunction: 'count',  // Use count aggregation
         sources: {
           postgres_exporter: {
             // Count indexes with zero buffer hits AND zero disk reads
-            // aggFunction: 'count' handles the aggregation
             expr: |||
-              (pg_statio_user_indexes_idx_blks_hit_total{%(queriesSelector)s} == 0)
-              and
-              (pg_statio_user_indexes_idx_blks_read_total{%(queriesSelector)s} == 0)
+              (pg_statio_user_indexes_idx_blks_hit_total{%(queriesSelector)s} == bool 0)
+              *
+              (pg_statio_user_indexes_idx_blks_read_total{%(queriesSelector)s} == bool 0)
             |||,
             legendCustomTemplate: ' Unused indexes',
           },

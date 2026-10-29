@@ -24,7 +24,7 @@
               (
                 sum by (%(instanceLabels)s) (pg_stat_activity_count{%(filteringSelector)s})
                 /
-                pg_settings_max_connections{%(filteringSelector)s}
+                on (%(instanceLabels)s) pg_settings_max_connections{%(filteringSelector)s}
               ) > %(threshold)s
             ||| % alertConfig {
               instanceLabels: std.join(', ', alertConfig.instanceLabels),
@@ -62,7 +62,7 @@
           },
           {
             alert: 'PostgreSQLReplicationLag',
-            expr: 'pg_replication_lag{%(filteringSelector)s} > %(threshold)s' % alertConfig {
+            expr: 'pg_replication_lag_seconds{%(filteringSelector)s} > %(threshold)s' % alertConfig {
               threshold: alertConfig.alerts.replicationLag.warn,
             },
             'for': '5m',
@@ -103,8 +103,9 @@
           {
             alert: 'PostgreSQLBlockedQueries',
             expr: |||
-              pg_locks_count{%(filteringSelector)s, mode="ExclusiveLock", granted="f"} > %(threshold)s
+              sum by (%(instanceLabels)s) (pg_stat_activity_count{%(filteringSelector)s, wait_event_type="Lock"}) > %(threshold)s
             ||| % alertConfig {
+              instanceLabels: std.join(', ', alertConfig.instanceLabels),
               threshold: alertConfig.alerts.blockedQueries.warn,
             },
             'for': '5m',
@@ -259,7 +260,7 @@
           {
             alert: 'PostgreSQLReplicationLagCritical',
             expr: |||
-              (pg_replication_lag{%(filteringSelector)s} > %(threshold)s)
+              (pg_replication_lag_seconds{%(filteringSelector)s} > %(threshold)s)
               and on (%(instanceLabels)s) (pg_replication_is_replica{%(filteringSelector)s} == 1)
             ||| % alertConfig {
               instanceLabels: std.join(', ', alertConfig.instanceLabels),
