@@ -100,6 +100,7 @@ Top-level view of the entire PostgreSQL cluster:
 ┌──────────────────────────────────────────────────────────────┐
 │ Cluster Health: [Status] [Instances] [Primary] [Replicas]   │
 │                 [Max Lag] [Cache] [Connections] [Deadlocks] │
+│                 [Alerts]                                    │
 ├──────────────────────────────────────────────────────────────┤
 │ Cluster Instances: [Instance Table] [Role History]          │
 │                    [Failover Events Timeline]               │
@@ -111,7 +112,7 @@ Top-level view of the entire PostgreSQL cluster:
 ├──────────────────────────────────────────────────────────────┤
 │ Throughput: [TPS] [QPS] [Writes] [Reads] [Read/Write Ratio] │
 ├──────────────────────────────────────────────────────────────┤
-│ Resources: [Connections] [Cache Hit] [DB Size] [WAL]        │
+│ Resources: [Connections] [Cache Hit]                        │
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -124,7 +125,7 @@ Single pane of glass for PostgreSQL instance health:
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │ Health: [UP] [Uptime] [Role] [Conn%] [Cache%] [Deadlocks]   │
-│         [Rep Lag] [Replicas] [Slot Lag] [Gauges]            │
+│         [Rep Lag] [Replicas] [Slot Lag] [Gauges] [Alerts]   │
 ├──────────────────────────────────────────────────────────────┤
 │ Problems: [Long Queries] [Blocked] [Idle TX] [Archive Fail] │
 │           [Checkpoint] [Lock Util] [Inactive Slots] [Errors]│
@@ -249,7 +250,6 @@ For cluster-wide monitoring:
 | `roleChanges` | Failover detection |
 | `tpsByInstance` | TPS per instance |
 | `qpsByInstance` | QPS per instance |
-| `totalDatabaseSize` | Total data size |
 
 ## Alerts
 

@@ -221,7 +221,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_replication_pg_current_wal_lsn_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: WAL position',
+            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            legendCustomTemplate: '{{cluster_prefix}}WAL position',
           },
         },
       },
@@ -331,7 +332,8 @@ function(this)
                 (pg_replication_is_replica{%(queriesSelector)s} == 0)
               )
             |||,
-            legendCustomTemplate: '{{cluster}}: Inserts',
+            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            legendCustomTemplate: '{{cluster_prefix}}Inserts',
           },
         },
       },
@@ -351,7 +353,8 @@ function(this)
                 (pg_replication_is_replica{%(queriesSelector)s} == 0)
               )
             |||,
-            legendCustomTemplate: '{{cluster}}: Updates',
+            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            legendCustomTemplate: '{{cluster_prefix}}Updates',
           },
         },
       },
@@ -371,7 +374,8 @@ function(this)
                 (pg_replication_is_replica{%(queriesSelector)s} == 0)
               )
             |||,
-            legendCustomTemplate: '{{cluster}}: Deletes',
+            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            legendCustomTemplate: '{{cluster_prefix}}Deletes',
           },
         },
       },
@@ -450,7 +454,8 @@ function(this)
                 (pg_replication_is_replica{%(queriesSelector)s} == 0)
               )
             |||,
-            legendCustomTemplate: '{{cluster}}: Total writes',
+            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            legendCustomTemplate: '{{cluster_prefix}}Total writes',
           },
         },
       },
@@ -464,7 +469,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'rate(pg_stat_database_tup_fetched{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}}: Total reads',
+            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            legendCustomTemplate: '{{cluster_prefix}}Total reads',
           },
         },
       },
@@ -477,7 +483,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_activity_count{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Total connections',
+            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            legendCustomTemplate: '{{cluster_prefix}}Total connections',
           },
         },
       },
@@ -491,7 +498,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_settings_max_connections{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Total max connections',
+            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            legendCustomTemplate: '{{cluster_prefix}}Total max connections',
           },
         },
       },
@@ -517,26 +525,6 @@ function(this)
             |||,
             aggKeepLabels: ['instance'],
             legendCustomTemplate: '{{instance}}: Cache hit ratio',
-          },
-        },
-      },
-
-      // Total database size (from primary only to avoid double counting)
-      totalDatabaseSize: {
-        name: 'Total database size',
-        description: 'Total size of all databases on the primary.',
-        type: 'raw',
-        unit: 'bytes',
-        sources: {
-          postgres_exporter: {
-            expr: |||
-              sum by (%(agg)s) (
-                pg_database_size_bytes{%(queriesSelector)s}
-                and on(instance)
-                (pg_replication_is_replica{%(queriesSelector)s} == 0)
-              )
-            |||,
-            legendCustomTemplate: '{{cluster}}: Total database size',
           },
         },
       },
