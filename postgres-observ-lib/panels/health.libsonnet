@@ -139,7 +139,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.health.deadlocks.asStat()
       + withInstantQuery
       + statWithThresholds
-      + g.panel.stat.options.withReduceOptions({ calcs: ['diff'] })
+      + g.panel.stat.standardOptions.withDecimals(0)
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
