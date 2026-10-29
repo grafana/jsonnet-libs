@@ -127,7 +127,8 @@ function(this)
         unit: 'bps',
         sources: {
           prometheus: {
-            expr: 'windows_ad_replication_data_intrasite_bytes_total{%(queriesSelector)s} * 8',
+            expr: 'windows_ad_replication_data_intrasite_bytes_total{%(queriesSelector)s}',
+            exprWrappers: [['', ' * 8']],
             aggKeepLabels: ['direction'],
             legendCustomTemplate: '{{ %s }} - {{ direction }}' % xtd.array.slice(this.instanceLabels, -1),
           },
@@ -141,7 +142,8 @@ function(this)
         unit: 'bps',
         sources: {
           prometheus: {
-            expr: 'windows_ad_replication_data_intersite_bytes_total{%(queriesSelector)s} * 8',
+            expr: 'windows_ad_replication_data_intersite_bytes_total{%(queriesSelector)s}',
+            exprWrappers: [['', ' * 8']],
             aggKeepLabels: ['direction'],
             legendCustomTemplate: '{{ %s }} - {{ direction }}' % xtd.array.slice(this.instanceLabels, -1),
           },
