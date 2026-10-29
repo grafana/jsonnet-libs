@@ -1,7 +1,10 @@
 {
   new(this): {
     // Use alertsFilteringSelector for all alert rules (no Grafana variables)
-    local alertConfig = this.config { filteringSelector: this.config.alertsFilteringSelector },
+    local alertConfig = this.config {
+      filteringSelector: this.config.alertsFilteringSelector,
+      agg: std.join(', ', this.config.groupLabels + this.config.instanceLabels),
+    },
 
     groups: [
       {
@@ -22,12 +25,11 @@
             alert: 'PostgreSQLHighConnectionUsage',
             expr: |||
               (
-                sum by (%(instanceLabels)s) (pg_stat_activity_count{%(filteringSelector)s})
+                sum by (%(agg)s) (pg_stat_activity_count{%(filteringSelector)s})
                 /
-                on (%(instanceLabels)s) pg_settings_max_connections{%(filteringSelector)s}
+                on (%(agg)s) pg_settings_max_connections{%(filteringSelector)s}
               ) > %(threshold)s
             ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
               threshold: alertConfig.alerts.connectionUtilization.warn / 100,
             },
             'for': '5m',
@@ -41,16 +43,15 @@
             alert: 'PostgreSQLLowCacheHitRatio',
             expr: |||
               (
-                sum by (%(instanceLabels)s) (pg_stat_database_blks_hit{%(filteringSelector)s})
+                sum by (%(agg)s) (pg_stat_database_blks_hit{%(filteringSelector)s})
                 /
                 (
-                  sum by (%(instanceLabels)s) (pg_stat_database_blks_hit{%(filteringSelector)s})
+                  sum by (%(agg)s) (pg_stat_database_blks_hit{%(filteringSelector)s})
                   +
-                  sum by (%(instanceLabels)s) (pg_stat_database_blks_read{%(filteringSelector)s})
+                  sum by (%(agg)s) (pg_stat_database_blks_read{%(filteringSelector)s})
                 )
               ) < %(threshold)s
             ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
               threshold: alertConfig.alerts.cacheHitRatio.warn / 100,
             },
             'for': '15m',
@@ -103,9 +104,8 @@
           {
             alert: 'PostgreSQLBlockedQueries',
             expr: |||
-              sum by (%(instanceLabels)s) (pg_stat_activity_count{%(filteringSelector)s, wait_event_type="Lock"}) > %(threshold)s
+              sum by (%(agg)s) (pg_stat_activity_count{%(filteringSelector)s, wait_event_type="Lock"}) > %(threshold)s
             ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
               threshold: alertConfig.alerts.blockedQueries.warn,
             },
             'for': '5m',
@@ -166,16 +166,15 @@
             alert: 'PostgreSQLTooManyRollbacks',
             expr: |||
               (
-                sum by (%(instanceLabels)s) (rate(pg_stat_database_xact_rollback{%(filteringSelector)s}[5m]))
+                sum by (%(agg)s) (rate(pg_stat_database_xact_rollback{%(filteringSelector)s}[5m]))
                 /
                 (
-                  sum by (%(instanceLabels)s) (rate(pg_stat_database_xact_commit{%(filteringSelector)s}[5m]))
+                  sum by (%(agg)s) (rate(pg_stat_database_xact_commit{%(filteringSelector)s}[5m]))
                   +
-                  sum by (%(instanceLabels)s) (rate(pg_stat_database_xact_rollback{%(filteringSelector)s}[5m]))
+                  sum by (%(agg)s) (rate(pg_stat_database_xact_rollback{%(filteringSelector)s}[5m]))
                 )
               ) > %(threshold)s
             ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
               threshold: alertConfig.alerts.rollbackRatio.warn / 100,
             },
             'for': '5m',
@@ -188,17 +187,16 @@
           {
             alert: 'PostgreSQLTooManyLocksAcquired',
             expr: |||
-              max by (%(instanceLabels)s) (
+              max by (%(agg)s) (
                 pg_locks_count{%(filteringSelector)s}
               )
               /
-              on(%(instanceLabels)s) (
+              on(%(agg)s) (
                 pg_settings_max_locks_per_transaction{%(filteringSelector)s}
                 *
                 pg_settings_max_connections{%(filteringSelector)s}
               ) > %(threshold)s
             ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
               threshold: alertConfig.alerts.lockUtilization.warn / 100,
             },
             'for': '5m',
@@ -241,13 +239,12 @@
           {
             alert: 'PostgreSQLHighQps',
             expr: |||
-              sum by (%(instanceLabels)s) (
+              sum by (%(agg)s) (
                 rate(pg_stat_database_xact_commit{%(filteringSelector)s}[5m])
                 +
                 rate(pg_stat_database_xact_rollback{%(filteringSelector)s}[5m])
               ) > %(threshold)s
             ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
               threshold: alertConfig.alerts.qps.warn,
             },
             'for': '5m',
@@ -261,9 +258,8 @@
             alert: 'PostgreSQLReplicationLagCritical',
             expr: |||
               (pg_replication_lag_seconds{%(filteringSelector)s} > %(threshold)s)
-              and on (%(instanceLabels)s) (pg_replication_is_replica{%(filteringSelector)s} == 1)
+              and on (%(agg)s) (pg_replication_is_replica{%(filteringSelector)s} == 1)
             ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
               threshold: alertConfig.alerts.replicationLag.critical,
             },
             'for': '5m',
