@@ -35,7 +35,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -66,6 +66,7 @@
                      }
                   ],
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "red",
@@ -76,7 +77,8 @@
                            "value": 1
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -108,7 +110,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -134,7 +136,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "decimals": 1,
@@ -143,13 +145,14 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "red",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
                      "mode": "absolute",
                      "steps": [
@@ -194,7 +197,7 @@
                "colorMode": "value",
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -243,13 +246,24 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "red",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
-                  ]
+                  ],
+                  "noValue": "No data",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -281,7 +295,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -307,7 +321,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -315,14 +329,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "orange",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -374,7 +390,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -400,7 +416,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -408,14 +424,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "red",
@@ -467,7 +485,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -493,22 +511,25 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
+                  "decimals": 0,
                   "mappings": [
                      {
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -519,7 +540,8 @@
                            "value": 1
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -547,18 +569,18 @@
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
-                     "diff"
+                     "lastNotNull"
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_deadlocks{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,cluster,instance) (increase(pg_stat_database_deadlocks{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__range]))",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": " Deadlocks",
@@ -577,7 +599,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -585,14 +607,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "white",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -644,7 +668,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -670,7 +694,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -678,14 +702,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "white",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "yellow",
@@ -696,7 +722,8 @@
                            "value": 1
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -728,7 +755,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -754,7 +781,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -762,14 +789,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "white",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -821,7 +850,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -851,8 +880,8 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "orange",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
@@ -860,6 +889,7 @@
                   ],
                   "max": 1,
                   "min": 0,
+                  "noValue": "No data",
                   "thresholds": {
                      "steps": [
                         {
@@ -899,7 +929,7 @@
             },
             "gridPos": {
                "h": 6,
-               "w": 12,
+               "w": 6,
                "x": 0,
                "y": 11
             },
@@ -908,7 +938,7 @@
                "minVizWidth": 200,
                "showThresholdLabels": false
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -938,8 +968,8 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
@@ -947,6 +977,7 @@
                   ],
                   "max": 1,
                   "min": 0,
+                  "noValue": "No data",
                   "thresholds": {
                      "steps": [
                         {
@@ -986,8 +1017,8 @@
             },
             "gridPos": {
                "h": 6,
-               "w": 12,
-               "x": 12,
+               "w": 6,
+               "x": 6,
                "y": 11
             },
             "options": {
@@ -995,7 +1026,7 @@
                "minVizWidth": 200,
                "showThresholdLabels": false
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1011,6 +1042,24 @@
             ],
             "title": "Cache hit ratio",
             "type": "gauge"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 11
+            },
+            "options": {
+               "alertInstanceLabelFilter": "job=~\"${job:regex}\",cluster=~\"${cluster:regex}\",instance=~\"${instance:regex}\",alertname=~\"PostgreSQL.*\""
+            },
+            "pluginVersion": "v11.4.0",
+            "title": "PostgreSQL alerts",
+            "type": "alertlist"
          },
          {
             "collapsed": false,
@@ -1033,7 +1082,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -1041,14 +1090,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1063,7 +1114,8 @@
                            "value": 3
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1096,7 +1148,7 @@
                },
                "textMode": "value"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1122,7 +1174,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -1130,14 +1182,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1152,7 +1206,8 @@
                            "value": 5
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1185,14 +1240,14 @@
                },
                "textMode": "value"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  pg_locks_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", mode=\"exclusivelock\"}              \n\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", wait_event_type=\"Lock\"} or pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 0\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": " Blocked queries",
@@ -1211,7 +1266,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -1219,14 +1274,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1241,7 +1298,8 @@
                            "value": 20
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1274,7 +1332,7 @@
                },
                "textMode": "value"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1300,22 +1358,25 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
+                  "decimals": 0,
                   "mappings": [
                      {
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "orange",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1326,7 +1387,8 @@
                            "value": 1
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1354,19 +1416,19 @@
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
-                     "diff"
+                     "lastNotNull"
                   ]
                },
                "textMode": "value"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_archiver_failed_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,cluster,instance) (increase(pg_stat_archiver_failed_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__range]))",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": " WAL archive failures",
@@ -1385,7 +1447,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -1393,14 +1455,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1449,7 +1513,7 @@
                },
                "textMode": "value"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1482,8 +1546,8 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
@@ -1491,6 +1555,7 @@
                   ],
                   "max": 1,
                   "min": 0,
+                  "noValue": "No data",
                   "thresholds": {
                      "steps": [
                         {
@@ -1539,7 +1604,7 @@
                "minVizWidth": 200,
                "showThresholdLabels": false
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1565,7 +1630,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -1573,14 +1638,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1591,7 +1658,8 @@
                            "value": 1
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1624,7 +1692,7 @@
                },
                "textMode": "value"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1650,7 +1718,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -1658,14 +1726,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "red",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1676,7 +1746,8 @@
                            "value": 1
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1709,7 +1780,7 @@
                },
                "textMode": "value"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1734,12 +1805,20 @@
             "description": "Deadlocks and conflicts (replica recovery cancellations).",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "short"
                },
@@ -1786,7 +1865,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1804,14 +1883,14 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  pg_stat_database_conflicts{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_database_conflicts{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": " Conflicts",
                   "refId": "Conflicts"
                }
             ],
-            "title": "Conflicts & Deadlocks",
+            "title": "Conflicts & deadlocks",
             "type": "timeseries"
          },
          {
@@ -1831,12 +1910,20 @@
                   "description": "Combined commits and rollbacks per second.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
                         },
                         "unit": "ops"
                      },
@@ -1871,7 +1958,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1896,12 +1983,20 @@
                   "description": "Queries per second. Requires pg_stat_statements extension.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
                         },
                         "unit": "ops"
                      },
@@ -1936,7 +2031,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1958,7 +2053,7 @@
                      "type": "datasource",
                      "uid": "-- Mixed --"
                   },
-                  "description": "Ratio of read operations (fetched) to write operations (insert+update+delete).",
+                  "description": "Rows fetched (sum): Number of rows fetched by queries per second.  \n\nRows inserted (sum): Number of rows inserted per second.  \n\nRows updated (sum): Number of rows updated per second.  \n\nRows deleted (sum): Number of rows deleted per second.",
                   "fieldConfig": {
                      "defaults": {
                         "unit": "rows/s"
@@ -2033,7 +2128,7 @@
                      },
                      "pieType": "donut"
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2080,7 +2175,7 @@
                         "refId": "Rows deleted"
                      }
                   ],
-                  "title": "Read/Write ratio",
+                  "title": "Read/write ratio",
                   "type": "piechart"
                },
                {
@@ -2091,12 +2186,20 @@
                   "description": "Read (fetched) and write (insert/update/delete) operations over time.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
                         },
                         "unit": "rows/s"
                      },
@@ -2173,7 +2276,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2220,7 +2323,7 @@
                         "refId": "Rows deleted"
                      }
                   ],
-                  "title": "Read/Write over time",
+                  "title": "Read/write over time",
                   "type": "timeseries"
                },
                {
@@ -2232,6 +2335,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
+                           "fixedColor": "#5794f2",
                            "mode": "thresholds"
                         },
                         "custom": {
@@ -2248,6 +2352,7 @@
                         "max": 1,
                         "min": 0,
                         "thresholds": {
+                           "mode": "absolute",
                            "steps": [
                               {
                                  "color": "green",
@@ -2306,7 +2411,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2331,6 +2436,10 @@
                   "description": "Buffer pool activity: allocations, cleaned by bgwriter, and max written stops (I/O pressure indicator).",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
@@ -2338,7 +2447,11 @@
                            "lineWidth": 2,
                            "showPoints": "never"
                         },
-                        "unit": "ops"
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
+                        },
+                        "unit": "cps"
                      },
                      "overrides": [
                         {
@@ -2415,7 +2528,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2474,6 +2587,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
+                           "fixedColor": "#5794f2",
                            "mode": "thresholds"
                         },
                         "custom": {
@@ -2490,6 +2604,7 @@
                         "max": 1,
                         "min": 0,
                         "thresholds": {
+                           "mode": "absolute",
                            "steps": [
                               {
                                  "color": "red",
@@ -2548,7 +2663,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2573,12 +2688,20 @@
                   "description": "Blocks read from disk (not cache). Spikes indicate cache misses.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
                         },
                         "unit": "ops"
                      },
@@ -2613,7 +2736,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2638,12 +2761,20 @@
                   "description": "Bytes written to temp files. High values indicate work_mem is too small.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
                         },
                         "unit": "bytes"
                      },
@@ -2678,7 +2809,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2703,12 +2834,20 @@
                   "description": "Rate of new buffer allocations per second. High values indicate memory pressure.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
                         },
                         "unit": "ops"
                      },
@@ -2743,7 +2882,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2769,6 +2908,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
+                           "fixedColor": "#5794f2",
                            "mode": "continuous-BlYlRd"
                         },
                         "custom": {
@@ -2785,6 +2925,7 @@
                         "max": 1,
                         "min": 0,
                         "thresholds": {
+                           "mode": "absolute",
                            "steps": [
                               {
                                  "color": "yellow",
@@ -2829,7 +2970,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -2868,7 +3009,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "thresholds"
                         },
                         "mappings": [
@@ -2876,14 +3017,16 @@
                               "options": {
                                  "match": "null",
                                  "result": {
-                                    "color": "orange",
-                                    "text": "No data"
+                                    "color": "text",
+                                    "index": 0
                                  }
                               },
                               "type": "special"
                            }
                         ],
+                        "noValue": "No data",
                         "thresholds": {
+                           "mode": "absolute",
                            "steps": [
                               {
                                  "color": "green",
@@ -2935,14 +3078,14 @@
                         ]
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
                            "type": "prometheus",
                            "uid": "${datasource}"
                         },
-                        "expr": "sum by (job,cluster,instance) (\n  avg by (job, cluster, instance) (\n  (\n    count(\n      (\n        pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n        /\n        (pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)\n      ) > 0.1\n    )\n    OR\n    vector(0)\n  )\n  /\n  count(pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n)\n\n)",
+                        "expr": "sum by (job,cluster,instance) (\n  avg by (job, cluster, instance) (\n  sum(\n    (\n      pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n      /\n      (pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)\n    ) > bool 0.1\n  )\n  /\n  count(pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n)\n\n)",
                         "format": "time_series",
                         "instant": true,
                         "legendFormat": "Tables needing vacuum",
@@ -2961,7 +3104,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "thresholds"
                         },
                         "mappings": [
@@ -2969,14 +3112,16 @@
                               "options": {
                                  "match": "null",
                                  "result": {
-                                    "color": "orange",
-                                    "text": "No data"
+                                    "color": "text",
+                                    "index": 0
                                  }
                               },
                               "type": "special"
                            }
                         ],
+                        "noValue": "No data",
                         "thresholds": {
+                           "mode": "absolute",
                            "steps": [
                               {
                                  "color": "green",
@@ -3024,7 +3169,7 @@
                         ]
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3050,6 +3195,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
+                           "fixedColor": "#5794f2",
                            "mode": "thresholds"
                         },
                         "custom": {
@@ -3066,6 +3212,7 @@
                         "max": 1,
                         "min": 0,
                         "thresholds": {
+                           "mode": "absolute",
                            "steps": [
                               {
                                  "color": "green",
@@ -3123,7 +3270,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3145,7 +3292,7 @@
                      "type": "datasource",
                      "uid": "-- Mixed --"
                   },
-                  "description": "Tables with dead tuple ratio and time since last vacuum. Sort by dead tuple ratio to find tables needing VACUUM.",
+                  "description": "Dead tuple ratio (sum): Ratio of dead to total tuples per table. > 10% needs vacuum.  \n\nLast vacuum age (sum): Time since each table was last vacuumed.",
                   "fieldConfig": {
                      "overrides": [
                         {
@@ -3271,7 +3418,7 @@
                      "x": 0,
                      "y": 102
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3349,7 +3496,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "thresholds"
                         },
                         "mappings": [
@@ -3357,14 +3504,16 @@
                               "options": {
                                  "match": "null",
                                  "result": {
-                                    "color": "yellow",
-                                    "text": "No data"
+                                    "color": "text",
+                                    "index": 0
                                  }
                               },
                               "type": "special"
                            }
                         ],
+                        "noValue": "No data",
                         "thresholds": {
+                           "mode": "absolute",
                            "steps": [
                               {
                                  "color": "green",
@@ -3416,7 +3565,7 @@
                         ]
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3442,7 +3591,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "thresholds"
                         },
                         "mappings": [
@@ -3450,14 +3599,16 @@
                               "options": {
                                  "match": "null",
                                  "result": {
-                                    "color": "yellow",
-                                    "text": "No data"
+                                    "color": "text",
+                                    "index": 0
                                  }
                               },
                               "type": "special"
                            }
                         ],
+                        "noValue": "No data",
                         "thresholds": {
+                           "mode": "absolute",
                            "steps": [
                               {
                                  "color": "green",
@@ -3472,7 +3623,8 @@
                                  "value": 10
                               }
                            ]
-                        }
+                        },
+                        "unit": "short"
                      },
                      "overrides": [
                         {
@@ -3504,14 +3656,14 @@
                         ]
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
                            "type": "prometheus",
                            "uid": "${datasource}"
                         },
-                        "expr": "count by (job,cluster,instance) (\n  (pg_statio_user_indexes_idx_blks_hit_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\nand\n(pg_statio_user_indexes_idx_blks_read_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\n\n)",
+                        "expr": "sum by (job,cluster,instance) (\n  (pg_statio_user_indexes_idx_blks_hit_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == bool 0)\n*\n(pg_statio_user_indexes_idx_blks_read_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == bool 0)\n\n)",
                         "format": "time_series",
                         "instant": true,
                         "legendFormat": " Unused indexes",
@@ -3533,7 +3685,7 @@
                      "x": 8,
                      "y": 110
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3599,7 +3751,7 @@
                   "fieldConfig": {
                      "defaults": {
                         "color": {
-                           "fixedColor": "text",
+                           "fixedColor": "#5794f2",
                            "mode": "thresholds"
                         },
                         "mappings": [
@@ -3607,14 +3759,16 @@
                               "options": {
                                  "match": "null",
                                  "result": {
-                                    "color": "orange",
-                                    "text": "No data"
+                                    "color": "text",
+                                    "index": 0
                                  }
                               },
                               "type": "special"
                            }
                         ],
+                        "noValue": "No data",
                         "thresholds": {
+                           "mode": "absolute",
                            "steps": [
                               {
                                  "color": "green",
@@ -3666,7 +3820,7 @@
                         ]
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3688,7 +3842,7 @@
                      "type": "datasource",
                      "uid": "-- Mixed --"
                   },
-                  "description": "Tables with time since last analyze. Stale statistics can cause poor query plans.",
+                  "description": "Last analyze age (sum): Time since each table was last analyzed.  \n",
                   "fieldConfig": {
                      "overrides": [
                         {
@@ -3771,7 +3925,7 @@
                      "x": 4,
                      "y": 118
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3822,7 +3976,7 @@
                            "sort": [
                               {
                                  "desc": true,
-                                 "field": "Last Analyze Age"
+                                 "field": "Last analyze age"
                               }
                            ]
                         }
@@ -3847,13 +4001,23 @@
                               "options": {
                                  "match": "null",
                                  "result": {
-                                    "color": "orange",
-                                    "text": "No data"
+                                    "color": "text",
+                                    "index": 0
                                  }
                               },
                               "type": "special"
                            }
                         ],
+                        "noValue": "No data",
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "#5794f2",
+                                 "value": null
+                              }
+                           ]
+                        },
                         "unit": "bytes"
                      },
                      "overrides": [
@@ -3878,7 +4042,6 @@
                      "y": 126
                   },
                   "options": {
-                     "colorMode": "fixed",
                      "graphMode": "area",
                      "reduceOptions": {
                         "calcs": [
@@ -3886,7 +4049,7 @@
                         ]
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3911,12 +4074,20 @@
                   "description": "Total size of all databases.",
                   "fieldConfig": {
                      "defaults": {
+                        "color": {
+                           "fixedColor": "#5794f2",
+                           "mode": "palette-classic"
+                        },
                         "custom": {
                            "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
                            "showPoints": "never"
+                        },
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [ ]
                         },
                         "unit": "bytes"
                      },
@@ -3951,7 +4122,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -3986,7 +4157,7 @@
                      "type": "datasource",
                      "uid": "-- Mixed --"
                   },
-                  "description": "PostgreSQL configuration settings. Use the Settings Filter variable above to search by setting name (regex). Default .* shows all settings.",
+                  "description": "PostgreSQL configuration settings. Use the Settings filter variable above to search by setting name (regex). Default .* shows all settings.",
                   "fieldConfig": {
                      "overrides": [
                         {
@@ -4077,7 +4248,7 @@
                         }
                      ]
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -4202,7 +4373,7 @@
                   "value": ""
                },
                "description": "Regex pattern to filter pg_settings_* metrics. Leave empty to show all settings.",
-               "label": "Settings Filter (regex)",
+               "label": "Settings filter (regex)",
                "name": "settingsFilter",
                "options": [
                   {
