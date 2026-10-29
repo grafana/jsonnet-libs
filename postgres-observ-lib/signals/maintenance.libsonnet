@@ -19,16 +19,12 @@ function(this)
           postgres_exporter: {
             expr: |||
               avg by (job, cluster, instance) (
-                (
-                  count(
-                    (
-                      pg_stat_user_tables_n_dead_tup{%(queriesSelector)s}
-                      /
-                      (pg_stat_user_tables_n_live_tup{%(queriesSelector)s} + pg_stat_user_tables_n_dead_tup{%(queriesSelector)s} + 1)
-                    ) > 0.1
-                  )
-                  OR
-                  vector(0)
+                sum(
+                  (
+                    pg_stat_user_tables_n_dead_tup{%(queriesSelector)s}
+                    /
+                    (pg_stat_user_tables_n_live_tup{%(queriesSelector)s} + pg_stat_user_tables_n_dead_tup{%(queriesSelector)s} + 1)
+                  ) > bool 0.1
                 )
                 /
                 count(pg_stat_user_tables_n_live_tup{%(queriesSelector)s})

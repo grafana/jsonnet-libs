@@ -4,7 +4,7 @@ local g = import './g.libsonnet';
   new(this):
     local settingsFilterVar =
       g.dashboard.variable.textbox.new('settingsFilter', default='')
-      + g.dashboard.variable.textbox.generalOptions.withLabel('Settings Filter (regex)')
+      + g.dashboard.variable.textbox.generalOptions.withLabel('Settings filter (regex)')
       + g.dashboard.variable.textbox.generalOptions.withDescription('Regex pattern to filter pg_settings_* metrics. Leave empty to show all settings.');
 
     // Variable for topk query limit (10 is first = default)
