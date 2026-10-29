@@ -15,9 +15,9 @@ groups:
             summary: PostgreSQL connection usage is high.
           expr: |
             (
-              sum by (instance) (pg_stat_activity_count{job=~".+", instance=~".+"})
+              sum by (job, cluster, instance) (pg_stat_activity_count{job=~".+", instance=~".+"})
               /
-              pg_settings_max_connections{job=~".+", instance=~".+"}
+              on (job, cluster, instance) pg_settings_max_connections{job=~".+", instance=~".+"}
             ) > 0.80000000000000004
           for: 5m
           labels:
@@ -28,12 +28,12 @@ groups:
             summary: PostgreSQL cache hit ratio is low.
           expr: |
             (
-              sum by (instance) (pg_stat_database_blks_hit{job=~".+", instance=~".+"})
+              sum by (job, cluster, instance) (pg_stat_database_blks_hit{job=~".+", instance=~".+"})
               /
               (
-                sum by (instance) (pg_stat_database_blks_hit{job=~".+", instance=~".+"})
+                sum by (job, cluster, instance) (pg_stat_database_blks_hit{job=~".+", instance=~".+"})
                 +
-                sum by (instance) (pg_stat_database_blks_read{job=~".+", instance=~".+"})
+                sum by (job, cluster, instance) (pg_stat_database_blks_read{job=~".+", instance=~".+"})
               )
             ) < 0.90000000000000002
           for: 15m
@@ -43,7 +43,7 @@ groups:
           annotations:
             description: Replica {{ $labels.instance }} is {{ $value }}s behind primary.
             summary: PostgreSQL replication lag is high.
-          expr: pg_replication_lag{job=~".+", instance=~".+"} > 30
+          expr: pg_replication_lag_seconds{job=~".+", instance=~".+"} > 30
           for: 5m
           labels:
             severity: warning
@@ -69,7 +69,7 @@ groups:
             description: PostgreSQL {{ $labels.instance }} has {{ $value }} queries waiting for locks.
             summary: PostgreSQL has blocked queries.
           expr: |
-            pg_locks_count{job=~".+", instance=~".+", mode="ExclusiveLock", granted="f"} > 1
+            sum by (job, cluster, instance) (pg_stat_activity_count{job=~".+", instance=~".+", wait_event_type="Lock"}) > 1
           for: 5m
           labels:
             severity: warning
@@ -111,12 +111,12 @@ groups:
             summary: PostgreSQL has too many rollbacks.
           expr: |
             (
-              sum by (instance) (rate(pg_stat_database_xact_rollback{job=~".+", instance=~".+"}[5m]))
+              sum by (job, cluster, instance) (rate(pg_stat_database_xact_rollback{job=~".+", instance=~".+"}[5m]))
               /
               (
-                sum by (instance) (rate(pg_stat_database_xact_commit{job=~".+", instance=~".+"}[5m]))
+                sum by (job, cluster, instance) (rate(pg_stat_database_xact_commit{job=~".+", instance=~".+"}[5m]))
                 +
-                sum by (instance) (rate(pg_stat_database_xact_rollback{job=~".+", instance=~".+"}[5m]))
+                sum by (job, cluster, instance) (rate(pg_stat_database_xact_rollback{job=~".+", instance=~".+"}[5m]))
               )
             ) > 0.10000000000000001
           for: 5m
@@ -127,11 +127,11 @@ groups:
             description: PostgreSQL {{ $labels.instance }} lock utilization is {{ $value | humanizePercentage }}.
             summary: PostgreSQL has acquired too many locks.
           expr: |
-            max by (instance) (
+            max by (job, cluster, instance) (
               pg_locks_count{job=~".+", instance=~".+"}
             )
             /
-            on(instance) (
+            on(job, cluster, instance) (
               pg_settings_max_locks_per_transaction{job=~".+", instance=~".+"}
               *
               pg_settings_max_connections{job=~".+", instance=~".+"}
@@ -167,7 +167,7 @@ groups:
             description: PostgreSQL {{ $labels.instance }} has {{ $value | humanize }} queries per second.
             summary: PostgreSQL has high QPS.
           expr: |
-            sum by (instance) (
+            sum by (job, cluster, instance) (
               rate(pg_stat_database_xact_commit{job=~".+", instance=~".+"}[5m])
               +
               rate(pg_stat_database_xact_rollback{job=~".+", instance=~".+"}[5m])
@@ -180,8 +180,8 @@ groups:
             description: Replica {{ $labels.instance }} is {{ $value }}s behind primary. Check for network issues or load imbalances.
             summary: PostgreSQL replication lag exceeds 1 hour.
           expr: |
-            (pg_replication_lag{job=~".+", instance=~".+"} > 3600)
-            and on (instance) (pg_replication_is_replica{job=~".+", instance=~".+"} == 1)
+            (pg_replication_lag_seconds{job=~".+", instance=~".+"} > 3600)
+            and on (job, cluster, instance) (pg_replication_is_replica{job=~".+", instance=~".+"} == 1)
           for: 5m
           labels:
             severity: critical
