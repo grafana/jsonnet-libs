@@ -284,7 +284,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             Value: 2,
           },
         }),
-        commonlib.panels.generic.table.base.transformations.sortBy('Last Analyze Age', desc=true),
+        commonlib.panels.generic.table.base.transformations.sortBy('Last analyze age', desc=true),
       ])
       + g.panel.table.standardOptions.withOverrides([
         g.panel.table.fieldOverride.byName.new('Last analyze age')
