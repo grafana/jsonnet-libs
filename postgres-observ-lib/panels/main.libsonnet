@@ -1,6 +1,6 @@
 {
   new(signals, config):: {
-    health: (import './health.libsonnet').new(signals),
+    health: (import './health.libsonnet').new(signals, config),
     problems: (import './problems.libsonnet').new(signals),
     performance: (import './performance.libsonnet').new(signals),
     maintenance: (import './maintenance.libsonnet').new(signals),

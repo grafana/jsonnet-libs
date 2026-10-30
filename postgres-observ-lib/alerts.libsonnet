@@ -1,7 +1,9 @@
 {
   new(this): {
-    // Use alertsFilteringSelector for all alert rules (no Grafana variables)
-    local alertConfig = this.config { filteringSelector: this.config.alertsFilteringSelector },
+    local config = this.config,
+    local signals = this.signals,
+    local agg = std.join(', ', config.groupLabels + config.instanceLabels),
+    local instanceLabel = config.instanceLabels[0],
 
     groups: [
       {
@@ -10,135 +12,102 @@
           // Critical Health Alerts
           {
             alert: 'PostgreSQLDown',
-            expr: 'pg_up{%(filteringSelector)s} == 0' % alertConfig,
+            expr: '(%s) == 0' % signals.health.up.asRuleExpression(),
             'for': '1m',
-            labels: { severity: 'critical' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertDownSeverity },
             annotations: {
               summary: 'PostgreSQL is down.',
-              description: 'PostgreSQL instance {{ $labels.instance }} is not responding.',
+              description: 'PostgreSQL instance {{ $labels.%s }} is not responding.' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLHighConnectionUsage',
-            expr: |||
-              (
-                sum by (%(instanceLabels)s) (pg_stat_activity_count{%(filteringSelector)s})
-                /
-                pg_settings_max_connections{%(filteringSelector)s}
-              ) > %(threshold)s
-            ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
-              threshold: alertConfig.alerts.connectionUtilization.warn / 100,
-            },
+            expr: '(%s) > %g' % [signals.health.connectionUtilization.asRuleExpression(), config.alertHighConnectionUsageThreshold],
             'for': '5m',
-            labels: { severity: 'warning' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertHighConnectionUsageSeverity },
             annotations: {
               summary: 'PostgreSQL connection usage is high.',
-              description: 'PostgreSQL {{ $labels.instance }} is at {{ $value | humanizePercentage }} connection capacity.',
+              description: 'PostgreSQL {{ $labels.%s }} is at {{ $value | humanizePercentage }} connection capacity.' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLLowCacheHitRatio',
-            expr: |||
-              (
-                sum by (%(instanceLabels)s) (pg_stat_database_blks_hit{%(filteringSelector)s})
-                /
-                (
-                  sum by (%(instanceLabels)s) (pg_stat_database_blks_hit{%(filteringSelector)s})
-                  +
-                  sum by (%(instanceLabels)s) (pg_stat_database_blks_read{%(filteringSelector)s})
-                )
-              ) < %(threshold)s
-            ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
-              threshold: alertConfig.alerts.cacheHitRatio.warn / 100,
-            },
+            expr: '(%s) < %g' % [signals.health.cacheHitRatio.asRuleExpression(), config.alertLowCacheHitRatioThreshold],
             'for': '15m',
-            labels: { severity: 'warning' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertLowCacheHitRatioSeverity },
             annotations: {
               summary: 'PostgreSQL cache hit ratio is low.',
-              description: 'PostgreSQL {{ $labels.instance }} cache hit ratio is {{ $value | humanizePercentage }}. Consider increasing shared_buffers.',
+              description: 'PostgreSQL {{ $labels.%s }} cache hit ratio is {{ $value | humanizePercentage }}. Consider increasing shared_buffers.' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLReplicationLag',
-            expr: 'pg_replication_lag{%(filteringSelector)s} > %(threshold)s' % alertConfig {
-              threshold: alertConfig.alerts.replicationLag.warn,
-            },
+            expr: '(%s) > %s' % [signals.health.replicationLag.asRuleExpression(), config.alertReplicationLagThreshold],
             'for': '5m',
-            labels: { severity: 'warning' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertReplicationLagSeverity },
             annotations: {
               summary: 'PostgreSQL replication lag is high.',
-              description: 'Replica {{ $labels.instance }} is {{ $value }}s behind primary.',
+              description: 'Replica {{ $labels.%s }} is {{ printf "%%.0f" $value }}s behind primary.' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLDeadlocks',
-            expr: 'rate(pg_stat_database_deadlocks{%(filteringSelector)s}[5m]) > %(threshold)s' % alertConfig {
-              threshold: alertConfig.alerts.deadlocks.warn / 300,  // per-second rate
-            },
+            expr: 'increase(pg_stat_database_deadlocks{%(filteringSelector)s}[5m]) > %(alertDeadlocksThreshold)s' % config,
             'for': '5m',
-            labels: { severity: 'warning' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertDeadlocksSeverity },
             annotations: {
               summary: 'PostgreSQL deadlocks detected.',
-              description: 'PostgreSQL {{ $labels.instance }} database {{ $labels.datname }} has deadlocks.',
+              description: 'PostgreSQL {{ $labels.%s }} database {{ $labels.datname }} has deadlocks.' % instanceLabel,
             },
           },
 
           // Active Problems Alerts
           {
             alert: 'PostgreSQLLongRunningQuery',
-            expr: |||
-              pg_stat_activity_max_tx_duration{%(filteringSelector)s, state="active"} > %(threshold)s
-            ||| % alertConfig {
-              threshold: alertConfig.alerts.longRunningQuery.warn,
-            },
+            expr: '(%s) > %s' % [signals.problems.longestActiveTransaction.asRuleExpression(), config.alertLongRunningQueryThreshold],
             'for': '1m',
-            labels: { severity: 'warning' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertLongRunningQuerySeverity },
             annotations: {
               summary: 'PostgreSQL has long-running query.',
-              description: 'Query on {{ $labels.instance }} has been running for {{ $value | humanizeDuration }}.',
+              description: 'Query on {{ $labels.%s }} has been running for {{ $value | humanizeDuration }}.' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLBlockedQueries',
-            expr: |||
-              pg_locks_count{%(filteringSelector)s, mode="ExclusiveLock", granted="f"} > %(threshold)s
-            ||| % alertConfig {
-              threshold: alertConfig.alerts.blockedQueries.warn,
-            },
+            expr: 'sum by (%s) (%s) > %s' % [agg, signals.problems.blockedQueries.asRuleExpression(), config.alertBlockedQueriesThreshold],
             'for': '5m',
-            labels: { severity: 'warning' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertBlockedQueriesSeverity },
             annotations: {
               summary: 'PostgreSQL has blocked queries.',
-              description: 'PostgreSQL {{ $labels.instance }} has {{ $value }} queries waiting for locks.',
+              description: 'PostgreSQL {{ $labels.%s }} has {{ $value }} queries waiting for locks.' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLWALArchiveFailure',
-            expr: 'rate(pg_stat_archiver_failed_count{%(filteringSelector)s}[5m]) > 0' % alertConfig,
+            expr: '(%s) > 0' % signals.problems.walArchiveFailures.withRangeFunction('rate').asRuleExpression(),
             'for': '5m',
-            labels: { severity: 'critical' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertWALArchiveFailureSeverity },
             annotations: {
               summary: 'PostgreSQL WAL archiving is failing.',
-              description: 'PostgreSQL {{ $labels.instance }} is failing to archive WAL files. Backups may be incomplete!',
+              description: 'PostgreSQL {{ $labels.%s }} is failing to archive WAL files. Backups may be incomplete!' % instanceLabel,
             },
           },
 
           // Maintenance Alerts
           {
             alert: 'PostgreSQLHighDeadTuples',
-            expr: |||
-              (
-                pg_stat_user_tables_n_dead_tup{%(filteringSelector)s}
-                /
-                (pg_stat_user_tables_n_live_tup{%(filteringSelector)s} + pg_stat_user_tables_n_dead_tup{%(filteringSelector)s} + 1)
-              ) > %(threshold)s
-            ||| % alertConfig {
-              threshold: alertConfig.alerts.deadTupleRatio.warn / 100,
-            },
+            expr: '(%s) > %g' % [signals.maintenance.deadTupleRatio.asRuleExpression(), config.alertHighDeadTuplesThreshold],
             'for': '30m',
-            labels: { severity: 'warning' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertHighDeadTuplesSeverity },
             annotations: {
               summary: 'PostgreSQL table needs vacuum.',
               description: 'Table {{ $labels.schemaname }}.{{ $labels.relname }} has {{ $value | humanizePercentage }} dead tuples.',
@@ -146,130 +115,106 @@
           },
           {
             alert: 'PostgreSQLVacuumNotRunning',
+            // Written out to keep tables never vacuumed, which the dashboard's vacuum age signal leaves out.
             expr: |||
-              (time() - pg_stat_user_tables_last_autovacuum{%(filteringSelector)s}) > %(threshold)s
+              (
+                time() - (
+                  pg_stat_user_tables_last_autovacuum{%(filteringSelector)s} > pg_stat_user_tables_last_vacuum{%(filteringSelector)s}
+                  or
+                  pg_stat_user_tables_last_vacuum{%(filteringSelector)s}
+                )
+              ) > %(alertVacuumNotRunningThreshold)s
               and
-              pg_stat_user_tables_n_dead_tup{%(filteringSelector)s} > 10000
-            ||| % alertConfig {
-              threshold: alertConfig.alerts.vacuumAge.warn * 86400,  // days to seconds
-            },
+              pg_stat_user_tables_n_dead_tup{%(filteringSelector)s} > %(alertVacuumNotRunningDeadTuples)s
+            ||| % config,
             'for': '1h',
-            labels: { severity: 'warning' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertVacuumNotRunningSeverity },
             annotations: {
               summary: 'PostgreSQL table has not been vacuumed.',
-              description: 'Table {{ $labels.schemaname }}.{{ $labels.relname }} has not been vacuumed in over 7 days.',
+              description: 'Table {{ $labels.schemaname }}.{{ $labels.relname }} has not been vacuumed in over %g days.' % (config.alertVacuumNotRunningThreshold / 86400),
             },
           },
 
           {
             alert: 'PostgreSQLTooManyRollbacks',
-            expr: |||
-              (
-                sum by (%(instanceLabels)s) (rate(pg_stat_database_xact_rollback{%(filteringSelector)s}[5m]))
-                /
-                (
-                  sum by (%(instanceLabels)s) (rate(pg_stat_database_xact_commit{%(filteringSelector)s}[5m]))
-                  +
-                  sum by (%(instanceLabels)s) (rate(pg_stat_database_xact_rollback{%(filteringSelector)s}[5m]))
-                )
-              ) > %(threshold)s
-            ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
-              threshold: alertConfig.alerts.rollbackRatio.warn / 100,
-            },
+            expr: '(%s) > %g' % [signals.performance.rollbackRatio.asRuleExpression(), config.alertTooManyRollbacksThreshold],
             'for': '5m',
-            labels: { severity: 'warning' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertTooManyRollbacksSeverity },
             annotations: {
               summary: 'PostgreSQL has too many rollbacks.',
-              description: 'PostgreSQL {{ $labels.instance }} has rollback ratio of {{ $value | humanizePercentage }}.',
+              description: 'PostgreSQL {{ $labels.%s }} has rollback ratio of {{ $value | humanizePercentage }}.' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLTooManyLocksAcquired',
-            expr: |||
-              max by (%(instanceLabels)s) (
-                pg_locks_count{%(filteringSelector)s}
-              )
-              /
-              on(%(instanceLabels)s) (
-                pg_settings_max_locks_per_transaction{%(filteringSelector)s}
-                *
-                pg_settings_max_connections{%(filteringSelector)s}
-              ) > %(threshold)s
-            ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
-              threshold: alertConfig.alerts.lockUtilization.warn / 100,
-            },
+            expr: '(%s) > %g' % [signals.problems.lockUtilization.asRuleExpression(), config.alertTooManyLocksAcquiredThreshold],
             'for': '5m',
-            labels: { severity: 'warning' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertTooManyLocksAcquiredSeverity },
             annotations: {
               summary: 'PostgreSQL has acquired too many locks.',
-              description: 'PostgreSQL {{ $labels.instance }} lock utilization is {{ $value | humanizePercentage }}.',
+              description: 'PostgreSQL {{ $labels.%s }} lock utilization is {{ $value | humanizePercentage }}.' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLInactiveReplicationSlot',
-            // Check for replicas not in streaming state as proxy for inactive slots
-            expr: 'pg_stat_replication_pg_wal_lsn_diff{%(filteringSelector)s, state!="streaming"} > 0' % alertConfig,
+            expr: '(%s) > 0' % signals.problems.nonStreamingReplicaLag.asRuleExpression(),
             'for': '30m',
-            labels: { severity: 'critical' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertInactiveReplicationSlotSeverity },
             annotations: {
               summary: 'PostgreSQL has inactive replication slot.',
-              description: 'PostgreSQL {{ $labels.instance }} has a replication slot not actively streaming. WAL files may accumulate!',
+              description: 'PostgreSQL {{ $labels.%s }} has a replication slot not actively streaming. WAL files may accumulate!' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLReplicationRoleChanged',
-            expr: 'pg_replication_is_replica{%(filteringSelector)s} and changes(pg_replication_is_replica{%(filteringSelector)s}[1m]) > 0' % alertConfig,
-            labels: { severity: 'warning' },
+            expr: '(%s) > 0' % signals.cluster.roleChanges.asRuleExpression(),
+            keep_firing_for: '5m',
+            labels: { severity: config.alertReplicationRoleChangedSeverity },
             annotations: {
               summary: 'PostgreSQL replication role changed.',
-              description: 'PostgreSQL {{ $labels.instance }} replication role has changed. Verify if this is expected failover.',
+              description: 'PostgreSQL {{ $labels.%s }} replication role has changed. Verify if this is expected failover.' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLExporterErrors',
-            expr: 'pg_exporter_last_scrape_error{%(filteringSelector)s} > 0' % alertConfig,
+            expr: '(%s) > 0' % signals.problems.exporterErrors.asRuleExpression(),
             'for': '30m',
-            labels: { severity: 'critical' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertExporterErrorsSeverity },
             annotations: {
               summary: 'PostgreSQL exporter has errors.',
-              description: 'PostgreSQL exporter for {{ $labels.instance }} is experiencing scrape errors.',
+              description: 'PostgreSQL exporter for {{ $labels.%s }} is experiencing scrape errors.' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLHighQps',
-            expr: |||
-              sum by (%(instanceLabels)s) (
-                rate(pg_stat_database_xact_commit{%(filteringSelector)s}[5m])
-                +
-                rate(pg_stat_database_xact_rollback{%(filteringSelector)s}[5m])
-              ) > %(threshold)s
-            ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
-              threshold: alertConfig.alerts.qps.warn,
-            },
+            expr: 'sum by (%s) (%s) > %s' % [agg, signals.performance.transactionsPerSecond.asRuleExpression(), config.alertHighQpsThreshold],
             'for': '5m',
-            labels: { severity: 'warning' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertHighQpsSeverity },
             annotations: {
               summary: 'PostgreSQL has high QPS.',
-              description: 'PostgreSQL {{ $labels.instance }} has {{ $value | humanize }} queries per second.',
+              description: 'PostgreSQL {{ $labels.%s }} has {{ $value | humanize }} queries per second.' % instanceLabel,
             },
           },
           {
             alert: 'PostgreSQLReplicationLagCritical',
-            expr: |||
-              (pg_replication_lag{%(filteringSelector)s} > %(threshold)s)
-              and on (%(instanceLabels)s) (pg_replication_is_replica{%(filteringSelector)s} == 1)
-            ||| % alertConfig {
-              instanceLabels: std.join(', ', alertConfig.instanceLabels),
-              threshold: alertConfig.alerts.replicationLag.critical,
-            },
+            expr: '((%s) > %s) and on (%s) ((%s) == 1)' % [
+              signals.health.replicationLag.asRuleExpression(),
+              config.alertReplicationLagCriticalThreshold,
+              agg,
+              signals.health.isReplica.asRuleExpression(),
+            ],
             'for': '5m',
-            labels: { severity: 'critical' },
+            keep_firing_for: '5m',
+            labels: { severity: config.alertReplicationLagCriticalSeverity },
             annotations: {
               summary: 'PostgreSQL replication lag exceeds 1 hour.',
-              description: 'Replica {{ $labels.instance }} is {{ $value }}s behind primary. Check for network issues or load imbalances.',
+              description: 'Replica {{ $labels.%s }} is {{ printf "%%.0f" $value }}s behind primary. Check for network issues or load imbalances.' % instanceLabel,
             },
           },
         ],

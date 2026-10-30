@@ -17,6 +17,7 @@ local g = import './g.libsonnet';
         panels.cluster.worstCacheHitRatio { gridPos+: { w: 8, h: 6 } },
         panels.cluster.worstConnectionUtilization { gridPos+: { w: 8, h: 6 } },
         panels.cluster.totalDeadlocks { gridPos+: { w: 8, h: 6 } },
+        panels.cluster.alerts { gridPos+: { w: 24, h: 6 } },
       ]),
 
     // Cluster Instances Table with Role History
@@ -76,8 +77,6 @@ local g = import './g.libsonnet';
       + g.panel.row.withPanels([
         panels.cluster.totalConnectionsTimeSeries { gridPos+: { w: 12, h: 8 } },
         panels.cluster.cacheHitRatioByInstanceTimeSeries { gridPos+: { w: 12, h: 8 } },
-        panels.cluster.totalDatabaseSize { gridPos+: { w: 12, h: 8 } },
-        panels.cluster.walPositionTimeSeries { gridPos+: { w: 12, h: 8 } },
       ]),
 
     health:
@@ -95,9 +94,10 @@ local g = import './g.libsonnet';
         panels.health.replicationLag { gridPos+: { w: 8, h: 4 } },
         panels.health.connectedReplicas { gridPos+: { w: 8, h: 4 } },
         panels.health.replicationSlotLag { gridPos+: { w: 8, h: 4 } },
-        // Line 3: Gauges (2 panels x 12 = 24)
-        panels.health.connectionUtilization { gridPos+: { w: 12, h: 6 } },
-        panels.health.cacheHitRatio { gridPos+: { w: 12, h: 6 } },
+        // Line 3: Gauges and alerts (3 panels)
+        panels.health.connectionUtilization { gridPos+: { w: 6, h: 6 } },
+        panels.health.cacheHitRatio { gridPos+: { w: 6, h: 6 } },
+        panels.health.alerts { gridPos+: { w: 12, h: 6 } },
       ]),
 
     // Tier 2: Active Problems - Expands when issues exist

@@ -100,6 +100,7 @@ Top-level view of the entire PostgreSQL cluster:
 ┌──────────────────────────────────────────────────────────────┐
 │ Cluster Health: [Status] [Instances] [Primary] [Replicas]   │
 │                 [Max Lag] [Cache] [Connections] [Deadlocks] │
+│                 [Alerts]                                    │
 ├──────────────────────────────────────────────────────────────┤
 │ Cluster Instances: [Instance Table] [Role History]          │
 │                    [Failover Events Timeline]               │
@@ -111,7 +112,7 @@ Top-level view of the entire PostgreSQL cluster:
 ├──────────────────────────────────────────────────────────────┤
 │ Throughput: [TPS] [QPS] [Writes] [Reads] [Read/Write Ratio] │
 ├──────────────────────────────────────────────────────────────┤
-│ Resources: [Connections] [Cache Hit] [DB Size] [WAL]        │
+│ Resources: [Connections] [Cache Hit]                        │
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -124,7 +125,7 @@ Single pane of glass for PostgreSQL instance health:
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │ Health: [UP] [Uptime] [Role] [Conn%] [Cache%] [Deadlocks]   │
-│         [Rep Lag] [Replicas] [Slot Lag] [Gauges]            │
+│         [Rep Lag] [Replicas] [Slot Lag] [Gauges] [Alerts]   │
 ├──────────────────────────────────────────────────────────────┤
 │ Problems: [Long Queries] [Blocked] [Idle TX] [Archive Fail] │
 │           [Checkpoint] [Lock Util] [Inactive Slots] [Errors]│
@@ -200,14 +201,14 @@ Requires `pg_stat_statements` extension:
 | `rowsUpdated` | Update rate |
 | `rowsDeleted` | Delete rate |
 | `buffersAlloc` | Buffer allocations |
-| `buffersCheckpoint` | Buffers cleaned by bgwriter |
+| `buffersCheckpoint` | Buffers written by checkpoints |
 
 ### Tier 4: Maintenance (Actionable)
 
 | Signal | What it tells you |
 |--------|-------------------|
 | `tablesNeedingVacuum` | Ratio of tables with >10% dead tuples |
-| `oldestVacuum` | Is autovacuum working? |
+| `oldestVacuum` | Is vacuum keeping up? |
 | `deadTupleRatio` | Per-table vacuum priority |
 | `lastVacuumAge` | Time since each table was vacuumed |
 | `sequentialScanRatio` | Missing indexes? |
@@ -249,11 +250,8 @@ For cluster-wide monitoring:
 | `roleChanges` | Failover detection |
 | `tpsByInstance` | TPS per instance |
 | `qpsByInstance` | QPS per instance |
-| `totalDatabaseSize` | Total data size |
 
 ## Alerts
-
-All alerts are configured with sensible defaults that can be customized:
 
 | Alert | Default Threshold | Severity |
 |-------|-------------------|----------|
@@ -262,9 +260,9 @@ All alerts are configured with sensible defaults that can be customized:
 | `PostgreSQLLowCacheHitRatio` | <90% | warning |
 | `PostgreSQLReplicationLag` | >30s | warning |
 | `PostgreSQLReplicationLagCritical` | >1h | critical |
-| `PostgreSQLDeadlocks` | any | warning |
+| `PostgreSQLDeadlocks` | >1 per 5 min | warning |
 | `PostgreSQLLongRunningQuery` | >5min | warning |
-| `PostgreSQLBlockedQueries` | any | warning |
+| `PostgreSQLBlockedQueries` | >1 waiting | warning |
 | `PostgreSQLWALArchiveFailure` | any | critical |
 | `PostgreSQLHighDeadTuples` | >10% | warning |
 | `PostgreSQLVacuumNotRunning` | >7 days | warning |
@@ -273,46 +271,55 @@ All alerts are configured with sensible defaults that can be customized:
 | `PostgreSQLInactiveReplicationSlot` | any | critical |
 | `PostgreSQLReplicationRoleChanged` | any | warning |
 | `PostgreSQLExporterErrors` | any | critical |
-| `PostgreSQLHighQPS` | >10000 | warning |
+| `PostgreSQLHighQps` | >10000 | warning |
+
+Default thresholds and severities can be configured in `config.libsonnet`:
+
+```jsonnet
+{
+  alertDownSeverity: 'critical',
+  alertHighConnectionUsageThreshold: 0.8,
+  alertHighConnectionUsageSeverity: 'warning',
+  alertLowCacheHitRatioThreshold: 0.9,
+  alertLowCacheHitRatioSeverity: 'warning',
+  alertReplicationLagThreshold: 30,
+  alertReplicationLagSeverity: 'warning',
+  alertReplicationLagCriticalThreshold: 3600,
+  alertReplicationLagCriticalSeverity: 'critical',
+  alertDeadlocksThreshold: 1,
+  alertDeadlocksSeverity: 'warning',
+  alertLongRunningQueryThreshold: 300,
+  alertLongRunningQuerySeverity: 'warning',
+  alertBlockedQueriesThreshold: 1,
+  alertBlockedQueriesSeverity: 'warning',
+  alertWALArchiveFailureSeverity: 'critical',
+  alertHighDeadTuplesThreshold: 0.1,
+  alertHighDeadTuplesSeverity: 'warning',
+  alertVacuumNotRunningThreshold: 7 * 86400,
+  alertVacuumNotRunningDeadTuples: 10000,
+  alertVacuumNotRunningSeverity: 'warning',
+  alertTooManyRollbacksThreshold: 0.1,
+  alertTooManyRollbacksSeverity: 'warning',
+  alertTooManyLocksAcquiredThreshold: 0.2,
+  alertTooManyLocksAcquiredSeverity: 'warning',
+  alertInactiveReplicationSlotSeverity: 'critical',
+  alertReplicationRoleChangedSeverity: 'warning',
+  alertExporterErrorsSeverity: 'critical',
+  alertHighQpsThreshold: 10000,
+  alertHighQpsSeverity: 'warning',
+}
+```
 
 ## Configuration
+
+Override any setting from `config.libsonnet` with `withConfigMixin`. This example changes the dashboard name prefix.
 
 ```jsonnet
 local postgres = import 'postgres-observ-lib/main.libsonnet';
 
 postgres.new()
 + postgres.withConfigMixin({
-  // Filtering
-  filteringSelector: '',  // Used in dashboard queries
-  alertsFilteringSelector: 'job=~".+", instance=~".+"',  // Used in alert rules
-  groupLabels: ['job', 'cluster'],
-  instanceLabels: ['instance'],
-  
-  // Dashboard
-  uid: 'postgres',
   dashboardNamePrefix: 'Production / ',
-  dashboardTags: ['postgres', 'database'],
-  
-  // Metrics source - extensible for future sources
-  metricsSource: ['postgres_exporter'],
-  
-  // Feature flags
-  enableQueryAnalysis: true,  // requires pg_stat_statements
-  
-  // Alert thresholds
-  alerts: {
-    connectionUtilization: { warn: 80, critical: 95 },
-    cacheHitRatio: { warn: 90 },
-    replicationLag: { warn: 30, critical: 3600 },
-    deadlocks: { warn: 1 },
-    longRunningQuery: { warn: 300 },
-    blockedQueries: { warn: 1 },
-    deadTupleRatio: { warn: 10, critical: 20 },
-    vacuumAge: { warn: 7 },
-    rollbackRatio: { warn: 10 },
-    lockUtilization: { warn: 20 },
-    qps: { warn: 10000 },
-  },
 })
 ```
 

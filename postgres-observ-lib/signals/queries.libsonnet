@@ -13,11 +13,12 @@ function(this)
       topQueriesByTotalTime: {
         name: 'Top queries by total time',
         description: 'Queries consuming the most cumulative execution time. Primary optimization targets.',
+        // Raw: a typed signal would aggregate before $topk ranks individual queries.
         type: 'raw',
         unit: 's',
         sources: {
           postgres_exporter: {
-            expr: 'topk($topk, rate(pg_stat_statements_seconds_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'topk($topk, rate(pg_stat_statements_seconds_total{%(queriesSelector)s}[%(interval)s]))',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },
@@ -28,6 +29,7 @@ function(this)
       slowestQueriesByMeanTime: {
         name: 'Slowest queries by mean time',
         description: 'Queries with highest average execution time (total time / calls).',
+        // Raw: a ratio of two counters, ranked by $topk.
         type: 'raw',
         unit: 's',
         sources: {
@@ -51,11 +53,12 @@ function(this)
       mostFrequentQueries: {
         name: 'Most frequent queries',
         description: 'Most frequently executed queries. Even fast queries can impact if called often.',
+        // Raw: a typed signal would aggregate before $topk ranks individual queries.
         type: 'raw',
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: 'topk($topk, rate(pg_stat_statements_calls_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'topk($topk, rate(pg_stat_statements_calls_total{%(queriesSelector)s}[%(interval)s]))',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },
@@ -66,11 +69,12 @@ function(this)
       topQueriesByRows: {
         name: 'Top queries by rows',
         description: 'Queries returning the most rows. May indicate full table scans.',
+        // Raw: a typed signal would aggregate before $topk ranks individual queries.
         type: 'raw',
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'topk($topk, rate(pg_stat_statements_rows_total{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'topk($topk, rate(pg_stat_statements_rows_total{%(queriesSelector)s}[%(interval)s]))',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },

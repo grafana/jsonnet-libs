@@ -8,10 +8,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       targets: std.map(function(t) t { instant: true }, super.targets),
     },
 
-    // No data mappings by severity
-    local noDataRed = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'red' } } },
-    local noDataOrange = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'orange' } } },
-    local noDataYellow = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'yellow' } } },
+    local noDataTextColor = { type: 'special', options: { match: 'null', result: { color: 'text', index: 0 } } },
+
 
     local statBase =
       commonlib.panels.generic.stat.base.stylize()
@@ -31,7 +29,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 1, color: 'yellow' },
         { value: 3, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Queries running longer than 5 minutes. Check pg_stat_activity for details.'
       ),
@@ -46,7 +45,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 1, color: 'yellow' },
         { value: 5, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Queries waiting for locks. Indicates lock contention.'
       ),
@@ -61,22 +61,24 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 5, color: 'yellow' },
         { value: 20, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Connections idle in transaction. Can hold locks and block others.'
       ),
 
     // WAL archive failures
     walArchiveFailures:
-      signals.problems.walArchiveFailures.asStat()
+      signals.problems.walArchiveFailures.withInterval('$__range').asStat()
       + withInstantQuery
       + statBase
-      + g.panel.stat.options.withReduceOptions({ calcs: ['diff'] })
+      + g.panel.stat.standardOptions.withDecimals(0)
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataOrange])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'WAL archive failures. Non-zero indicates backup problems!'
       ),
@@ -93,17 +95,18 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.01, color: 'yellow' },
         { value: 0.1, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Buffer flush bottlenecks per second. When bgwriter hits its limit, backends must flush buffers themselves, causing latency spikes. Should be 0.'
       ),
 
     // Conflicts and Deadlocks
     conflictsDeadlocks:
-      g.panel.timeSeries.new('Conflicts & Deadlocks')
+      g.panel.timeSeries.new('Conflicts & deadlocks')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('short')
-      + signals.health.deadlocks.asPanelMixin()
+      + signals.health.deadlocks.withRangeFunction('rate').asPanelMixin()
       + signals.problems.conflicts.asPanelMixin()
       + g.panel.timeSeries.panelOptions.withDescription(
         'Deadlocks and conflicts (replica recovery cancellations).'
@@ -128,7 +131,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.1, color: 'orange' },
         { value: 0.2, color: 'red' },
       ])
-      + g.panel.gauge.standardOptions.withMappings([noDataYellow])
+      + g.panel.gauge.standardOptions.withNoValue('No data')
+      + g.panel.gauge.standardOptions.withMappings([noDataTextColor])
       + g.panel.gauge.options.withMinVizHeight(200)
       + g.panel.gauge.options.withMinVizWidth(200)
       + g.panel.gauge.options.withShowThresholdLabels(false)
@@ -145,7 +149,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Inactive replication slots. Can cause WAL to accumulate and fill disk!'
       ),
@@ -159,7 +164,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataRed])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'PostgreSQL exporter scrape errors.'
       ),

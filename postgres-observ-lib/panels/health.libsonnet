@@ -1,18 +1,16 @@
 local g = import '../g.libsonnet';
+local alertsOverviewlib = import 'alerts-observ-lib/main.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
-  new(signals):: {
+  new(signals, config):: {
     // Helper to convert stat panel queries to instant queries for current status
     local withInstantQuery = {
       targets: std.map(function(t) t { instant: true }, super.targets),
     },
 
-    // No data mappings by severity
     local noDataRed = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'red' } } },
-    local noDataOrange = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'orange' } } },
-    local noDataYellow = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'yellow' } } },
-    local noDataNeutral = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'white' } } },
+    local noDataTextColor = { type: 'special', options: { match: 'null', result: { color: 'text', index: 0 } } },
 
     local statWithThresholds =
       commonlib.panels.generic.stat.base.stylize()
@@ -50,7 +48,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 300, color: 'yellow' },  // 5 minutes
         { value: 3600, color: 'green' },  // 1 hour+
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataRed]),
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor]),
 
     // Helper to convert gauge panel queries to instant queries
     local withInstantQueryGauge = {
@@ -70,7 +69,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.85, color: 'orange' },
         { value: 0.95, color: 'red' },
       ])
-      + g.panel.gauge.standardOptions.withMappings([noDataOrange])
+      + g.panel.gauge.standardOptions.withNoValue('No data')
+      + g.panel.gauge.standardOptions.withMappings([noDataTextColor])
       + g.panel.gauge.options.withMinVizHeight(200)
       + g.panel.gauge.options.withMinVizWidth(200)
       + g.panel.gauge.options.withShowThresholdLabels(false),
@@ -86,7 +86,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.85, color: 'orange' },
         { value: 0.95, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataOrange]),
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor]),
 
     // Cache hit ratio gauge
     cacheHitRatio:
@@ -101,7 +102,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.9, color: 'yellow' },
         { value: 0.95, color: 'green' },
       ])
-      + g.panel.gauge.standardOptions.withMappings([noDataYellow])
+      + g.panel.gauge.standardOptions.withNoValue('No data')
+      + g.panel.gauge.standardOptions.withMappings([noDataTextColor])
       + g.panel.gauge.options.withMinVizHeight(200)
       + g.panel.gauge.options.withMinVizWidth(200)
       + g.panel.gauge.options.withShowThresholdLabels(false),
@@ -118,7 +120,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.9, color: 'yellow' },
         { value: 0.95, color: 'green' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow]),
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor]),
 
     // Replication lag - N/A for primaries
     replicationLag:
@@ -132,19 +135,32 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 30, color: 'orange' },
         { value: 60, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataNeutral]),
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor]),
+
+    alerts:
+      (alertsOverviewlib.new() + alertsOverviewlib.withConfigMixin({
+         filteringSelector: config.filteringSelector,
+         groupLabels: config.groupLabels,
+         instanceLabels: config.instanceLabels,
+       })).grafana.panels.alertsOverview
+      + g.panel.alertList.panelOptions.withTitle('PostgreSQL alerts')
+      + g.panel.alertList.panelOptions.withDescription('')
+      // The library's filter also lists other integrations' alerts on the same job.
+      + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(signals.health.getVariables().queriesSelectorAdvancedSyntax + ',alertname=~"PostgreSQL.*"'),
 
     // Deadlocks
     deadlocks:
-      signals.health.deadlocks.asStat()
+      signals.health.deadlocks.withInterval('$__range').asStat()
       + withInstantQuery
       + statWithThresholds
-      + g.panel.stat.options.withReduceOptions({ calcs: ['diff'] })
+      + g.panel.stat.standardOptions.withDecimals(0)
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow]),
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor]),
 
     nodeRole:
       signals.health.isReplica.asStat()
@@ -160,8 +176,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             '1': { text: 'REPLICA', color: 'purple', index: 1 },
           },
         },
-        noDataRed,
-      ]),
+        noDataTextColor,
+      ])
+      + g.panel.stat.standardOptions.withNoValue('No data'),
 
     // Connected replicas count - N/A for replicas
     connectedReplicas:
@@ -172,7 +189,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0, color: 'yellow' },
         { value: 1, color: 'green' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataNeutral]),
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor]),
 
     // Replication slot lag - N/A if no slots
     replicationSlotLag:
@@ -186,6 +204,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 104857600, color: 'orange' },  // 100MB
         { value: 1073741824, color: 'red' },  // 1GB
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataNeutral]),
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor]),
   },
 }
