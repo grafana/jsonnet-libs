@@ -1,0 +1,364 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: PostgreSQLDown
+  interval: 1m
+  input_series:
+  - series: pg_up{job="integrations/postgres_exporter",instance="pg-1"}
+    values: 1 0x10
+  alert_rule_test:
+  - eval_time: 5m
+    alertname: PostgreSQLDown
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        severity: critical
+      exp_annotations:
+        summary: PostgreSQL is down.
+        description: PostgreSQL instance pg-1 is not responding.
+- name: PostgreSQLHighConnectionUsage
+  interval: 1m
+  input_series:
+  - series: pg_stat_activity_count{job="integrations/postgres_exporter",instance="pg-1",datname="app",state="active"}
+    values: 90x10
+  - series: pg_settings_max_connections{job="integrations/postgres_exporter",instance="pg-1",server="localhost:5432"}
+    values: 100x10
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: PostgreSQLHighConnectionUsage
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL connection usage is high.
+        description: PostgreSQL pg-1 is at 90% connection capacity.
+- name: PostgreSQLLowCacheHitRatio
+  interval: 1m
+  input_series:
+  - series: pg_stat_database_blks_hit{job="integrations/postgres_exporter",instance="pg-1",datname="app"}
+    values: 80+80x30
+  - series: pg_stat_database_blks_read{job="integrations/postgres_exporter",instance="pg-1",datname="app"}
+    values: 20+20x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: PostgreSQLLowCacheHitRatio
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL cache hit ratio is low.
+        description: PostgreSQL pg-1 cache hit ratio is 80%. Consider increasing shared_buffers.
+- name: PostgreSQLReplicationLag
+  interval: 1m
+  input_series:
+  - series: pg_replication_lag_seconds{job="integrations/postgres_exporter",instance="pg-2",server="localhost:5432"}
+    values: 60x10
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: PostgreSQLReplicationLag
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-2
+        server: localhost:5432
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL replication lag is high.
+        description: Replica pg-2 is 60s behind primary.
+- name: PostgreSQLDeadlocks
+  interval: 1m
+  input_series:
+  - series: pg_stat_database_deadlocks{job="integrations/postgres_exporter",instance="pg-1",datname="app",datid="16384"}
+    values: 0+1x20
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: PostgreSQLDeadlocks
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        datname: app
+        datid: "16384"
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL deadlocks detected.
+        description: PostgreSQL pg-1 database app has deadlocks.
+- name: PostgreSQLLongRunningQuery
+  interval: 1m
+  input_series:
+  - series: pg_stat_activity_max_tx_duration{job="integrations/postgres_exporter",instance="pg-1",datname="app",state="active"}
+    values: 400x5
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: PostgreSQLLongRunningQuery
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        datname: app
+        state: active
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL has long-running query.
+        description: Query on pg-1 has been running for 6m 40s.
+- name: PostgreSQLBlockedQueries
+  interval: 1m
+  input_series:
+  - series: pg_stat_activity_count{job="integrations/postgres_exporter",instance="pg-1",datname="app",state="active",wait_event_type="Lock"}
+    values: 3x10
+  - series: pg_stat_activity_count{job="integrations/postgres_exporter",instance="pg-1",datname="app",state="idle"}
+    values: 5x10
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: PostgreSQLBlockedQueries
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL has blocked queries.
+        description: PostgreSQL pg-1 has 3 queries waiting for locks.
+- name: PostgreSQLBlockedQueries-one_waiting
+  interval: 1m
+  input_series:
+  - series: pg_stat_activity_count{job="integrations/postgres_exporter",instance="pg-1",datname="app",state="active",wait_event_type="Lock"}
+    values: 1x10
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: PostgreSQLBlockedQueries
+    exp_alerts: []
+- name: PostgreSQLWALArchiveFailure
+  interval: 1m
+  input_series:
+  - series: pg_stat_archiver_failed_count{job="integrations/postgres_exporter",instance="pg-1",server="localhost:5432"}
+    values: 0+1x20
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: PostgreSQLWALArchiveFailure
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        server: localhost:5432
+        severity: critical
+      exp_annotations:
+        summary: PostgreSQL WAL archiving is failing.
+        description: PostgreSQL pg-1 is failing to archive WAL files. Backups may be incomplete!
+- name: PostgreSQLHighDeadTuples
+  interval: 1m
+  input_series:
+  - series: pg_stat_user_tables_n_dead_tup{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
+    values: 50x40
+  - series: pg_stat_user_tables_n_live_tup{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
+    values: 149x40
+  alert_rule_test:
+  - eval_time: 35m
+    alertname: PostgreSQLHighDeadTuples
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        datname: app
+        schemaname: public
+        relname: orders
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL table needs vacuum.
+        description: Table public.orders has 25% dead tuples.
+- name: PostgreSQLVacuumNotRunning
+  interval: 5m
+  input_series:
+  - series: pg_stat_user_tables_last_autovacuum{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
+    values: 3600x2400
+  - series: pg_stat_user_tables_last_vacuum{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
+    values: 0x2400
+  - series: pg_stat_user_tables_n_dead_tup{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
+    values: 20000x2400
+  alert_rule_test:
+  - eval_time: 6d
+    alertname: PostgreSQLVacuumNotRunning
+    exp_alerts: []
+  - eval_time: 8d
+    alertname: PostgreSQLVacuumNotRunning
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        datname: app
+        schemaname: public
+        relname: orders
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL table has not been vacuumed.
+        description: Table public.orders has not been vacuumed in over 7 days.
+- name: PostgreSQLVacuumNotRunning-vacuumed_manually
+  interval: 5m
+  input_series:
+  - series: pg_stat_user_tables_last_autovacuum{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
+    values: 0x2400
+  - series: pg_stat_user_tables_last_vacuum{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
+    values: 0+300x2400
+  - series: pg_stat_user_tables_n_dead_tup{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
+    values: 20000x2400
+  alert_rule_test:
+  - eval_time: 8d
+    alertname: PostgreSQLVacuumNotRunning
+    exp_alerts: []
+- name: PostgreSQLVacuumNotRunning-never_vacuumed
+  interval: 5m
+  input_series:
+  - series: pg_stat_user_tables_last_autovacuum{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
+    values: 0x2400
+  - series: pg_stat_user_tables_last_vacuum{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
+    values: 0x2400
+  - series: pg_stat_user_tables_n_dead_tup{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
+    values: 20000x2400
+  alert_rule_test:
+  - eval_time: 8d
+    alertname: PostgreSQLVacuumNotRunning
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        datname: app
+        schemaname: public
+        relname: orders
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL table has not been vacuumed.
+        description: Table public.orders has not been vacuumed in over 7 days.
+- name: PostgreSQLTooManyRollbacks
+  interval: 1m
+  input_series:
+  - series: pg_stat_database_xact_commit{job="integrations/postgres_exporter",instance="pg-1",datname="app"}
+    values: 0+180x20
+  - series: pg_stat_database_xact_rollback{job="integrations/postgres_exporter",instance="pg-1",datname="app"}
+    values: 0+60x20
+  alert_rule_test:
+  - eval_time: 15m
+    alertname: PostgreSQLTooManyRollbacks
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL has too many rollbacks.
+        description: PostgreSQL pg-1 has rollback ratio of 25%.
+- name: PostgreSQLTooManyLocksAcquired
+  interval: 1m
+  input_series:
+  - series: pg_locks_count{job="integrations/postgres_exporter",instance="pg-1",datname="app",mode="accesssharelock"}
+    values: 2000x10
+  - series: pg_locks_count{job="integrations/postgres_exporter",instance="pg-1",datname="app",mode="rowexclusivelock"}
+    values: 1200x10
+  - series: pg_settings_max_locks_per_transaction{job="integrations/postgres_exporter",instance="pg-1",server="localhost:5432"}
+    values: 64x10
+  - series: pg_settings_max_connections{job="integrations/postgres_exporter",instance="pg-1",server="localhost:5432"}
+    values: 100x10
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: PostgreSQLTooManyLocksAcquired
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL has acquired too many locks.
+        description: PostgreSQL pg-1 lock utilization is 50%.
+- name: PostgreSQLInactiveReplicationSlot
+  interval: 1m
+  input_series:
+  - series: pg_stat_replication_pg_wal_lsn_diff{job="integrations/postgres_exporter",instance="pg-1",application_name="replica1",state="catchup"}
+    values: 100x40
+  alert_rule_test:
+  - eval_time: 35m
+    alertname: PostgreSQLInactiveReplicationSlot
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        application_name: replica1
+        state: catchup
+        severity: critical
+      exp_annotations:
+        summary: PostgreSQL has inactive replication slot.
+        description: PostgreSQL pg-1 has a replication slot not actively streaming. WAL files may accumulate!
+- name: PostgreSQLReplicationRoleChanged
+  interval: 1m
+  input_series:
+  - series: pg_replication_is_replica{job="integrations/postgres_exporter",instance="pg-1",server="localhost:5432"}
+    values: 0 0 1 1 1 1
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: PostgreSQLReplicationRoleChanged
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        server: localhost:5432
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL replication role changed.
+        description: PostgreSQL pg-1 replication role has changed. Verify if this is expected failover.
+- name: PostgreSQLExporterErrors
+  interval: 1m
+  input_series:
+  - series: pg_exporter_last_scrape_error{job="integrations/postgres_exporter",instance="pg-1"}
+    values: 1x40
+  alert_rule_test:
+  - eval_time: 35m
+    alertname: PostgreSQLExporterErrors
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        severity: critical
+      exp_annotations:
+        summary: PostgreSQL exporter has errors.
+        description: PostgreSQL exporter for pg-1 is experiencing scrape errors.
+- name: PostgreSQLHighQps
+  interval: 1m
+  input_series:
+  - series: pg_stat_database_xact_commit{job="integrations/postgres_exporter",instance="pg-1",datname="app"}
+    values: 0+720000x10
+  - series: pg_stat_database_xact_rollback{job="integrations/postgres_exporter",instance="pg-1",datname="app"}
+    values: 0x10
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: PostgreSQLHighQps
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-1
+        severity: warning
+      exp_annotations:
+        summary: PostgreSQL has high QPS.
+        description: PostgreSQL pg-1 has 12k queries per second.
+- name: PostgreSQLReplicationLagCritical
+  interval: 1m
+  input_series:
+  - series: pg_replication_lag_seconds{job="integrations/postgres_exporter",instance="pg-2",server="localhost:5432"}
+    values: 4000x10
+  - series: pg_replication_is_replica{job="integrations/postgres_exporter",instance="pg-2",server="localhost:5432"}
+    values: 1x10
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: PostgreSQLReplicationLagCritical
+    exp_alerts:
+    - exp_labels:
+        job: integrations/postgres_exporter
+        instance: pg-2
+        server: localhost:5432
+        severity: critical
+      exp_annotations:
+        summary: PostgreSQL replication lag exceeds 1 hour.
+        description: Replica pg-2 is 4000s behind primary. Check for network issues or load imbalances.
