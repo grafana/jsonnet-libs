@@ -114,8 +114,15 @@
           },
           {
             alert: 'PostgreSQLVacuumNotRunning',
+            // Counts manual vacuums too, which the dashboard's vacuum age signal does not.
             expr: |||
-              (time() - pg_stat_user_tables_last_autovacuum{%(filteringSelector)s}) > %(alertVacuumNotRunningThreshold)s
+              (
+                time() - (
+                  pg_stat_user_tables_last_autovacuum{%(filteringSelector)s} > pg_stat_user_tables_last_vacuum{%(filteringSelector)s}
+                  or
+                  pg_stat_user_tables_last_vacuum{%(filteringSelector)s}
+                )
+              ) > %(alertVacuumNotRunningThreshold)s
               and
               pg_stat_user_tables_n_dead_tup{%(filteringSelector)s} > %(alertVacuumNotRunningDeadTuples)s
             ||| % config,
