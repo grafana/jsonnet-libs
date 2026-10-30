@@ -312,26 +312,14 @@ Default thresholds and severities can be configured in `config.libsonnet`:
 
 ## Configuration
 
+Override any setting from `config.libsonnet` with `withConfigMixin`. This example changes the dashboard name prefix.
+
 ```jsonnet
 local postgres = import 'postgres-observ-lib/main.libsonnet';
 
 postgres.new()
 + postgres.withConfigMixin({
-  // Filtering
-  filteringSelector: '',
-  groupLabels: ['job', 'cluster'],
-  instanceLabels: ['instance'],
-  
-  // Dashboard
-  uid: 'postgres',
   dashboardNamePrefix: 'Production / ',
-  dashboardTags: ['postgres', 'database'],
-  
-  // Metrics source - extensible for future sources
-  metricsSource: ['postgres_exporter'],
-  
-  // Feature flags
-  enableQueryAnalysis: true,  // requires pg_stat_statements
 })
 ```
 
