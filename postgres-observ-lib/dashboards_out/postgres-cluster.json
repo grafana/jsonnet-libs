@@ -819,7 +819,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (increase(pg_stat_database_deadlocks{job=~\"$job\",cluster=~\"$cluster\"}[$__range]))",
+                  "expr": "sum by (job,cluster) (\n  increase(pg_stat_database_deadlocks{job=~\"$job\",cluster=~\"$cluster\"}[$__range:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": "{{cluster}}: Total deadlocks",
@@ -1407,7 +1407,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  changes(pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}[5m])\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  changes(pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Role changes",
@@ -1780,7 +1780,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (increase(pg_stat_archiver_failed_count{job=~\"$job\",cluster=~\"$cluster\"}[$__range]))",
+                  "expr": "sum by (job,cluster) (\n  increase(pg_stat_archiver_failed_count{job=~\"$job\",cluster=~\"$cluster\"}[$__range:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": "{{cluster}}: WAL archive failures",

@@ -5,93 +5,99 @@ groups:
           annotations:
             description: PostgreSQL instance {{ $labels.instance }} is not responding.
             summary: PostgreSQL is down.
-          expr: pg_up{job=~".+", instance=~".+"} == 0
+          expr: (pg_up{}) == 0
           for: 1m
+          keep_firing_for: 5m
           labels:
             severity: critical
         - alert: PostgreSQLHighConnectionUsage
           annotations:
             description: PostgreSQL {{ $labels.instance }} is at {{ $value | humanizePercentage }} connection capacity.
             summary: PostgreSQL connection usage is high.
-          expr: |
-            (
-              sum by (job, cluster, instance) (pg_stat_activity_count{job=~".+", instance=~".+"})
-              /
-              on (job, cluster, instance) pg_settings_max_connections{job=~".+", instance=~".+"}
-            ) > 0.80000000000000004
+          expr: |-
+            (sum by (job,cluster,instance) (pg_stat_activity_count{})
+            /
+            max by (job,cluster,instance) (pg_settings_max_connections{})
+            ) > 0.8
           for: 5m
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLLowCacheHitRatio
           annotations:
             description: PostgreSQL {{ $labels.instance }} cache hit ratio is {{ $value | humanizePercentage }}. Consider increasing shared_buffers.
             summary: PostgreSQL cache hit ratio is low.
-          expr: |
+          expr: |-
+            (sum by (job,cluster,instance) (pg_stat_database_blks_hit{})
+            /
             (
-              sum by (job, cluster, instance) (pg_stat_database_blks_hit{job=~".+", instance=~".+"})
-              /
-              (
-                sum by (job, cluster, instance) (pg_stat_database_blks_hit{job=~".+", instance=~".+"})
-                +
-                sum by (job, cluster, instance) (pg_stat_database_blks_read{job=~".+", instance=~".+"})
-              )
-            ) < 0.90000000000000002
+              sum by (job,cluster,instance) (pg_stat_database_blks_hit{})
+              +
+              sum by (job,cluster,instance) (pg_stat_database_blks_read{})
+            )
+            ) < 0.9
           for: 15m
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLReplicationLag
           annotations:
             description: Replica {{ $labels.instance }} is {{ $value }}s behind primary.
             summary: PostgreSQL replication lag is high.
-          expr: pg_replication_lag_seconds{job=~".+", instance=~".+"} > 30
+          expr: (pg_replication_lag_seconds{}) > 30
           for: 5m
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLDeadlocks
           annotations:
             description: PostgreSQL {{ $labels.instance }} database {{ $labels.datname }} has deadlocks.
             summary: PostgreSQL deadlocks detected.
-          expr: rate(pg_stat_database_deadlocks{job=~".+", instance=~".+"}[5m]) > 0.0033333333333333335
+          expr: increase(pg_stat_database_deadlocks{}[5m]) > 1
           for: 5m
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLLongRunningQuery
           annotations:
             description: Query on {{ $labels.instance }} has been running for {{ $value | humanizeDuration }}.
             summary: PostgreSQL has long-running query.
-          expr: |
-            pg_stat_activity_max_tx_duration{job=~".+", instance=~".+", state="active"} > 300
+          expr: (pg_stat_activity_max_tx_duration{state="active", }) > 300
           for: 1m
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLBlockedQueries
           annotations:
             description: PostgreSQL {{ $labels.instance }} has {{ $value }} queries waiting for locks.
             summary: PostgreSQL has blocked queries.
-          expr: |
-            sum by (job, cluster, instance) (pg_stat_activity_count{job=~".+", instance=~".+", wait_event_type="Lock"}) > 1
+          expr: sum by (job, cluster, instance) (pg_stat_activity_count{wait_event_type="Lock", } or pg_stat_activity_count{} * 0) > 1
           for: 5m
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLWALArchiveFailure
           annotations:
             description: PostgreSQL {{ $labels.instance }} is failing to archive WAL files. Backups may be incomplete!
             summary: PostgreSQL WAL archiving is failing.
-          expr: rate(pg_stat_archiver_failed_count{job=~".+", instance=~".+"}[5m]) > 0
+          expr: (rate(pg_stat_archiver_failed_count{}[5m])) > 0
           for: 5m
+          keep_firing_for: 5m
           labels:
             severity: critical
         - alert: PostgreSQLHighDeadTuples
           annotations:
             description: Table {{ $labels.schemaname }}.{{ $labels.relname }} has {{ $value | humanizePercentage }} dead tuples.
             summary: PostgreSQL table needs vacuum.
-          expr: |
-            (
-              pg_stat_user_tables_n_dead_tup{job=~".+", instance=~".+"}
+          expr: |-
+            ((
+              pg_stat_user_tables_n_dead_tup{}
               /
-              (pg_stat_user_tables_n_live_tup{job=~".+", instance=~".+"} + pg_stat_user_tables_n_dead_tup{job=~".+", instance=~".+"} + 1)
-            ) > 0.10000000000000001
+              (pg_stat_user_tables_n_live_tup{} + pg_stat_user_tables_n_dead_tup{} + 1)
+            )
+            ) > 0.1
           for: 30m
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLVacuumNotRunning
@@ -99,89 +105,98 @@ groups:
             description: Table {{ $labels.schemaname }}.{{ $labels.relname }} has not been vacuumed in over 7 days.
             summary: PostgreSQL table has not been vacuumed.
           expr: |
-            (time() - pg_stat_user_tables_last_autovacuum{job=~".+", instance=~".+"}) > 604800
+            (
+              time() - (
+                pg_stat_user_tables_last_autovacuum{} > pg_stat_user_tables_last_vacuum{}
+                or
+                pg_stat_user_tables_last_vacuum{}
+              )
+            ) > 604800
             and
-            pg_stat_user_tables_n_dead_tup{job=~".+", instance=~".+"} > 10000
+            pg_stat_user_tables_n_dead_tup{} > 10000
           for: 1h
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLTooManyRollbacks
           annotations:
             description: PostgreSQL {{ $labels.instance }} has rollback ratio of {{ $value | humanizePercentage }}.
             summary: PostgreSQL has too many rollbacks.
-          expr: |
+          expr: |-
+            (sum by (job,cluster,instance) (rate(pg_stat_database_xact_rollback{}[5m]))
+            /
             (
-              sum by (job, cluster, instance) (rate(pg_stat_database_xact_rollback{job=~".+", instance=~".+"}[5m]))
-              /
-              (
-                sum by (job, cluster, instance) (rate(pg_stat_database_xact_commit{job=~".+", instance=~".+"}[5m]))
-                +
-                sum by (job, cluster, instance) (rate(pg_stat_database_xact_rollback{job=~".+", instance=~".+"}[5m]))
-              )
-            ) > 0.10000000000000001
+              sum by (job,cluster,instance) (rate(pg_stat_database_xact_commit{}[5m]))
+              +
+              sum by (job,cluster,instance) (rate(pg_stat_database_xact_rollback{}[5m]))
+            )
+            ) > 0.1
           for: 5m
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLTooManyLocksAcquired
           annotations:
             description: PostgreSQL {{ $labels.instance }} lock utilization is {{ $value | humanizePercentage }}.
             summary: PostgreSQL has acquired too many locks.
-          expr: |
-            max by (job, cluster, instance) (
-              pg_locks_count{job=~".+", instance=~".+"}
-            )
+          expr: |-
+            (sum by (job,cluster,instance) (pg_locks_count{})
             /
-            on(job, cluster, instance) (
-              pg_settings_max_locks_per_transaction{job=~".+", instance=~".+"}
+            (
+              max by (job,cluster,instance) (pg_settings_max_locks_per_transaction{})
               *
-              pg_settings_max_connections{job=~".+", instance=~".+"}
-            ) > 0.20000000000000001
+              max by (job,cluster,instance) (pg_settings_max_connections{})
+            )
+            ) > 0.2
           for: 5m
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLInactiveReplicationSlot
           annotations:
             description: PostgreSQL {{ $labels.instance }} has a replication slot not actively streaming. WAL files may accumulate!
             summary: PostgreSQL has inactive replication slot.
-          expr: pg_stat_replication_pg_wal_lsn_diff{job=~".+", instance=~".+", state!="streaming"} > 0
+          expr: (pg_stat_replication_pg_wal_lsn_diff{state!="streaming", }) > 0
           for: 30m
+          keep_firing_for: 5m
           labels:
             severity: critical
         - alert: PostgreSQLReplicationRoleChanged
           annotations:
             description: PostgreSQL {{ $labels.instance }} replication role has changed. Verify if this is expected failover.
             summary: PostgreSQL replication role changed.
-          expr: pg_replication_is_replica{job=~".+", instance=~".+"} and changes(pg_replication_is_replica{job=~".+", instance=~".+"}[1m]) > 0
+          expr: (changes(pg_replication_is_replica{}[5m])) > 0
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLExporterErrors
           annotations:
             description: PostgreSQL exporter for {{ $labels.instance }} is experiencing scrape errors.
             summary: PostgreSQL exporter has errors.
-          expr: pg_exporter_last_scrape_error{job=~".+", instance=~".+"} > 0
+          expr: (pg_exporter_last_scrape_error{}) > 0
           for: 30m
+          keep_firing_for: 5m
           labels:
             severity: critical
         - alert: PostgreSQLHighQps
           annotations:
             description: PostgreSQL {{ $labels.instance }} has {{ $value | humanize }} queries per second.
             summary: PostgreSQL has high QPS.
-          expr: |
-            sum by (job, cluster, instance) (
-              rate(pg_stat_database_xact_commit{job=~".+", instance=~".+"}[5m])
-              +
-              rate(pg_stat_database_xact_rollback{job=~".+", instance=~".+"}[5m])
+          expr: |-
+            sum by (job, cluster, instance) (rate(pg_stat_database_xact_commit{}[5m])
+            +
+            rate(pg_stat_database_xact_rollback{}[5m])
             ) > 10000
           for: 5m
+          keep_firing_for: 5m
           labels:
             severity: warning
         - alert: PostgreSQLReplicationLagCritical
           annotations:
             description: Replica {{ $labels.instance }} is {{ $value }}s behind primary. Check for network issues or load imbalances.
             summary: PostgreSQL replication lag exceeds 1 hour.
-          expr: |
-            (pg_replication_lag_seconds{job=~".+", instance=~".+"} > 3600)
-            and on (job, cluster, instance) (pg_replication_is_replica{job=~".+", instance=~".+"} == 1)
+          expr: ((pg_replication_lag_seconds{}) > 3600) and on (job, cluster, instance) ((pg_replication_is_replica{}) == 1)
           for: 5m
+          keep_firing_for: 5m
           labels:
             severity: critical
