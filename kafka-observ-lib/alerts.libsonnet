@@ -4,6 +4,11 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
   new(this): {
     local instanceLabel = xtd.array.slice(this.config.instanceLabels, -1)[0],
     local groupLabel = xtd.array.slice(this.config.groupLabels, -1)[0],
+    local metricsSources = if std.type(this.config.metricsSource) == 'string' then [this.config.metricsSource] else this.config.metricsSource,
+    local uncleanElectionMetrics = {
+      grafanacloud: 'kafka_controller_controllerstats_uncleanleaderelectionspersec',
+      prometheus: 'kafka_controller_controllerstats_uncleanleaderelections_total',
+    },
     groups+: [
       {
         name: this.config.uid + '-kafka-alerts',
@@ -38,7 +43,16 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               expr: 'sum by (%s, topic, consumergroup) (%s) > %s' %
                     [
                       std.join(',', this.config.groupLabels),
-                      this.signals.consumerGroup.consumerGroupLag.asRuleExpression(),
+                      // Only Grafana's exporter uses -1 for an uncommitted partition.
+                      std.join(
+                        '\nor\n',
+                        std.map(
+                          function(x)
+                            if std.startsWith(x, 'kafka_consumergroup_uncommitted_offsets{') then x + ' != -1'
+                            else x,
+                          std.split(this.signals.consumerGroup.consumerGroupLag.asRuleExpression(), '\nor\n')
+                        )
+                      ),
                       this.config.alertKafkaLagTooHighThreshold,
                     ],
               'for': '15m',
@@ -318,7 +332,18 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             },
             {
               alert: 'KafkaUncleanLeaderElection',
-              expr: '(%s) != 0' % this.signals.brokerReplicaManager.uncleanLeaderElection.asRuleExpression(),
+              // Grafana's Meter.Count takes precedence when both exporters share labels.
+              // A flat Prometheus counter must not mask a Grafana election event.
+              expr: '(%s) != 0' % std.join('\nor\n', [
+                'sum by (%s) (increase(%s{%s}[10m]))' % [
+                  std.join(',', this.config.groupLabels + this.config.instanceLabels),
+                  uncleanElectionMetrics[source],
+                  this.config.signals.brokerReplicaManager.filteringSelector,
+                ]
+                for source in ['grafanacloud', 'prometheus']
+                if std.member(metricsSources, source) ||
+                   (source == 'prometheus' && std.member(metricsSources, 'bitnami'))
+              ]),
               'for': '5m',
               keep_firing_for: '5m',
               labels: {
@@ -327,7 +352,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'Kafka has unclean leader elections.',
                 description: |||
-                  Kafka cluster {{ $labels.%s }} has {{ $value }} unclean partition leader elections reported in the last 5 minutes.
+                  Kafka cluster {{ $labels.%s }} has {{ $value }} unclean partition leader elections reported in the last 10 minutes.
 
                   CRITICAL Impact - DATA LOSS RISK:
                   Unclean leader election occurs when no in-sync replica (ISR) is available to become the leader, forcing Kafka to elect an out-of-sync replica. This WILL result in data loss for any messages that were committed to the previous leader but not replicated to the new leader. This compromises data durability guarantees and can cause:
