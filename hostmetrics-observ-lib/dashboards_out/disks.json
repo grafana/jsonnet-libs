@@ -7,7 +7,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{job=~\".+\",job=~\"$job\",instance=~\"$instance\", os_description!=\"\"}))[$__interval:1m] offset -$__interval) > 1",
+               "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))[$__interval:1m] offset -$__interval) > 1",
                "hide": true,
                "iconColor": "light-blue",
                "name": "OS or kernel change",
@@ -22,7 +22,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
+               "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
                "hide": true,
                "iconColor": "#fade2a",
                "name": "Reboot",
@@ -139,7 +139,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization_ratio{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\", mode!=\"ro\"}\n)\n)\nor\n100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\", mode!=\"ro\"}\n)\n)",
+                  "expr": "100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization_ratio{mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization{mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} {{mountpoint}}",
@@ -214,7 +214,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,mountpoint) (\n  system_filesystem_usage_bytes{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\", state=\"free\"}\n)\nor\nsum by (job,instance,mountpoint) (\n  system_filesystem_usage{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\", state=\"free\"}\n)",
+                  "expr": "sum by (job,instance,mountpoint) (\n  system_filesystem_usage_bytes{state=\"free\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,mountpoint) (\n  system_filesystem_usage{state=\"free\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Available ({{mountpoint}})",
@@ -288,7 +288,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,mountpoint,state) (\n  system_filesystem_usage_bytes{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\"}\n)\nor\nsum by (job,instance,mountpoint,state) (\n  system_filesystem_usage{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\"}\n)",
+                  "expr": "sum by (job,instance,mountpoint,state) (\n  system_filesystem_usage_bytes{type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,mountpoint,state) (\n  system_filesystem_usage{type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Space ({{mountpoint}} {{state}})",
@@ -362,7 +362,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,mountpoint) (\n  system_filesystem_inodes_usage{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\", state=\"free\"}\n)",
+                  "expr": "sum by (job,instance,mountpoint) (\n  system_filesystem_inodes_usage{state=\"free\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Free ({{mountpoint}})",
@@ -436,7 +436,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,mountpoint) (\n  system_filesystem_inodes_usage{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\"}\n)",
+                  "expr": "sum by (job,instance,mountpoint) (\n  system_filesystem_inodes_usage{type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Total ({{mountpoint}})",
@@ -531,7 +531,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,device,direction) (\n  rate(system_disk_io_bytes_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_disk_io{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,instance,device,direction) (\n  rate(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: I/O ({{device}} {{direction}})",
@@ -607,7 +607,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,device,direction) (\n  rate(system_disk_operations_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_disk_operations{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,instance,device,direction) (\n  rate(system_disk_operations_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_disk_operations{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Ops ({{device}} {{direction}})",
@@ -681,7 +681,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,device) (\n  rate(system_disk_io_time_seconds_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device) (\n  rate(system_disk_io_time{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,instance,device) (\n  rate(system_disk_io_time_seconds_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device) (\n  rate(system_disk_io_time{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: I/O time ({{device}})",
@@ -757,7 +757,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance, device, direction) (rate(system_disk_operation_time_seconds_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval]))\n/\n(sum by (job,instance, device, direction) (rate(system_disk_operations_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])) > 0)\n\nor\nsum by (job,instance, device, direction) (rate(system_disk_operation_time{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval]))\n/\n(sum by (job,instance, device, direction) (rate(system_disk_operations{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])) > 0)\n",
+                  "expr": "sum by (job,instance, device, direction) (rate(system_disk_operation_time_seconds_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n/\n(sum by (job,instance, device, direction) (rate(system_disk_operations_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) > 0)\n\nor\nsum by (job,instance, device, direction) (rate(system_disk_operation_time{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n/\n(sum by (job,instance, device, direction) (rate(system_disk_operations{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) > 0)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} {{device}} {{direction}}",
@@ -833,7 +833,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,device) (\n  rate(system_disk_weighted_io_time_seconds_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device) (\n  rate(system_disk_weighted_io_time{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,instance,device) (\n  rate(system_disk_weighted_io_time_seconds_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device) (\n  rate(system_disk_weighted_io_time{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Queue ({{device}})",
@@ -907,7 +907,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,instance,device) (\n  system_disk_pending_operations{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}\n)",
+                  "expr": "max by (job,instance,device) (\n  system_disk_pending_operations{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Pending ({{device}})",
@@ -981,7 +981,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,device,direction) (\n  rate(system_disk_merged_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_disk_merged{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,instance,device,direction) (\n  rate(system_disk_merged_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_disk_merged{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Merged ({{device}} {{direction}})",
@@ -1016,7 +1016,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job=~\".+\"}, job)",
+               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job!=\"\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -1031,7 +1031,7 @@
                "label": "Instance",
                "multi": false,
                "name": "instance",
-               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job=~\".+\",job=~\"$job\"}, instance)",
+               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job!=\"\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

@@ -17,7 +17,7 @@ function(this)
         type: 'info',
         aggLevel: 'instance',
         description: 'Hostname reported by the host.',
-        sources: common.sources('target_info{%(queriesSelector)s, host_name!=""}', { infoLabel: 'host_name' }),
+        sources: common.sources('target_info{host_name!="", %(queriesSelector)s}', { infoLabel: 'host_name' }),
       },
       // os_description ends in the kernel's uname, i.e. "Ubuntu 24.04.5 LTS (Noble Numbat) (Linux host 6.8.0 ...)":
       // keep what comes before the first " (".
@@ -28,7 +28,7 @@ function(this)
         aggLevel: 'instance',
         description: 'Distribution reported by the host.',
         sources: common.sources(
-          'label_replace(target_info{%(queriesSelector)s, os_description!=""}, "os_name", "$1", "os_description", "(.+?)( [(].*)?")',
+          'label_replace(target_info{os_description!="", %(queriesSelector)s}, "os_name", "$1", "os_description", "(.+?)( [(].*)?")',
           { infoLabel: 'os_name' }
         ),
       },
@@ -38,7 +38,7 @@ function(this)
         type: 'info',
         aggLevel: 'none',
         description: 'CPU architecture reported by the host.',
-        sources: common.sources('target_info{%(queriesSelector)s, host_arch!=""}', { infoLabel: 'host_arch' }),
+        sources: common.sources('target_info{host_arch!="", %(queriesSelector)s}', { infoLabel: 'host_arch' }),
       },
       uptime: {
         name: 'Uptime',
@@ -63,7 +63,7 @@ function(this)
         type: 'raw',
         description: 'The reported distribution or kernel changed.',
         unit: 'short',
-        sources: common.sources('changes(sum by (%(agg)s) (group by (%(agg)s, os_description) (target_info{%(queriesSelector)s, os_description!=""}))[$__interval:1m] offset -$__interval) > 1'),
+        sources: common.sources('changes(sum by (%(agg)s) (group by (%(agg)s, os_description) (target_info{os_description!="", %(queriesSelector)s}))[$__interval:1m] offset -$__interval) > 1'),
       },
       cpuCount: {
         name: 'CPU cores',
@@ -86,7 +86,7 @@ function(this)
         type: 'gauge',
         description: 'Processes currently running.',
         unit: 'short',
-        sources: common.sources('system_processes_count{%(queriesSelector)s, status="running"}'),
+        sources: common.sources('system_processes_count{status="running", %(queriesSelector)s}'),
       },
       processesCreated: {
         name: 'Processes created',

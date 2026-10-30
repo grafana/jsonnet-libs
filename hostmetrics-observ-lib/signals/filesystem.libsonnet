@@ -2,7 +2,7 @@ local common = import './common.libsonnet';
 
 function(this)
   local fsSources(expr, extra={}) =
-    common.sources(std.strReplace(expr, '%(queriesSelector)s', '%(queriesSelector)s, ' + this.filesystemSelector + ', ' + this.filesystemMountpointSelector), extra);
+    common.sources(std.strReplace(expr, '%(queriesSelector)s', this.filesystemSelector + ', ' + this.filesystemMountpointSelector + ', %(queriesSelector)s'), extra);
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
@@ -20,7 +20,7 @@ function(this)
         description: 'Share of each filesystem in use.',
         unit: 'percent',
         sources: fsSources(
-          'system_filesystem_utilization{%(queriesSelector)s, mode!="ro"}',
+          'system_filesystem_utilization{mode!="ro", %(queriesSelector)s}',
           { aggKeepLabels: ['mountpoint'], legendCustomTemplate: '%(aggLegend)s {{mountpoint}}', exprWrappers: [['100 * (', ')']] },
         ),
       },
@@ -30,7 +30,7 @@ function(this)
         type: 'gauge',
         description: 'Free bytes per filesystem.',
         unit: 'bytes',
-        sources: fsSources('system_filesystem_usage{%(queriesSelector)s, state="free"}', { aggKeepLabels: ['mountpoint'] }),
+        sources: fsSources('system_filesystem_usage{state="free", %(queriesSelector)s}', { aggKeepLabels: ['mountpoint'] }),
       },
       filesystemUsageByState: {
         name: 'Filesystem space by state',
@@ -46,7 +46,7 @@ function(this)
         type: 'gauge',
         description: 'Size of the root filesystem.',
         unit: 'bytes',
-        sources: fsSources('system_filesystem_usage{%(queriesSelector)s, mountpoint="/"}'),
+        sources: fsSources('system_filesystem_usage{mountpoint="/", %(queriesSelector)s}'),
       },
       rootFilesystemUsagePercent: {
         name: 'Root mount usage',
@@ -56,7 +56,7 @@ function(this)
         description: 'Share of the root filesystem in use.',
         unit: 'percent',
         sources: fsSources(
-          'system_filesystem_utilization{%(queriesSelector)s, mountpoint="/"}',
+          'system_filesystem_utilization{mountpoint="/", %(queriesSelector)s}',
           { legendCustomTemplate: '%(aggLegend)s', exprWrappers: [['100 * (', ')']] },
         ),
       },
@@ -66,7 +66,7 @@ function(this)
         type: 'gauge',
         description: 'Free inodes per filesystem.',
         unit: 'short',
-        sources: fsSources('system_filesystem_inodes_usage{%(queriesSelector)s, state="free"}', { aggKeepLabels: ['mountpoint'] }),
+        sources: fsSources('system_filesystem_inodes_usage{state="free", %(queriesSelector)s}', { aggKeepLabels: ['mountpoint'] }),
       },
       inodesTotal: {
         name: 'Total inodes',
@@ -84,7 +84,7 @@ function(this)
         description: 'Share of inodes in use per filesystem.',
         unit: 'percent',
         sources: fsSources(
-          '100 * max by (%(agg)s, mountpoint) (system_filesystem_inodes_usage{%(queriesSelector)s, state="used", mode!="ro"} / ignoring(state) sum without (state) (system_filesystem_inodes_usage{%(queriesSelector)s, mode!="ro"}))',
+          '100 * max by (%(agg)s, mountpoint) (system_filesystem_inodes_usage{state="used", mode!="ro", %(queriesSelector)s} / ignoring(state) sum without (state) (system_filesystem_inodes_usage{mode!="ro", %(queriesSelector)s}))',
           { legendCustomTemplate: '%(aggLegend)s {{mountpoint}}' },
         ),
       },

@@ -7,7 +7,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{job=~\".+\",job=~\"$job\",instance=~\"$instance\", os_description!=\"\"}))[$__interval:1m] offset -$__interval) > 1",
+               "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))[$__interval:1m] offset -$__interval) > 1",
                "hide": true,
                "iconColor": "light-blue",
                "name": "OS or kernel change",
@@ -22,7 +22,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
+               "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
                "hide": true,
                "iconColor": "#fade2a",
                "name": "Reboot",
@@ -139,7 +139,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization_ratio{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=~\"idle|wait\"})))\nor\n100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=~\"idle|wait\"})))",
+                  "expr": "100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization_ratio{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"})))\nor\n100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"})))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -266,7 +266,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "100 * (\n  avg by (job,instance,state) (\n  system_cpu_utilization_ratio{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state!=\"idle\"}\n)\n)\nor\n100 * (\n  avg by (job,instance,state) (\n  system_cpu_utilization{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state!=\"idle\"}\n)\n)",
+                  "expr": "100 * (\n  avg by (job,instance,state) (\n  system_cpu_utilization_ratio{state!=\"idle\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  avg by (job,instance,state) (\n  system_cpu_utilization{state!=\"idle\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} {{state}}",
@@ -343,7 +343,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "100 * (1 - sum by (job,instance, cpu) (system_cpu_utilization_ratio{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=~\"idle|wait\"}))\nor\n100 * (1 - sum by (job,instance, cpu) (system_cpu_utilization{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=~\"idle|wait\"}))",
+                  "expr": "100 * (1 - sum by (job,instance, cpu) (system_cpu_utilization_ratio{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))\nor\n100 * (1 - sum by (job,instance, cpu) (system_cpu_utilization{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} {{cpu}}",
@@ -417,7 +417,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,state) (\n  rate(system_cpu_time_seconds_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,state) (\n  rate(system_cpu_time{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,instance,state) (\n  rate(system_cpu_time_seconds_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,state) (\n  rate(system_cpu_time{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: CPU time ({{state}})",
@@ -570,7 +570,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,instance) (\n  system_cpu_load_average_1m{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "max by (job,instance) (\n  system_cpu_load_average_1m{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: 1m",
@@ -581,7 +581,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,instance) (\n  system_cpu_load_average_5m{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "max by (job,instance) (\n  system_cpu_load_average_5m{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: 5m",
@@ -592,7 +592,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,instance) (\n  system_cpu_load_average_15m{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "max by (job,instance) (\n  system_cpu_load_average_15m{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: 15m",
@@ -603,7 +603,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,instance) (\n  system_cpu_logical_count{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "max by (job,instance) (\n  system_cpu_logical_count{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Cores",
@@ -677,7 +677,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "avg by (job,instance,cpu) (\n  system_cpu_frequency_hertz{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance,cpu) (\n  system_cpu_frequency{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job,instance,cpu) (\n  system_cpu_frequency_hertz{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance,cpu) (\n  system_cpu_frequency{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Frequency ({{cpu}})",
@@ -763,7 +763,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,instance) (\n  system_processes_count{job=~\".+\",job=~\"$job\",instance=~\"$instance\", status=\"running\"}\n)",
+                  "expr": "max by (job,instance) (\n  system_processes_count{status=\"running\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Running",
@@ -774,7 +774,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance) (\n  rate(system_processes_created_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance) (\n  rate(system_processes_created{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,instance) (\n  rate(system_processes_created_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance) (\n  rate(system_processes_created{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Created",
@@ -809,7 +809,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job=~\".+\"}, job)",
+               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job!=\"\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -824,7 +824,7 @@
                "label": "Instance",
                "multi": false,
                "name": "instance",
-               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job=~\".+\",job=~\"$job\"}, instance)",
+               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job!=\"\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

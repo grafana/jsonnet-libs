@@ -18,7 +18,7 @@ function(this)
         description: 'Share of CPU time spent working: not idle, and not waiting for I/O.',
         unit: 'percent',
         sources: common.sources(
-          '100 * (1 - avg by (%(agg)s) (sum by (%(agg)s, cpu) (system_cpu_utilization{%(queriesSelector)s, state=~"idle|wait"})))',
+          '100 * (1 - avg by (%(agg)s) (sum by (%(agg)s, cpu) (system_cpu_utilization{state=~"idle|wait", %(queriesSelector)s})))',
           { legendCustomTemplate: '%(aggLegend)s' },
         ),
       },
@@ -30,7 +30,7 @@ function(this)
         description: 'CPU time share per state, excluding idle.',
         unit: 'percent',
         sources: common.sources(
-          'system_cpu_utilization{%(queriesSelector)s, state!="idle"}',
+          'system_cpu_utilization{state!="idle", %(queriesSelector)s}',
           { aggKeepLabels: ['state'], legendCustomTemplate: '%(aggLegend)s {{state}}', exprWrappers: [['100 * (', ')']] },
         ),
       },
@@ -42,7 +42,7 @@ function(this)
         description: 'Share of time each core spends working: not idle, and not waiting for I/O.',
         unit: 'percent',
         sources: common.sources(
-          '100 * (1 - sum by (%(agg)s, cpu) (system_cpu_utilization{%(queriesSelector)s, state=~"idle|wait"}))',
+          '100 * (1 - sum by (%(agg)s, cpu) (system_cpu_utilization{state=~"idle|wait", %(queriesSelector)s}))',
           { legendCustomTemplate: '%(aggLegend)s {{cpu}}' },
         ),
       },

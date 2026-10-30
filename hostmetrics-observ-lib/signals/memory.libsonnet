@@ -20,7 +20,7 @@ function(this)
         description: 'Share of physical memory in use.',
         unit: 'percent',
         sources: common.sources(
-          'system_memory_utilization{%(queriesSelector)s, state="used"}',
+          'system_memory_utilization{state="used", %(queriesSelector)s}',
           { legendCustomTemplate: '%(aggLegend)s', exprWrappers: [['100 * (', ')']] },
         ),
       },
@@ -99,7 +99,7 @@ function(this)
         aggFunction: 'sum',
         description: 'Page faults that had to read from disk.',
         unit: 'ops',
-        sources: common.sources('system_paging_faults{%(queriesSelector)s, type="major"}', { exprWrappers: [pagingCount] }),
+        sources: common.sources('system_paging_faults{type="major", %(queriesSelector)s}', { exprWrappers: [pagingCount] }),
       },
     },
   }

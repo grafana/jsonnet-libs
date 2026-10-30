@@ -7,7 +7,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{job=~\".+\",job=~\"$job\",instance=~\"$instance\", os_description!=\"\"}))[$__interval:1m] offset -$__interval) > 1",
+               "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))[$__interval:1m] offset -$__interval) > 1",
                "hide": true,
                "iconColor": "light-blue",
                "name": "OS or kernel change",
@@ -22,7 +22,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
+               "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
                "hide": true,
                "iconColor": "#fade2a",
                "name": "Reboot",
@@ -139,7 +139,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "100 * (\n  sum by (job,instance) (\n  system_memory_utilization_ratio{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=\"used\"}\n)\n)\nor\n100 * (\n  sum by (job,instance) (\n  system_memory_utilization{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=\"used\"}\n)\n)",
+                  "expr": "100 * (\n  sum by (job,instance) (\n  system_memory_utilization_ratio{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  sum by (job,instance) (\n  system_memory_utilization{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
@@ -243,7 +243,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,state) (\n  system_memory_usage_bytes{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,state) (\n  system_memory_usage{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "sum by (job,instance,state) (\n  system_memory_usage_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,state) (\n  system_memory_usage{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Memory ({{state}})",
@@ -347,7 +347,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,instance) (\n  system_linux_memory_available_bytes{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_linux_memory_available{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "max by (job,instance) (\n  system_linux_memory_available_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_linux_memory_available{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Available",
@@ -451,7 +451,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,instance) (\n  system_memory_limit_bytes{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_memory_limit{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "max by (job,instance) (\n  system_memory_limit_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_memory_limit{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Total",
@@ -538,7 +538,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "(\n  sum by (job,instance,direction) (\n  rate(system_paging_operations_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\nor\n(\n  sum by (job,instance,direction) (\n  rate(system_paging_operations{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096",
+                  "expr": "(\n  sum by (job,instance,direction) (\n  rate(system_paging_operations_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\nor\n(\n  sum by (job,instance,direction) (\n  rate(system_paging_operations{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Pages ({{direction}})",
@@ -612,7 +612,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "(\n  sum by (job,instance,type) (\n  rate(system_paging_faults_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\nor\n(\n  sum by (job,instance,type) (\n  rate(system_paging_faults{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096",
+                  "expr": "(\n  sum by (job,instance,type) (\n  rate(system_paging_faults_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\nor\n(\n  sum by (job,instance,type) (\n  rate(system_paging_faults{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Faults ({{type}})",
@@ -716,7 +716,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,state) (\n  system_paging_usage_bytes{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,state) (\n  system_paging_usage{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "sum by (job,instance,state) (\n  system_paging_usage_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,state) (\n  system_paging_usage{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Swap ({{state}})",
@@ -832,7 +832,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,instance) (\n  system_linux_memory_dirty_bytes{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_linux_memory_dirty{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "max by (job,instance) (\n  system_linux_memory_dirty_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_linux_memory_dirty{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Dirty",
@@ -843,7 +843,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,instance) (\n  system_memory_linux_shared_bytes{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_memory_linux_shared{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "max by (job,instance) (\n  system_memory_linux_shared_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_memory_linux_shared{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Shared",
@@ -878,7 +878,7 @@
                "label": "Job",
                "multi": true,
                "name": "job",
-               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job=~\".+\"}, job)",
+               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job!=\"\"}, job)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -893,7 +893,7 @@
                "label": "Instance",
                "multi": false,
                "name": "instance",
-               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job=~\".+\",job=~\"$job\"}, instance)",
+               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job!=\"\",job=~\"$job\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
