@@ -52,14 +52,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       | line_format `{{ if eq "[[instance]]" ".*" }}{{alignLeft 25 .instance}}|{{alignLeft 25 .unit}}|{{else}}{{alignLeft 25 .unit}}|{{end}} {{__line__}}`
     |||,
 
-  // alerts thresholds
+  // Alerts thresholds
   alertsCPUHighUsageThreshold: 90,  // %
   alertsMemoryHighUtilizationThreshold: 90,  // %
-  alertsDiskSpaceLowThresholdWarning: 95,  // %
-  alertsDiskSpaceLowThresholdCritical: 97,  // %
+  alertsDiskSpaceLowThresholdWarning: 95,  // % used
+  alertsDiskSpaceLowThresholdCritical: 97,  // % used
   alertsSystemSaturationPerCoreThreshold: 2,  // 5m load average relative to logical core count
-  alertsInodesLowThresholdWarning: 95,  // %
-  alertsInodesLowThresholdCritical: 97,  // %
+  alertsInodesLowThresholdWarning: 95,  // % used
+  alertsInodesLowThresholdCritical: 97,  // % used
   alertsDiskIOSaturationThreshold: 10,  // average I/O queue length
   alertsNetworkErrorsThreshold: 1,  // % of packets
   alertsConntrackHighUsageThreshold: 75,  // % of the conntrack table
@@ -68,8 +68,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   alertsHostRebootedThreshold: 600,  // seconds of uptime
   alertsHostDownWindow: '10m',
 
-  // alerts severities. HostmetricsDiskSpaceLow and HostmetricsInodesLow have a warning and a critical rule: tune
-  // them with their thresholds.
+  // Alerts severities. HostmetricsDiskSpaceLow and HostmetricsInodesLow have no severity setting: each has a
+  // warning rule and a critical rule, tuned with the thresholds above.
   alertsHostDownSeverity: 'critical',
   alertsCPUHighUsageSeverity: 'warning',
   alertsMemoryHighUtilizationSeverity: 'warning',
