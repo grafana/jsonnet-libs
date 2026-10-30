@@ -201,7 +201,7 @@ Requires `pg_stat_statements` extension:
 | `rowsUpdated` | Update rate |
 | `rowsDeleted` | Delete rate |
 | `buffersAlloc` | Buffer allocations |
-| `buffersCheckpoint` | Buffers cleaned by bgwriter |
+| `buffersCheckpoint` | Buffers written by checkpoints |
 
 ### Tier 4: Maintenance (Actionable)
 

@@ -194,21 +194,19 @@ function(this)
         },
       },
 
-      // Buffers written by bgwriter (cleaning)
       buffersCheckpoint: {
-        name: 'Buffers cleaned',
-        description: 'Number of buffers written by background writer per second.',
+        name: 'Buffers written by checkpoints',
+        description: 'Number of buffers written during checkpoints per second.',
         type: 'gauge',
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}[%(interval)s])',
-            legendCustomTemplate: ' Cleaned',
+            expr: 'rate(pg_stat_bgwriter_buffers_checkpoint_total{%(queriesSelector)s}[%(interval)s])',
+            legendCustomTemplate: ' Checkpoint',
           },
         },
       },
 
-      // Buffers clean total (duplicate metric for compatibility)
       buffersClean: {
         name: 'Buffers clean total',
         description: 'Number of buffers cleaned by bgwriter per second.',
