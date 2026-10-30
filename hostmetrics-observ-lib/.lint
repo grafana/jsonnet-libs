@@ -1,0 +1,14 @@
+exclusions:
+  template-instance-rule:
+    reason: "These dashboards are designed to be single instance"
+    entries:
+      - dashboard: Hostmetrics / overview
+      - dashboard: Hostmetrics / CPU and system
+      - dashboard: Hostmetrics / memory
+      - dashboard: Hostmetrics / filesystem and disks
+      - dashboard: Hostmetrics / network
+  panel-datasource-rule:
+    reason: "The alert list panel uses the -- Mixed -- datasource."
+    entries:
+      - dashboard: Hostmetrics / overview
+        panel: Alerts

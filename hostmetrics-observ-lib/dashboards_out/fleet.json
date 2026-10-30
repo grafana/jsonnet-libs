@@ -1,0 +1,1547 @@
+{
+      "annotations": {
+         "list": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "enable": true,
+               "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{job=~\".+\",job=~\"$job\",instance=~\"$instance\", os_description!=\"\"}))[$__interval:1m] offset -$__interval) > 1",
+               "hide": true,
+               "iconColor": "light-blue",
+               "name": "OS or kernel change",
+               "step": "5m",
+               "tagKeys": "job,instance",
+               "textFormat": "",
+               "titleFormat": "OS or kernel change"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "enable": true,
+               "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
+               "hide": true,
+               "iconColor": "#fade2a",
+               "name": "Reboot",
+               "tagKeys": "job,instance",
+               "titleFormat": "Reboot",
+               "useValueForTime": "on"
+            }
+         ]
+      },
+      "links": [
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "hostmetrics"
+            ],
+            "title": "All Hostmetrics / dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "One row per host.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  },
+                  "unit": "s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Host name"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "host_name"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Hostname"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Operating system"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "os_name"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "OS"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Load average 1m"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "1m"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "CPU cores"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Cores"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "CPU usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "CPU"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Memory total"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Total"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Memory usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Memory"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Root mount size"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Root FS size"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Root mount usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Root FS used"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Critical alert"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Critical"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Warning alert"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Warnings"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "type": "color-text"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "thresholds"
+                           }
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                 {
+                                    "color": "orange",
+                                    "value": null
+                                 },
+                                 {
+                                    "color": "text",
+                                    "value": 600
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           "id": "unit",
+                           "value": "dtdurations"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "CPU"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Memory"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Root FS used"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "basic",
+                              "type": "gauge"
+                           }
+                        },
+                        {
+                           "id": "color",
+                           "value": {
+                              "mode": "continuous-BlYlRd"
+                           }
+                        },
+                        {
+                           "id": "custom.gradientMode",
+                           "value": "scheme"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        },
+                        {
+                           "id": "max",
+                           "value": 100
+                        },
+                        {
+                           "id": "min",
+                           "value": 0
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "1m"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Load 1m"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "^(Critical|Warnings)$"
+                     },
+                     "properties": [
+                        {
+                           "id": "noValue",
+                           "value": "0"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "^(Instance|Job|Hostname)$"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.filterable",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "targetBlank": false,
+                                 "title": "Drill down to ${__value.text}",
+                                 "url": "/d/hostmetrics-nodes?var-instance=${__data.fields.instance}&${__url_time_range}&${datasource:queryparam}"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 10,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "options": {
+               "footer": {
+                  "fields": [
+                     "Value #Load average 1m",
+                     "Value #CPU cores",
+                     "Value #Memory total",
+                     "Value #Root mount size"
+                  ],
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": true
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,instance) (\n  system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Uptime",
+                  "refId": "Uptime"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,instance,host_name) (\n  target_info{job=~\".+\",job=~\"$job\",instance=~\"$instance\", host_name!=\"\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Hostname",
+                  "refId": "Host name"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,instance,os_name) (\n  label_replace(target_info{job=~\".+\",job=~\"$job\",instance=~\"$instance\", os_description!=\"\"}, \"os_name\", \"$1\", \"os_description\", \"(.+?)( [(].*)?\")\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: OS",
+                  "refId": "Operating system"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,instance) (\n  system_cpu_load_average_1m{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: 1m",
+                  "refId": "Load average 1m"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,instance) (\n  system_cpu_logical_count{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Cores",
+                  "refId": "CPU cores"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization_ratio{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=~\"idle|wait\"})))\nor\n100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=~\"idle|wait\"})))",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "CPU usage"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,instance) (\n  system_memory_limit_bytes{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_memory_limit{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Total",
+                  "refId": "Memory total"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "100 * (\n  sum by (job,instance) (\n  system_memory_utilization_ratio{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=\"used\"}\n)\n)\nor\n100 * (\n  sum by (job,instance) (\n  system_memory_utilization{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=\"used\"}\n)\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Memory usage"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,instance) (\n  system_filesystem_usage_bytes{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\", mountpoint=\"/\"}\n)\nor\nsum by (job,instance) (\n  system_filesystem_usage{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\", mountpoint=\"/\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Root FS size",
+                  "refId": "Root mount size"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "100 * (\n  max by (job,instance) (\n  system_filesystem_utilization_ratio{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\", mountpoint=\"/\"}\n)\n)\nor\n100 * (\n  max by (job,instance) (\n  system_filesystem_utilization{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\", mountpoint=\"/\"}\n)\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Root mount usage"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count by (job,instance) (\n  ALERTS{alertstate=\"firing\", severity=\"critical\", job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Critical",
+                  "refId": "Critical alert"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "count by (job,instance) (\n  ALERTS{alertstate=\"firing\", severity=\"warning\", job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}: Warnings",
+                  "refId": "Warning alert"
+               }
+            ],
+            "title": "Fleet overview",
+            "transformations": [
+               {
+                  "id": "merge"
+               },
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value #(.*)",
+                     "renamePattern": "$1"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "^(?!Time).*$"
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "indexByName": {
+                        "host_name": 1,
+                        "instance": 0,
+                        "job": 2,
+                        "os_name": 3
+                     },
+                     "renameByName": {
+                        "Value": "Fleet overview",
+                        "instance": "Instance",
+                        "job": "Job"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 10
+            },
+            "id": 2,
+            "panels": [ ],
+            "title": "Compute",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Top 25. Share of CPU time spent working: not idle, and not waiting for I/O.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 1,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Mean"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#ffb357",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 11
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(25,\n  100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization_ratio{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=~\"idle|wait\"})))\n)\nor\ntopk(25,\n  100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=~\"idle|wait\"})))\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "CPU usage"
+               }
+            ],
+            "title": "CPU usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Top 25. Share of physical memory in use.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 1,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Mean"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#ffb357",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 11
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(25,\n  100 * (\n  sum by (job,instance) (\n  system_memory_utilization_ratio{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=\"used\"}\n)\n)\n)\nor\ntopk(25,\n  100 * (\n  sum by (job,instance) (\n  system_memory_utilization{job=~\".+\",job=~\"$job\",instance=~\"$instance\", state=\"used\"}\n)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Memory usage"
+               }
+            ],
+            "title": "Memory usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Top 25. System load over 1 minute.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Load average 1m"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 11
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(25,\n  max by (job,instance) (\n  system_cpu_load_average_1m{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: 1m",
+                  "refId": "Load average 1m"
+               }
+            ],
+            "title": "Load average 1m",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 19
+            },
+            "id": 6,
+            "panels": [ ],
+            "title": "Storage and network",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Top 25. Bytes read and written across all devices.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "Bps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/time|used|busy|util/"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.axisSoftMax",
+                           "value": 100
+                        },
+                        {
+                           "id": "custom.drawStyle",
+                           "value": "points"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 20
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(25,\n  sum by (job,instance) (\n  rate(system_disk_io_bytes_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)\nor\ntopk(25,\n  sum by (job,instance) (\n  rate(system_disk_io{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: I/O",
+                  "refId": "Disk I/O"
+               }
+            ],
+            "title": "Disk I/O",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Top 25. Share of each filesystem in use.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 1,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 1,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Mean"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "#ffb357",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 20
+            },
+            "id": 8,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(25,\n  100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization_ratio{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\", mode!=\"ro\"}\n)\n)\n)\nor\ntopk(25,\n  100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization{job=~\".+\",job=~\"$job\",instance=~\"$instance\", type!=\"\", mountpoint!=\"\", mode!=\"ro\"}\n)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}} {{mountpoint}}",
+                  "refId": "Disk space usage"
+               }
+            ],
+            "title": "Disk space usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Top 25. Bits received and transmitted across all interfaces.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "noValue": "No traffic",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "bps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Network traffic"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "bps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 20
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(25,\n  8 * (\n  sum by (job,instance) (\n  rate(system_network_io_bytes_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)\n)\nor\ntopk(25,\n  8 * (\n  sum by (job,instance) (\n  rate(system_network_io{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Traffic",
+                  "refId": "Network traffic"
+               }
+            ],
+            "title": "Network traffic",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Top 25. Errors (sum): Errored packets across all interfaces.  \n\nDropped (sum): Dropped packets across all interfaces.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "noValue": "No errors",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "pps"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Network errors"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "pps"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Dropped packets"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "pps"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 28
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(25,\n  sum by (job,instance) (\n  rate(system_network_errors_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)\nor\ntopk(25,\n  sum by (job,instance) (\n  rate(system_network_errors{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Errors",
+                  "refId": "Network errors"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(25,\n  sum by (job,instance) (\n  rate(system_network_dropped_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)\nor\ntopk(25,\n  sum by (job,instance) (\n  rate(system_network_dropped{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Dropped",
+                  "refId": "Dropped packets"
+               }
+            ],
+            "title": "Network errors and dropped packets",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Time since the host last booted.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "links": [
+                     {
+                        "title": "Drill down to this instance",
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "s"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 28
+            },
+            "id": 11,
+            "options": {
+               "legend": {
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "max by (job,instance) (\n  system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Uptime",
+                  "refId": "Uptime"
+               }
+            ],
+            "title": "Uptime",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "hostmetrics"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job=~\".+\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job=~\".+\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "",
+      "title": "Hostmetrics / fleet overview",
+      "uid": "hostmetrics-fleet"
+   }

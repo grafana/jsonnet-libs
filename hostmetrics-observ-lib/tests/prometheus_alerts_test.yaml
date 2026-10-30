@@ -1,0 +1,269 @@
+rule_files:
+  - ../prometheus_rules_out/prometheus_alerts.yaml
+
+evaluation_interval: 1m
+
+tests:
+  # host1 is saturated and then stops reporting; host2 stays healthy and must not alert.
+  - interval: 1m
+    input_series:
+      - series: 'system_cpu_utilization{job="integrations/hostmetrics", instance="host1", cpu="cpu0", state="idle"}'
+        values: '0.05x30'
+      - series: 'system_cpu_utilization{job="integrations/hostmetrics", instance="host2", cpu="cpu0", state="idle"}'
+        values: '0.80x60'
+      # host3 is waiting on disk, not busy: I/O wait must not count as CPU usage.
+      - series: 'system_cpu_utilization{job="integrations/hostmetrics", instance="host3", cpu="cpu0", state="idle"}'
+        values: '0.05x60'
+      - series: 'system_cpu_utilization{job="integrations/hostmetrics", instance="host3", cpu="cpu0", state="wait"}'
+        values: '0.90x60'
+      - series: 'system_memory_utilization{job="integrations/hostmetrics", instance="host1", state="used"}'
+        values: '0.95x30'
+      - series: 'system_memory_utilization{job="integrations/hostmetrics", instance="host2", state="used"}'
+        values: '0.40x60'
+      - series: 'system_filesystem_utilization{job="integrations/hostmetrics", instance="host1", mountpoint="/", device="sda1", type="ext4", mode="rw"}'
+        values: '0.98x30'
+      - series: 'system_filesystem_utilization{job="integrations/hostmetrics", instance="host2", mountpoint="/", device="sda1", type="ext4", mode="rw"}'
+        values: '0.50x60'
+      # Read-only filesystems such as snap packages are always full and must not alert.
+      - series: 'system_filesystem_utilization{job="integrations/hostmetrics", instance="host2", mountpoint="/snap/core22/1234", device="/dev/loop0", type="squashfs", mode="ro"}'
+        values: '1x60'
+      - series: 'system_cpu_load_average_5m{job="integrations/hostmetrics", instance="host1"}'
+        values: '9x30'
+      - series: 'system_cpu_load_average_5m{job="integrations/hostmetrics", instance="host2"}'
+        values: '1x60'
+      - series: 'system_cpu_logical_count{job="integrations/hostmetrics", instance="host1"}'
+        values: '4x30'
+      - series: 'system_cpu_logical_count{job="integrations/hostmetrics", instance="host2"}'
+        values: '4x60'
+      - series: 'system_uptime{job="integrations/hostmetrics", instance="host1"}'
+        values: '1000+60x30 _x30'
+      - series: 'system_uptime{job="integrations/hostmetrics", instance="host2"}'
+        values: '1000+60x60'
+
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: HostmetricsCPUHighUsage
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              job: integrations/hostmetrics
+              instance: host1
+            exp_annotations:
+              summary: 'Host CPU usage is high.'
+              description: 'CPU usage on host1 has been above 90% for 15 minutes, currently 95.00%.'
+
+      - eval_time: 20m
+        alertname: HostmetricsMemoryHighUtilization
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              job: integrations/hostmetrics
+              instance: host1
+              state: used
+            exp_annotations:
+              summary: 'Host memory usage is high.'
+              description: 'Memory usage on host1 has been above 90% for 15 minutes, currently 95.00%.'
+
+      - eval_time: 31m
+        alertname: HostmetricsDiskSpaceLow
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              job: integrations/hostmetrics
+              instance: host1
+              mountpoint: /
+              device: sda1
+              type: ext4
+              mode: rw
+            exp_annotations:
+              summary: 'Filesystem is nearly full.'
+              description: '/ on host1 is 98.00% full, above the threshold of 95%.'
+          - exp_labels:
+              severity: critical
+              job: integrations/hostmetrics
+              instance: host1
+              mountpoint: /
+              device: sda1
+              type: ext4
+              mode: rw
+            exp_annotations:
+              summary: 'Filesystem is critically full.'
+              description: '/ on host1 is 98.00% full, above the threshold of 97%.'
+
+      - eval_time: 20m
+        alertname: HostmetricsSystemSaturation
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              job: integrations/hostmetrics
+              instance: host1
+            exp_annotations:
+              summary: 'Host load average is high relative to core count.'
+              description: '5 minute load average on host1 is more than 2 times its logical core count.'
+
+      # Still reporting at 20m, so not down yet.
+      - eval_time: 20m
+        alertname: HostmetricsHostDown
+        exp_alerts: []
+
+      # Last sample at 30m: silent for 10m from 40m, firing after 5m more.
+      - eval_time: 50m
+        alertname: HostmetricsHostDown
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              job: integrations/hostmetrics
+              instance: host1
+            exp_annotations:
+              summary: 'No host metrics received.'
+              description: 'No metrics have been received from host1 for more than 10m.'
+
+  # host1 breaks every resource alert and has just booted; host2 stays healthy and must not alert.
+  - interval: 1m
+    input_series:
+      - series: 'system_filesystem_inodes_usage{job="integrations/hostmetrics", instance="host1", mountpoint="/", device="sda1", type="ext4", mode="rw", state="used"}'
+        values: '98x90'
+      - series: 'system_filesystem_inodes_usage{job="integrations/hostmetrics", instance="host1", mountpoint="/", device="sda1", type="ext4", mode="rw", state="free"}'
+        values: '1x90'
+      - series: 'system_filesystem_inodes_usage{job="integrations/hostmetrics", instance="host2", mountpoint="/", device="sda1", type="ext4", mode="rw", state="used"}'
+        values: '10x90'
+      - series: 'system_filesystem_inodes_usage{job="integrations/hostmetrics", instance="host2", mountpoint="/", device="sda1", type="ext4", mode="rw", state="free"}'
+        values: '90x90'
+      - series: 'system_disk_weighted_io_time{job="integrations/hostmetrics", instance="host1", device="sda"}'
+        values: '0+1200x90'
+      - series: 'system_disk_weighted_io_time{job="integrations/hostmetrics", instance="host2", device="sda"}'
+        values: '0+60x90'
+      - series: 'system_processes_count{job="integrations/hostmetrics", instance="host1", status="running"}'
+        values: '500x90'
+      - series: 'system_processes_count{job="integrations/hostmetrics", instance="host2", status="running"}'
+        values: '5x90'
+      - series: 'system_uptime{job="integrations/hostmetrics", instance="host1"}'
+        values: '100+60x90'
+      - series: 'system_uptime{job="integrations/hostmetrics", instance="host2"}'
+        values: '100000+60x90'
+      # host3 has been up for a while and reboots at 31m; host1 is newly added and must not count as a reboot.
+      - series: 'system_uptime{job="integrations/hostmetrics", instance="host3"}'
+        values: '100000+60x30 60+60x59'
+      - series: 'system_network_errors{job="integrations/hostmetrics", instance="host1", device="eth0", direction="receive"}'
+        values: '0+120x90'
+      - series: 'system_network_packets{job="integrations/hostmetrics", instance="host1", device="eth0", direction="receive"}'
+        values: '0+6000x90'
+      - series: 'system_network_errors{job="integrations/hostmetrics", instance="host2", device="eth0", direction="receive"}'
+        values: '0x90'
+      - series: 'system_network_packets{job="integrations/hostmetrics", instance="host2", device="eth0", direction="receive"}'
+        values: '0+6000x90'
+      - series: 'system_network_conntrack_count{job="integrations/hostmetrics", instance="host1"}'
+        values: '900x90'
+      - series: 'system_network_conntrack_max{job="integrations/hostmetrics", instance="host1"}'
+        values: '1000x90'
+      - series: 'system_network_conntrack_count{job="integrations/hostmetrics", instance="host2"}'
+        values: '10x90'
+      - series: 'system_network_conntrack_max{job="integrations/hostmetrics", instance="host2"}'
+        values: '1000x90'
+      - series: 'system_paging_faults{job="integrations/hostmetrics", instance="host1", type="major"}'
+        values: '0+245760000x90'
+      # The receiver reports faults multiplied by 4096. Minor faults are normal and must not count.
+      - series: 'system_paging_faults{job="integrations/hostmetrics", instance="host2", type="major"}'
+        values: '0+245760x90'
+      - series: 'system_paging_faults{job="integrations/hostmetrics", instance="host2", type="minor"}'
+        values: '0+2457600000x90'
+
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: HostmetricsHostRebooted
+        exp_alerts: []
+
+      - eval_time: 35m
+        alertname: HostmetricsHostRebooted
+        exp_alerts:
+          - exp_labels:
+              severity: info
+              job: integrations/hostmetrics
+              instance: host3
+            exp_annotations:
+              summary: 'Host has rebooted.'
+              description: 'host3 booted 5m 0s ago.'
+
+      - eval_time: 70m
+        alertname: HostmetricsHostRebooted
+        exp_alerts: []
+
+      - eval_time: 70m
+        alertname: HostmetricsInodesLow
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              job: integrations/hostmetrics
+              instance: host1
+              mountpoint: /
+            exp_annotations:
+              summary: 'Filesystem is running out of inodes.'
+              description: '/ on host1 has used 98.99% of its inodes, above the threshold of 95%.'
+          - exp_labels:
+              severity: critical
+              job: integrations/hostmetrics
+              instance: host1
+              mountpoint: /
+            exp_annotations:
+              summary: 'Filesystem is almost out of inodes.'
+              description: '/ on host1 has used 98.99% of its inodes, above the threshold of 97%.'
+
+      - eval_time: 70m
+        alertname: HostmetricsDiskIOSaturation
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              job: integrations/hostmetrics
+              instance: host1
+              device: sda
+            exp_annotations:
+              summary: 'Disk I/O queue is high.'
+              description: 'The average I/O queue of sda on host1 has been above 10 for 30 minutes, currently 20.00.'
+
+      - eval_time: 70m
+        alertname: HostmetricsProcessesHigh
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              job: integrations/hostmetrics
+              instance: host1
+              status: running
+            exp_annotations:
+              summary: 'Many processes are running.'
+              description: 'host1 has had more than 400 running processes for 5 minutes, currently 500.'
+
+      - eval_time: 70m
+        alertname: HostmetricsNetworkErrors
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              job: integrations/hostmetrics
+              instance: host1
+              device: eth0
+              direction: receive
+            exp_annotations:
+              summary: 'Network interface has a high error rate.'
+              description: 'receive errors on eth0 on host1 have been above 1% of packets for an hour, currently 2.00%.'
+
+      - eval_time: 70m
+        alertname: HostmetricsConntrackHighUsage
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              job: integrations/hostmetrics
+              instance: host1
+            exp_annotations:
+              summary: 'Connection tracking table is filling up.'
+              description: 'host1 is using 90.00% of its conntrack entries, above the threshold of 75%.'
+
+      - eval_time: 70m
+        alertname: HostmetricsMemoryMajorPageFaults
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              job: integrations/hostmetrics
+              instance: host1
+              type: major
+            exp_annotations:
+              summary: 'Memory major page faults are high.'
+              description: 'host1 has had more than 500 major page faults per second for 15 minutes, currently 1000.00.'
