@@ -162,6 +162,7 @@ local common = import './signals/common.libsonnet';
           signals.network.conntrackMax.asRuleExpression(),
           config.alertsConntrackHighUsageThreshold,
         ],
+        'for': '5m',
         labels: { severity: config.alertsConntrackHighUsageSeverity },
         annotations: {
           summary: 'Connection tracking table is filling up.',
