@@ -116,7 +116,7 @@ tests:
               instance: host1
             exp_annotations:
               summary: 'No host metrics received.'
-              description: 'No metrics have been received from host1 for 10m.'
+              description: 'No metrics have been received from host1 for more than 10m.'
 
   # host1 breaks every resource alert and has just booted; host2 stays healthy and must not alert.
   - interval: 1m

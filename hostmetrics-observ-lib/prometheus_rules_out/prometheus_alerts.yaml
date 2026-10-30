@@ -3,7 +3,7 @@ groups:
       rules:
         - alert: HostmetricsHostDown
           annotations:
-            description: No metrics have been received from {{ $labels.instance }} for 10m.
+            description: No metrics have been received from {{ $labels.instance }} for more than 10m.
             summary: No host metrics received.
           expr: max by (job, instance) (max_over_time(system_uptime{job=~".+"}[1h]) or max_over_time(system_uptime_seconds{job=~".+"}[1h])) unless max by (job, instance) (max_over_time(system_uptime{job=~".+"}[10m]) or max_over_time(system_uptime_seconds{job=~".+"}[10m]))
           for: 5m
@@ -138,9 +138,9 @@ groups:
           expr: |-
             100 * (rate(system_network_errors_total{job=~".+", device!=""}[5m])
             or
-            rate(system_network_errors{job=~".+", device!=""}[5m])) / (rate(system_network_packets_total{job=~".+", device!=""}[5m])
+            rate(system_network_errors{job=~".+", device!=""}[5m])) / ((rate(system_network_packets_total{job=~".+", device!=""}[5m])
             or
-            rate(system_network_packets{job=~".+", device!=""}[5m])) > 1
+            rate(system_network_packets{job=~".+", device!=""}[5m])) > 0) > 1
           for: 1h
           keep_firing_for: 5m
           labels:

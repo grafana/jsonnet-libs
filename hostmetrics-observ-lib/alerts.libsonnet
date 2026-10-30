@@ -23,7 +23,7 @@ local common = import './signals/common.libsonnet';
         labels: { severity: config.alertsHostDownSeverity },
         annotations: {
           summary: 'No host metrics received.',
-          description: 'No metrics have been received from {{ $labels.%s }} for %s.' % [instanceLabel, config.alertsHostDownWindow],
+          description: 'No metrics have been received from {{ $labels.%s }} for more than %s.' % [instanceLabel, config.alertsHostDownWindow],
         },
       },
       // Saturation
@@ -143,7 +143,7 @@ local common = import './signals/common.libsonnet';
     local networkRules = if config.enableNetworkScraper then [
       {
         alert: 'HostmetricsNetworkErrors',
-        expr: '100 * (%s) / (%s) > %s' % [
+        expr: '100 * (%s) / ((%s) > 0) > %s' % [
           signals.network.networkErrors.asRuleExpression(),
           signals.network.networkPackets.asRuleExpression(),
           config.alertsNetworkErrorsThreshold,
