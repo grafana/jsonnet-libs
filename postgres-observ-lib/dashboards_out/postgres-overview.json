@@ -580,7 +580,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (increase(pg_stat_database_deadlocks{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__range]))",
+                  "expr": "sum by (job,cluster,instance) (\n  increase(pg_stat_database_deadlocks{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__range:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": " Deadlocks",
@@ -1247,7 +1247,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", wait_event_type=\"Lock\"} or pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 0\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  pg_stat_activity_count{wait_event_type=\"Lock\", job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} or pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} * 0\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": " Blocked queries",
@@ -1428,7 +1428,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (increase(pg_stat_archiver_failed_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__range]))",
+                  "expr": "sum by (job,cluster,instance) (\n  increase(pg_stat_archiver_failed_count{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__range:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": " WAL archive failures",
@@ -2977,7 +2977,7 @@
                            "type": "prometheus",
                            "uid": "${datasource}"
                         },
-                        "expr": "avg by (job,cluster,instance) (\n  sum(rate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\n/\n(\n  sum(rate(pg_stat_database_xact_commit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\n  +\n  sum(rate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\n)\n\n)",
+                        "expr": "avg by (job,cluster,instance) (\n  sum by (job,cluster,instance) (rate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\n/\n(\n  sum by (job,cluster,instance) (rate(pg_stat_database_xact_commit{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\n  +\n  sum by (job,cluster,instance) (rate(pg_stat_database_xact_rollback{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))\n)\n\n)",
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": " Rollback ratio",
