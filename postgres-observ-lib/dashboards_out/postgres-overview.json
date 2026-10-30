@@ -2469,7 +2469,7 @@
                         {
                            "matcher": {
                               "id": "byFrameRefID",
-                              "options": "Buffers cleaned"
+                              "options": "Buffers written by checkpoints"
                            },
                            "properties": [
                               {
@@ -2546,11 +2546,11 @@
                            "type": "prometheus",
                            "uid": "${datasource}"
                         },
-                        "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_buffers_clean_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                        "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_buffers_checkpoint_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": " Cleaned",
-                        "refId": "Buffers cleaned"
+                        "legendFormat": " Checkpoint",
+                        "refId": "Buffers written by checkpoints"
                      },
                      {
                         "datasource": {
