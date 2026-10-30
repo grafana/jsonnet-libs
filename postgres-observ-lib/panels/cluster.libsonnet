@@ -164,7 +164,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Total deadlocks
     totalDeadlocks:
-      signals.cluster.totalDeadlocks.asStat()
+      signals.cluster.totalDeadlocks.withInterval('$__range').asStat()
       + withInstantQuery
       + statWithThresholds
       + g.panel.stat.standardOptions.withDecimals(0)
@@ -481,7 +481,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Total WAL archive failures
     totalWalArchiveFailures:
-      signals.cluster.totalWalArchiveFailures.asStat()
+      signals.cluster.totalWalArchiveFailures.withInterval('$__range').asStat()
       + withInstantQuery
       + statWithThresholds
       + g.panel.stat.standardOptions.withDecimals(0)

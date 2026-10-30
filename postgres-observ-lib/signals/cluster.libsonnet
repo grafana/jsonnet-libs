@@ -142,11 +142,12 @@ function(this)
       totalDeadlocks: {
         name: 'Total deadlocks',
         description: 'Total deadlocks detected across all instances in the cluster.',
-        type: 'raw',
+        type: 'counter',
         unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: 'sum by (%(agg)s) (increase(pg_stat_database_deadlocks{%(queriesSelector)s}[$__range]))',
+            expr: 'pg_stat_database_deadlocks{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}}: Total deadlocks',
           },
         },
@@ -272,11 +273,12 @@ function(this)
       totalWalArchiveFailures: {
         name: 'Total WAL archive failures',
         description: 'Total WAL archive failures across all instances.',
-        type: 'raw',
+        type: 'counter',
         unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: 'sum by (%(agg)s) (increase(pg_stat_archiver_failed_count{%(queriesSelector)s}[$__range]))',
+            expr: 'pg_stat_archiver_failed_count{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}}: WAL archive failures',
           },
         },

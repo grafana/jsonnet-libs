@@ -143,7 +143,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Deadlocks
     deadlocks:
-      signals.health.deadlocks.asStat()
+      signals.health.deadlocks.withInterval('$__range').asStat()
       + withInstantQuery
       + statWithThresholds
       + g.panel.stat.standardOptions.withDecimals(0)
