@@ -226,7 +226,7 @@ function(this)
         unit: 'short',
         sources: {
           prometheus: {
-            expr: 'windows_disk_drive_status{%(queriesSelector)s}',
+            expr: 'windows_diskdrive_status{%(queriesSelector)s}',
             legendCustomTemplate: '{{ name }}',
             valueMappings: [
               {
