@@ -19,9 +19,9 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              rate(pg_stat_database_xact_commit{%(queriesSelector)s}[$__rate_interval])
+              rate(pg_stat_database_xact_commit{%(queriesSelector)s}[%(interval)s])
               +
-              rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval])
+              rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[%(interval)s])
             |||,
             legendCustomTemplate: ' TPS',
           },
@@ -38,7 +38,7 @@ function(this)
           postgres_exporter: {
             expr: |||
               sum by (%(agg)s) (
-                rate(pg_stat_statements_calls_total{%(queriesSelector)s}[$__rate_interval])
+                rate(pg_stat_statements_calls_total{%(queriesSelector)s}[%(interval)s])
               )
             |||,
             legendCustomTemplate: ' QPS',
@@ -99,12 +99,12 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              sum(rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval]))
+              sum by (%(agg)s) (rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[%(interval)s]))
               /
               (
-                sum(rate(pg_stat_database_xact_commit{%(queriesSelector)s}[$__rate_interval]))
+                sum by (%(agg)s) (rate(pg_stat_database_xact_commit{%(queriesSelector)s}[%(interval)s]))
                 +
-                sum(rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval]))
+                sum by (%(agg)s) (rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[%(interval)s]))
               )
             |||,
             legendCustomTemplate: ' Rollback ratio',
@@ -119,7 +119,7 @@ function(this)
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_fetched{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(pg_stat_database_tup_fetched{%(queriesSelector)s}[%(interval)s])',
             legendCustomTemplate: ' Fetched',
           },
         },
@@ -133,7 +133,7 @@ function(this)
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_returned{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(pg_stat_database_tup_returned{%(queriesSelector)s}[%(interval)s])',
             legendCustomTemplate: ' Returned',
           },
         },
@@ -147,7 +147,7 @@ function(this)
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_inserted{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(pg_stat_database_tup_inserted{%(queriesSelector)s}[%(interval)s])',
             legendCustomTemplate: ' Inserted',
           },
         },
@@ -161,7 +161,7 @@ function(this)
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_updated{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(pg_stat_database_tup_updated{%(queriesSelector)s}[%(interval)s])',
             legendCustomTemplate: ' Updated',
           },
         },
@@ -175,7 +175,7 @@ function(this)
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_deleted{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(pg_stat_database_tup_deleted{%(queriesSelector)s}[%(interval)s])',
             legendCustomTemplate: ' Deleted',
           },
         },
@@ -188,7 +188,7 @@ function(this)
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_buffers_alloc_total{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(pg_stat_bgwriter_buffers_alloc_total{%(queriesSelector)s}[%(interval)s])',
             legendCustomTemplate: ' Allocated',
           },
         },
@@ -202,7 +202,7 @@ function(this)
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}[%(interval)s])',
             legendCustomTemplate: ' Cleaned',
           },
         },
@@ -216,7 +216,7 @@ function(this)
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}[%(interval)s])',
             legendCustomTemplate: ' Clean total',
           },
         },
@@ -230,7 +230,7 @@ function(this)
         unit: 'cps',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_maxwritten_clean_total{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(pg_stat_bgwriter_maxwritten_clean_total{%(queriesSelector)s}[%(interval)s])',
             legendCustomTemplate: ' Max written stops',
           },
         },
