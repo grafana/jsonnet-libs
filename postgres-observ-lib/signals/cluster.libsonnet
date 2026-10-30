@@ -176,7 +176,7 @@ function(this)
         unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: 'changes(pg_replication_is_replica{%(queriesSelector)s}[5m])',
+            expr: 'changes(pg_replication_is_replica{%(queriesSelector)s}[%(interval)s])',
             aggKeepLabels: ['instance'],
             legendCustomTemplate: '{{instance}}: Role changes',
           },
@@ -329,7 +329,7 @@ function(this)
           postgres_exporter: {
             expr: |||
               sum by (%(agg)s) (
-                rate(pg_stat_database_tup_inserted{%(queriesSelector)s}[$__rate_interval])
+                rate(pg_stat_database_tup_inserted{%(queriesSelector)s}[%(interval)s])
                 and on(instance)
                 (pg_replication_is_replica{%(queriesSelector)s} == 0)
               )
@@ -350,7 +350,7 @@ function(this)
           postgres_exporter: {
             expr: |||
               sum by (%(agg)s) (
-                rate(pg_stat_database_tup_updated{%(queriesSelector)s}[$__rate_interval])
+                rate(pg_stat_database_tup_updated{%(queriesSelector)s}[%(interval)s])
                 and on(instance)
                 (pg_replication_is_replica{%(queriesSelector)s} == 0)
               )
@@ -371,7 +371,7 @@ function(this)
           postgres_exporter: {
             expr: |||
               sum by (%(agg)s) (
-                rate(pg_stat_database_tup_deleted{%(queriesSelector)s}[$__rate_interval])
+                rate(pg_stat_database_tup_deleted{%(queriesSelector)s}[%(interval)s])
                 and on(instance)
                 (pg_replication_is_replica{%(queriesSelector)s} == 0)
               )
@@ -390,7 +390,7 @@ function(this)
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_fetched{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(pg_stat_database_tup_fetched{%(queriesSelector)s}[%(interval)s])',
             aggKeepLabels: ['instance'],
             legendCustomTemplate: '{{instance}}: Fetched',
           },
@@ -406,9 +406,9 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              rate(pg_stat_database_xact_commit{%(queriesSelector)s}[$__rate_interval])
+              rate(pg_stat_database_xact_commit{%(queriesSelector)s}[%(interval)s])
               +
-              rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval])
+              rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[%(interval)s])
             |||,
             aggKeepLabels: ['instance'],
             legendCustomTemplate: '{{instance}}: TPS',
@@ -426,7 +426,7 @@ function(this)
           postgres_exporter: {
             expr: |||
               sum by (instance) (
-                rate(pg_stat_statements_calls_total{%(queriesSelector)s}[$__rate_interval])
+                rate(pg_stat_statements_calls_total{%(queriesSelector)s}[%(interval)s])
               )
             |||,
             aggKeepLabels: ['instance'],
@@ -446,11 +446,11 @@ function(this)
             expr: |||
               sum by (%(agg)s) (
                 (
-                  rate(pg_stat_database_tup_inserted{%(queriesSelector)s}[$__rate_interval])
+                  rate(pg_stat_database_tup_inserted{%(queriesSelector)s}[%(interval)s])
                   +
-                  rate(pg_stat_database_tup_updated{%(queriesSelector)s}[$__rate_interval])
+                  rate(pg_stat_database_tup_updated{%(queriesSelector)s}[%(interval)s])
                   +
-                  rate(pg_stat_database_tup_deleted{%(queriesSelector)s}[$__rate_interval])
+                  rate(pg_stat_database_tup_deleted{%(queriesSelector)s}[%(interval)s])
                 )
                 and on(instance)
                 (pg_replication_is_replica{%(queriesSelector)s} == 0)
@@ -470,7 +470,7 @@ function(this)
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_fetched{%(queriesSelector)s}[$__rate_interval])',
+            expr: 'rate(pg_stat_database_tup_fetched{%(queriesSelector)s}[%(interval)s])',
             exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
             legendCustomTemplate: '{{cluster_prefix}}Total reads',
           },

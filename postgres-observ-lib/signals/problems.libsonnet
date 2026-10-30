@@ -23,6 +23,19 @@ function(this)
         },
       },
 
+      longestActiveTransaction: {
+        name: 'Longest active transaction',
+        description: 'Duration of the longest transaction with an active query.',
+        type: 'gauge',
+        unit: 's',
+        aggFunction: 'max',
+        sources: {
+          postgres_exporter: {
+            expr: 'pg_stat_activity_max_tx_duration{state="active", %(queriesSelector)s}',
+          },
+        },
+      },
+
       // Are locks causing waits?
       blockedQueries: {
         name: 'Blocked queries',
@@ -32,7 +45,7 @@ function(this)
         // aggFunction: 'sum' is default, let it handle aggregation
         sources: {
           postgres_exporter: {
-            expr: 'pg_stat_activity_count{%(queriesSelector)s, wait_event_type="Lock"} or pg_stat_activity_count{%(queriesSelector)s} * 0',
+            expr: 'pg_stat_activity_count{wait_event_type="Lock", %(queriesSelector)s} or pg_stat_activity_count{%(queriesSelector)s} * 0',
             legendCustomTemplate: ' Blocked queries',
           },
         },
@@ -135,6 +148,18 @@ function(this)
               (0 * group by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}))
             |||,
             legendCustomTemplate: ' Inactive replication slots',
+          },
+        },
+      },
+
+      nonStreamingReplicaLag: {
+        name: 'Non-streaming replica lag',
+        description: 'Bytes a replica that is not streaming is behind the primary.',
+        type: 'gauge',
+        unit: 'decbytes',
+        sources: {
+          postgres_exporter: {
+            expr: 'pg_stat_replication_pg_wal_lsn_diff{state!="streaming", %(queriesSelector)s}',
           },
         },
       },

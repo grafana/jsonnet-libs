@@ -1,9 +1,6 @@
 {
   // Filtering and labels
-  // filteringSelector: used in dashboard queries (empty = uses only $job/$instance from groupLabels/instanceLabels)
-  // alertsFilteringSelector: used in alert rules (no Grafana variables available)
   filteringSelector: '',
-  alertsFilteringSelector: 'job=~".+", instance=~".+"',
   groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
 
@@ -19,44 +16,35 @@
   // Feature flags
   enableQueryAnalysis: true,  // Requires pg_stat_statements extension
 
-  // Alert thresholds
-  alerts: {
-    connectionUtilization: {
-      warn: 80,  // percentage
-      critical: 95,
-    },
-    cacheHitRatio: {
-      warn: 90,  // percentage, below this triggers warning
-    },
-    replicationLag: {
-      warn: 30,  // seconds
-      critical: 3600,  // 1 hour (from upstream)
-    },
-    deadlocks: {
-      warn: 1,  // per 5m window
-    },
-    longRunningQuery: {
-      warn: 300,  // seconds (5 minutes)
-    },
-    blockedQueries: {
-      warn: 1,  // count
-    },
-    deadTupleRatio: {
-      warn: 10,  // percentage
-      critical: 20,
-    },
-    vacuumAge: {
-      warn: 7,  // days since last vacuum
-    },
-    // From upstream postgres_mixin
-    rollbackRatio: {
-      warn: 10,  // percentage, above this triggers warning
-    },
-    lockUtilization: {
-      warn: 20,  // percentage of max locks
-    },
-    qps: {
-      warn: 10000,  // queries per second
-    },
-  },
+  // Alerts
+  alertDownSeverity: 'critical',
+  alertHighConnectionUsageThreshold: 0.8,
+  alertHighConnectionUsageSeverity: 'warning',
+  alertLowCacheHitRatioThreshold: 0.9,
+  alertLowCacheHitRatioSeverity: 'warning',
+  alertReplicationLagThreshold: 30,
+  alertReplicationLagSeverity: 'warning',
+  alertReplicationLagCriticalThreshold: 3600,
+  alertReplicationLagCriticalSeverity: 'critical',
+  alertDeadlocksThreshold: 1,
+  alertDeadlocksSeverity: 'warning',
+  alertLongRunningQueryThreshold: 300,
+  alertLongRunningQuerySeverity: 'warning',
+  alertBlockedQueriesThreshold: 1,
+  alertBlockedQueriesSeverity: 'warning',
+  alertWALArchiveFailureSeverity: 'critical',
+  alertHighDeadTuplesThreshold: 0.1,
+  alertHighDeadTuplesSeverity: 'warning',
+  alertVacuumNotRunningThreshold: 7 * 86400,
+  alertVacuumNotRunningDeadTuples: 10000,
+  alertVacuumNotRunningSeverity: 'warning',
+  alertTooManyRollbacksThreshold: 0.1,
+  alertTooManyRollbacksSeverity: 'warning',
+  alertTooManyLocksAcquiredThreshold: 0.2,
+  alertTooManyLocksAcquiredSeverity: 'warning',
+  alertInactiveReplicationSlotSeverity: 'critical',
+  alertReplicationRoleChangedSeverity: 'warning',
+  alertExporterErrorsSeverity: 'critical',
+  alertHighQpsThreshold: 10000,
+  alertHighQpsSeverity: 'warning',
 }
