@@ -1048,6 +1048,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
+            "description": "",
             "gridPos": {
                "h": 6,
                "w": 12,
@@ -1055,7 +1056,8 @@
                "y": 11
             },
             "options": {
-               "alertInstanceLabelFilter": "job=~\"${job:regex}\",cluster=~\"${cluster:regex}\",instance=~\"${instance:regex}\",alertname=~\"PostgreSQL.*\""
+               "alertInstanceLabelFilter": "job=~\"${job:regex}\",cluster=~\"${cluster:regex}\",instance=~\"${instance:regex}\",alertname=~\"PostgreSQL.*\"",
+               "groupMode": "default"
             },
             "pluginVersion": "v11.4.0",
             "title": "PostgreSQL alerts",
@@ -2038,7 +2040,7 @@
                            "type": "prometheus",
                            "uid": "${datasource}"
                         },
-                        "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)\n",
+                        "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
                         "format": "time_series",
                         "instant": false,
                         "legendFormat": " QPS",
@@ -3085,7 +3087,7 @@
                            "type": "prometheus",
                            "uid": "${datasource}"
                         },
-                        "expr": "sum by (job,cluster,instance) (\n  avg by (job, cluster, instance) (\n  sum(\n    (\n      pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n      /\n      (pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)\n    ) > bool 0.1\n  )\n  /\n  count(pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n)\n\n)",
+                        "expr": "sum by (job,cluster,instance) (\n  avg by (job,cluster,instance) (\n  sum(\n    (\n      pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n      /\n      (pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + pg_stat_user_tables_n_dead_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)\n    ) > bool 0.1\n  )\n  /\n  count(pg_stat_user_tables_n_live_tup{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\n)\n\n)",
                         "format": "time_series",
                         "instant": true,
                         "legendFormat": "Tables needing vacuum",
@@ -3176,7 +3178,7 @@
                            "type": "prometheus",
                            "uid": "${datasource}"
                         },
-                        "expr": "max by (job,cluster,instance) (\n  (time() - pg_stat_user_tables_last_autovacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"})\nand\npg_stat_user_tables_last_autovacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} > 0\n\n)",
+                        "expr": "max by (job,cluster,instance) (\n  time() - (\n  (\n    pg_stat_user_tables_last_autovacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} > pg_stat_user_tables_last_vacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n    or\n    pg_stat_user_tables_last_vacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n  ) > 0\n)\n\n)",
                         "format": "time_series",
                         "instant": true,
                         "legendFormat": " Oldest vacuum",
@@ -3436,7 +3438,7 @@
                            "type": "prometheus",
                            "uid": "${datasource}"
                         },
-                        "expr": "sum by (job,cluster,instance,schemaname,relname) (\n  (\n  time() - pg_stat_user_tables_last_autovacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n)\nand\npg_stat_user_tables_last_autovacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} > 0\n\n)",
+                        "expr": "sum by (job,cluster,instance,schemaname,relname) (\n  time() - (\n  (\n    pg_stat_user_tables_last_autovacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} > pg_stat_user_tables_last_vacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n    or\n    pg_stat_user_tables_last_vacuum{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n  ) > 0\n)\n\n)",
                         "format": "table",
                         "instant": true,
                         "legendFormat": " {{ schemaname }}.{{ relname }}",
@@ -4306,6 +4308,7 @@
             "type": "row"
          }
       ],
+      "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
          "postgres",
@@ -4352,7 +4355,7 @@
                "type": "query"
             },
             {
-               "allValue": null,
+               "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${datasource}"
@@ -4388,10 +4391,10 @@
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-1h",
          "to": "now"
       },
-      "timezone": "utc",
+      "timezone": "",
       "title": "PostgreSQL instance overview",
       "uid": "postgres-overview"
    }

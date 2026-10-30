@@ -1,6 +1,18 @@
 exclusions:
   panel-datasource-rule:
     reason: "grafonnet created panels use --Mixed-- datasource by default"
+    entries:
+      - panel: "Buffers activity"
+      - panel: "Cluster instances"
+      - panel: "Conflicts & deadlocks"
+      - panel: "PostgreSQL settings"
+      - panel: "Query statistics"
+      - panel: "Read/write over time"
+      - panel: "Table analyze status"
+      - panel: "Table vacuum status"
+      - panel: "Total connections"
+      - panel: "Unused indexes"
+      - panel: "Write operations (primary)"
 
   template-instance-rule:
     reason: "Instance selector is single-select for instance-specific dashboards; Cluster dashboard is cluster-wide"

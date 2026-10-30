@@ -3,6 +3,7 @@
     local config = this.config,
     local signals = this.signals,
     local agg = std.join(', ', config.groupLabels + config.instanceLabels),
+    local instanceLabel = config.instanceLabels[0],
 
     groups: [
       {
@@ -17,7 +18,7 @@
             labels: { severity: config.alertDownSeverity },
             annotations: {
               summary: 'PostgreSQL is down.',
-              description: 'PostgreSQL instance {{ $labels.instance }} is not responding.',
+              description: 'PostgreSQL instance {{ $labels.%s }} is not responding.' % instanceLabel,
             },
           },
           {
@@ -28,7 +29,7 @@
             labels: { severity: config.alertHighConnectionUsageSeverity },
             annotations: {
               summary: 'PostgreSQL connection usage is high.',
-              description: 'PostgreSQL {{ $labels.instance }} is at {{ $value | humanizePercentage }} connection capacity.',
+              description: 'PostgreSQL {{ $labels.%s }} is at {{ $value | humanizePercentage }} connection capacity.' % instanceLabel,
             },
           },
           {
@@ -39,7 +40,7 @@
             labels: { severity: config.alertLowCacheHitRatioSeverity },
             annotations: {
               summary: 'PostgreSQL cache hit ratio is low.',
-              description: 'PostgreSQL {{ $labels.instance }} cache hit ratio is {{ $value | humanizePercentage }}. Consider increasing shared_buffers.',
+              description: 'PostgreSQL {{ $labels.%s }} cache hit ratio is {{ $value | humanizePercentage }}. Consider increasing shared_buffers.' % instanceLabel,
             },
           },
           {
@@ -50,7 +51,7 @@
             labels: { severity: config.alertReplicationLagSeverity },
             annotations: {
               summary: 'PostgreSQL replication lag is high.',
-              description: 'Replica {{ $labels.instance }} is {{ $value }}s behind primary.',
+              description: 'Replica {{ $labels.%s }} is {{ printf "%%.0f" $value }}s behind primary.' % instanceLabel,
             },
           },
           {
@@ -61,7 +62,7 @@
             labels: { severity: config.alertDeadlocksSeverity },
             annotations: {
               summary: 'PostgreSQL deadlocks detected.',
-              description: 'PostgreSQL {{ $labels.instance }} database {{ $labels.datname }} has deadlocks.',
+              description: 'PostgreSQL {{ $labels.%s }} database {{ $labels.datname }} has deadlocks.' % instanceLabel,
             },
           },
 
@@ -74,7 +75,7 @@
             labels: { severity: config.alertLongRunningQuerySeverity },
             annotations: {
               summary: 'PostgreSQL has long-running query.',
-              description: 'Query on {{ $labels.instance }} has been running for {{ $value | humanizeDuration }}.',
+              description: 'Query on {{ $labels.%s }} has been running for {{ $value | humanizeDuration }}.' % instanceLabel,
             },
           },
           {
@@ -85,7 +86,7 @@
             labels: { severity: config.alertBlockedQueriesSeverity },
             annotations: {
               summary: 'PostgreSQL has blocked queries.',
-              description: 'PostgreSQL {{ $labels.instance }} has {{ $value }} queries waiting for locks.',
+              description: 'PostgreSQL {{ $labels.%s }} has {{ $value }} queries waiting for locks.' % instanceLabel,
             },
           },
           {
@@ -96,7 +97,7 @@
             labels: { severity: config.alertWALArchiveFailureSeverity },
             annotations: {
               summary: 'PostgreSQL WAL archiving is failing.',
-              description: 'PostgreSQL {{ $labels.instance }} is failing to archive WAL files. Backups may be incomplete!',
+              description: 'PostgreSQL {{ $labels.%s }} is failing to archive WAL files. Backups may be incomplete!' % instanceLabel,
             },
           },
 
@@ -114,7 +115,7 @@
           },
           {
             alert: 'PostgreSQLVacuumNotRunning',
-            // Counts manual vacuums too, which the dashboard's vacuum age signal does not.
+            // Written out to keep tables never vacuumed, which the dashboard's vacuum age signal leaves out.
             expr: |||
               (
                 time() - (
@@ -143,7 +144,7 @@
             labels: { severity: config.alertTooManyRollbacksSeverity },
             annotations: {
               summary: 'PostgreSQL has too many rollbacks.',
-              description: 'PostgreSQL {{ $labels.instance }} has rollback ratio of {{ $value | humanizePercentage }}.',
+              description: 'PostgreSQL {{ $labels.%s }} has rollback ratio of {{ $value | humanizePercentage }}.' % instanceLabel,
             },
           },
           {
@@ -154,7 +155,7 @@
             labels: { severity: config.alertTooManyLocksAcquiredSeverity },
             annotations: {
               summary: 'PostgreSQL has acquired too many locks.',
-              description: 'PostgreSQL {{ $labels.instance }} lock utilization is {{ $value | humanizePercentage }}.',
+              description: 'PostgreSQL {{ $labels.%s }} lock utilization is {{ $value | humanizePercentage }}.' % instanceLabel,
             },
           },
           {
@@ -165,7 +166,7 @@
             labels: { severity: config.alertInactiveReplicationSlotSeverity },
             annotations: {
               summary: 'PostgreSQL has inactive replication slot.',
-              description: 'PostgreSQL {{ $labels.instance }} has a replication slot not actively streaming. WAL files may accumulate!',
+              description: 'PostgreSQL {{ $labels.%s }} has a replication slot not actively streaming. WAL files may accumulate!' % instanceLabel,
             },
           },
           {
@@ -175,7 +176,7 @@
             labels: { severity: config.alertReplicationRoleChangedSeverity },
             annotations: {
               summary: 'PostgreSQL replication role changed.',
-              description: 'PostgreSQL {{ $labels.instance }} replication role has changed. Verify if this is expected failover.',
+              description: 'PostgreSQL {{ $labels.%s }} replication role has changed. Verify if this is expected failover.' % instanceLabel,
             },
           },
           {
@@ -186,7 +187,7 @@
             labels: { severity: config.alertExporterErrorsSeverity },
             annotations: {
               summary: 'PostgreSQL exporter has errors.',
-              description: 'PostgreSQL exporter for {{ $labels.instance }} is experiencing scrape errors.',
+              description: 'PostgreSQL exporter for {{ $labels.%s }} is experiencing scrape errors.' % instanceLabel,
             },
           },
           {
@@ -197,7 +198,7 @@
             labels: { severity: config.alertHighQpsSeverity },
             annotations: {
               summary: 'PostgreSQL has high QPS.',
-              description: 'PostgreSQL {{ $labels.instance }} has {{ $value | humanize }} queries per second.',
+              description: 'PostgreSQL {{ $labels.%s }} has {{ $value | humanize }} queries per second.' % instanceLabel,
             },
           },
           {
@@ -213,7 +214,7 @@
             labels: { severity: config.alertReplicationLagCriticalSeverity },
             annotations: {
               summary: 'PostgreSQL replication lag exceeds 1 hour.',
-              description: 'Replica {{ $labels.instance }} is {{ $value }}s behind primary. Check for network issues or load imbalances.',
+              description: 'Replica {{ $labels.%s }} is {{ printf "%%.0f" $value }}s behind primary. Check for network issues or load imbalances.' % instanceLabel,
             },
           },
         ],

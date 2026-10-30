@@ -18,7 +18,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              avg by (job, cluster, instance) (
+              avg by (%(agg)s) (
                 sum(
                   (
                     pg_stat_user_tables_n_dead_tup{%(queriesSelector)s}
@@ -46,9 +46,13 @@ function(this)
           postgres_exporter: {
             // aggFunction: 'max' handles the outer aggregation
             expr: |||
-              (time() - pg_stat_user_tables_last_autovacuum{%(queriesSelector)s})
-              and
-              pg_stat_user_tables_last_autovacuum{%(queriesSelector)s} > 0
+              time() - (
+                (
+                  pg_stat_user_tables_last_autovacuum{%(queriesSelector)s} > pg_stat_user_tables_last_vacuum{%(queriesSelector)s}
+                  or
+                  pg_stat_user_tables_last_vacuum{%(queriesSelector)s}
+                ) > 0
+              )
             |||,
             legendCustomTemplate: ' Oldest vacuum',
           },
@@ -85,11 +89,13 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              (
-                time() - pg_stat_user_tables_last_autovacuum{%(queriesSelector)s}
+              time() - (
+                (
+                  pg_stat_user_tables_last_autovacuum{%(queriesSelector)s} > pg_stat_user_tables_last_vacuum{%(queriesSelector)s}
+                  or
+                  pg_stat_user_tables_last_vacuum{%(queriesSelector)s}
+                ) > 0
               )
-              and
-              pg_stat_user_tables_last_autovacuum{%(queriesSelector)s} > 0
             |||,
             aggKeepLabels: ['schemaname', 'relname'],
             legendCustomTemplate: ' {{ schemaname }}.{{ relname }}',

@@ -1,8 +1,9 @@
 local g = import '../g.libsonnet';
+local alertsOverviewlib = import 'alerts-observ-lib/main.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
-  new(signals):: {
+  new(signals, config):: {
     // Helper to convert stat panel queries to instant queries for current status
     local withInstantQuery = {
       targets: std.map(function(t) t { instant: true }, super.targets),
@@ -138,7 +139,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.standardOptions.withMappings([noDataTextColor]),
 
     alerts:
-      g.panel.alertList.new('PostgreSQL alerts')
+      (alertsOverviewlib.new() + alertsOverviewlib.withConfigMixin({
+         filteringSelector: config.filteringSelector,
+         groupLabels: config.groupLabels,
+         instanceLabels: config.instanceLabels,
+       })).grafana.panels.alertsOverview
+      + g.panel.alertList.panelOptions.withTitle('PostgreSQL alerts')
+      + g.panel.alertList.panelOptions.withDescription('')
+      // The library's filter also lists other integrations' alerts on the same job.
       + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(signals.health.getVariables().queriesSelectorAdvancedSyntax + ',alertname=~"PostgreSQL.*"'),
 
     // Deadlocks

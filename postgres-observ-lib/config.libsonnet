@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   // Filtering and labels
   filteringSelector: '',
@@ -8,6 +10,9 @@
   uid: 'postgres',
   dashboardNamePrefix: '',
   dashboardTags: ['postgres', 'database'],
+  dashboardPeriod: 'now-1h',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
+  dashboardRefresh: '1m',
 
   // Metrics source - extensible pattern for future sources
   // Currently only 'postgres_exporter' (prometheus community exporter) is implemented

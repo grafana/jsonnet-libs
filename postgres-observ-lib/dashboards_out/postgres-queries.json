@@ -548,6 +548,7 @@
             "type": "table"
          }
       ],
+      "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
          "postgres",
@@ -594,7 +595,7 @@
                "type": "query"
             },
             {
-               "allValue": null,
+               "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${datasource}"
@@ -655,10 +656,10 @@
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-1h",
          "to": "now"
       },
-      "timezone": "utc",
+      "timezone": "",
       "title": "PostgreSQL query performance",
       "uid": "postgres-queries"
    }

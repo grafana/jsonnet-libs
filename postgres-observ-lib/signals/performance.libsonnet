@@ -32,15 +32,11 @@ function(this)
       queriesPerSecond: {
         name: 'Queries per second',
         description: 'Queries per second. Requires pg_stat_statements extension.',
-        type: 'raw',
+        type: 'counter',
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: |||
-              sum by (%(agg)s) (
-                rate(pg_stat_statements_calls_total{%(queriesSelector)s}[%(interval)s])
-              )
-            |||,
+            expr: 'pg_stat_statements_calls_total{%(queriesSelector)s}',
             legendCustomTemplate: ' QPS',
           },
         },
@@ -115,11 +111,11 @@ function(this)
       rowsFetched: {
         name: 'Rows fetched',
         description: 'Number of rows fetched by queries per second.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_fetched{%(queriesSelector)s}[%(interval)s])',
+            expr: 'pg_stat_database_tup_fetched{%(queriesSelector)s}',
             legendCustomTemplate: ' Fetched',
           },
         },
@@ -129,11 +125,11 @@ function(this)
       rowsReturned: {
         name: 'Rows returned',
         description: 'Number of rows returned by queries per second.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_returned{%(queriesSelector)s}[%(interval)s])',
+            expr: 'pg_stat_database_tup_returned{%(queriesSelector)s}',
             legendCustomTemplate: ' Returned',
           },
         },
@@ -143,11 +139,11 @@ function(this)
       rowsInserted: {
         name: 'Rows inserted',
         description: 'Number of rows inserted per second.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_inserted{%(queriesSelector)s}[%(interval)s])',
+            expr: 'pg_stat_database_tup_inserted{%(queriesSelector)s}',
             legendCustomTemplate: ' Inserted',
           },
         },
@@ -157,11 +153,11 @@ function(this)
       rowsUpdated: {
         name: 'Rows updated',
         description: 'Number of rows updated per second.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_updated{%(queriesSelector)s}[%(interval)s])',
+            expr: 'pg_stat_database_tup_updated{%(queriesSelector)s}',
             legendCustomTemplate: ' Updated',
           },
         },
@@ -171,11 +167,11 @@ function(this)
       rowsDeleted: {
         name: 'Rows deleted',
         description: 'Number of rows deleted per second.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'rows/s',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_deleted{%(queriesSelector)s}[%(interval)s])',
+            expr: 'pg_stat_database_tup_deleted{%(queriesSelector)s}',
             legendCustomTemplate: ' Deleted',
           },
         },
@@ -184,11 +180,11 @@ function(this)
       buffersAlloc: {
         name: 'Buffers alloc',
         description: 'Number of buffers allocated per second.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_buffers_alloc_total{%(queriesSelector)s}[%(interval)s])',
+            expr: 'pg_stat_bgwriter_buffers_alloc_total{%(queriesSelector)s}',
             legendCustomTemplate: ' Allocated',
           },
         },
@@ -197,11 +193,11 @@ function(this)
       buffersCheckpoint: {
         name: 'Buffers written by checkpoints',
         description: 'Number of buffers written during checkpoints per second.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_buffers_checkpoint_total{%(queriesSelector)s}[%(interval)s])',
+            expr: 'pg_stat_bgwriter_buffers_checkpoint_total{%(queriesSelector)s}',
             legendCustomTemplate: ' Checkpoint',
           },
         },
@@ -210,11 +206,11 @@ function(this)
       buffersClean: {
         name: 'Buffers clean total',
         description: 'Number of buffers cleaned by bgwriter per second.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'ops',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}[%(interval)s])',
+            expr: 'pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}',
             legendCustomTemplate: ' Clean total',
           },
         },
@@ -224,11 +220,11 @@ function(this)
       buffersBackend: {
         name: 'Max written stops',
         description: 'Times bgwriter stopped due to writing too many buffers. Indicates I/O pressure.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'cps',
         sources: {
           postgres_exporter: {
-            expr: 'rate(pg_stat_bgwriter_maxwritten_clean_total{%(queriesSelector)s}[%(interval)s])',
+            expr: 'pg_stat_bgwriter_maxwritten_clean_total{%(queriesSelector)s}',
             legendCustomTemplate: ' Max written stops',
           },
         },
