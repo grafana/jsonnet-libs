@@ -54,6 +54,7 @@ Examples:
  - [golang-observ-lib](golang-observ-lib/)
  - [csp-mixin](csp-mixin/)
  - [windows-observ-lib](windows-observ-lib/)
+ - [hostmetrics-observ-lib](hostmetrics-observ-lib/)
 
 ## Prometheus rules testing for monitoring mixins and observability libraries
 

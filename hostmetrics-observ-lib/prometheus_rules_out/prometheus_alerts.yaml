@@ -1,0 +1,171 @@
+groups:
+    - name: hostmetrics-alerts
+      rules:
+        - alert: HostmetricsHostDown
+          annotations:
+            description: No metrics have been received from {{ $labels.instance }} for 10m.
+            summary: No host metrics received.
+          expr: max by (job, instance) (max_over_time(system_uptime{job=~".+"}[1h]) or max_over_time(system_uptime_seconds{job=~".+"}[1h])) unless max by (job, instance) (max_over_time(system_uptime{job=~".+"}[10m]) or max_over_time(system_uptime_seconds{job=~".+"}[10m]))
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+        - alert: HostmetricsCPUHighUsage
+          annotations:
+            description: CPU usage on {{ $labels.instance }} has been above 90% for 15 minutes, currently {{ printf "%.2f" $value }}%.
+            summary: Host CPU usage is high.
+          expr: |-
+            (100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization_ratio{job=~".+", state=~"idle|wait"})))
+            or
+            100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization{job=~".+", state=~"idle|wait"})))) > 90
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: HostmetricsMemoryHighUtilization
+          annotations:
+            description: Memory usage on {{ $labels.instance }} has been above 90% for 15 minutes, currently {{ printf "%.2f" $value }}%.
+            summary: Host memory usage is high.
+          expr: |-
+            (100 * (
+              system_memory_utilization_ratio{job=~".+", state="used"}
+            )
+            or
+            100 * (
+              system_memory_utilization{job=~".+", state="used"}
+            )) > 90
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: HostmetricsDiskSpaceLow
+          annotations:
+            description: '{{ $labels.mountpoint }} on {{ $labels.instance }} is {{ printf "%.2f" $value }}% full, above the threshold of 95%.'
+            summary: Filesystem is nearly full.
+          expr: |-
+            (100 * (
+              system_filesystem_utilization_ratio{job=~".+", type!="", mountpoint!="", mode!="ro"}
+            )
+            or
+            100 * (
+              system_filesystem_utilization{job=~".+", type!="", mountpoint!="", mode!="ro"}
+            )) > 95
+          for: 30m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: HostmetricsDiskSpaceLow
+          annotations:
+            description: '{{ $labels.mountpoint }} on {{ $labels.instance }} is {{ printf "%.2f" $value }}% full, above the threshold of 97%.'
+            summary: Filesystem is critically full.
+          expr: |-
+            (100 * (
+              system_filesystem_utilization_ratio{job=~".+", type!="", mountpoint!="", mode!="ro"}
+            )
+            or
+            100 * (
+              system_filesystem_utilization{job=~".+", type!="", mountpoint!="", mode!="ro"}
+            )) > 97
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+        - alert: HostmetricsSystemSaturation
+          annotations:
+            description: 5 minute load average on {{ $labels.instance }} is more than 2 times its logical core count.
+            summary: Host load average is high relative to core count.
+          expr: max by (job, instance) (system_cpu_load_average_5m{job=~".+"}) > max by (job, instance) (system_cpu_logical_count{job=~".+"}) * 2
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: HostmetricsInodesLow
+          annotations:
+            description: '{{ $labels.mountpoint }} on {{ $labels.instance }} has used {{ printf "%.2f" $value }}% of its inodes, above the threshold of 95%.'
+            summary: Filesystem is running out of inodes.
+          expr: (100 * max by (job,instance, mountpoint) (system_filesystem_inodes_usage{job=~".+", type!="", mountpoint!="", state="used", mode!="ro"} / ignoring(state) sum without (state) (system_filesystem_inodes_usage{job=~".+", type!="", mountpoint!="", mode!="ro"}))) > 95
+          for: 30m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: HostmetricsInodesLow
+          annotations:
+            description: '{{ $labels.mountpoint }} on {{ $labels.instance }} has used {{ printf "%.2f" $value }}% of its inodes, above the threshold of 97%.'
+            summary: Filesystem is almost out of inodes.
+          expr: (100 * max by (job,instance, mountpoint) (system_filesystem_inodes_usage{job=~".+", type!="", mountpoint!="", state="used", mode!="ro"} / ignoring(state) sum without (state) (system_filesystem_inodes_usage{job=~".+", type!="", mountpoint!="", mode!="ro"}))) > 97
+          for: 30m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+        - alert: HostmetricsDiskIOSaturation
+          annotations:
+            description: The average I/O queue of {{ $labels.device }} on {{ $labels.instance }} has been above 10 for 30 minutes, currently {{ printf "%.2f" $value }}.
+            summary: Disk I/O queue is high.
+          expr: |-
+            (rate(system_disk_weighted_io_time_seconds_total{job=~".+", device!=""}[5m])
+            or
+            rate(system_disk_weighted_io_time{job=~".+", device!=""}[5m])) > 10
+          for: 30m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: HostmetricsProcessesHigh
+          annotations:
+            description: '{{ $labels.instance }} has had more than 400 running processes for 5 minutes, currently {{ $value }}.'
+            summary: Many processes are running.
+          expr: (system_processes_count{job=~".+", status="running"}) > 400
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: HostmetricsHostRebooted
+          annotations:
+            description: '{{ $labels.instance }} booted {{ $value | humanizeDuration }} ago.'
+            summary: Host has rebooted.
+          expr: |-
+            (system_uptime_seconds{job=~".+"}
+            or
+            system_uptime{job=~".+"}) < 600 and ((system_uptime_seconds{job=~".+"} offset 600s)
+            or
+            (system_uptime{job=~".+"} offset 600s)) > 600
+          keep_firing_for: 5m
+          labels:
+            severity: info
+        - alert: HostmetricsNetworkErrors
+          annotations:
+            description: '{{ $labels.direction }} errors on {{ $labels.device }} on {{ $labels.instance }} have been above 1% of packets for an hour, currently {{ printf "%.2f" $value }}%.'
+            summary: Network interface has a high error rate.
+          expr: |-
+            100 * (rate(system_network_errors_total{job=~".+", device!=""}[5m])
+            or
+            rate(system_network_errors{job=~".+", device!=""}[5m])) / (rate(system_network_packets_total{job=~".+", device!=""}[5m])
+            or
+            rate(system_network_packets{job=~".+", device!=""}[5m])) > 1
+          for: 1h
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: HostmetricsConntrackHighUsage
+          annotations:
+            description: '{{ $labels.instance }} is using {{ printf "%.2f" $value }}% of its conntrack entries, above the threshold of 75%.'
+            summary: Connection tracking table is filling up.
+          expr: 100 * (system_network_conntrack_count{job=~".+"}) / (system_network_conntrack_max{job=~".+"}) > 75
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: HostmetricsMemoryMajorPageFaults
+          annotations:
+            description: '{{ $labels.instance }} has had more than 500 major page faults per second for 15 minutes, currently {{ printf "%.2f" $value }}.'
+            summary: Memory major page faults are high.
+          expr: |-
+            ((
+              rate(system_paging_faults_total{job=~".+", type="major"}[5m])
+            ) / 4096
+            or
+            (
+              rate(system_paging_faults{job=~".+", type="major"}[5m])
+            ) / 4096) > 500
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
