@@ -56,11 +56,12 @@ function(this)
       walArchiveFailures: {
         name: 'WAL archive failures',
         description: 'Failed WAL archive attempts. Non-zero means backups may be incomplete.',
-        type: 'raw',
+        type: 'counter',
         unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: 'sum by (%(agg)s) (increase(pg_stat_archiver_failed_count{%(queriesSelector)s}[$__range]))',
+            expr: 'pg_stat_archiver_failed_count{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: ' WAL archive failures',
           },
         },
@@ -79,19 +80,6 @@ function(this)
             // Note: type='counter' automatically applies rate()
             expr: 'pg_stat_bgwriter_maxwritten_clean_total{%(queriesSelector)s}',
             legendCustomTemplate: ' Max written clean',
-          },
-        },
-      },
-
-      deadlocks: {
-        name: 'Deadlocks',
-        description: 'Deadlocks detected per second.',
-        type: 'counter',
-        unit: 'short',
-        sources: {
-          postgres_exporter: {
-            expr: 'pg_stat_database_deadlocks{%(queriesSelector)s}',
-            legendCustomTemplate: ' Deadlocks',
           },
         },
       },

@@ -96,11 +96,12 @@ function(this)
       deadlocks: {
         name: 'Deadlocks',
         description: 'Total deadlocks detected. Any deadlocks indicate contention problems.',
-        type: 'raw',
+        type: 'counter',
         unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: 'sum by (%(agg)s) (increase(pg_stat_database_deadlocks{%(queriesSelector)s}[$__range]))',
+            expr: 'pg_stat_database_deadlocks{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: ' Deadlocks',
           },
         },

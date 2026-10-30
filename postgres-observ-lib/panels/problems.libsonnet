@@ -69,7 +69,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // WAL archive failures
     walArchiveFailures:
-      signals.problems.walArchiveFailures.asStat()
+      signals.problems.walArchiveFailures.withInterval('$__range').asStat()
       + withInstantQuery
       + statBase
       + g.panel.stat.standardOptions.withDecimals(0)
@@ -106,7 +106,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       g.panel.timeSeries.new('Conflicts & deadlocks')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('short')
-      + signals.problems.deadlocks.asPanelMixin()
+      + signals.health.deadlocks.withRangeFunction('rate').asPanelMixin()
       + signals.problems.conflicts.asPanelMixin()
       + g.panel.timeSeries.panelOptions.withDescription(
         'Deadlocks and conflicts (replica recovery cancellations).'
