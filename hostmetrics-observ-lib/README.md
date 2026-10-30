@@ -22,7 +22,63 @@ OTLP ingestion can store metrics with or without unit and type suffixes, for exa
 
 The default is both, `['otel', 'otel_with_suffixes']`, so dashboards and alerts work with either. The suffixes for each metric are listed in [signals/common.libsonnet](signals/common.libsonnet).
 
-The receiver must also run the `resourcedetection` processor with the `system` detector so that `target_info` carries `host_name`, `host_arch` and `os_description`, and set `service.namespace`, `service.name` and `service.instance.id` so that the `job` and `instance` labels are populated.
+## Receiver configuration
+
+The dashboards and alerts use metrics and resource attributes that the hostmetrics receiver and the `system` resource detector don't send by default. The config below sends all of them. The `job` label is `service.name`, or `service.namespace/service.name` if you set a namespace. The `instance` label is `service.instance.id`.
+
+The default `filteringSelector`, `job!=""`, matches any job. To show only these hosts, set it to `job="<your-namespace>/<your-service-name>"`.
+
+```yaml
+receivers:
+  hostmetrics:
+    scrapers:
+      cpu:
+        metrics:
+          system.cpu.utilization: {enabled: true, attributes: [cpu, state]}
+          system.cpu.logical.count: {enabled: true}
+          system.cpu.physical.count: {enabled: true}
+          system.cpu.frequency: {enabled: true}
+      load:
+      memory:
+        metrics:
+          system.memory.utilization: {enabled: true}
+          system.memory.limit: {enabled: true}
+          system.linux.memory.available: {enabled: true}
+          system.linux.memory.dirty: {enabled: true}
+          system.memory.linux.shared: {enabled: true}
+      disk:
+      filesystem:
+        metrics:
+          system.filesystem.utilization: {enabled: true}
+      network:
+        metrics:
+          system.network.conntrack.count: {enabled: true}
+          system.network.conntrack.max: {enabled: true}
+      paging:
+      processes:
+      system:
+
+processors:
+  resource_detection:
+    detectors: [system]
+    system:
+      resource_attributes:
+        host.arch: {enabled: true}
+        os.description: {enabled: true}
+  resource:
+    attributes:
+      - key: service.namespace
+        value: <your-namespace>
+        action: upsert
+      - key: service.name
+        value: <your-service-name>
+        action: upsert
+      - key: service.instance.id
+        from_attribute: host.name
+        action: insert
+```
+
+The `network` and `paging` scrapers are optional: set `enableNetworkScraper` or `enablePagingScraper` to `false` if you leave them out.
 
 ## Example
 
