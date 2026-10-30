@@ -57,7 +57,12 @@ enableLokiLogs: true,
 logsFilteringSelector: 'service_namespace="integrations", service_name="linux-hostmetrics"',
 logsGroupLabels: ['service_name'],
 logsInstanceLabels: ['service_instance_id'],
+extraLogLabels: [],
 logsVolumeGroupBy: 'detected_level',
+logsExtraFilters:
+  |||
+    | line_format `{{ if eq "[[instance]]" ".*" }}{{alignLeft 25 .service_instance_id}}|{{end}} {{__line__}}`
+  |||,
 ```
 
 The links at the top of each dashboard keep the selected host when you move between dashboards, including to and from the logs dashboard. To enable that with OTLP logs the logs dashboard's host variable is named `instance` even though it filters on `service_instance_id`.

@@ -33,7 +33,9 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         templating+: {
           list: [
             if std.objectHas(logsVarNames, v.name) then v { name: logsVarNames[v.name], label: metricsVarLabels[logsVarNames[v.name]] }
-            else v + (if std.objectHas(v, 'label') then { label: std.strReplace(v.label, '_', ' ') } else {})
+            else v
+                 + (if std.objectHas(v, 'label') then { label: std.strReplace(v.label, '_', ' ') } else {})
+                 + (if std.isString(std.get(v, 'query')) then { query: rename(v.query) } else {})
             for v in super.list
           ],
         },

@@ -22,7 +22,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "max by (job,instance) (round(timestamp(system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60)) * 1000 > $__from < $__to",
+               "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
                "hide": true,
                "iconColor": "#fade2a",
                "name": "Reboot",

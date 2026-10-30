@@ -22,7 +22,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "max by (job,instance) (round(timestamp(system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60)) * 1000 > $__from < $__to",
+               "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
                "hide": true,
                "iconColor": "#fade2a",
                "name": "Reboot",
@@ -77,7 +77,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Bytes received and transmitted per interface.",
+            "description": "Bits received and transmitted per interface.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -108,7 +108,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": "Bps"
+                           "value": "bps"
                         }
                      ]
                   }
@@ -138,7 +138,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,instance,device,direction) (\n  rate(system_network_io_bytes_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_network_io{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)",
+                  "expr": "8 * (\n  sum by (job,instance,device,direction) (\n  rate(system_network_io_bytes_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)\nor\n8 * (\n  sum by (job,instance,device,direction) (\n  rate(system_network_io{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Traffic ({{device}} {{direction}})",

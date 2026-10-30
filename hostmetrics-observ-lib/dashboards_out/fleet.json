@@ -22,7 +22,7 @@
                   "uid": "${datasource}"
                },
                "enable": true,
-               "expr": "max by (job,instance) (round(timestamp(system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60)) * 1000 > $__from < $__to",
+               "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job=~\".+\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
                "hide": true,
                "iconColor": "#fade2a",
                "name": "Reboot",
@@ -1213,7 +1213,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Top 25. Bytes received and transmitted across all interfaces.",
+            "description": "Top 25. Bits received and transmitted across all interfaces.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1250,7 +1250,7 @@
                      "properties": [
                         {
                            "id": "unit",
-                           "value": "Bps"
+                           "value": "bps"
                         }
                      ]
                   }
@@ -1285,7 +1285,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "topk(25,\n  sum by (job,instance) (\n  rate(system_network_io_bytes_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)\nor\ntopk(25,\n  sum by (job,instance) (\n  rate(system_network_io{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)",
+                  "expr": "topk(25,\n  8 * (\n  sum by (job,instance) (\n  rate(system_network_io_bytes_total{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)\n)\nor\ntopk(25,\n  8 * (\n  sum by (job,instance) (\n  rate(system_network_io{job=~\".+\",job=~\"$job\",instance=~\"$instance\", device!=\"\"}[$__rate_interval])\n)\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Traffic",

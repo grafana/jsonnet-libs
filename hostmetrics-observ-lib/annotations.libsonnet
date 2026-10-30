@@ -8,7 +8,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       commonlib.annotations.reboot.new(
         title='Reboot',
         target=signals.host.bootTime.asTarget()
-               + { expr: signals.host.bootTime.asPanelExpression() + ' * 1000 > $__from < $__to' },
+               + { expr: '(%s) * 1000 > $__from < $__to' % signals.host.bootTime.asPanelExpression() },
         instanceLabels=std.join(',', this.config.instanceLabels),
       )
       + commonlib.annotations.base.withTagKeys(tagKeys),
