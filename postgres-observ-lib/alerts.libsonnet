@@ -13,6 +13,7 @@
             alert: 'PostgreSQLDown',
             expr: '(%s) == 0' % signals.health.up.asRuleExpression(),
             'for': '1m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertDownSeverity },
             annotations: {
               summary: 'PostgreSQL is down.',
@@ -23,6 +24,7 @@
             alert: 'PostgreSQLHighConnectionUsage',
             expr: '(%s) > %g' % [signals.health.connectionUtilization.asRuleExpression(), config.alertHighConnectionUsageThreshold],
             'for': '5m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertHighConnectionUsageSeverity },
             annotations: {
               summary: 'PostgreSQL connection usage is high.',
@@ -33,6 +35,7 @@
             alert: 'PostgreSQLLowCacheHitRatio',
             expr: '(%s) < %g' % [signals.health.cacheHitRatio.asRuleExpression(), config.alertLowCacheHitRatioThreshold],
             'for': '15m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertLowCacheHitRatioSeverity },
             annotations: {
               summary: 'PostgreSQL cache hit ratio is low.',
@@ -43,6 +46,7 @@
             alert: 'PostgreSQLReplicationLag',
             expr: '(%s) > %s' % [signals.health.replicationLag.asRuleExpression(), config.alertReplicationLagThreshold],
             'for': '5m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertReplicationLagSeverity },
             annotations: {
               summary: 'PostgreSQL replication lag is high.',
@@ -53,6 +57,7 @@
             alert: 'PostgreSQLDeadlocks',
             expr: 'increase(pg_stat_database_deadlocks{%(filteringSelector)s}[5m]) > %(alertDeadlocksThreshold)s' % config,
             'for': '5m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertDeadlocksSeverity },
             annotations: {
               summary: 'PostgreSQL deadlocks detected.',
@@ -65,6 +70,7 @@
             alert: 'PostgreSQLLongRunningQuery',
             expr: '(%s) > %s' % [signals.problems.longestActiveTransaction.asRuleExpression(), config.alertLongRunningQueryThreshold],
             'for': '1m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertLongRunningQuerySeverity },
             annotations: {
               summary: 'PostgreSQL has long-running query.',
@@ -75,6 +81,7 @@
             alert: 'PostgreSQLBlockedQueries',
             expr: 'sum by (%s) (%s) > %s' % [agg, signals.problems.blockedQueries.asRuleExpression(), config.alertBlockedQueriesThreshold],
             'for': '5m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertBlockedQueriesSeverity },
             annotations: {
               summary: 'PostgreSQL has blocked queries.',
@@ -85,6 +92,7 @@
             alert: 'PostgreSQLWALArchiveFailure',
             expr: '(%s) > 0' % signals.problems.walArchiveFailures.withRangeFunction('rate').asRuleExpression(),
             'for': '5m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertWALArchiveFailureSeverity },
             annotations: {
               summary: 'PostgreSQL WAL archiving is failing.',
@@ -97,6 +105,7 @@
             alert: 'PostgreSQLHighDeadTuples',
             expr: '(%s) > %g' % [signals.maintenance.deadTupleRatio.asRuleExpression(), config.alertHighDeadTuplesThreshold],
             'for': '30m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertHighDeadTuplesSeverity },
             annotations: {
               summary: 'PostgreSQL table needs vacuum.',
@@ -111,6 +120,7 @@
               pg_stat_user_tables_n_dead_tup{%(filteringSelector)s} > %(alertVacuumNotRunningDeadTuples)s
             ||| % config,
             'for': '1h',
+            keep_firing_for: '5m',
             labels: { severity: config.alertVacuumNotRunningSeverity },
             annotations: {
               summary: 'PostgreSQL table has not been vacuumed.',
@@ -122,6 +132,7 @@
             alert: 'PostgreSQLTooManyRollbacks',
             expr: '(%s) > %g' % [signals.performance.rollbackRatio.asRuleExpression(), config.alertTooManyRollbacksThreshold],
             'for': '5m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertTooManyRollbacksSeverity },
             annotations: {
               summary: 'PostgreSQL has too many rollbacks.',
@@ -132,6 +143,7 @@
             alert: 'PostgreSQLTooManyLocksAcquired',
             expr: '(%s) > %g' % [signals.problems.lockUtilization.asRuleExpression(), config.alertTooManyLocksAcquiredThreshold],
             'for': '5m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertTooManyLocksAcquiredSeverity },
             annotations: {
               summary: 'PostgreSQL has acquired too many locks.',
@@ -142,6 +154,7 @@
             alert: 'PostgreSQLInactiveReplicationSlot',
             expr: '(%s) > 0' % signals.problems.nonStreamingReplicaLag.asRuleExpression(),
             'for': '30m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertInactiveReplicationSlotSeverity },
             annotations: {
               summary: 'PostgreSQL has inactive replication slot.',
@@ -151,6 +164,7 @@
           {
             alert: 'PostgreSQLReplicationRoleChanged',
             expr: '(%s) > 0' % signals.cluster.roleChanges.asRuleExpression(),
+            keep_firing_for: '5m',
             labels: { severity: config.alertReplicationRoleChangedSeverity },
             annotations: {
               summary: 'PostgreSQL replication role changed.',
@@ -161,6 +175,7 @@
             alert: 'PostgreSQLExporterErrors',
             expr: '(%s) > 0' % signals.problems.exporterErrors.asRuleExpression(),
             'for': '30m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertExporterErrorsSeverity },
             annotations: {
               summary: 'PostgreSQL exporter has errors.',
@@ -171,6 +186,7 @@
             alert: 'PostgreSQLHighQps',
             expr: 'sum by (%s) (%s) > %s' % [agg, signals.performance.transactionsPerSecond.asRuleExpression(), config.alertHighQpsThreshold],
             'for': '5m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertHighQpsSeverity },
             annotations: {
               summary: 'PostgreSQL has high QPS.',
@@ -186,6 +202,7 @@
               signals.health.isReplica.asRuleExpression(),
             ],
             'for': '5m',
+            keep_firing_for: '5m',
             labels: { severity: config.alertReplicationLagCriticalSeverity },
             annotations: {
               summary: 'PostgreSQL replication lag exceeds 1 hour.',
