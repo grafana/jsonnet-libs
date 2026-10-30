@@ -38,19 +38,9 @@ local g = import './g.libsonnet';
       ['cluster']
     );
 
-    local instanceVariables = makeClusterOptional(
-      makeSingleSelectByName(
-        this.signals.health.getVariablesMultiChoice(),
-        ['instance']
-      )
-    );
+    local instanceVariables = makeClusterOptional(this.signals.health.getVariablesSingleChoice());
 
-    local queriesVariables = makeClusterOptional(
-      makeSingleSelectByName(
-        this.signals.queries.getVariablesMultiChoice(),
-        ['instance']
-      )
-    ) + [topkVar];
+    local queriesVariables = makeClusterOptional(this.signals.queries.getVariablesSingleChoice()) + [topkVar];
 
     {
       'postgres-cluster.json':
@@ -59,6 +49,9 @@ local g = import './g.libsonnet';
         + g.dashboard.withTags(this.config.dashboardTags + ['cluster'])
         + g.dashboard.withUid(this.config.uid + '-cluster')
         + g.dashboard.withLinks(this.grafana.links.otherDashboards)
+        + g.dashboard.withTimezone(this.config.dashboardTimezone)
+        + g.dashboard.withRefresh(this.config.dashboardRefresh)
+        + g.dashboard.time.withFrom(this.config.dashboardPeriod)
         + g.dashboard.withDescription(
           |||
             PostgreSQL Cluster monitoring dashboard.
@@ -96,6 +89,9 @@ local g = import './g.libsonnet';
         + g.dashboard.withTags(this.config.dashboardTags + ['instance'])
         + g.dashboard.withUid(this.config.uid + '-overview')
         + g.dashboard.withLinks(this.grafana.links.otherDashboards)
+        + g.dashboard.withTimezone(this.config.dashboardTimezone)
+        + g.dashboard.withRefresh(this.config.dashboardRefresh)
+        + g.dashboard.time.withFrom(this.config.dashboardPeriod)
         + g.dashboard.withDescription(
           |||
             PostgreSQL instance monitoring dashboard.
@@ -128,6 +124,9 @@ local g = import './g.libsonnet';
         + g.dashboard.withTags(this.config.dashboardTags + ['pg_stat_statements'])
         + g.dashboard.withUid(this.config.uid + '-queries')
         + g.dashboard.withLinks(this.grafana.links.otherDashboards)
+        + g.dashboard.withTimezone(this.config.dashboardTimezone)
+        + g.dashboard.withRefresh(this.config.dashboardRefresh)
+        + g.dashboard.time.withFrom(this.config.dashboardPeriod)
         + g.dashboard.withDescription(
           |||
             PostgreSQL query performance analysis.            

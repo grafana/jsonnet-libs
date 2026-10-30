@@ -1,4 +1,5 @@
 local g = import '../g.libsonnet';
+local alertsOverviewlib = import 'alerts-observ-lib/main.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
@@ -159,7 +160,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ),
 
     alerts:
-      g.panel.alertList.new('PostgreSQL alerts')
+      (alertsOverviewlib.new() + alertsOverviewlib.withConfigMixin({
+         filteringSelector: config.filteringSelector,
+         groupLabels: config.groupLabels,
+         instanceLabels: config.instanceLabels,
+       })).grafana.panels.alertsOverview
+      + g.panel.alertList.panelOptions.withTitle('PostgreSQL alerts')
+      + g.panel.alertList.panelOptions.withDescription('')
+      // The library's filter also lists other integrations' alerts on the same job.
       + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(signals.cluster.getVariables().queriesSelectorAdvancedSyntax + ',alertname=~"PostgreSQL.*"'),
 
     // Total deadlocks
@@ -251,7 +259,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             { id: 'links', value: [
               {
                 title: 'View Instance',
-                url: '/d/postgres-overview?var-instance=${__data.fields.Instance}&${datasource:queryparam}&${job:queryparam}&${cluster:queryparam}',
+                url: '/d/' + config.uid + '-overview?var-instance=${__data.fields.Instance}&${__url_time_range}&${datasource:queryparam}&${job:queryparam}&${cluster:queryparam}',
               },
             ] },
           ],
@@ -381,7 +389,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       )
       + g.panel.timeSeries.standardOptions.withUnit('short')
       + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars')
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(80)
       + g.panel.timeSeries.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
@@ -542,8 +549,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.cluster.primaryUpdates.asPanelMixin()
       + signals.cluster.primaryDeletes.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withUnit('rows/s')
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' })
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(50),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' }),
 
     // Read operations per instance
     readOperations:

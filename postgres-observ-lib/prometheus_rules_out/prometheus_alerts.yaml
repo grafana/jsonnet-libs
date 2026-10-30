@@ -42,7 +42,7 @@ groups:
             severity: warning
         - alert: PostgreSQLReplicationLag
           annotations:
-            description: Replica {{ $labels.instance }} is {{ $value }}s behind primary.
+            description: Replica {{ $labels.instance }} is {{ printf "%.0f" $value }}s behind primary.
             summary: PostgreSQL replication lag is high.
           expr: (pg_replication_lag_seconds{}) > 30
           for: 5m
@@ -193,7 +193,7 @@ groups:
             severity: warning
         - alert: PostgreSQLReplicationLagCritical
           annotations:
-            description: Replica {{ $labels.instance }} is {{ $value }}s behind primary. Check for network issues or load imbalances.
+            description: Replica {{ $labels.instance }} is {{ printf "%.0f" $value }}s behind primary. Check for network issues or load imbalances.
             summary: PostgreSQL replication lag exceeds 1 hour.
           expr: ((pg_replication_lag_seconds{}) > 3600) and on (job, cluster, instance) ((pg_replication_is_replica{}) == 1)
           for: 5m

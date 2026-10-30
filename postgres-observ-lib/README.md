@@ -208,7 +208,7 @@ Requires `pg_stat_statements` extension:
 | Signal | What it tells you |
 |--------|-------------------|
 | `tablesNeedingVacuum` | Ratio of tables with >10% dead tuples |
-| `oldestVacuum` | Is autovacuum working? |
+| `oldestVacuum` | Is vacuum keeping up? |
 | `deadTupleRatio` | Per-table vacuum priority |
 | `lastVacuumAge` | Time since each table was vacuumed |
 | `sequentialScanRatio` | Missing indexes? |
