@@ -43,7 +43,7 @@
           {
             alert: 'CouchbaseMemoryEvictionRate',
             expr: |||
-              (kv_ep_num_value_ejects) > %(alertsWarningMemoryEvictionRate)s
+              increase(kv_ep_num_value_ejects[5m]) > %(alertsWarningMemoryEvictionRate)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -53,7 +53,7 @@
               summary: 'There is a spike in evictions in a bucket, which indicates high memory pressure.',
               description:
                 (
-                  '{{ printf "%%.0f" $value }} evictions in bucket {{$labels.bucket}}, on node {{$labels.instance}}, and on cluster {{$labels.couchbase_cluster}}, ' +
+                  '{{ printf "%%.0f" $value }} evictions in the last 5 minutes in bucket {{$labels.bucket}}, on node {{$labels.instance}}, and on cluster {{$labels.couchbase_cluster}}, ' +
                   'which is above the threshold of %(alertsWarningMemoryEvictionRate)s.'
                 ) % this.config,
             },
