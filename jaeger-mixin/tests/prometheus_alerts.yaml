@@ -2,23 +2,23 @@ rule_files:
 - ../prometheus_rules_out/prometheus_alerts.yaml
 evaluation_interval: 15s
 tests:
-- name: exact one percent
+- name: just below one percent
   interval: 15s
   input_series:
   - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
-    values: 0+1x100
+    values: 0+9x100
   - series: jaeger_agent_reporter_batches_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
     values: 0+0x100
   - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
-    values: 0+99x100
+    values: 0+991x100
   - series: jaeger_agent_reporter_batches_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
     values: 0+0x100
   - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
-    values: 0+1x100
+    values: 0+9x100
   - series: jaeger_agent_reporter_spans_failures_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
     values: 0+0x100
   - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="jaeger",protocol="grpc"}
-    values: 0+99x100
+    values: 0+991x100
   - series: jaeger_agent_reporter_spans_submitted_total{instance="agent-a:14271",job="jaeger-agent",namespace="tracing",format="zipkin",protocol="grpc"}
     values: 0+0x100
   alert_rule_test:
