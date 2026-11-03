@@ -106,8 +106,8 @@ tests:
         alertname: HostmetricsHostDown
         exp_alerts: []
 
-      # Last sample at 30m: silent for 10m from 40m, firing after 5m more.
-      - eval_time: 50m
+      # Last sample at 30m: silent for 5m from 35m, firing after 5m more.
+      - eval_time: 45m
         alertname: HostmetricsHostDown
         exp_alerts:
           - exp_labels:
@@ -116,7 +116,12 @@ tests:
               instance: host1
             exp_annotations:
               summary: 'No host metrics received.'
-              description: 'No metrics have been received from host1 for more than 10m.'
+              description: 'No metrics have been received from host1 for more than 5m.'
+
+      # Silent for longer than the 30m lookback, so it has resolved.
+      - eval_time: 65m
+        alertname: HostmetricsHostDown
+        exp_alerts: []
 
   # host1 breaks every resource alert and has just booted; host2 stays healthy and must not alert.
   - interval: 1m

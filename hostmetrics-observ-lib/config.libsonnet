@@ -66,7 +66,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   alertsMemoryMajorPageFaultsThreshold: 500,  // per second
   alertsProcessesHighThreshold: 400,  // running processes
   alertsHostRebootedThreshold: 600,  // seconds of uptime
-  alertsHostDownWindow: '10m',
+  alertsHostDownWindow: '5m',  // silence before HostmetricsHostDown fires, after its 5m for
+  alertsHostDownLookback: '30m',  // how far back it looks for hosts: it resolves once a host has been silent this long
 
   // Alerts severities. HostmetricsDiskSpaceLow and HostmetricsInodesLow have no severity setting: each has a
   // warning rule and a critical rule, tuned with the thresholds above.

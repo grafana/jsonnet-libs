@@ -16,9 +16,9 @@ local common = import './signals/common.libsonnet';
       // Availability
       {
         alert: 'HostmetricsHostDown',
-        // Seen in the last hour but silent for the window. The alert resolves
-        // an hour after a host goes away for good.
-        expr: 'max by (%s) (%s) unless max by (%s) (%s)' % [by, seenWithin('1h'), by, seenWithin(config.alertsHostDownWindow)],
+        // Seen within the lookback period but silent for the window. The alert resolves
+        // once a host has been silent for the lookback period
+        expr: 'max by (%s) (%s) unless max by (%s) (%s)' % [by, seenWithin(config.alertsHostDownLookback), by, seenWithin(config.alertsHostDownWindow)],
         'for': '5m',
         labels: { severity: config.alertsHostDownSeverity },
         annotations: {
