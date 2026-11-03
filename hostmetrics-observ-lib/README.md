@@ -104,12 +104,11 @@ hostmetrics.asMonitoringMixin()
 
 ## Logs
 
-Set `enableLokiLogs: true` to add a logs dashboard. By default it expects logs with the same `job` and `instance` labels as the metrics.
+The logs dashboard is on by default. Set `enableLokiLogs: false` to leave it out. By default it expects logs with the same `job` and `instance` labels as the metrics.
 
 Logs sent over OTLP are labeled from resource attributes instead. Set the logs options to match, for example:
 
 ```jsonnet
-enableLokiLogs: true,
 logsFilteringSelector: 'service_namespace="integrations", service_name="linux-hostmetrics"',
 logsGroupLabels: ['service_name'],
 logsInstanceLabels: ['service_instance_id'],

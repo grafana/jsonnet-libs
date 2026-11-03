@@ -4,7 +4,7 @@
             {
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "enable": true,
                "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))[$__interval:1m] offset -$__interval) > 1",
@@ -19,7 +19,7 @@
             {
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "enable": true,
                "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
@@ -75,7 +75,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Share of physical memory in use.",
             "fieldConfig": {
@@ -137,7 +137,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "100 * (\n  sum by (job,instance) (\n  system_memory_utilization_ratio{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  sum by (job,instance) (\n  system_memory_utilization{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
@@ -152,7 +152,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Physical memory broken down by state.",
             "fieldConfig": {
@@ -241,7 +241,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,state) (\n  system_memory_usage_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,state) (\n  system_memory_usage{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -256,7 +256,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Memory available to new allocations without swapping.",
             "fieldConfig": {
@@ -345,7 +345,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance) (\n  system_linux_memory_available_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_linux_memory_available{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -360,7 +360,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Total physical memory.",
             "fieldConfig": {
@@ -449,7 +449,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance) (\n  system_memory_limit_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_memory_limit{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -477,7 +477,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Pages moved between memory and swap.",
             "fieldConfig": {
@@ -536,7 +536,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "(\n  sum by (job,instance,direction) (\n  rate(system_paging_operations_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\nor\n(\n  sum by (job,instance,direction) (\n  rate(system_paging_operations{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096",
                   "format": "time_series",
@@ -551,7 +551,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Minor and major page faults.",
             "fieldConfig": {
@@ -610,7 +610,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "(\n  sum by (job,instance,type) (\n  rate(system_paging_faults_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\nor\n(\n  sum by (job,instance,type) (\n  rate(system_paging_faults{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096",
                   "format": "time_series",
@@ -625,7 +625,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Swap space by state.",
             "fieldConfig": {
@@ -714,7 +714,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,state) (\n  system_paging_usage_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,state) (\n  system_paging_usage{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -729,7 +729,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Dirty (max): Memory waiting to be written back to disk.  \n\nShared (max): Memory shared between processes.",
             "fieldConfig": {
@@ -830,7 +830,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance) (\n  system_linux_memory_dirty_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_linux_memory_dirty{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -841,7 +841,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance) (\n  system_memory_linux_shared_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_memory_linux_shared{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -862,8 +862,8 @@
       "templating": {
          "list": [
             {
-               "label": "Data source",
-               "name": "datasource",
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
                "query": "prometheus",
                "regex": "",
                "type": "datasource"
@@ -872,7 +872,7 @@
                "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
                "label": "Job",
@@ -887,7 +887,7 @@
                "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "includeAll": false,
                "label": "Instance",
@@ -897,6 +897,14 @@
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },

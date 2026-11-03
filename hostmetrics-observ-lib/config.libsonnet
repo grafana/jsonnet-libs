@@ -39,7 +39,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   // Loki logs dashboard, for logs collected with the same job and instance labels.
   // Logs sent over OTLP are labeled from resource attributes instead, i.e. service_name and
   // service_instance_id: set the logs selector and labels to match.
-  enableLokiLogs: false,
+  enableLokiLogs: true,
   logsGroupLabels: self.groupLabels,
   logsInstanceLabels: self.instanceLabels,
   extraLogLabels: ['transport', 'unit', 'level'],

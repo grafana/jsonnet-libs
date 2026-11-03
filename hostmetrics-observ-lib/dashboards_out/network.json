@@ -4,7 +4,7 @@
             {
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "enable": true,
                "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))[$__interval:1m] offset -$__interval) > 1",
@@ -19,7 +19,7 @@
             {
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "enable": true,
                "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
@@ -75,7 +75,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Bits received and transmitted per interface.",
             "fieldConfig": {
@@ -136,7 +136,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "8 * (\n  sum by (job,instance,device,direction) (\n  rate(system_network_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\nor\n8 * (\n  sum by (job,instance,device,direction) (\n  rate(system_network_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)",
                   "format": "time_series",
@@ -151,7 +151,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Packets received and transmitted per interface.",
             "fieldConfig": {
@@ -212,7 +212,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,device,direction) (\n  rate(system_network_packets_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_network_packets{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
@@ -240,7 +240,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Errored packets per interface.",
             "fieldConfig": {
@@ -301,7 +301,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,device,direction) (\n  rate(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
@@ -316,7 +316,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Dropped packets per interface.",
             "fieldConfig": {
@@ -377,7 +377,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,device,direction) (\n  rate(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
@@ -405,7 +405,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Open connections by state.",
             "fieldConfig": {
@@ -464,7 +464,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,state) (\n  system_network_connections{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -479,7 +479,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Entries (max): Entries in the connection tracking table.  \n\nLimit (max): Size limit of the connection tracking table.",
             "fieldConfig": {
@@ -550,7 +550,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance) (\n  system_network_conntrack_count{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -561,7 +561,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance) (\n  system_network_conntrack_max{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -582,8 +582,8 @@
       "templating": {
          "list": [
             {
-               "label": "Data source",
-               "name": "datasource",
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
                "query": "prometheus",
                "regex": "",
                "type": "datasource"
@@ -592,7 +592,7 @@
                "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
                "label": "Job",
@@ -607,7 +607,7 @@
                "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "includeAll": false,
                "label": "Instance",
@@ -617,6 +617,14 @@
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },

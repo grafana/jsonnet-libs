@@ -4,7 +4,7 @@
             {
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "enable": true,
                "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))[$__interval:1m] offset -$__interval) > 1",
@@ -19,7 +19,7 @@
             {
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "enable": true,
                "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
@@ -75,7 +75,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Share of each filesystem in use.",
             "fieldConfig": {
@@ -137,7 +137,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization_ratio{mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization{mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
@@ -152,7 +152,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Free bytes per filesystem.",
             "fieldConfig": {
@@ -212,7 +212,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,mountpoint) (\n  system_filesystem_usage_bytes{state=\"free\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,mountpoint) (\n  system_filesystem_usage{state=\"free\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -227,7 +227,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Used, free and reserved bytes per filesystem.",
             "fieldConfig": {
@@ -286,7 +286,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,mountpoint,state) (\n  system_filesystem_usage_bytes{type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,mountpoint,state) (\n  system_filesystem_usage{type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -301,7 +301,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Free inodes per filesystem.",
             "fieldConfig": {
@@ -360,7 +360,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,mountpoint) (\n  system_filesystem_inodes_usage{state=\"free\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -375,7 +375,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Inodes used and free per filesystem.",
             "fieldConfig": {
@@ -434,7 +434,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,mountpoint) (\n  system_filesystem_inodes_usage{type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -462,7 +462,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Bytes read and written per device.",
             "fieldConfig": {
@@ -529,7 +529,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,device,direction) (\n  rate(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
@@ -544,7 +544,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Read and write operations per second.",
             "fieldConfig": {
@@ -605,7 +605,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,device,direction) (\n  rate(system_disk_operations_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_disk_operations{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
@@ -620,7 +620,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Share of time each device spent performing I/O.",
             "fieldConfig": {
@@ -679,7 +679,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,device) (\n  rate(system_disk_io_time_seconds_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device) (\n  rate(system_disk_io_time{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
@@ -694,7 +694,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Mean time each operation spends being serviced.",
             "fieldConfig": {
@@ -755,7 +755,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance, device, direction) (rate(system_disk_operation_time_seconds_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n/\n(sum by (job,instance, device, direction) (rate(system_disk_operations_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) > 0)\n\nor\nsum by (job,instance, device, direction) (rate(system_disk_operation_time{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n/\n(sum by (job,instance, device, direction) (rate(system_disk_operations{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) > 0)\n",
                   "format": "time_series",
@@ -770,7 +770,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Weighted I/O time, an approximation of queue depth.",
             "fieldConfig": {
@@ -831,7 +831,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,device) (\n  rate(system_disk_weighted_io_time_seconds_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device) (\n  rate(system_disk_weighted_io_time{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
@@ -846,7 +846,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Operations queued but not yet complete.",
             "fieldConfig": {
@@ -905,7 +905,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance,device) (\n  system_disk_pending_operations{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -920,7 +920,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Adjacent operations merged by the scheduler.",
             "fieldConfig": {
@@ -979,7 +979,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,device,direction) (\n  rate(system_disk_merged_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_disk_merged{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
@@ -1000,8 +1000,8 @@
       "templating": {
          "list": [
             {
-               "label": "Data source",
-               "name": "datasource",
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
                "query": "prometheus",
                "regex": "",
                "type": "datasource"
@@ -1010,7 +1010,7 @@
                "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
                "label": "Job",
@@ -1025,7 +1025,7 @@
                "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "includeAll": false,
                "label": "Instance",
@@ -1035,6 +1035,14 @@
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },

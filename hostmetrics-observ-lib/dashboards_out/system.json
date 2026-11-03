@@ -4,7 +4,7 @@
             {
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "enable": true,
                "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))[$__interval:1m] offset -$__interval) > 1",
@@ -19,7 +19,7 @@
             {
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "enable": true,
                "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
@@ -75,7 +75,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Share of CPU time spent working: not idle, and not waiting for I/O.",
             "fieldConfig": {
@@ -137,7 +137,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization_ratio{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"})))\nor\n100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"})))",
                   "format": "time_series",
@@ -152,7 +152,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "CPU time share per state, excluding idle.",
             "fieldConfig": {
@@ -264,7 +264,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "100 * (\n  avg by (job,instance,state) (\n  system_cpu_utilization_ratio{state!=\"idle\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  avg by (job,instance,state) (\n  system_cpu_utilization{state!=\"idle\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
@@ -279,7 +279,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Share of time each core spends working: not idle, and not waiting for I/O.",
             "fieldConfig": {
@@ -341,7 +341,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "100 * (1 - sum by (job,instance, cpu) (system_cpu_utilization_ratio{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))\nor\n100 * (1 - sum by (job,instance, cpu) (system_cpu_utilization{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))",
                   "format": "time_series",
@@ -356,7 +356,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "CPU seconds spent per second in each state, in cores.",
             "fieldConfig": {
@@ -415,7 +415,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance,state) (\n  rate(system_cpu_time_seconds_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,state) (\n  rate(system_cpu_time{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
@@ -443,7 +443,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "1m (max): System load over 1 minute.  \n\n5m (max): System load over 5 minutes.  \n\n15m (max): System load over 15 minutes.  \n\nCores (max): Logical cores available.",
             "fieldConfig": {
@@ -568,7 +568,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance) (\n  system_cpu_load_average_1m{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -579,7 +579,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance) (\n  system_cpu_load_average_5m{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -590,7 +590,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance) (\n  system_cpu_load_average_15m{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -601,7 +601,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance) (\n  system_cpu_logical_count{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -616,7 +616,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Current clock frequency per core.",
             "fieldConfig": {
@@ -675,7 +675,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "avg by (job,instance,cpu) (\n  system_cpu_frequency_hertz{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance,cpu) (\n  system_cpu_frequency{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -690,7 +690,7 @@
          {
             "datasource": {
                "type": "prometheus",
-               "uid": "${datasource}"
+               "uid": "${prometheus_datasource}"
             },
             "description": "Running (max): Processes currently running.  \n\nCreated (sum): Processes created per second.",
             "fieldConfig": {
@@ -761,7 +761,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "max by (job,instance) (\n  system_processes_count{status=\"running\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
@@ -772,7 +772,7 @@
                {
                   "datasource": {
                      "type": "prometheus",
-                     "uid": "${datasource}"
+                     "uid": "${prometheus_datasource}"
                   },
                   "expr": "sum by (job,instance) (\n  rate(system_processes_created_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance) (\n  rate(system_processes_created{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
@@ -793,8 +793,8 @@
       "templating": {
          "list": [
             {
-               "label": "Data source",
-               "name": "datasource",
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
                "query": "prometheus",
                "regex": "",
                "type": "datasource"
@@ -803,7 +803,7 @@
                "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "includeAll": true,
                "label": "Job",
@@ -818,7 +818,7 @@
                "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
-                  "uid": "${datasource}"
+                  "uid": "${prometheus_datasource}"
                },
                "includeAll": false,
                "label": "Instance",
@@ -828,6 +828,14 @@
                "refresh": 2,
                "sort": 1,
                "type": "query"
+            },
+            {
+               "hide": 2,
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
             }
          ]
       },
