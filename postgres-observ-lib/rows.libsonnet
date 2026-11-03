@@ -165,10 +165,10 @@ local g = import './g.libsonnet';
       g.panel.row.new('Query analysis')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        panels.queries.topQueriesByTotalTime { gridPos+: { w: 12, h: 14 } },
-        panels.queries.slowestQueriesByMeanTime { gridPos+: { w: 12, h: 14 } },
-        panels.queries.mostFrequentQueries { gridPos+: { w: 12, h: 14 } },
-        panels.queries.topQueriesByRows { gridPos+: { w: 12, h: 14 } },
+        panels.queries.topQueriesByTotalTime { gridPos+: { w: 24, h: 8 } },
+        panels.queries.slowestQueriesByMeanTime { gridPos+: { w: 24, h: 8 } },
+        panels.queries.mostFrequentQueries { gridPos+: { w: 24, h: 8 } },
+        panels.queries.topQueriesByRows { gridPos+: { w: 24, h: 8 } },
         panels.queries.queryStatsTable { gridPos+: { w: 24, h: 12 } },
       ]),
 
