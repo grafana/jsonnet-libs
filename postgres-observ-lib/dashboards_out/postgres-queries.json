@@ -505,10 +505,8 @@
                         "Time 6": true,
                         "__name__": true,
                         "cluster": true,
-                        "environment": true,
                         "instance": true,
-                        "job": true,
-                        "server_id": true
+                        "job": true
                      },
                      "indexByName": {
                         "Value #CallsRate": 4,

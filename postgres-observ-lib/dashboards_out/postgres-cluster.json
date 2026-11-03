@@ -1234,9 +1234,7 @@
                         "Time": true,
                         "__name__": true,
                         "cluster": true,
-                        "environment": true,
-                        "job": true,
-                        "server_id": true
+                        "job": true
                      },
                      "indexByName": {
                         "Value #Instance cache hit ratio": 5,

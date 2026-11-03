@@ -2025,11 +2025,9 @@
                         "Time": true,
                         "__name__": false,
                         "cluster": true,
-                        "environment": true,
                         "instance": true,
                         "job": true,
-                        "server": true,
-                        "server_id": true
+                        "server": true
                      },
                      "indexByName": {
                         "Value": 1,

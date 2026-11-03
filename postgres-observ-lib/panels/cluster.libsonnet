@@ -230,8 +230,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           excludeByName: {
             Time: true,
             __name__: true,
-            server_id: true,
-            environment: true,
           } + { [label]: true for label in config.groupLabels },
           renameByName: {
             [instanceLabel]: instanceColumn,
