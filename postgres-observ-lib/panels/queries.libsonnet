@@ -2,7 +2,7 @@ local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
-  new(signals):: {
+  new(signals, config):: {
     local queriesSelector = signals.queries.templatingVariables.queriesSelector,
 
     // Legend sorted by last value descending with stats
@@ -109,13 +109,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             'Time 4': true,
             'Time 5': true,
             'Time 6': true,
-            job: true,
-            instance: true,
-            cluster: true,
             __name__: true,
             server_id: true,
             environment: true,
-          },
+          } + { [label]: true for label in config.groupLabels + config.instanceLabels },
           renameByName: {
             queryid: 'Query ID',
             datname: 'Database',

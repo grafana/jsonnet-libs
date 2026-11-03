@@ -163,8 +163,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_replication_is_replica{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s',
           },
         },
       },
@@ -178,8 +178,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'changes(pg_replication_is_replica{%(queriesSelector)s}[%(interval)s])',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: Role changes',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: Role changes',
           },
         },
       },
@@ -192,8 +192,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: Replication lag',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: Replication lag',
           },
         },
       },
@@ -207,7 +207,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}',
-            aggKeepLabels: ['instance', 'client_addr', 'application_name', 'state'],
+            aggKeepLabels: this.instanceLabels + ['client_addr', 'application_name', 'state'],
             legendCustomTemplate: '{{client_addr}} ({{state}})',
           },
         },
@@ -395,8 +395,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_database_tup_fetched{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: Fetched',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: Fetched',
           },
         },
       },
@@ -414,8 +414,8 @@ function(this)
               +
               rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[%(interval)s])
             |||,
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: TPS',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: TPS',
           },
         },
       },
@@ -429,8 +429,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_statements_calls_total{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: QPS',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: QPS',
           },
         },
       },
@@ -517,17 +517,17 @@ function(this)
           postgres_exporter: {
             expr: |||
               (
-                sum by (%(agg)s, instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
                 /
                 (
-                  sum by (%(agg)s, instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                  sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
                   +
-                  sum by (%(agg)s, instance) (pg_stat_database_blks_read{%(queriesSelector)s})
+                  sum by (%(agg)s) (pg_stat_database_blks_read{%(queriesSelector)s})
                 )
               )
             |||,
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: Cache hit ratio',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: Cache hit ratio',
           },
         },
       },
@@ -540,8 +540,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_up{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s',
           },
         },
       },
@@ -555,8 +555,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'time() - pg_postmaster_start_time_seconds{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s',
           },
         },
       },
@@ -571,13 +571,13 @@ function(this)
           postgres_exporter: {
             expr: |||
               (
-                sum by (%(agg)s, instance) (pg_stat_activity_count{%(queriesSelector)s})
+                sum by (%(agg)s) (pg_stat_activity_count{%(queriesSelector)s})
                 /
-                max by (%(agg)s, instance) (pg_settings_max_connections{%(queriesSelector)s})
+                max by (%(agg)s) (pg_settings_max_connections{%(queriesSelector)s})
               )
             |||,
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s',
           },
         },
       },
@@ -592,17 +592,17 @@ function(this)
           postgres_exporter: {
             expr: |||
               (
-                sum by (%(agg)s, instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
                 /
                 (
-                  sum by (%(agg)s, instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                  sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
                   +
-                  sum by (%(agg)s, instance) (pg_stat_database_blks_read{%(queriesSelector)s})
+                  sum by (%(agg)s) (pg_stat_database_blks_read{%(queriesSelector)s})
                 )
               )
             |||,
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s',
           },
         },
       },
@@ -616,8 +616,8 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s',
           },
         },
       },

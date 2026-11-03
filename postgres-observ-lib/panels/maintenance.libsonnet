@@ -2,7 +2,10 @@ local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
-  new(signals):: {
+  new(signals, config):: {
+    local queriesSelector = signals.maintenance.templatingVariables.queriesSelector,
+    local labelColumns = { [label]: true for label in config.groupLabels + config.instanceLabels },
+
     // Helper to convert stat panel queries to instant queries for current status
     local withInstantQuery = {
       targets: std.map(function(t) t { instant: true }, super.targets),
@@ -90,11 +93,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         }),
         g.panel.table.queryOptions.transformation.withId('organize')
         + g.panel.table.queryOptions.transformation.withOptions({
-          excludeByName: {
-            job: true,
-            instance: true,
-            cluster: true,
-          },
+          excludeByName: labelColumns,
           renameByName: {
             schemaname: 'Schema',
             relname: 'Table',
@@ -191,11 +190,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           datasource: { type: 'prometheus', uid: '${datasource}' },
           expr: |||
             (
-              (pg_statio_user_indexes_idx_blks_hit_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"} == 0)
+              (pg_statio_user_indexes_idx_blks_hit_total{%(queriesSelector)s} == 0)
               and
-              (pg_statio_user_indexes_idx_blks_read_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"} == 0)
+              (pg_statio_user_indexes_idx_blks_read_total{%(queriesSelector)s} == 0)
             )
-          |||,
+          ||| % { queriesSelector: queriesSelector },
           format: 'table',
           instant: true,
           refId: 'UnusedIndexes',
@@ -272,11 +271,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         }),
         g.panel.table.queryOptions.transformation.withId('organize')
         + g.panel.table.queryOptions.transformation.withOptions({
-          excludeByName: {
-            job: true,
-            instance: true,
-            cluster: true,
-          },
+          excludeByName: labelColumns,
           renameByName: {
             schemaname: 'Schema',
             relname: 'Table',
