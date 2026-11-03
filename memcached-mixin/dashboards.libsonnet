@@ -57,16 +57,16 @@ local g = (import 'grafana-builder/grafana.libsonnet');
         )
         .addPanel(
           g.panel('Rejected Connections / sec') +
-          g.queryPanel('sum by(instance) (rate(memcached_connections_rejected_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"}[$__rate_interval]))', '{{instance}}') +
+          g.queryPanel('sum by(instance) (rate(last_over_time(memcached_connections_rejected_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"}[1h])[$__rate_interval:]))', '{{instance}}') +
           {
-            description: 'Connections that memcached rejected at its connection limit. The exporter cannot scrape an instance at the limit, so the rejects show up after the instance recovers.',
+            description: 'Connections that memcached rejected at its connection limit. The exporter cannot scrape an instance at the limit. The rejects counted during that gap show when the exporter can scrape again. The query keeps the last counter value for up to 1h. Rejects from a longer gap do not show.',
           },
         )
         .addPanel(
           g.panel('Unreachable Instances') +
           g.queryPanel('sum by (job) (memcached_up{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"} == bool 0)', '{{job}}') +
           {
-            description: 'Instances with memcached_up 0. memcached rejects the exporter connection at its connection limit, so this includes instances at the limit. Instances that are down or starting also count.',
+            description: 'Instances with memcached_up 0. In the default maxconns_fast mode, memcached rejects the exporter connection at its connection limit. Thus this panel includes instances at the limit. It also includes instances where memcached is down or starting while the exporter runs. An instance with no running exporter has no memcached_up series and does not show here.',
           },
         )
       )
