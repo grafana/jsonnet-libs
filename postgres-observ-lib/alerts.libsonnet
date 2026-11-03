@@ -176,6 +176,7 @@
           },
           {
             alert: 'PostgreSQLReplicationRoleChanged',
+            // No 'for': the expression is true for under 5 minutes after a role change, so a 5m 'for' never fires.
             expr: '(%s) > 0' % signals.cluster.roleChanges.asRuleExpression(),
             keep_firing_for: '5m',
             labels: { severity: config.alertReplicationRoleChangedSeverity },
