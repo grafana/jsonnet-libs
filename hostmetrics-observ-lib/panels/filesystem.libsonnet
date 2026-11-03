@@ -26,13 +26,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.filesystem.filesystemUsageByState.asTimeSeries()
       + commonlib.panels.disk.timeSeries.usage.stylize()
       + common.hideZeros,
-    inodesFree:
-      signals.filesystem.inodesFree.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + common.hideZeros,
-    inodesTotal:
-      signals.filesystem.inodesTotal.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + common.hideZeros,
+    inodesUsagePercent:
+      signals.filesystem.inodesUsagePercent.asTimeSeries()
+      + commonlib.panels.disk.timeSeries.usagePercent.stylize()
+      + common.hideZeros
+      + common.tableLegend,
   },
 }

@@ -100,17 +100,16 @@ local g = import './g.libsonnet';
       panels.filesystem.filesystemUsagePercent,
       panels.filesystem.filesystemAvailable,
       panels.filesystem.filesystemUsageByState,
-      panels.filesystem.inodesFree { gridPos+: { w: 6 } },
-      panels.filesystem.inodesTotal { gridPos+: { w: 6 } },
+      panels.filesystem.inodesUsagePercent,
     ]),
     disksIO: row('Disk I/O', [
       panels.disk.diskIO,
       panels.disk.diskOperations,
       panels.disk.diskIOTime,
       panels.disk.diskWaitTime,
-      panels.disk.diskQueue { gridPos+: { w: 8 } },
-      panels.disk.diskPendingOperations { gridPos+: { w: 8 } },
-      panels.disk.diskMerged { gridPos+: { w: 8 } },
+      panels.disk.diskQueue,
+      panels.disk.diskPendingOperations,
+      panels.disk.diskMerged { gridPos+: { w: 24 } },
     ]),
 
     // Network

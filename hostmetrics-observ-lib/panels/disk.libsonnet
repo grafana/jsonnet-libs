@@ -39,6 +39,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     diskMerged:
       signals.disk.diskMerged.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + common.hideZeros,
+      + common.hideZeros
+      + common.tableLegend,
   },
 }
