@@ -1391,7 +1391,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "\n  topk(25,\n  sum by (job,instance) (\n  rate(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n > 0\nor\n\n  topk(25,\n  sum by (job,instance) (\n  rate(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n > 0",
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and ((sum by (job,instance) (\n  increase(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\nor\nsum by (job,instance) (\n  increase(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)) > 0)\n)\nor\ntopk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and ((sum by (job,instance) (\n  increase(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\nor\nsum by (job,instance) (\n  increase(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)) > 0)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Errors",
@@ -1402,7 +1402,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "\n  topk(25,\n  sum by (job,instance) (\n  rate(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n > 0\nor\n\n  topk(25,\n  sum by (job,instance) (\n  rate(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n > 0",
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and ((sum by (job,instance) (\n  increase(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\nor\nsum by (job,instance) (\n  increase(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)) > 0)\n)\nor\ntopk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and ((sum by (job,instance) (\n  increase(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\nor\nsum by (job,instance) (\n  increase(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)) > 0)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Dropped",

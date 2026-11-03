@@ -543,7 +543,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "\n  (\n  sum by (job,instance,direction) (\n  rate(system_paging_operations_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n > 0\nor\n\n  (\n  sum by (job,instance,direction) (\n  rate(system_paging_operations{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n > 0",
+                  "expr": "(\n  (\n  sum by (job,instance,direction) (\n  rate(system_paging_operations_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (((\n  sum by (job,instance,direction) (\n  increase(system_paging_operations_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\n) / 4096\nor\n(\n  sum by (job,instance,direction) (\n  increase(system_paging_operations{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\n) / 4096) > 0)\nor\n(\n  (\n  sum by (job,instance,direction) (\n  rate(system_paging_operations{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (((\n  sum by (job,instance,direction) (\n  increase(system_paging_operations_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\n) / 4096\nor\n(\n  sum by (job,instance,direction) (\n  increase(system_paging_operations{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\n) / 4096) > 0)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Pages ({{direction}})",
@@ -618,7 +618,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "\n  (\n  sum by (job,instance,type) (\n  rate(system_paging_faults_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n > 0\nor\n\n  (\n  sum by (job,instance,type) (\n  rate(system_paging_faults{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n > 0",
+                  "expr": "(\n  (\n  sum by (job,instance,type) (\n  rate(system_paging_faults_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (((\n  sum by (job,instance,type) (\n  increase(system_paging_faults_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\n) / 4096\nor\n(\n  sum by (job,instance,type) (\n  increase(system_paging_faults{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\n) / 4096) > 0)\nor\n(\n  (\n  sum by (job,instance,type) (\n  rate(system_paging_faults{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (((\n  sum by (job,instance,type) (\n  increase(system_paging_faults_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\n) / 4096\nor\n(\n  sum by (job,instance,type) (\n  increase(system_paging_faults{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\n) / 4096) > 0)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Faults ({{type}})",

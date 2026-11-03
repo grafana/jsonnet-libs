@@ -39,11 +39,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.memory.timeSeries.usageBytes.stylize()
       + common.hideZeros,
     pagingOperations:
-      signals.memory.pagingOperations.withExprWrappersMixin(common.nonZero).asTimeSeries()
+      common.activeInRange(signals.memory.pagingOperations).asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + common.hideZeros,
     pageFaults:
-      signals.memory.pageFaults.withExprWrappersMixin(common.nonZero).asTimeSeries()
+      common.activeInRange(signals.memory.pageFaults).asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + common.hideZeros,
   },
