@@ -278,37 +278,58 @@ Default thresholds and severities can be configured in `config.libsonnet`:
 ```jsonnet
 {
   alertDownSeverity: 'critical',
-  alertHighConnectionUsageThreshold: 0.8,
+  alertHighConnectionUsageThreshold: 80,  // percent of max_connections
   alertHighConnectionUsageSeverity: 'warning',
-  alertLowCacheHitRatioThreshold: 0.9,
+  alertLowCacheHitRatioThreshold: 90,  // percent
   alertLowCacheHitRatioSeverity: 'warning',
-  alertReplicationLagThreshold: 30,
+  alertReplicationLagThreshold: 30,  // seconds
   alertReplicationLagSeverity: 'warning',
-  alertReplicationLagCriticalThreshold: 3600,
+  alertReplicationLagCriticalThreshold: 3600,  // seconds
   alertReplicationLagCriticalSeverity: 'critical',
-  alertDeadlocksThreshold: 1,
+  alertDeadlocksThreshold: 1,  // deadlocks in 5 minutes
   alertDeadlocksSeverity: 'warning',
-  alertLongRunningQueryThreshold: 300,
+  alertLongRunningQueryThreshold: 300,  // seconds
   alertLongRunningQuerySeverity: 'warning',
-  alertBlockedQueriesThreshold: 1,
+  alertBlockedQueriesThreshold: 1,  // queries
   alertBlockedQueriesSeverity: 'warning',
   alertWALArchiveFailureSeverity: 'critical',
-  alertHighDeadTuplesThreshold: 0.1,
+  alertHighDeadTuplesThreshold: 10,  // percent of tuples that are dead
   alertHighDeadTuplesSeverity: 'warning',
-  alertVacuumNotRunningThreshold: 7 * 86400,
-  alertVacuumNotRunningDeadTuples: 10000,
+  alertVacuumNotRunningThreshold: 7,  // days
+  alertVacuumNotRunningDeadTuples: 10000,  // dead tuples
   alertVacuumNotRunningSeverity: 'warning',
-  alertTooManyRollbacksThreshold: 0.1,
+  alertTooManyRollbacksThreshold: 10,  // percent of transactions rolled back
   alertTooManyRollbacksSeverity: 'warning',
-  alertTooManyLocksAcquiredThreshold: 0.2,
+  alertTooManyLocksAcquiredThreshold: 20,  // percent of the lock table size
   alertTooManyLocksAcquiredSeverity: 'warning',
   alertInactiveReplicationSlotSeverity: 'critical',
   alertReplicationRoleChangedSeverity: 'warning',
   alertExporterErrorsSeverity: 'critical',
-  alertHighQpsThreshold: 10000,
+  alertHighQpsThreshold: 10000,  // transactions per second
   alertHighQpsSeverity: 'warning',
 }
 ```
+
+### Upgrading from the `alerts` object
+
+The `alert<Name>Threshold` keys replace the nested `alerts` object. A config that still sets `alerts` builds, but its values are ignored. Move each value to its new key. The units are the same.
+
+| Old key | New key |
+|---------|---------|
+| `alerts.connectionUtilization.warn` | `alertHighConnectionUsageThreshold` |
+| `alerts.cacheHitRatio.warn` | `alertLowCacheHitRatioThreshold` |
+| `alerts.replicationLag.warn` | `alertReplicationLagThreshold` |
+| `alerts.replicationLag.critical` | `alertReplicationLagCriticalThreshold` |
+| `alerts.deadlocks.warn` | `alertDeadlocksThreshold` |
+| `alerts.longRunningQuery.warn` | `alertLongRunningQueryThreshold` |
+| `alerts.blockedQueries.warn` | `alertBlockedQueriesThreshold` |
+| `alerts.deadTupleRatio.warn` | `alertHighDeadTuplesThreshold` |
+| `alerts.vacuumAge.warn` | `alertVacuumNotRunningThreshold` |
+| `alerts.rollbackRatio.warn` | `alertTooManyRollbacksThreshold` |
+| `alerts.lockUtilization.warn` | `alertTooManyLocksAcquiredThreshold` |
+| `alerts.qps.warn` | `alertHighQpsThreshold` |
+
+`alertsFilteringSelector` is deprecated. Alerts use `filteringSelector`.
 
 ## Configuration
 
