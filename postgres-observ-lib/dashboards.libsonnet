@@ -101,8 +101,6 @@ local g = import './g.libsonnet';
             Sections:
             - Health: At-a-glance status
             - Problems: Issues needing attention
-            - Performance: Throughput and resource trends
-            - Maintenance: Vacuum, bloat, and capacity planning
             - Settings: PostgreSQL configuration parameters
           |||
         )
@@ -111,9 +109,34 @@ local g = import './g.libsonnet';
             g.util.grid.wrapPanels([
               this.grafana.rows.health,
               this.grafana.rows.problems,
+              this.grafana.rows.settings,
+            ])
+          ), setPanelIDs=false
+        ),
+
+      'postgres-performance-maintenance.json':
+        g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL instance performance and maintenance')
+        + g.dashboard.withVariables(instanceVariables)
+        + g.dashboard.withTags(this.config.dashboardTags + ['instance'])
+        + g.dashboard.withUid(this.config.uid + '-performance-maintenance')
+        + g.dashboard.withLinks(this.grafana.links.otherDashboards)
+        + g.dashboard.withTimezone(this.config.dashboardTimezone)
+        + g.dashboard.withRefresh(this.config.dashboardRefresh)
+        + g.dashboard.time.withFrom(this.config.dashboardPeriod)
+        + g.dashboard.withDescription(
+          |||
+            PostgreSQL instance trends and maintenance work.
+
+            Sections:
+            - Performance: Throughput and resource trends
+            - Maintenance: Vacuum, bloat, and capacity planning
+          |||
+        )
+        + g.dashboard.withPanels(
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels([
               this.grafana.rows.performance,
               this.grafana.rows.maintenance,
-              this.grafana.rows.settings,
             ])
           ), setPanelIDs=false
         ),

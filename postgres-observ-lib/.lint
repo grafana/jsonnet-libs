@@ -19,6 +19,7 @@ exclusions:
     entries:
       - dashboard: "PostgreSQL cluster overview"
       - dashboard: "PostgreSQL instance overview"
+      - dashboard: "PostgreSQL instance performance and maintenance"
       - dashboard: "PostgreSQL query performance"
 
   target-instance-rule:

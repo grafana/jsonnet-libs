@@ -64,6 +64,7 @@ This will:
 dashboards_out/
 ├── postgres-cluster.json     # Cluster-wide overview dashboard
 ├── postgres-overview.json    # Instance-level overview dashboard
+├── postgres-performance-maintenance.json  # Instance performance and maintenance dashboard
 └── postgres-queries.json     # Query performance dashboard
 
 prometheus_rules_out/
@@ -130,14 +131,22 @@ Single pane of glass for PostgreSQL instance health:
 │ Problems: [Long Queries] [Blocked] [Idle TX] [Archive Fail] │
 │           [Checkpoint] [Lock Util] [Inactive Slots] [Errors]│
 ├──────────────────────────────────────────────────────────────┤
+│ Settings: [PostgreSQL Configuration Parameters Table]       │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### PostgreSQL instance performance and maintenance
+
+Trends and maintenance work for one instance:
+
+```
+┌──────────────────────────────────────────────────────────────┐
 │ Performance: [TPS] [QPS] [Rows] [Connections] [Cache Hit]   │
 │              [Buffers] [Disk Reads] [Temp Bytes] [Checkpoint]│
 ├──────────────────────────────────────────────────────────────┤
 │ Maintenance: [Vacuum Needed] [Oldest Vacuum] [Seq Scans]    │
 │              [Unused Indexes] [DB Size] [WAL Size]          │
 │              [Vacuum Table] [Index Table] [Analyze Status]  │
-├──────────────────────────────────────────────────────────────┤
-│ Settings: [PostgreSQL Configuration Parameters Table]       │
 └──────────────────────────────────────────────────────────────┘
 ```
 
