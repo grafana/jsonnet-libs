@@ -8,7 +8,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Legend sorted by last value descending with stats
     local legendSortedByValue =
       g.panel.timeSeries.options.legend.withDisplayMode('table')
-      + g.panel.timeSeries.options.legend.withPlacement('bottom')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'max', 'mean'])
       + g.panel.timeSeries.options.legend.withSortBy('Last *')
       + g.panel.timeSeries.options.legend.withSortDesc(true),
