@@ -1335,7 +1335,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance,device,direction) (\n  rate(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "(\n  sum by (job,instance,device,direction) (\n  rate(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and ((sum by (job,instance,device,direction) (\n  increase(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\nor\nsum by (job,instance,device,direction) (\n  increase(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)) > 0)\nor\n(\n  sum by (job,instance,device,direction) (\n  rate(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and ((sum by (job,instance,device,direction) (\n  increase(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\nor\nsum by (job,instance,device,direction) (\n  increase(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)) > 0)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: I/O ({{device}} {{direction}})",

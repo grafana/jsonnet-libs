@@ -11,25 +11,25 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + common.drillDown
       + common.hideZeros,
     diskIO:
-      signals.disk.diskIO.asTimeSeries()
+      common.activeInRange(signals.disk.diskIO).asTimeSeries()
       + commonlib.panels.disk.timeSeries.ioBytesPerSec.stylize()
       + common.hideZeros
       + common.tableLegend,
     diskOperations:
-      signals.disk.diskOperations.asTimeSeries()
+      common.activeInRange(signals.disk.diskOperations).asTimeSeries()
       + commonlib.panels.disk.timeSeries.iops.stylize()
       + common.hideZeros
       + common.tableLegend,
     diskIOTime:
-      signals.disk.diskIOTime.asTimeSeries()
+      common.activeInRange(signals.disk.diskIOTime).asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + common.hideZeros,
     diskWaitTime:
-      signals.disk.diskWaitTime.asTimeSeries()
+      common.activeInRange(signals.disk.diskWaitTime).asTimeSeries()
       + commonlib.panels.disk.timeSeries.ioWaitTime.stylize()
       + common.hideZeros,
     diskQueue:
-      signals.disk.diskQueue.asTimeSeries()
+      common.activeInRange(signals.disk.diskQueue).asTimeSeries()
       + commonlib.panels.disk.timeSeries.ioQueue.stylize()
       + common.hideZeros,
     diskPendingOperations:
@@ -37,7 +37,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + common.hideZeros,
     diskMerged:
-      signals.disk.diskMerged.asTimeSeries()
+      common.activeInRange(signals.disk.diskMerged).asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + common.hideZeros
       + common.tableLegend,
