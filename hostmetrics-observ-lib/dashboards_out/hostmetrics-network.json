@@ -127,6 +127,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -203,6 +204,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -292,6 +294,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -303,7 +306,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance,device,direction) (\n  rate(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "\n  sum by (job,instance,device,direction) (\n  rate(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n > 0\nor\n\n  sum by (job,instance,device,direction) (\n  rate(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n > 0",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Errors ({{device}} {{direction}})",
@@ -368,6 +371,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -379,7 +383,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance,device,direction) (\n  rate(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "\n  sum by (job,instance,device,direction) (\n  rate(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n > 0\nor\n\n  sum by (job,instance,device,direction) (\n  rate(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n > 0",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Dropped ({{device}} {{direction}})",
@@ -455,6 +459,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -466,7 +471,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance,state) (\n  system_network_connections{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "\n  sum by (job,instance,state) (\n  system_network_connections{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n > 0",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Connections ({{state}})",

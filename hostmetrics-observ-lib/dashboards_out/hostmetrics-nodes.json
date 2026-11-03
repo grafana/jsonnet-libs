@@ -1398,6 +1398,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -1484,6 +1485,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }

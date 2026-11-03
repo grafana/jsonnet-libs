@@ -10,27 +10,33 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + common.topNote
       + common.drillDown,
     networkErrorsAndDroppedTopk:
-      signals.network.networkErrorsTotal.withTopK(common.fleetTopK).asTimeSeries('Network errors and dropped packets')
-      + signals.network.networkDroppedTotal.withTopK(common.fleetTopK).asPanelMixin()
+      signals.network.networkErrorsTotal.withTopK(common.fleetTopK).withExprWrappersMixin(common.nonZero).asTimeSeries('Network errors and dropped packets')
+      + signals.network.networkDroppedTotal.withTopK(common.fleetTopK).withExprWrappersMixin(common.nonZero).asPanelMixin()
       + commonlib.panels.network.timeSeries.errors.stylize()
       + common.fleetLegend
+      + common.hideZeros
       + common.topNote
       + common.drillDown,
     networkIO:
       signals.network.networkIO.asTimeSeries()
-      + commonlib.panels.network.timeSeries.traffic.stylize(),
+      + commonlib.panels.network.timeSeries.traffic.stylize()
+      + common.hideZeros,
     networkPackets:
       signals.network.networkPackets.asTimeSeries()
-      + commonlib.panels.network.timeSeries.packets.stylize(),
+      + commonlib.panels.network.timeSeries.packets.stylize()
+      + common.hideZeros,
     networkErrors:
-      signals.network.networkErrors.asTimeSeries()
-      + commonlib.panels.network.timeSeries.errors.stylize(),
+      signals.network.networkErrors.withExprWrappersMixin(common.nonZero).asTimeSeries()
+      + commonlib.panels.network.timeSeries.errors.stylize()
+      + common.hideZeros,
     networkDropped:
-      signals.network.networkDropped.asTimeSeries()
-      + commonlib.panels.network.timeSeries.dropped.stylize(),
+      signals.network.networkDropped.withExprWrappersMixin(common.nonZero).asTimeSeries()
+      + commonlib.panels.network.timeSeries.dropped.stylize()
+      + common.hideZeros,
     networkConnections:
-      signals.network.networkConnections.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      signals.network.networkConnections.withExprWrappersMixin(common.nonZero).asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + common.hideZeros,
     conntrack:
       signals.network.conntrackCount.asTimeSeries('NF conntrack')
       + signals.network.conntrackMax.asPanelMixin()

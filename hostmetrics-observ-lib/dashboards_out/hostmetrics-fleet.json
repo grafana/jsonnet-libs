@@ -1373,6 +1373,7 @@
                   "placement": "right"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -1384,7 +1385,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,\n  sum by (job,instance) (\n  rate(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\nor\ntopk(25,\n  sum by (job,instance) (\n  rate(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)",
+                  "expr": "\n  topk(25,\n  sum by (job,instance) (\n  rate(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n > 0\nor\n\n  topk(25,\n  sum by (job,instance) (\n  rate(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n > 0",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Errors",
@@ -1395,7 +1396,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,\n  sum by (job,instance) (\n  rate(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\nor\ntopk(25,\n  sum by (job,instance) (\n  rate(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)",
+                  "expr": "\n  topk(25,\n  sum by (job,instance) (\n  rate(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n > 0\nor\n\n  topk(25,\n  sum by (job,instance) (\n  rate(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n > 0",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Dropped",
