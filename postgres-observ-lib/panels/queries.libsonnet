@@ -110,8 +110,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             'Time 5': true,
             'Time 6': true,
             __name__: true,
-            server_id: true,
-            environment: true,
           } + { [label]: true for label in config.groupLabels + config.instanceLabels },
           renameByName: {
             queryid: 'Query ID',

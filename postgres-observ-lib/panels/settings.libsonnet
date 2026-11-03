@@ -29,9 +29,8 @@ local g = import '../g.libsonnet';
             excludeByName: {
               Time: true,
               __name__: false,
+              // postgres_exporter adds a server label to its built-in metrics, which include pg_settings_*.
               server: true,
-              server_id: true,
-              environment: true,
             } + { [label]: true for label in config.groupLabels + config.instanceLabels },
             indexByName: {
               __name__: 0,
