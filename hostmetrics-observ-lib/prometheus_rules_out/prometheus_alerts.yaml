@@ -5,7 +5,20 @@ groups:
           annotations:
             description: No metrics have been received from {{ $labels.instance }} for more than 5m.
             summary: No host metrics received.
-          expr: max by (job, instance) (max_over_time(system_uptime{job!=""}[30m]) or max_over_time(system_uptime_seconds{job!=""}[30m])) unless max by (job, instance) (max_over_time(system_uptime{job!=""}[5m]) or max_over_time(system_uptime_seconds{job!=""}[5m]))
+          expr: |-
+            max by (job, instance) (max_over_time(
+              system_uptime_seconds{job!=""}
+            [30m])
+            or
+            max_over_time(
+              system_uptime{job!=""}
+            [30m])) unless max by (job, instance) (max_over_time(
+              system_uptime_seconds{job!=""}
+            [5m])
+            or
+            max_over_time(
+              system_uptime{job!=""}
+            [5m]))
           for: 5m
           keep_firing_for: 5m
           labels:
@@ -66,7 +79,7 @@ groups:
             100 * (
               system_filesystem_utilization{mode!="ro", type!="", mountpoint!="", job!=""}
             )) > 97
-          for: 15m
+          for: 30m
           keep_firing_for: 5m
           labels:
             severity: critical

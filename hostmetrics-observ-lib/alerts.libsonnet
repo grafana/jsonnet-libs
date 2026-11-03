@@ -1,4 +1,3 @@
-local common = import './signals/common.libsonnet';
 {
   new(this): {
     local config = this.config,
@@ -6,11 +5,8 @@ local common = import './signals/common.libsonnet';
     local by = std.join(', ', config.groupLabels + config.instanceLabels),
     local instanceLabel = config.instanceLabels[std.length(config.instanceLabels) - 1],
 
-    // Hosts that reported system_uptime within the window, for whichever metric names are configured.
-    local seenWithin(window) = std.join(' or ', [
-      'max_over_time(%s{%s}[%s])' % [common.discoveryMetric[source], config.filteringSelector, window]
-      for source in config.metricsSource
-    ]),
+    // Hosts that reported uptime within the window.
+    local seenWithin(window) = signals.host.uptime.withExprWrappersMixin(['max_over_time(', '[%s])' % window]).asRuleExpression(),
 
     local coreRules = [
       // Availability
@@ -60,7 +56,7 @@ local common = import './signals/common.libsonnet';
       {
         alert: 'HostmetricsDiskSpaceLow',
         expr: '(%s) > %s' % [signals.filesystem.filesystemUsagePercent.asRuleExpression(), config.alertsDiskSpaceLowThresholdCritical],
-        'for': '15m',
+        'for': '30m',
         labels: { severity: 'critical' },
         annotations: {
           summary: 'Filesystem is critically full.',
