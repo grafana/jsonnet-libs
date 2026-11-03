@@ -6,18 +6,20 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     diskIOTopk:
       signals.disk.diskIOTotal.withTopK(common.fleetTopK).asTimeSeries('Disk I/O')
       + commonlib.panels.disk.timeSeries.ioBytesPerSec.stylize()
-      + common.fleetLegend
+      + common.tableLegend
       + common.topNote
       + common.drillDown
       + common.hideZeros,
     diskIO:
       signals.disk.diskIO.asTimeSeries()
       + commonlib.panels.disk.timeSeries.ioBytesPerSec.stylize()
-      + common.hideZeros,
+      + common.hideZeros
+      + common.tableLegend,
     diskOperations:
       signals.disk.diskOperations.asTimeSeries()
       + commonlib.panels.disk.timeSeries.iops.stylize()
-      + common.hideZeros,
+      + common.hideZeros
+      + common.tableLegend,
     diskIOTime:
       signals.disk.diskIOTime.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()

@@ -20,7 +20,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     memoryUsageByState:
       signals.memory.memoryUsageByState.asTimeSeries()
       + commonlib.panels.memory.timeSeries.usageBytes.stylize()
-      + common.hideZeros,
+      + common.hideZeros
+      + common.tableLegend,
     memoryAvailable:
       signals.memory.memoryAvailable.asTimeSeries()
       + commonlib.panels.memory.timeSeries.usageBytes.stylize()

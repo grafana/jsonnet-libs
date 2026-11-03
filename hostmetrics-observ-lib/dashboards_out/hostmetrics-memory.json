@@ -229,8 +229,13 @@
             "id": 3,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "hideZeros": true,

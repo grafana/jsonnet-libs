@@ -16,7 +16,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     filesystemUsagePercent:
       signals.filesystem.filesystemUsagePercent.asTimeSeries()
       + commonlib.panels.disk.timeSeries.usagePercent.stylize()
-      + common.hideZeros,
+      + common.hideZeros
+      + common.tableLegend,
     filesystemAvailable:
       signals.filesystem.filesystemAvailable.asTimeSeries()
       + commonlib.panels.disk.timeSeries.available.stylize()

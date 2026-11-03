@@ -330,8 +330,13 @@
             "id": 4,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "hideZeros": true,
@@ -667,8 +672,13 @@
             "id": 8,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "hideZeros": true,
@@ -683,7 +693,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance,cpu) (\n  system_cpu_frequency_hertz{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance,cpu) (\n  system_cpu_frequency{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "(\n  avg by (job,instance,cpu) (\n  system_cpu_frequency_hertz{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n) and ((max_over_time((avg by (job,instance,cpu) (\n  system_cpu_frequency_hertz{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance,cpu) (\n  system_cpu_frequency{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n))[$__range:])) > 0)\nor\n(\n  avg by (job,instance,cpu) (\n  system_cpu_frequency{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n) and ((max_over_time((avg by (job,instance,cpu) (\n  system_cpu_frequency_hertz{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance,cpu) (\n  system_cpu_frequency{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n))[$__range:])) > 0)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Frequency ({{cpu}})",

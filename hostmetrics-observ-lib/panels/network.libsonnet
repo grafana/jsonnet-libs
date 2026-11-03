@@ -6,7 +6,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     networkIOTopk:
       signals.network.networkIOTotal.withTopK(common.fleetTopK).asTimeSeries('Network traffic')
       + commonlib.panels.network.timeSeries.traffic.stylize()
-      + common.fleetLegend
+      + common.tableLegend
       + common.topNote
       + common.drillDown
       + common.hideZeros,
@@ -14,18 +14,20 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       common.activeInRange(signals.network.networkErrorsTotal).withTopK(common.fleetTopK).asTimeSeries('Network errors and dropped packets')
       + common.activeInRange(signals.network.networkDroppedTotal).withTopK(common.fleetTopK).asPanelMixin()
       + commonlib.panels.network.timeSeries.errors.stylize()
-      + common.fleetLegend
+      + common.tableLegend
       + common.hideZeros
       + common.topNote
       + common.drillDown,
     networkIO:
       common.activeInRange(signals.network.networkIO).asTimeSeries()
       + commonlib.panels.network.timeSeries.traffic.stylize()
-      + common.hideZeros,
+      + common.hideZeros
+      + common.tableLegend,
     networkPackets:
       common.activeInRange(signals.network.networkPackets).asTimeSeries()
       + commonlib.panels.network.timeSeries.packets.stylize()
-      + common.hideZeros,
+      + common.hideZeros
+      + common.tableLegend,
     networkErrors:
       common.activeInRange(signals.network.networkErrors).asTimeSeries()
       + commonlib.panels.network.timeSeries.errors.stylize()

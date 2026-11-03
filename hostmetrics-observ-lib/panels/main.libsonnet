@@ -12,7 +12,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       drillDown: commonlib.panels.generic.timeSeries.base.withDataLink(this.config.instanceLabels, overviewUid),
       fleetTopK: fleetTopK,
       topNote: { description: 'Top %d. ' % fleetTopK + super.description },
-      fleetLegend:
+      tableLegend:
         g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['mean', 'max', 'lastNotNull']),

@@ -12,7 +12,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     loadAverageTopk:
       signals.cpu.loadAverage1m.withTopK(common.fleetTopK).asTimeSeries('Load average 1m')
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + common.fleetLegend
+      + common.tableLegend
       + common.topNote
       + common.drillDown
       + common.hideZeros,
@@ -27,15 +27,17 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     cpuUsagePerCore:
       signals.cpu.cpuUsagePerCore.asTimeSeries()
       + commonlib.panels.cpu.timeSeries.utilization.stylize()
-      + common.hideZeros,
+      + common.hideZeros
+      + common.tableLegend,
     cpuTimeByMode:
       common.activeInRange(signals.cpu.cpuTimeByMode).asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + common.hideZeros,
     cpuFrequency:
-      signals.cpu.cpuFrequency.asTimeSeries()
+      common.activeInRange(signals.cpu.cpuFrequency).asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + common.hideZeros,
+      + common.hideZeros
+      + common.tableLegend,
     loadAverage:
       signals.cpu.loadAverage1m.asTimeSeries('Load average')
       + signals.cpu.loadAverage5m.asPanelMixin()

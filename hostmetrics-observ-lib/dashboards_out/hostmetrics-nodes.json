@@ -1226,8 +1226,13 @@
             "id": 20,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "hideZeros": true,
@@ -1309,8 +1314,13 @@
             "id": 21,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "hideZeros": true,
@@ -1399,8 +1409,13 @@
             "id": 23,
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right"
                },
                "tooltip": {
                   "hideZeros": true,
