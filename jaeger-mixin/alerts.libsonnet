@@ -54,7 +54,13 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
           },
         }, {
           alert: 'JaegerAgentSpansDropped',
-          expr: percentErrsWithTotal('jaeger_agent_reporter_batches_failures_total', 'jaeger_agent_reporter_batches_submitted_total') + '> 1',
+          expr: |||
+            100 * sum by (instance, job, namespace) (rate(jaeger_agent_reporter_spans_failures_total[1m]))
+            / (
+              sum by (instance, job, namespace) (rate(jaeger_agent_reporter_spans_failures_total[1m]))
+              + sum by (instance, job, namespace) (rate(jaeger_agent_reporter_spans_submitted_total[1m]))
+            ) > 1
+          |||,
           'for': '15m',
           labels: {
             severity: 'warning',
@@ -140,7 +146,7 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
           annotations: {
             summary: 'Jaeger queries are failing.',
             description: |||
-              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
+              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors.
             |||,
           },
         }, {
@@ -153,7 +159,7 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
           annotations: {
             summary: 'Jaeger writes to Cassandra are failing.',
             description: |||
-              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
+              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors.
             |||,
           },
         }, {
@@ -166,7 +172,7 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
           annotations: {
             summary: 'Jaeger reads from Cassandra are failing.',
             description: |||
-              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
+              {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors.
             |||,
           },
         }],
