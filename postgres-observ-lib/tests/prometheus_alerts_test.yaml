@@ -155,9 +155,13 @@ tests:
   interval: 1m
   input_series:
   - series: pg_stat_user_tables_n_dead_tup{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
-    values: 50x40
+    values: 20000x40
   - series: pg_stat_user_tables_n_live_tup{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="orders"}
-    values: 149x40
+    values: 59999x40
+  - series: pg_stat_user_tables_n_dead_tup{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="settings"}
+    values: 1x40
+  - series: pg_stat_user_tables_n_live_tup{job="integrations/postgres_exporter",instance="pg-1",datname="app",schemaname="public",relname="settings"}
+    values: 1x40
   alert_rule_test:
   - eval_time: 35m
     alertname: PostgreSQLHighDeadTuples

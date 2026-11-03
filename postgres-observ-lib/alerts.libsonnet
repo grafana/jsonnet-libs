@@ -104,7 +104,12 @@
           // Maintenance Alerts
           {
             alert: 'PostgreSQLHighDeadTuples',
-            expr: '(%s) > %g' % [signals.maintenance.deadTupleRatio.asRuleExpression(), config.alertHighDeadTuplesThreshold / 100],
+            expr: '(%s) > %g and pg_stat_user_tables_n_dead_tup{%s} > %s' % [
+              signals.maintenance.deadTupleRatio.asRuleExpression(),
+              config.alertHighDeadTuplesThreshold / 100,
+              config.filteringSelector,
+              config.alertHighDeadTuplesMinDeadTuples,
+            ],
             'for': '30m',
             keep_firing_for: '5m',
             labels: { severity: config.alertHighDeadTuplesSeverity },

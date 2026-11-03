@@ -41,6 +41,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   alertBlockedQueriesSeverity: 'warning',
   alertWALArchiveFailureSeverity: 'critical',
   alertHighDeadTuplesThreshold: 10,  // percent of tuples that are dead
+  alertHighDeadTuplesMinDeadTuples: 10000,  // dead tuples
   alertHighDeadTuplesSeverity: 'warning',
   alertVacuumNotRunningThreshold: 7,  // days
   alertVacuumNotRunningDeadTuples: 10000,  // dead tuples

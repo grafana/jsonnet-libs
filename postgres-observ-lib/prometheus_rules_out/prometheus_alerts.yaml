@@ -95,7 +95,7 @@ groups:
               /
               (pg_stat_user_tables_n_live_tup{} + pg_stat_user_tables_n_dead_tup{} + 1)
             )
-            ) > 0.1
+            ) > 0.1 and pg_stat_user_tables_n_dead_tup{} > 10000
           for: 30m
           keep_firing_for: 5m
           labels:
