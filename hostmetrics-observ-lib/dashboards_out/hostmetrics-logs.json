@@ -194,6 +194,7 @@
             "maxDataPoints": 100,
             "options": {
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }

@@ -44,7 +44,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           for p in super.panels
         ],
       };
-    // Hidden, so links keep them and the annotations, which filter on them, work.
+    // Group variables the logs lack, added hidden to the logs dashboard for its links and annotations.
     local metricsGroupVars = [
       v { hide: 2 }
       for v in vars.multiInstance
@@ -133,6 +133,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
                  g.panel.logs.options.withEnableLogDetails(true)
                  + g.panel.logs.options.withShowTime(false)
                  + g.panel.logs.options.withWrapLogMessage(false),
+               logsVolume+: { options+: { tooltip+: { hideZeros: true } } },
              },
              variables+: {
                // Keep the Prometheus data source for the status panels.

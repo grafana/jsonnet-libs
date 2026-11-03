@@ -7,25 +7,31 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.filesystem.filesystemUsagePercent.withTopK(common.fleetTopK).asTimeSeries('Disk space usage')
       + commonlib.panels.generic.timeSeries.topkPercentage.stylize()
       + common.topNote
-      + common.drillDown,
+      + common.drillDown
+      + common.hideZeros,
     rootFilesystemSize:
       signals.filesystem.rootFilesystemSize.asStat()
       + commonlib.panels.disk.stat.total.stylize()
       + common.capacityTextSize,
     filesystemUsagePercent:
       signals.filesystem.filesystemUsagePercent.asTimeSeries()
-      + commonlib.panels.disk.timeSeries.usagePercent.stylize(),
+      + commonlib.panels.disk.timeSeries.usagePercent.stylize()
+      + common.hideZeros,
     filesystemAvailable:
       signals.filesystem.filesystemAvailable.asTimeSeries()
-      + commonlib.panels.disk.timeSeries.available.stylize(),
+      + commonlib.panels.disk.timeSeries.available.stylize()
+      + common.hideZeros,
     filesystemUsageByState:
       signals.filesystem.filesystemUsageByState.asTimeSeries()
-      + commonlib.panels.disk.timeSeries.usage.stylize(),
+      + commonlib.panels.disk.timeSeries.usage.stylize()
+      + common.hideZeros,
     inodesFree:
       signals.filesystem.inodesFree.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + common.hideZeros,
     inodesTotal:
       signals.filesystem.inodesTotal.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + common.hideZeros,
   },
 }

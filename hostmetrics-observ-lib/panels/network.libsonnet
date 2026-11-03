@@ -8,7 +8,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.network.timeSeries.traffic.stylize()
       + common.fleetLegend
       + common.topNote
-      + common.drillDown,
+      + common.drillDown
+      + common.hideZeros,
     networkErrorsAndDroppedTopk:
       signals.network.networkErrorsTotal.withTopK(common.fleetTopK).withExprWrappersMixin(common.nonZero).asTimeSeries('Network errors and dropped packets')
       + signals.network.networkDroppedTotal.withTopK(common.fleetTopK).withExprWrappersMixin(common.nonZero).asPanelMixin()
@@ -40,6 +41,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     conntrack:
       signals.network.conntrackCount.asTimeSeries('NF conntrack')
       + signals.network.conntrackMax.asPanelMixin()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + common.hideZeros,
   },
 }

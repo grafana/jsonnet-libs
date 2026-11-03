@@ -8,27 +8,35 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.disk.timeSeries.ioBytesPerSec.stylize()
       + common.fleetLegend
       + common.topNote
-      + common.drillDown,
+      + common.drillDown
+      + common.hideZeros,
     diskIO:
       signals.disk.diskIO.asTimeSeries()
-      + commonlib.panels.disk.timeSeries.ioBytesPerSec.stylize(),
+      + commonlib.panels.disk.timeSeries.ioBytesPerSec.stylize()
+      + common.hideZeros,
     diskOperations:
       signals.disk.diskOperations.asTimeSeries()
-      + commonlib.panels.disk.timeSeries.iops.stylize(),
+      + commonlib.panels.disk.timeSeries.iops.stylize()
+      + common.hideZeros,
     diskIOTime:
       signals.disk.diskIOTime.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + common.hideZeros,
     diskWaitTime:
       signals.disk.diskWaitTime.asTimeSeries()
-      + commonlib.panels.disk.timeSeries.ioWaitTime.stylize(),
+      + commonlib.panels.disk.timeSeries.ioWaitTime.stylize()
+      + common.hideZeros,
     diskQueue:
       signals.disk.diskQueue.asTimeSeries()
-      + commonlib.panels.disk.timeSeries.ioQueue.stylize(),
+      + commonlib.panels.disk.timeSeries.ioQueue.stylize()
+      + common.hideZeros,
     diskPendingOperations:
       signals.disk.diskPendingOperations.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + common.hideZeros,
     diskMerged:
       signals.disk.diskMerged.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + common.hideZeros,
   },
 }

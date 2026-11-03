@@ -546,6 +546,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }

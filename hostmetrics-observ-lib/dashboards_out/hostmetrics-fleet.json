@@ -786,6 +786,7 @@
                   "placement": "right"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -871,6 +872,7 @@
                   "placement": "right"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -976,6 +978,7 @@
                   "placement": "right"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -1082,6 +1085,7 @@
                   "placement": "right"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -1187,6 +1191,7 @@
                   "placement": "right"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -1274,6 +1279,7 @@
                   "placement": "right"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
