@@ -4,6 +4,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 function(this)
   {
+    local instanceLabel = this.instanceLabels[std.length(this.instanceLabels) - 1],
+    local instanceLabels = std.join(',', this.instanceLabels),
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
@@ -56,8 +58,8 @@ function(this)
         unit: 'percent',
         sources: {
           otelcol: {
-            legendCustomTemplate: '{{ service_instance_id }} saturation',
-            expr: '(max(otelcol_exporter_queue_size{%(queriesSelector)s} / otelcol_exporter_queue_capacity{%(queriesSelector)s}) by (service_instance_id)) * 100',
+            legendCustomTemplate: '{{ ' + instanceLabel + ' }} saturation',
+            expr: '(max(otelcol_exporter_queue_size{%(queriesSelector)s} / otelcol_exporter_queue_capacity{%(queriesSelector)s}) by (' + instanceLabels + ')) * 100',
           },
         },
       },

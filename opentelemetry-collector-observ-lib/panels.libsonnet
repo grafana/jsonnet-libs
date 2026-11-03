@@ -91,7 +91,8 @@ local incomingByProcessorStyle =
   + g.panel.timeSeries.options.withLegend({ calcs: [], displayMode: 'table', placement: 'right' });
 
 {
-  new(signals, process):: {
+  new(signals, process, config):: {
+    local instanceLabel = config.instanceLabels[std.length(config.instanceLabels) - 1],
     // Without any data, this panel shows an error because the `joinByField` transforms fails on empty data
     // There is no way to work around this as of grafana 12.4.2
     fleetOverview:
@@ -122,8 +123,8 @@ local incomingByProcessorStyle =
       + g.panel.table.queryOptions.withTransformationsMixin([
         g.panel.table.queryOptions.transformation.withId('joinByField')
         + g.panel.table.queryOptions.transformation.withOptions({
-          byField: 'service_instance_id',
-          mode: 'inner',
+          byField: instanceLabel,
+          mode: 'outer',
         }),
         g.panel.table.queryOptions.transformation.withId('renameByRegex')
         + g.panel.table.queryOptions.transformation.withOptions({
@@ -135,12 +136,12 @@ local incomingByProcessorStyle =
           excludeByName: {},
           indexByName: {},
           renameByName: {
-            service_instance_id: 'Instance ID',
+            [instanceLabel]: 'Instance ID',
             service_name: 'Name',
             service_version: 'Version',
           },
           includeByName: {
-            service_instance_id: true,
+            [instanceLabel]: true,
             service_name: true,
             service_version: true,
             Uptime: true,
