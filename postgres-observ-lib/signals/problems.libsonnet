@@ -136,30 +136,30 @@ function(this)
       inactiveReplicationSlots: {
         name: 'Inactive replication slots',
         description: 'Number of inactive replication slots. Can cause WAL to accumulate.',
-        type: 'gauge',
+        type: 'raw',
         unit: 'short',
         sources: {
           postgres_exporter: {
-            // Count replicas not in streaming state as a proxy for inactive slots
-            // Returns 0 if no non-streaming slots exist
+            // Raw: counts the slots at 0 and falls back to 0 when every slot is active.
             expr: |||
-              count by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s, state!="streaming"})
+              count by (%(agg)s) (pg_replication_slots_active{%(queriesSelector)s} == 0)
               or
-              (0 * group by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}))
+              (0 * group by (%(agg)s) (pg_replication_slots_active{%(queriesSelector)s}))
             |||,
             legendCustomTemplate: ' Inactive replication slots',
           },
         },
       },
 
-      nonStreamingReplicaLag: {
-        name: 'Non-streaming replica lag',
-        description: 'Bytes a replica that is not streaming is behind the primary.',
+      replicationSlotActive: {
+        name: 'Replication slot active',
+        description: 'Whether each replication slot is being streamed (1) or not (0).',
         type: 'gauge',
-        unit: 'decbytes',
+        unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: 'pg_stat_replication_pg_wal_lsn_diff{state!="streaming", %(queriesSelector)s}',
+            expr: 'pg_replication_slots_active{%(queriesSelector)s}',
+            aggKeepLabels: ['slot_name'],
           },
         },
       },
