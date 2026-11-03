@@ -1,0 +1,106 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: falling connections stay silent
+  interval: 1m
+  input_series:
+  - series: openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor",instance="ldap-1",job="integrations/openldap"}
+    values: 90-1x30
+  alert_rule_test:
+  - eval_time: 12m
+    alertname: OpenLDAPConnectionSpike
+    exp_alerts: []
+- name: sustained growth of 25 connections per minute fires
+  interval: 1m
+  input_series:
+  - series: openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor",instance="ldap-2",job="integrations/openldap"}
+    values: 20x9 45+25x14 395x10
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: OpenLDAPConnectionSpike
+    exp_alerts:
+    - exp_labels:
+        severity: warning
+        dn: cn=Current,cn=Connections,cn=Monitor
+        instance: ldap-2
+        job: integrations/openldap
+      exp_annotations:
+        description: OpenLDAP connections on instance ldap-2 have a net increase of 125 over the last 5 minutes,
+          which is above the threshold of 100.
+        summary: A sudden spike in OpenLDAP connections indicates potential high usage or security issues.
+- name: control, a steady 50 connections stays silent
+  interval: 1m
+  input_series:
+  - series: openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor",instance="ldap-3",job="integrations/openldap"}
+    values: 50x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: OpenLDAPConnectionSpike
+    exp_alerts: []
+- name: missing series do not invent an alert
+  interval: 1m
+  input_series: []
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: OpenLDAPConnectionSpike
+    exp_alerts: []
+- name: net growth remains pending before five minutes
+  interval: 1m
+  input_series:
+  - series: openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor",instance="ldap-2",job="integrations/openldap"}
+    values: 20x9 45+25x14 395x10
+  alert_rule_test:
+  - eval_time: 16m
+    alertname: OpenLDAPConnectionSpike
+    exp_alerts: []
+- name: brief connection jump is not sustained growth
+  interval: 1m
+  input_series:
+  - series: openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor",instance="ldap-brief"}
+    values: 20x9 220x20
+  alert_rule_test:
+  - eval_time: 14m
+    alertname: OpenLDAPConnectionSpike
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: OpenLDAPConnectionSpike
+    exp_alerts: []
+- name: exactly one hundred net connections stays silent
+  interval: 1m
+  input_series:
+  - series: openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor",instance="ldap-brief"}
+    values: 20+20x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: OpenLDAPConnectionSpike
+    exp_alerts: []
+- name: total connections DN is not current connections
+  interval: 1m
+  input_series:
+  - series: openldap_monitor_counter_object{dn="cn=Total,cn=Connections,cn=Monitor",instance="ldap-total"}
+    values: 20+25x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: OpenLDAPConnectionSpike
+    exp_alerts: []
+- name: rising target does not merge with a falling target
+  interval: 1m
+  input_series:
+  - series: openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor",instance="ldap-2",job="integrations/openldap"}
+    values: 20x9 45+25x14 395x10
+  - series: openldap_monitor_counter_object{dn="cn=Current,cn=Connections,cn=Monitor",instance="ldap-1",job="integrations/openldap"}
+    values: 90-1x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: OpenLDAPConnectionSpike
+    exp_alerts:
+    - exp_labels:
+        severity: warning
+        dn: cn=Current,cn=Connections,cn=Monitor
+        instance: ldap-2
+        job: integrations/openldap
+      exp_annotations:
+        description: OpenLDAP connections on instance ldap-2 have a net increase of 125 over the last 5 minutes,
+          which is above the threshold of 100.
+        summary: A sudden spike in OpenLDAP connections indicates potential high usage or security issues.

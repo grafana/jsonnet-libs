@@ -4,6 +4,8 @@
     local signals = this.signals,
     local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet',
     local instanceLabel = xtd.array.slice(config.instanceLabels, -1)[0],
+    // query() is unsupported by Grafana-managed alerting. Query-based descriptions are opt-in via alertsQueryTemplateEnabled.
+    local queryDescription(text) = if config.alertsQueryTemplateEnabled then text else '',
     local ADAlerts = [
       {
         alert: 'WindowsActiveDirectoryHighPendingReplicationOperations',
@@ -122,17 +124,23 @@
                    annotations: {
                      summary: 'High memory usage on Windows host.',
                      description: |||
-                       Memory usage on host {{ $labels.%(instanceLabel)s }} is critically high, with {{ printf "%%.2f" $value }}%% of total memory used.
-                       This exceeds the threshold of %(threshold)s%%.
-                       Current memory free: {{ with printf `%(memoryFree)s` | query | first | value | humanize }}{{ . }}{{ end }}.
-                       Total memory: {{ with printf `%(memoryTotal)s` | query | first | value | humanize }}{{ . }}{{ end }}.
-                       Consider investigating processes consuming high memory or increasing available memory.
-                     ||| % {
-                       instanceLabel: instanceLabel,
-                       threshold: config.alertMemoryUsageThresholdCritical,
-                       memoryFree: signals.memory.memoryFree.asRuleExpression(),
-                       memoryTotal: signals.memory.memoryTotal.asRuleExpression(),
-                     },
+                                    Memory usage on host {{ $labels.%(instanceLabel)s }} is critically high, with {{ printf "%%.2f" $value }}%% of total memory used.
+                                    This exceeds the threshold of %(threshold)s%%.
+                                  ||| % {
+                                    instanceLabel: instanceLabel,
+                                    threshold: config.alertMemoryUsageThresholdCritical,
+                                  }
+                                  + queryDescription(|||
+                                    Current memory free: {{ with printf `%(memoryFree)s` $labels.%(instanceLabel)s | query | first | value | humanize }}{{ . }}{{ end }}.
+                                    Total memory: {{ with printf `%(memoryTotal)s` $labels.%(instanceLabel)s | query | first | value | humanize }}{{ . }}{{ end }}.
+                                  ||| % {
+                                    instanceLabel: instanceLabel,
+                                    memoryFree: signals.memory.memoryFree.withFilteringSelectorMixin(instanceLabel + '="%[1]s"').asRuleExpression(),
+                                    memoryTotal: signals.memory.memoryTotal.withFilteringSelectorMixin(instanceLabel + '="%[1]s"').asRuleExpression(),
+                                  })
+                                  + |||
+                                    Consider investigating processes consuming high memory or increasing available memory.
+                                  |||,
                    },
                  },
                  {
@@ -151,12 +159,16 @@
                    annotations: {
                      summary: 'Disk is almost full on Windows host.',
                      description: |||
-                       Disk space on volume {{ $labels.volume }} of host {{ $labels.%s }} is critically low, with {{ printf "%%.2f" $value }}%% of total space used.
-                       This exceeds the threshold of %s%%.
-                       Current disk free: {{ with printf `windows_logical_disk_free_bytes{volume="%%s", %s}` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
-                       Total disk size: {{ with printf `windows_logical_disk_size_bytes{volume="%%s", %s}` $labels.volume | query | first | value | humanize }}{{ . }}{{ end }}.
-                       Consider cleaning up unnecessary files or increasing disk capacity.
-                     ||| % [instanceLabel, config.alertDiskUsageThresholdCritical, config.filteringSelector, config.filteringSelector],
+                                    Disk space on volume {{ $labels.volume }} of host {{ $labels.%s }} is critically low, with {{ printf "%%.2f" $value }}%% of total space used.
+                                    This exceeds the threshold of %s%%.
+                                  ||| % [instanceLabel, config.alertDiskUsageThresholdCritical]
+                                  + queryDescription(|||
+                                    Current disk free: {{ with printf `windows_logical_disk_free_bytes{volume="%%s", %(instanceLabel)s="%%s", %(filteringSelector)s}` $labels.volume $labels.%(instanceLabel)s | query | first | value | humanize }}{{ . }}{{ end }}.
+                                    Total disk size: {{ with printf `windows_logical_disk_size_bytes{volume="%%s", %(instanceLabel)s="%%s", %(filteringSelector)s}` $labels.volume $labels.%(instanceLabel)s | query | first | value | humanize }}{{ . }}{{ end }}.
+                                  ||| % { instanceLabel: instanceLabel, filteringSelector: config.filteringSelector })
+                                  + |||
+                                    Consider cleaning up unnecessary files or increasing disk capacity.
+                                  |||,
                    },
                  },
                  {

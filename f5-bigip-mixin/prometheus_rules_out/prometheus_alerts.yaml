@@ -30,10 +30,10 @@ groups:
             severity: warning
         - alert: BigIPHighConnectionQueueDepth
           annotations:
-            description: '{{ printf "%.0f" $value }} percent increase in connection queue depth on node {{$labels.pool}}, which is above the threshold of 75.'
+            description: '{{ printf "%.0f" $value }} percent increase in average connection queue depth on pool {{$labels.pool}}, which is above the threshold of 75.'
             summary: A sudden spike or sustained high queue depth may indicate a bottleneck in handling incoming connections.
           expr: |
-            max without(instance, job) (100 * rate(bigip_pool_connq_depth{}[5m])) / clamp_min(rate(bigip_pool_connq_depth{}[50m] offset 10m), 1) > 75
+            max without(instance, job) (100 * (avg_over_time(bigip_pool_connq_depth{}[5m]) / clamp_min(avg_over_time(bigip_pool_connq_depth{}[50m] offset 10m), 1) - 1)) > 75
           for: 5m
           labels:
             severity: warning

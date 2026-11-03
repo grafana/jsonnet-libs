@@ -14,6 +14,9 @@ and the following alerts:
 - OpenLDAPDialFailureRateIncrease
 - OpenLDAPBindFailureRateIncrease
 
+## Connection spike alert semantics
+`OpenLDAPConnectionSpike` measures the net increase in currently open connections over five minutes, not connection arrivals or the current connection count. The default threshold is 100 and the condition must persist for five minutes, so brief jumps can clear without firing. Prometheus extrapolates `delta()` to the window boundaries, so the reported change can be fractional. The `cn=Total` connection counter would describe arrivals and is not used by this alert.
+
 ## OpenLDAP  Overview
 
 The OpenLDAP cluster overview dashboard provides details on connections, waiters, network connectivity, PDU processes, authentication attempts, operations and threads metrics.

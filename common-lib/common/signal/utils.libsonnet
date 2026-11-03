@@ -21,13 +21,14 @@
 
     expr: if type == 'counter' then
       (
-        // for increase/delta/idelta - must be $__interval with negative offset for proper Total calculations, else use default from init function.
+        // for dashboards, increase/delta/idelta - must be $__interval with negative offset for proper Total calculations, else use default from init function.
         // if $__range is used in increase/delta/idelta then offset must also be $__range (for table aggregations).
+        // for alert/recording rules the negative offset must NOT be used: rules are evaluated at "now", so the shifted
+        // window (t, t+interval] contains no samples and the function always returns 0. Use a plain trailing range instead.
         local _interval =
-          if (rangeFunction == 'idelta' || rangeFunction == 'delta' || rangeFunction == 'increase') then
+          if !alertRule && (rangeFunction == 'idelta' || rangeFunction == 'delta' || rangeFunction == 'increase') then
             (
-              if alertRule then '[%(interval)s:] offset -%(interval)s'
-              else if interval == '$__range' then '[$__range:] offset -$__interval'
+              if interval == '$__range' then '[$__range:] offset -$__interval'
               else '[$__interval:] offset -$__interval'
             )
           else '[%(interval)s]';

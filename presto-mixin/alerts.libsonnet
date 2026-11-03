@@ -76,7 +76,7 @@
             {
               alert: 'PrestoHighBlockedNodes',
               expr: |||
-                increase(presto_ClusterMemoryPool_general_BlockedNodes[5m]) > %(alertsHighBlockedNodesCount)s
+                delta(presto_ClusterMemoryPool_general_BlockedNodes[5m]) > %(alertsHighBlockedNodesCount)s
               ||| % this.config,
               'for': '5m',
               labels: {
@@ -86,7 +86,7 @@
                 summary: 'The amount of nodes that are blocked due to memory restrictions is increasing. Blocked nodes can cause performance degradation and resource starvation.',
                 description:
                   (
-                    'The number of blocked nodes on {{$labels.instance}} is {{ printf "%%.0f" $value }} which is greater than the threshold of %(alertsHighBlockedNodesCount)s'
+                    'The net increase in blocked nodes on {{$labels.instance}} over the last 5 minutes is {{ printf "%%.0f" $value }} which is greater than the threshold of %(alertsHighBlockedNodesCount)s'
                   ) % this.config,
               },
             },

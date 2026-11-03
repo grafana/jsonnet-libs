@@ -63,7 +63,7 @@
           {
             alert: 'BigIPHighConnectionQueueDepth',
             expr: |||
-              max without(instance, job) (100 * rate(bigip_pool_connq_depth{%(filteringSelector)s}[5m])) / clamp_min(rate(bigip_pool_connq_depth{%(filteringSelector)s}[50m] offset 10m), 1) > %(alertsCriticalHighConnectionQueueDepth)s
+              max without(instance, job) (100 * (avg_over_time(bigip_pool_connq_depth{%(filteringSelector)s}[5m]) / clamp_min(avg_over_time(bigip_pool_connq_depth{%(filteringSelector)s}[50m] offset 10m), 1) - 1)) > %(alertsCriticalHighConnectionQueueDepth)s
             ||| % config,
             'for': '5m',
             labels: {
@@ -73,7 +73,7 @@
               summary: 'A sudden spike or sustained high queue depth may indicate a bottleneck in handling incoming connections.',
               description:
                 (
-                  '{{ printf "%%.0f" $value }} percent increase in connection queue depth on node {{$labels.pool}}, ' +
+                  '{{ printf "%%.0f" $value }} percent increase in average connection queue depth on pool {{$labels.pool}}, ' +
                   'which is above the threshold of %(alertsCriticalHighConnectionQueueDepth)s.'
                 ) % config,
             },

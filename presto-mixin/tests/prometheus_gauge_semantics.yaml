@@ -1,0 +1,97 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: falling count stays silent
+  interval: 1m
+  input_series:
+  - series: presto_ClusterMemoryPool_general_BlockedNodes{instance="presto-1",job="integrations/presto"}
+    values: 5x9 4 4 3 3 2 2 1 1 0x20
+  alert_rule_test:
+  - eval_time: 17m
+    alertname: PrestoHighBlockedNodes
+    exp_alerts: []
+- name: growing count fires
+  interval: 1m
+  input_series:
+  - series: presto_ClusterMemoryPool_general_BlockedNodes{instance="presto-2",job="integrations/presto"}
+    values: 0x9 1 1 2 2 3 3 4 4 5x20
+  alert_rule_test:
+  - eval_time: 17m
+    alertname: PrestoHighBlockedNodes
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        instance: presto-2
+        job: integrations/presto
+      exp_annotations:
+        description: The net increase in blocked nodes on presto-2 over the last 5 minutes is 2 which is greater
+          than the threshold of 0
+        summary: The amount of nodes that are blocked due to memory restrictions is increasing. Blocked nodes can
+          cause performance degradation and resource starvation.
+- name: control, constant count stays silent
+  interval: 1m
+  input_series:
+  - series: presto_ClusterMemoryPool_general_BlockedNodes{instance="presto-3",job="integrations/presto"}
+    values: 2x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: PrestoHighBlockedNodes
+    exp_alerts: []
+- name: missing series do not invent an alert
+  interval: 1m
+  input_series: []
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: PrestoHighBlockedNodes
+    exp_alerts: []
+- name: growth remains pending before five minutes
+  interval: 1m
+  input_series:
+  - series: presto_ClusterMemoryPool_general_BlockedNodes{instance="presto-2",job="integrations/presto"}
+    values: 0x9 1 1 2 2 3 3 4 4 5x20
+  alert_rule_test:
+  - eval_time: 13m
+    alertname: PrestoHighBlockedNodes
+    exp_alerts: []
+- name: brief rise does not survive the pending period
+  interval: 1m
+  input_series:
+  - series: presto_ClusterMemoryPool_general_BlockedNodes{instance="presto-brief"}
+    values: 0x9 5x20
+  alert_rule_test:
+  - eval_time: 14m
+    alertname: PrestoHighBlockedNodes
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: PrestoHighBlockedNodes
+    exp_alerts: []
+- name: stale growing series clears the alert
+  interval: 1m
+  input_series:
+  - series: presto_ClusterMemoryPool_general_BlockedNodes{instance="presto-stale"}
+    values: 0+1x15 stale _x15
+  alert_rule_test:
+  - eval_time: 25m
+    alertname: PrestoHighBlockedNodes
+    exp_alerts: []
+- name: rising target does not merge with a falling target
+  interval: 1m
+  input_series:
+  - series: presto_ClusterMemoryPool_general_BlockedNodes{instance="presto-2",job="integrations/presto"}
+    values: 0x9 1 1 2 2 3 3 4 4 5x20
+  - series: presto_ClusterMemoryPool_general_BlockedNodes{instance="presto-1",job="integrations/presto"}
+    values: 5x9 4 4 3 3 2 2 1 1 0x20
+  alert_rule_test:
+  - eval_time: 17m
+    alertname: PrestoHighBlockedNodes
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        instance: presto-2
+        job: integrations/presto
+      exp_annotations:
+        description: The net increase in blocked nodes on presto-2 over the last 5 minutes is 2 which is greater
+          than the threshold of 0
+        summary: The amount of nodes that are blocked due to memory restrictions is increasing. Blocked nodes can
+          cause performance degradation and resource starvation.

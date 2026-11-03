@@ -1,0 +1,122 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 15s
+tests:
+- name: rise stays pending then fires and clears
+  interval: 15s
+  input_series:
+  - series: bigip_pool_connq_depth{instance="bigip-a:9142",job="integrations/f5-bigip",partition="Common",pool="api"}
+    values: 10+0x243 100+0x79 10+0x80
+  alert_rule_test:
+  - eval_time: 64m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts: []
+  - eval_time: 70m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts:
+    - &id001
+      exp_labels:
+        partition: Common
+        pool: api
+        severity: warning
+      exp_annotations:
+        description: 900 percent increase in average connection queue depth on pool
+          api, which is above the threshold of 75.
+        summary: A sudden spike or sustained high queue depth may indicate a bottleneck
+          in handling incoming connections.
+  - eval_time: 90m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts: []
+- name: ratios are computed per target before dropping scrape labels
+  interval: 15s
+  input_series:
+  - series: bigip_pool_connq_depth{instance="bigip-a:9142",job="integrations/f5-bigip",partition="Common",pool="api"}
+    values: 10+0x243 100+0x160
+  - series: bigip_pool_connq_depth{instance="bigip-b:9142",job="second-scrape",partition="Common",pool="api"}
+    values: 1000+0x404
+  - series: bigip_pool_connq_depth{instance="bigip-c:9142",job="integrations/f5-bigip",partition="Common",pool="healthy"}
+    values: 10+0x404
+  alert_rule_test:
+  - eval_time: 70m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts:
+    - *id001
+- name: constant queue
+  interval: 15s
+  input_series:
+  - series: bigip_pool_connq_depth{instance="bigip-a:9142",job="integrations/f5-bigip",partition="Common",pool="api"}
+    values: 10+0x404
+  alert_rule_test:
+  - eval_time: 70m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts: []
+- name: falling queue is not a counter reset
+  interval: 15s
+  input_series:
+  - series: bigip_pool_connq_depth{instance="bigip-a:9142",job="integrations/f5-bigip",partition="Common",pool="api"}
+    values: 100+0x243 10+0x160
+  alert_rule_test:
+  - eval_time: 70m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts: []
+- name: exact 75 percent is not above threshold
+  interval: 15s
+  input_series:
+  - series: bigip_pool_connq_depth{instance="bigip-a:9142",job="integrations/f5-bigip",partition="Common",pool="api"}
+    values: 4+0x243 7+0x160
+  alert_rule_test:
+  - eval_time: 70m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts: []
+- name: below threshold
+  interval: 15s
+  input_series:
+  - series: bigip_pool_connq_depth{instance="bigip-a:9142",job="integrations/f5-bigip",partition="Common",pool="api"}
+    values: 10+0x243 17+0x160
+  alert_rule_test:
+  - eval_time: 70m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts: []
+- name: zero baseline and zero queue
+  interval: 15s
+  input_series:
+  - series: bigip_pool_connq_depth{instance="bigip-a:9142",job="integrations/f5-bigip",partition="Common",pool="api"}
+    values: 0+0x404
+  alert_rule_test:
+  - eval_time: 70m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts: []
+- name: zero baseline uses one connection floor
+  interval: 15s
+  input_series:
+  - series: bigip_pool_connq_depth{instance="bigip-a:9142",job="integrations/f5-bigip",partition="Common",pool="api"}
+    values: 0+0x243 2+0x160
+  alert_rule_test:
+  - eval_time: 71m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts:
+    - exp_annotations:
+        description: 100 percent increase in average connection queue depth on pool
+          api, which is above the threshold of 75.
+        summary: A sudden spike or sustained high queue depth may indicate a bottleneck
+          in handling incoming connections.
+      exp_labels:
+        partition: Common
+        pool: api
+        severity: warning
+- name: missing metric is silent
+  interval: 15s
+  input_series: []
+  alert_rule_test:
+  - eval_time: 70m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts: []
+- name: sustained decreases must not be read as repeated counter resets
+  interval: 15s
+  input_series:
+  - series: bigip_pool_connq_depth{instance="bigip-a:9142",job="integrations/f5-bigip",partition="Common",pool="api"}
+    values: 1000000+0x243 997000-3000x160
+  alert_rule_test:
+  - eval_time: 70m
+    alertname: BigIPHighConnectionQueueDepth
+    exp_alerts: []

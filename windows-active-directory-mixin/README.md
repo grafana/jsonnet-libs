@@ -125,6 +125,16 @@ Default thresholds can be configured in `config.libsonnet`.
 }
 ```
 
+Some alert descriptions use the `query` template function, which is only supported by Prometheus/Mimir (datasource-managed) rule evaluation. When installing the alerts as Grafana-managed rules, set `alertsQueryTemplateEnabled` to `false` in `config.libsonnet` to omit these lines:
+
+```js
+{
+  _config+:: {
+    alertsQueryTemplateEnabled: false,
+  },
+}
+```
+
 ## Install tools
 ```bash
 go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest

@@ -7,5 +7,8 @@
     // tooltip will  appear only on the panel under the cursor
     // 2: Shared Tooltip, both crosshair and tooltip will appear on all panels
     graphTooltip: 1,
+
+    // Tags to apply to all dashboards.
+    tags: ['memcached'],
   },
 }

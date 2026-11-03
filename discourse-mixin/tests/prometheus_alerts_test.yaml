@@ -1,0 +1,216 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: DiscourseHigh5xxErrors-single_high
+  interval: 1m
+  input_series:
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="500"}
+    values: 0+50x20
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+50x20
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: DiscourseHigh5xxErrors
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: DiscourseHigh5xxErrors
+    exp_alerts:
+    - exp_labels:
+        instance: discourse-0:9405
+        job: discourse
+        db: default
+        api: web
+        verb: GET
+        type: regular
+        status: '500'
+        severity: critical
+      exp_annotations:
+        description: 50.00% of all requests are resulting in 500 status codes, which is above the threshold 10%, indicating a potentially larger issue for discourse-0:9405
+        summary: More than 10% of all requests result in a 5XX.
+- name: DiscourseHigh5xxErrors-single_low
+  interval: 1m
+  input_series:
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="500"}
+    values: 0+1x20
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+99x20
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: DiscourseHigh5xxErrors
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: DiscourseHigh5xxErrors
+    exp_alerts: []
+- name: DiscourseHigh5xxErrors-multi_mixed
+  interval: 1m
+  input_series:
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="500"}
+    values: 0+50x20
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+50x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="500"}
+    values: 0+1x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+99x20
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: DiscourseHigh5xxErrors
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: DiscourseHigh5xxErrors
+    exp_alerts:
+    - exp_labels:
+        instance: discourse-0:9405
+        job: discourse
+        db: default
+        api: web
+        verb: GET
+        type: regular
+        status: '500'
+        severity: critical
+      exp_annotations:
+        description: 50.00% of all requests are resulting in 500 status codes, which is above the threshold 10%, indicating a potentially larger issue for discourse-0:9405
+        summary: More than 10% of all requests result in a 5XX.
+- name: DiscourseHigh5xxErrors-multi_low
+  interval: 1m
+  input_series:
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="500"}
+    values: 0+1x20
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+99x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="500"}
+    values: 0+1x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+99x20
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: DiscourseHigh5xxErrors
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: DiscourseHigh5xxErrors
+    exp_alerts: []
+- name: DiscourseHigh5xxErrors-multi_boundary
+  interval: 1m
+  input_series:
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="500"}
+    values: 0+10x20
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+90x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="500"}
+    values: 0+10x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+90x20
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: DiscourseHigh5xxErrors
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: DiscourseHigh5xxErrors
+    exp_alerts: []
+- name: DiscourseHigh4xxErrors-single_high
+  interval: 1m
+  input_series:
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="400"}
+    values: 0+50x20
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+50x20
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: DiscourseHigh4xxErrors
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: DiscourseHigh4xxErrors
+    exp_alerts:
+    - exp_labels:
+        instance: discourse-0:9405
+        job: discourse
+        db: default
+        api: web
+        verb: GET
+        type: regular
+        status: '400'
+        severity: warning
+      exp_annotations:
+        description: 50.00% of all requests are resulting in 400 status code, which is above the threshold 30%, indicating a potentially larger issue for discourse-0:9405
+        summary: More than 30% of all requests result in a 4XX.
+- name: DiscourseHigh4xxErrors-single_low
+  interval: 1m
+  input_series:
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="400"}
+    values: 0+1x20
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+99x20
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: DiscourseHigh4xxErrors
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: DiscourseHigh4xxErrors
+    exp_alerts: []
+- name: DiscourseHigh4xxErrors-multi_mixed
+  interval: 1m
+  input_series:
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="400"}
+    values: 0+50x20
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+50x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="400"}
+    values: 0+1x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+99x20
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: DiscourseHigh4xxErrors
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: DiscourseHigh4xxErrors
+    exp_alerts:
+    - exp_labels:
+        instance: discourse-0:9405
+        job: discourse
+        db: default
+        api: web
+        verb: GET
+        type: regular
+        status: '400'
+        severity: warning
+      exp_annotations:
+        description: 50.00% of all requests are resulting in 400 status code, which is above the threshold 30%, indicating a potentially larger issue for discourse-0:9405
+        summary: More than 30% of all requests result in a 4XX.
+- name: DiscourseHigh4xxErrors-multi_low
+  interval: 1m
+  input_series:
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="400"}
+    values: 0+1x20
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+99x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="400"}
+    values: 0+1x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+99x20
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: DiscourseHigh4xxErrors
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: DiscourseHigh4xxErrors
+    exp_alerts: []
+- name: DiscourseHigh4xxErrors-multi_boundary
+  interval: 1m
+  input_series:
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="400"}
+    values: 0+30x20
+  - series: discourse_http_requests{instance="discourse-0:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+70x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="400"}
+    values: 0+30x20
+  - series: discourse_http_requests{instance="discourse-1:9405",job="discourse",db="default",api="web",verb="GET",type="regular",status="200"}
+    values: 0+70x20
+  alert_rule_test:
+  - eval_time: 3m
+    alertname: DiscourseHigh4xxErrors
+    exp_alerts: []
+  - eval_time: 15m
+    alertname: DiscourseHigh4xxErrors
+    exp_alerts: []

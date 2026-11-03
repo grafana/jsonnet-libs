@@ -19,6 +19,9 @@ and the following alerts:
 - PrestoHighFailedQueriesWarning
 - PrestoHighFailedQueriesCritical
 
+## Blocked-node alert semantics
+`PrestoHighBlockedNodes` measures the net increase in the current blocked-node population over five minutes, with a five-minute pending period. It does not measure the current number of blocked nodes or all nodes that became blocked within the window. A falling or constant population is not growth; brief rises may clear before the pending period ends. Prometheus extrapolates `delta()` to the window boundaries, so the reported change can be fractional.
+
 ## Presto overview
 
 The Presto overview dashboard provides details on integration status/alerts, workers/coordinators, error failures, data throughput, blocked nodes, and distributed bytes.

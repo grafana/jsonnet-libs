@@ -18,7 +18,11 @@ and the following alerts:
 - IstioHighGRPCRequestErrorsCritical
 - IstioMetricsDown
 
+## Listener conflict alert semantics
+`IstioListenerConfigConflictsCritical` sums the inbound and outbound conflict entries reported by each istiod pod for its current push, with a one-minute pending period. These metrics are gauges: the alert remains active while a nonzero conflict count persists, rather than counting new conflict events over five minutes. The value is a sum of reported conflict-map entries, not a count of distinct events or affected listeners. Both gauges must be available for the existing addition to produce a result.
+
 ## Istio overview
+
 The Istio overview dashboard provides high level details on alerts, HTTP/GRPC requests, vCPU, memory, control plane metrics, and service info for Istiod, proxies, and gateways.
 ![Istio overview dashboard (system)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_overview_1.png)
 ![Istio overview dashboard (control plane)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_overview_2.png)
