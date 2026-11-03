@@ -29,7 +29,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     processes:
       signals.host.processesRunning.asTimeSeries('Processes')
       + signals.host.processesCreated.asPanelMixin()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + common.hideZeros,
     uptimeTs:
       signals.host.uptime.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()

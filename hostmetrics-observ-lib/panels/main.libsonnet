@@ -16,6 +16,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['mean', 'max', 'lastNotNull']),
+      // Grafonnet v11.4.0 has no helper for the tooltip's "Hide zeros" option.
+      hideZeros: { options+: { tooltip+: { hideZeros: true } } },
+      // Drops series that sit at 0, so they don't fill the legend.
+      nonZero: ['', ' > 0'],
       hostTextSize: g.panel.stat.options.text.withValueSize(24),
       capacityTextSize: g.panel.stat.options.text.withValueSize(40),
       // Only the shared settings: our whole config would replace alerts-observ-lib's own signals.

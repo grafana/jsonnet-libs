@@ -18,22 +18,27 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.cpu.cpuUsage.asTimeSeries()
       + commonlib.panels.cpu.timeSeries.utilization.stylize(),
     cpuUsageByMode:
-      signals.cpu.cpuUsageByMode.asTimeSeries()
-      + commonlib.panels.cpu.timeSeries.utilizationByMode.stylize(),
+      signals.cpu.cpuUsageByMode.withExprWrappersMixin(common.nonZero).asTimeSeries()
+      + commonlib.panels.cpu.timeSeries.utilizationByMode.stylize()
+      + common.hideZeros,
     cpuUsagePerCore:
       signals.cpu.cpuUsagePerCore.asTimeSeries()
-      + commonlib.panels.cpu.timeSeries.utilization.stylize(),
+      + commonlib.panels.cpu.timeSeries.utilization.stylize()
+      + common.hideZeros,
     cpuTimeByMode:
-      signals.cpu.cpuTimeByMode.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      signals.cpu.cpuTimeByMode.withExprWrappersMixin(common.nonZero).asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + common.hideZeros,
     cpuFrequency:
       signals.cpu.cpuFrequency.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + common.hideZeros,
     loadAverage:
       signals.cpu.loadAverage1m.asTimeSeries('Load average')
       + signals.cpu.loadAverage5m.asPanelMixin()
       + signals.cpu.loadAverage15m.asPanelMixin()
       + signals.host.cpuCount.asPanelMixin()
-      + commonlib.panels.system.timeSeries.loadAverage.stylize(cpuCountName='.*Cores.*'),
+      + commonlib.panels.system.timeSeries.loadAverage.stylize(cpuCountName='.*Cores.*')
+      + common.hideZeros,
   },
 }

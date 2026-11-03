@@ -255,6 +255,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -266,7 +267,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * (\n  avg by (job,instance,state) (\n  system_cpu_utilization_ratio{state!=\"idle\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  avg by (job,instance,state) (\n  system_cpu_utilization{state!=\"idle\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
+                  "expr": "\n  100 * (\n  avg by (job,instance,state) (\n  system_cpu_utilization_ratio{state!=\"idle\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\n > 0\nor\n\n  100 * (\n  avg by (job,instance,state) (\n  system_cpu_utilization{state!=\"idle\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\n > 0",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}} {{state}}",
@@ -332,6 +333,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -406,6 +408,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -417,7 +420,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance,state) (\n  rate(system_cpu_time_seconds_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,state) (\n  rate(system_cpu_time{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "\n  sum by (job,instance,state) (\n  rate(system_cpu_time_seconds_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n > 0\nor\n\n  sum by (job,instance,state) (\n  rate(system_cpu_time{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n > 0",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: CPU time ({{state}})",
@@ -559,6 +562,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
@@ -666,6 +670,7 @@
                   "displayMode": "list"
                },
                "tooltip": {
+                  "hideZeros": true,
                   "mode": "multi",
                   "sort": "desc"
                }
