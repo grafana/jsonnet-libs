@@ -160,13 +160,13 @@
           },
           {
             alert: 'PostgreSQLInactiveReplicationSlot',
-            expr: '(%s) > 0' % signals.problems.nonStreamingReplicaLag.asRuleExpression(),
+            expr: '(%s) == 0' % signals.problems.replicationSlotActive.asRuleExpression(),
             'for': '30m',
             keep_firing_for: '5m',
             labels: { severity: config.alertInactiveReplicationSlotSeverity },
             annotations: {
               summary: 'PostgreSQL has inactive replication slot.',
-              description: 'PostgreSQL {{ $labels.%s }} has a replication slot not actively streaming. WAL files may accumulate!' % instanceLabel,
+              description: 'PostgreSQL {{ $labels.%s }} replication slot {{ $labels.slot_name }} is not actively streaming. WAL files may accumulate!' % instanceLabel,
             },
           },
           {

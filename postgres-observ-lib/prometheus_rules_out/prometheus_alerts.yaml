@@ -154,9 +154,9 @@ groups:
             severity: warning
         - alert: PostgreSQLInactiveReplicationSlot
           annotations:
-            description: PostgreSQL {{ $labels.instance }} has a replication slot not actively streaming. WAL files may accumulate!
+            description: PostgreSQL {{ $labels.instance }} replication slot {{ $labels.slot_name }} is not actively streaming. WAL files may accumulate!
             summary: PostgreSQL has inactive replication slot.
-          expr: (pg_stat_replication_pg_wal_lsn_diff{state!="streaming", }) > 0
+          expr: (pg_replication_slots_active{}) == 0
           for: 30m
           keep_firing_for: 5m
           labels:

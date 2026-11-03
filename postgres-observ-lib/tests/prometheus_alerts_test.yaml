@@ -277,21 +277,25 @@ tests:
 - name: PostgreSQLInactiveReplicationSlot
   interval: 1m
   input_series:
-  - series: pg_stat_replication_pg_wal_lsn_diff{job="integrations/postgres_exporter",instance="pg-1",application_name="replica1",state="catchup"}
-    values: 100x40
+  - series: pg_replication_slots_active{job="integrations/postgres_exporter",instance="pg-1",slot_name="replica1",database=""}
+    values: 0x40
+  - series: pg_replication_slots_active{job="integrations/postgres_exporter",instance="pg-2",slot_name="replica2",database=""}
+    values: 1x40
   alert_rule_test:
+  - eval_time: 25m
+    alertname: PostgreSQLInactiveReplicationSlot
+    exp_alerts: []
   - eval_time: 35m
     alertname: PostgreSQLInactiveReplicationSlot
     exp_alerts:
     - exp_labels:
         job: integrations/postgres_exporter
         instance: pg-1
-        application_name: replica1
-        state: catchup
+        slot_name: replica1
         severity: critical
       exp_annotations:
         summary: PostgreSQL has inactive replication slot.
-        description: PostgreSQL pg-1 has a replication slot not actively streaming. WAL files may accumulate!
+        description: PostgreSQL pg-1 replication slot replica1 is not actively streaming. WAL files may accumulate!
 - name: PostgreSQLReplicationRoleChanged
   interval: 1m
   input_series:

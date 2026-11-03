@@ -1701,7 +1701,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  count by (job,cluster,instance) (pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\", state!=\"streaming\"})\nor\n(0 * group by (job,cluster,instance) (pg_stat_replication_pg_wal_lsn_diff{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}))\n\n)",
+                  "expr": "count by (job,cluster,instance) (pg_replication_slots_active{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\nor\n(0 * group by (job,cluster,instance) (pg_replication_slots_active{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}))\n",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": " Inactive replication slots",
