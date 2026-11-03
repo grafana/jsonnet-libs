@@ -273,7 +273,7 @@ For cluster-wide monitoring:
 | `PostgreSQLLongRunningQuery` | >5min | warning |
 | `PostgreSQLBlockedQueries` | >1 waiting | warning |
 | `PostgreSQLWALArchiveFailure` | any | critical |
-| `PostgreSQLHighDeadTuples` | >10% | warning |
+| `PostgreSQLHighDeadTuples` | >10% and >10,000 dead tuples | warning |
 | `PostgreSQLVacuumNotRunning` | >7 days | warning |
 | `PostgreSQLTooManyRollbacks` | >10% | warning |
 | `PostgreSQLTooManyLocksAcquired` | >20% | warning |
@@ -303,6 +303,7 @@ Default thresholds and severities can be configured in `config.libsonnet`:
   alertBlockedQueriesSeverity: 'warning',
   alertWALArchiveFailureSeverity: 'critical',
   alertHighDeadTuplesThreshold: 10,  // percent of tuples that are dead
+  alertHighDeadTuplesMinDeadTuples: 10000,  // dead tuples
   alertHighDeadTuplesSeverity: 'warning',
   alertVacuumNotRunningThreshold: 7,  // days
   alertVacuumNotRunningDeadTuples: 10000,  // dead tuples
