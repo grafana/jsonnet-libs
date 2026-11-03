@@ -9,8 +9,8 @@ local g = import './g.libsonnet';
       + link.link.options.withKeepTime(true)
       + link.link.options.withIncludeVars(true),
 
-    backToFleet: backTo('fleet overview', 'fleet.json'),
-    backToOverview: backTo('overview', 'nodes.json'),
+    backToFleet: backTo('fleet overview', 'hostmetrics-fleet.json'),
+    backToOverview: backTo('overview', 'hostmetrics-nodes.json'),
     otherDashboards:
       link.dashboards.new('All ' + prefix + 'dashboards', this.config.dashboardTags)
       + link.dashboards.options.withIncludeVars(true)

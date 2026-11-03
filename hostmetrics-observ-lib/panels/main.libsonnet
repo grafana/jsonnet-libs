@@ -3,7 +3,7 @@ local alertsOverviewlib = import 'alerts-observ-lib/main.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(this): {
-    local overviewUid = this.grafana.dashboards['nodes.json'].uid,
+    local overviewUid = this.grafana.dashboards['hostmetrics-nodes.json'].uid,
     local datasourceVariable = this.grafana.variables.datasources.prometheus.name,
     local fleetTopK = 25,
     local common = {

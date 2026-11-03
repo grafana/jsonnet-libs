@@ -51,7 +51,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       if std.member(this.config.groupLabels, v.name) && !std.member(logsLabels, v.name)
     ];
     {
-      'fleet.json':
+      'hostmetrics-fleet.json':
         g.dashboard.new(prefix + 'fleet overview')
         + layout([
           panels.fleet.fleetOverviewTable { gridPos+: { w: 24, h: 10 } },
@@ -61,7 +61,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         // hide link to self
         + common(vars.multiInstance, 'fleet', links { backToFleet+:: {}, backToOverview+:: {} }),
 
-      'nodes.json':
+      'hostmetrics-nodes.json':
         g.dashboard.new(prefix + 'overview')
         + layout([
           rows.nodesHost,
@@ -74,7 +74,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         ], 6, 4)
         + common(vars.singleInstance, 'nodes', links { backToOverview+:: {} }),
 
-      'system.json':
+      'hostmetrics-system.json':
         g.dashboard.new(prefix + 'CPU and system')
         + layout([
           rows.systemUtilization,
@@ -82,7 +82,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         ], 12, 8)
         + common(vars.singleInstance, 'system', links),
 
-      'memory.json':
+      'hostmetrics-memory.json':
         g.dashboard.new(prefix + 'memory')
         + layout(
           [rows.memoryUtilization]
@@ -92,7 +92,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         + common(vars.singleInstance, 'memory', links),
 
-      'disks.json':
+      'hostmetrics-disks.json':
         g.dashboard.new(prefix + 'filesystem and disks')
         + layout([
           rows.disksFilesystems,
@@ -101,7 +101,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + common(vars.singleInstance, 'disks', links),
     }
     + (if this.config.enableNetworkScraper then {
-         'network.json':
+         'hostmetrics-network.json':
            g.dashboard.new(prefix + 'network')
            + layout([
              rows.networkThroughput,
@@ -111,7 +111,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
            + common(vars.singleInstance, 'network', links),
        } else {})
     + (if this.config.enableLokiLogs then {
-         'logs.json': withMetricsVarNames(
+         'hostmetrics-logs.json': withMetricsVarNames(
            logslib.new(
              prefix + 'logs',
              datasourceName=vars.datasources.loki.name,
