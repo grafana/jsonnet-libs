@@ -20,7 +20,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + legendSortedByValue
       + g.panel.timeSeries.panelOptions.withTitle('Query time consumption rate')
       + g.panel.timeSeries.panelOptions.withDescription(
-        'Execution time consumption rate per query. Higher values = more resource usage.'
+        "Execution time consumption rate per query. Higher values = more resource usage. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL."
       ),
 
     slowestQueriesByMeanTime:
@@ -29,7 +29,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withUnit('s')
       + legendSortedByValue
       + g.panel.timeSeries.panelOptions.withDescription(
-        'Average execution time per call. Higher values = slower queries.'
+        "Average execution time per call. Higher values = slower queries. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL."
       ),
 
     mostFrequentQueries:
@@ -38,7 +38,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withUnit('ops')
       + legendSortedByValue
       + g.panel.timeSeries.panelOptions.withDescription(
-        'Query execution rate. High-frequency queries may benefit from caching.'
+        "Query execution rate. High-frequency queries may benefit from caching. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL."
       ),
 
     topQueriesByRows:
@@ -47,7 +47,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withUnit('rows/s')
       + legendSortedByValue
       + g.panel.timeSeries.panelOptions.withDescription(
-        'Rows returned per query. High values may indicate missing WHERE/LIMIT clauses.'
+        "Rows returned per query. High values may indicate missing WHERE/LIMIT clauses. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL."
       ),
 
     // Combined table view - shows all queries, independent of topk variable
@@ -55,7 +55,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     queryStatsTable:
       g.panel.table.new('Query statistics')
       + g.panel.table.panelOptions.withDescription(
-        'Query statistics from pg_stat_statements. Shows all queries - sort by any column to analyze.'
+        "Query statistics from pg_stat_statements. Shows all queries - sort by any column to analyze. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL."
       )
       + g.panel.table.options.withSortBy([
         { desc: true, displayName: 'Time/s' },
