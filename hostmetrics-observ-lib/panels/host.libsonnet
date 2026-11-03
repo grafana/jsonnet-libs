@@ -31,10 +31,5 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.host.processesCreated.asPanelMixin()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + common.hideZeros,
-    uptimeTs:
-      signals.host.uptime.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + common.fleetLegend
-      + common.drillDown,
   },
 }

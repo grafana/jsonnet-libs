@@ -10,23 +10,20 @@ local g = import './g.libsonnet';
 
     // Fleet overview
     fleetCompute: row('Compute', [
-      panels.cpu.cpuUsageTopk { gridPos+: { w: 8 } },
-      panels.memory.memoryUsageTopk { gridPos+: { w: 8 } },
-      panels.cpu.loadAverageTopk { gridPos+: { w: 8 } },
+      panels.cpu.cpuUsageTopk,
+      panels.cpu.loadAverageTopk,
+      panels.memory.memoryUsageTopk { gridPos+: { w: 24 } },
     ]),
     fleetStorageAndNetwork: row(
       'Storage and network',
       [
-        panels.disk.diskIOTopk { gridPos+: { w: 8 } },
-        panels.filesystem.filesystemUsageTopk { gridPos+: { w: 8 } },
+        panels.disk.diskIOTopk,
+        panels.filesystem.filesystemUsageTopk,
       ]
       + (if this.config.enableNetworkScraper then [
-           panels.network.networkIOTopk { gridPos+: { w: 8 } },
-           panels.network.networkErrorsAndDroppedTopk { gridPos+: { w: 12 } },
+           panels.network.networkIOTopk,
+           panels.network.networkErrorsAndDroppedTopk,
          ] else [])
-      + [
-        panels.host.uptimeTs { gridPos+: { w: 12 } },
-      ]
     ),
 
     // Host overview
