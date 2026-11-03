@@ -31,7 +31,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Execution time consumption rate per query. Higher values = more resource usage.",
+            "description": "Execution time consumption rate per query. Higher values = more resource usage. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -112,7 +112,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Average execution time per call. Higher values = slower queries.",
+            "description": "Average execution time per call. Higher values = slower queries. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -193,7 +193,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Query execution rate. High-frequency queries may benefit from caching.",
+            "description": "Query execution rate. High-frequency queries may benefit from caching. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -274,7 +274,7 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Rows returned per query. High values may indicate missing WHERE/LIMIT clauses.",
+            "description": "Rows returned per query. High values may indicate missing WHERE/LIMIT clauses. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -355,7 +355,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Query statistics from pg_stat_statements. Shows all queries - sort by any column to analyze.",
+            "description": "Query statistics from pg_stat_statements. Shows all queries - sort by any column to analyze. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL.",
             "fieldConfig": {
                "overrides": [
                   {
