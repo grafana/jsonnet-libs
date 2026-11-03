@@ -23,7 +23,7 @@
           },
           {
             alert: 'PostgreSQLHighConnectionUsage',
-            expr: '(%s) > %g' % [signals.health.connectionUtilization.asRuleExpression(), config.alertHighConnectionUsageThreshold],
+            expr: '(%s) > %g' % [signals.health.connectionUtilization.asRuleExpression(), config.alertHighConnectionUsageThreshold / 100],
             'for': '5m',
             keep_firing_for: '5m',
             labels: { severity: config.alertHighConnectionUsageSeverity },
@@ -34,7 +34,7 @@
           },
           {
             alert: 'PostgreSQLLowCacheHitRatio',
-            expr: '(%s) < %g' % [signals.health.cacheHitRatio.asRuleExpression(), config.alertLowCacheHitRatioThreshold],
+            expr: '(%s) < %g' % [signals.health.cacheHitRatio.asRuleExpression(), config.alertLowCacheHitRatioThreshold / 100],
             'for': '15m',
             keep_firing_for: '5m',
             labels: { severity: config.alertLowCacheHitRatioSeverity },
@@ -104,7 +104,7 @@
           // Maintenance Alerts
           {
             alert: 'PostgreSQLHighDeadTuples',
-            expr: '(%s) > %g' % [signals.maintenance.deadTupleRatio.asRuleExpression(), config.alertHighDeadTuplesThreshold],
+            expr: '(%s) > %g' % [signals.maintenance.deadTupleRatio.asRuleExpression(), config.alertHighDeadTuplesThreshold / 100],
             'for': '30m',
             keep_firing_for: '5m',
             labels: { severity: config.alertHighDeadTuplesSeverity },
@@ -126,19 +126,19 @@
               ) > %(alertVacuumNotRunningThreshold)s
               and
               pg_stat_user_tables_n_dead_tup{%(filteringSelector)s} > %(alertVacuumNotRunningDeadTuples)s
-            ||| % config,
+            ||| % config { alertVacuumNotRunningThreshold: config.alertVacuumNotRunningThreshold * 86400 },
             'for': '1h',
             keep_firing_for: '5m',
             labels: { severity: config.alertVacuumNotRunningSeverity },
             annotations: {
               summary: 'PostgreSQL table has not been vacuumed.',
-              description: 'Table {{ $labels.schemaname }}.{{ $labels.relname }} has not been vacuumed in over %g days.' % (config.alertVacuumNotRunningThreshold / 86400),
+              description: 'Table {{ $labels.schemaname }}.{{ $labels.relname }} has not been vacuumed in over %g days.' % config.alertVacuumNotRunningThreshold,
             },
           },
 
           {
             alert: 'PostgreSQLTooManyRollbacks',
-            expr: '(%s) > %g' % [signals.performance.rollbackRatio.asRuleExpression(), config.alertTooManyRollbacksThreshold],
+            expr: '(%s) > %g' % [signals.performance.rollbackRatio.asRuleExpression(), config.alertTooManyRollbacksThreshold / 100],
             'for': '5m',
             keep_firing_for: '5m',
             labels: { severity: config.alertTooManyRollbacksSeverity },
@@ -149,7 +149,7 @@
           },
           {
             alert: 'PostgreSQLTooManyLocksAcquired',
-            expr: '(%s) > %g' % [signals.problems.lockUtilization.asRuleExpression(), config.alertTooManyLocksAcquiredThreshold],
+            expr: '(%s) > %g' % [signals.problems.lockUtilization.asRuleExpression(), config.alertTooManyLocksAcquiredThreshold / 100],
             'for': '5m',
             keep_firing_for: '5m',
             labels: { severity: config.alertTooManyLocksAcquiredSeverity },

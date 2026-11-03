@@ -3,6 +3,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   // Filtering and labels
   filteringSelector: '',
+  // Deprecated, use filteringSelector instead.
+  alertsFilteringSelector: self.filteringSelector,
   groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
 
@@ -23,33 +25,33 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
   // Alerts
   alertDownSeverity: 'critical',
-  alertHighConnectionUsageThreshold: 0.8,
+  alertHighConnectionUsageThreshold: 80,  // percent of max_connections
   alertHighConnectionUsageSeverity: 'warning',
-  alertLowCacheHitRatioThreshold: 0.9,
+  alertLowCacheHitRatioThreshold: 90,  // percent
   alertLowCacheHitRatioSeverity: 'warning',
-  alertReplicationLagThreshold: 30,
+  alertReplicationLagThreshold: 30,  // seconds
   alertReplicationLagSeverity: 'warning',
-  alertReplicationLagCriticalThreshold: 3600,
+  alertReplicationLagCriticalThreshold: 3600,  // seconds
   alertReplicationLagCriticalSeverity: 'critical',
-  alertDeadlocksThreshold: 1,
+  alertDeadlocksThreshold: 1,  // deadlocks in 5 minutes
   alertDeadlocksSeverity: 'warning',
-  alertLongRunningQueryThreshold: 300,
+  alertLongRunningQueryThreshold: 300,  // seconds
   alertLongRunningQuerySeverity: 'warning',
-  alertBlockedQueriesThreshold: 1,
+  alertBlockedQueriesThreshold: 1,  // queries
   alertBlockedQueriesSeverity: 'warning',
   alertWALArchiveFailureSeverity: 'critical',
-  alertHighDeadTuplesThreshold: 0.1,
+  alertHighDeadTuplesThreshold: 10,  // percent of tuples that are dead
   alertHighDeadTuplesSeverity: 'warning',
-  alertVacuumNotRunningThreshold: 7 * 86400,
-  alertVacuumNotRunningDeadTuples: 10000,
+  alertVacuumNotRunningThreshold: 7,  // days
+  alertVacuumNotRunningDeadTuples: 10000,  // dead tuples
   alertVacuumNotRunningSeverity: 'warning',
-  alertTooManyRollbacksThreshold: 0.1,
+  alertTooManyRollbacksThreshold: 10,  // percent of transactions rolled back
   alertTooManyRollbacksSeverity: 'warning',
-  alertTooManyLocksAcquiredThreshold: 0.2,
+  alertTooManyLocksAcquiredThreshold: 20,  // percent of the lock table size
   alertTooManyLocksAcquiredSeverity: 'warning',
   alertInactiveReplicationSlotSeverity: 'critical',
   alertReplicationRoleChangedSeverity: 'warning',
   alertExporterErrorsSeverity: 'critical',
-  alertHighQpsThreshold: 10000,
+  alertHighQpsThreshold: 10000,  // transactions per second
   alertHighQpsSeverity: 'warning',
 }
