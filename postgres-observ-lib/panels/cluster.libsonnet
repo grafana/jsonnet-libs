@@ -4,6 +4,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(signals, config):: {
+    local instanceLabel = config.instanceLabels[0],
+    local instanceColumn = commonlib.utils.toSentenceCase(instanceLabel),
+    local groupQueryParams = std.join('&', ['${%s:queryparam}' % label for label in config.groupLabels]),
+
     // Helper to convert stat panel queries to instant queries for current status
     local withInstantQuery = {
       targets: std.map(function(t) t { instant: true }, super.targets),
@@ -226,13 +230,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           excludeByName: {
             Time: true,
             __name__: true,
-            job: true,
-            cluster: true,
             server_id: true,
             environment: true,
-          },
+          } + { [label]: true for label in config.groupLabels },
           renameByName: {
-            instance: 'Instance',
+            [instanceLabel]: instanceColumn,
             'Value #Instance status': 'Status',
             'Value #Instance role': 'Role',
             'Value #Instance uptime': 'Uptime',
@@ -241,7 +243,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             'Value #Instance replication lag': 'Lag',
           },
           indexByName: {
-            instance: 0,
+            [instanceLabel]: 0,
             'Value #Instance role': 1,
             'Value #Instance status': 2,
             'Value #Instance uptime': 3,
@@ -253,13 +255,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ])
       + g.panel.table.standardOptions.withOverrides([
         {
-          matcher: { id: 'byName', options: 'Instance' },
+          matcher: { id: 'byName', options: instanceColumn },
           properties: [
             { id: 'custom.minWidth', value: 350 },
             { id: 'links', value: [
               {
                 title: 'View Instance',
-                url: '/d/' + config.uid + '-overview?var-instance=${__data.fields.Instance}&${__url_time_range}&${datasource:queryparam}&${job:queryparam}&${cluster:queryparam}',
+                url: '/d/' + config.uid + '-overview?var-' + instanceLabel + '=${__data.fields.' + instanceColumn + '}&${__url_time_range}&${datasource:queryparam}&' + groupQueryParams,
               },
             ] },
           ],
@@ -349,7 +351,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             links: [
               {
                 title: 'View Instance Details',
-                url: '/d/' + config.uid + '-overview?var-instance=${__data.fields.Instance}&${__url_time_range}',
+                url: '/d/' + config.uid + '-overview?var-' + instanceLabel + '=${__data.fields.' + instanceColumn + '}&${__url_time_range}',
               },
             ],
           },

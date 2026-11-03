@@ -1,7 +1,7 @@
 local g = import '../g.libsonnet';
 
 {
-  new(signals):: {
+  new(signals, config):: {
     local queriesSelector = signals.health.templatingVariables.queriesSelector,
 
     // Settings table - shows all pg_settings_* metrics in a searchable table
@@ -29,13 +29,10 @@ local g = import '../g.libsonnet';
             excludeByName: {
               Time: true,
               __name__: false,
-              job: true,
-              cluster: true,
-              instance: true,
               server: true,
               server_id: true,
               environment: true,
-            },
+            } + { [label]: true for label in config.groupLabels + config.instanceLabels },
             indexByName: {
               __name__: 0,
               Value: 1,

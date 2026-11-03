@@ -34,7 +34,7 @@ local g = import './g.libsonnet';
 
     // Cluster dashboard variables: exclude instance, make cluster single-select
     local clusterVariables = makeSingleSelectByName(
-      std.filter(function(v) v.name != 'instance', this.signals.cluster.getVariablesMultiChoice()),
+      std.filter(function(v) !std.member(this.config.instanceLabels, v.name), this.signals.cluster.getVariablesMultiChoice()),
       ['cluster']
     );
 
