@@ -62,7 +62,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + common(vars.multiInstance, 'fleet', links { backToFleet+:: {}, backToOverview+:: {} }),
 
       'hostmetrics-nodes.json':
-        g.dashboard.new(prefix + 'overview')
+        g.dashboard.new(prefix + 'host summary')
         + layout([
           rows.nodesHost,
           rows.nodesCapacity,

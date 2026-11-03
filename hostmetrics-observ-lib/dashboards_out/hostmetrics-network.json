@@ -43,7 +43,7 @@
          {
             "includeVars": true,
             "keepTime": true,
-            "title": "Back to Hostmetrics / overview",
+            "title": "Back to Hostmetrics / host summary",
             "type": "link",
             "url": "/d/hostmetrics-nodes"
          },
@@ -139,7 +139,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "8 * (\n  sum by (job,instance,device,direction) (\n  rate(system_network_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\nor\n8 * (\n  sum by (job,instance,device,direction) (\n  rate(system_network_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)",
+                  "expr": "(8 * (\n  sum by (job,instance,device,direction) (\n  rate(system_network_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\nor\n8 * (\n  sum by (job,instance,device,direction) (\n  rate(system_network_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)) and ((8 * (\n  sum by (job,instance,device,direction) (\n  increase(system_network_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\n)\nor\n8 * (\n  sum by (job,instance,device,direction) (\n  increase(system_network_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\n)) > 0)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Traffic ({{device}} {{direction}})",
@@ -216,7 +216,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance,device,direction) (\n  rate(system_network_packets_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_network_packets{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "(sum by (job,instance,device,direction) (\n  rate(system_network_packets_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance,device,direction) (\n  rate(system_network_packets{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)) and ((sum by (job,instance,device,direction) (\n  increase(system_network_packets_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)\nor\nsum by (job,instance,device,direction) (\n  increase(system_network_packets{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range])\n)) > 0)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Packets ({{device}} {{direction}})",

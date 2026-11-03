@@ -43,7 +43,7 @@
          {
             "includeVars": true,
             "keepTime": true,
-            "title": "Back to Hostmetrics / overview",
+            "title": "Back to Hostmetrics / host summary",
             "type": "link",
             "url": "/d/hostmetrics-nodes"
          },

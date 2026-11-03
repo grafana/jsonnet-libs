@@ -16,13 +16,18 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['mean', 'max', 'lastNotNull']),
-      // Grafonnet v11.4.0 has no helper for the tooltip's "Hide zeros" option.
       hideZeros: { options+: { tooltip+: { hideZeros: true } } },
-      // Drops series that sit at 0, so they don't fill the legend.
+      // Drops series at 0.
       nonZero: ['', ' > 0'],
+      // Keeps series that changed in the dashboard's time range.
+      activeInRange(signal):: {
+        // common-lib rewrites increase into a subquery, so build rate and swap it.
+        local changed = std.strReplace(signal.withInterval('$__range').asPanelExpression(), 'rate(', 'increase('),
+        targets: [t { expr: '(%s) and ((%s) > 0)' % [t.expr, changed] } for t in super.targets],
+      },
       hostTextSize: g.panel.stat.options.text.withValueSize(24),
       capacityTextSize: g.panel.stat.options.text.withValueSize(40),
-      // Only the shared settings: our whole config would replace alerts-observ-lib's own signals.
+      // Shared settings only: the full config would replace alerts-observ-lib's signals.
       alertsOverview:
         alertsOverviewlib.new()
         + alertsOverviewlib.withConfigMixin({

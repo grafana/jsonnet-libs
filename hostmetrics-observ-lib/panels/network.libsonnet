@@ -21,10 +21,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     networkIO:
       signals.network.networkIO.asTimeSeries()
       + commonlib.panels.network.timeSeries.traffic.stylize()
+      + common.activeInRange(signals.network.networkIO)
       + common.hideZeros,
     networkPackets:
       signals.network.networkPackets.asTimeSeries()
       + commonlib.panels.network.timeSeries.packets.stylize()
+      + common.activeInRange(signals.network.networkPackets)
       + common.hideZeros,
     networkErrors:
       signals.network.networkErrors.withExprWrappersMixin(common.nonZero).asTimeSeries()

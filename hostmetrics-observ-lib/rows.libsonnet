@@ -26,7 +26,7 @@ local g = import './g.libsonnet';
          ] else [])
     ),
 
-    // Host overview
+    // Host summary
     nodesHost: row('Host', [
       panels.host.hostname { gridPos+: { w: 8, h: 3 } },
       panels.host.osName { gridPos+: { w: 8, h: 3 } },
