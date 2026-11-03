@@ -119,10 +119,10 @@ local g = import './g.libsonnet';
         panels.problems.conflictsDeadlocks { gridPos+: { w: 8, h: 6 } },
       ]),
 
-    // Tier 3: Performance Trends - Time series (collapsed for faster loading)
+    // Tier 3: Performance Trends - Time series
     performance:
       g.panel.row.new('Performance trends')
-      + g.panel.row.withCollapsed(true)
+      + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         panels.performance.transactionsPerSecond { gridPos+: { w: 12, h: 8 } },
         panels.performance.queriesPerSecond { gridPos+: { w: 12, h: 8 } },
@@ -137,10 +137,10 @@ local g = import './g.libsonnet';
         panels.performance.rollbackRatio { gridPos+: { w: 12, h: 8 } },
       ]),
 
-    // Tier 4: Maintenance - Actionable tasks (collapsed for faster loading)
+    // Tier 4: Maintenance - Actionable tasks
     maintenance:
       g.panel.row.new('Maintenance')
-      + g.panel.row.withCollapsed(true)
+      + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         // Row 1: Vacuum - Stats | Time series
         panels.maintenance.tablesNeedingVacuum { gridPos+: { w: 4, h: 8 } },
@@ -172,10 +172,10 @@ local g = import './g.libsonnet';
         panels.queries.queryStatsTable { gridPos+: { w: 24, h: 12 } },
       ]),
 
-    // Tier 6: Settings - PostgreSQL configuration parameters (collapsed for faster loading)
+    // Tier 6: Settings - PostgreSQL configuration parameters
     settings:
       g.panel.row.new('PostgreSQL settings')
-      + g.panel.row.withCollapsed(true)
+      + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         panels.settings.settingsTable { gridPos+: { w: 24, h: 16 } },
       ]),
