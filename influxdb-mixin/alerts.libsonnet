@@ -43,7 +43,7 @@
           {
             alert: 'InfluxDBHighBusyWorkerPercentage',
             expr: |||
-              task_executor_workers_busy{%(filteringSelector)s} >= %(alertsWarningHighBusyWorkerPercentage)s
+              100 * task_executor_workers_busy{%(filteringSelector)s} >= %(alertsWarningHighBusyWorkerPercentage)s
             ||| % this.config,
             'for': '5m',
             labels: {
