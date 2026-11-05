@@ -1,0 +1,382 @@
+{
+      "annotations": {
+         "list": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "enable": true,
+               "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))[$__interval:1m] offset -$__interval) > 1",
+               "hide": true,
+               "iconColor": "light-blue",
+               "name": "OS or kernel change",
+               "step": "5m",
+               "tagKeys": "job,instance",
+               "textFormat": "",
+               "titleFormat": "OS or kernel change"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "enable": true,
+               "expr": "(max by (job,instance) (round(timestamp(system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime_seconds{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))\nor\nmax by (job,instance) (round(timestamp(system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}) - system_uptime{job!=\"\",job=~\"$job\",instance=~\"$instance\"}, 60))) * 1000 > $__from < $__to",
+               "hide": true,
+               "iconColor": "#fade2a",
+               "name": "Reboot",
+               "tagKeys": "job,instance",
+               "titleFormat": "Reboot",
+               "useValueForTime": "on"
+            }
+         ]
+      },
+      "links": [
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "Back to Hostmetrics / fleet overview",
+            "type": "link",
+            "url": "/d/hostmetrics-fleet"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "Back to Hostmetrics / host summary",
+            "type": "link",
+            "url": "/d/hostmetrics-nodes"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "hostmetrics"
+            ],
+            "title": "All Hostmetrics / dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "loki",
+               "uid": "${loki_datasource}"
+            },
+            "description": "Logs volume grouped by \"level\" label.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "drawStyle": "bars",
+                     "fillOpacity": 50,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "none"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(E|e)merg|(F|f)atal|(A|a)lert|(C|c)rit.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "purple",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(E|e)(rr.*|RR.*)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(W|w)(arn.*|ARN.*|rn|RN)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "orange",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(N|n)(otice|ote)|(I|i)(nf.*|NF.*)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "dbg.*|DBG.*|(D|d)(EBUG|ebug)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(T|t)(race|RACE)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "logs"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "text",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "maxDataPoints": 100,
+            "options": {
+               "tooltip": {
+                  "hideZeros": true,
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "loki",
+                     "uid": "${loki_datasource}"
+                  },
+                  "expr": "sum by (level) (count_over_time({job!=\"\",job=~\"$job\",instance=~\"$instance\",transport=~\"$transport\",unit=~\"$unit\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "legendFormat": "{{ level }}"
+               }
+            ],
+            "title": "Logs volume",
+            "transformations": [
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value",
+                     "renamePattern": "logs"
+                  }
+               }
+            ],
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "gridPos": {
+               "h": 18,
+               "w": 24,
+               "x": 0,
+               "y": 18
+            },
+            "id": 2,
+            "options": {
+               "dedupStrategy": "exact",
+               "enableLogDetails": true,
+               "prettifyLogMessage": true,
+               "showTime": false,
+               "wrapLogMessage": false
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "loki",
+                     "uid": "${loki_datasource}"
+                  },
+                  "expr": "{job!=\"\",job=~\"$job\",instance=~\"$instance\",transport=~\"$transport\",unit=~\"$unit\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n| label_format timestamp=\"{{__timestamp__}}\"\n| line_format `{{ if eq \"[[instance]]\" \".*\" }}{{alignLeft 25 .instance}}|{{alignLeft 25 .unit}}|{{else}}{{alignLeft 25 .unit}}|{{end}} {{__line__}}`\n\n"
+               }
+            ],
+            "title": "Logs",
+            "type": "logs"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "hostmetrics"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({job!=\"\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values({job!=\"\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Transport",
+               "multi": true,
+               "name": "transport",
+               "query": "label_values({job!=\"\",job=~\"$job\",instance=~\"$instance\"}, transport)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Unit",
+               "multi": true,
+               "name": "unit",
+               "query": "label_values({job!=\"\",job=~\"$job\",instance=~\"$instance\",transport=~\"$transport\"}, unit)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Level",
+               "multi": true,
+               "name": "level",
+               "query": "label_values({job!=\"\",job=~\"$job\",instance=~\"$instance\",transport=~\"$transport\",unit=~\"$unit\"}, level)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "",
+                  "value": ""
+               },
+               "label": "Regex search",
+               "name": "regex_search",
+               "options": [
+                  {
+                     "selected": true,
+                     "text": "",
+                     "value": ""
+                  }
+               ],
+               "query": "",
+               "type": "textbox"
+            },
+            {
+               "hide": 2,
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "",
+      "title": "Hostmetrics / logs",
+      "uid": "hostmetrics-logs"
+   }
