@@ -1,4 +1,5 @@
 JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 2 --string-style s --comment-style s
+ALERTS_SOURCE ?= $(wildcard alerts.libsonnet alerts)
 
 .PHONY: all
 all: build dashboards_out prometheus_alerts.yaml prometheus_rules.yaml test
@@ -33,9 +34,9 @@ dashboards_out: mixin.libsonnet $(wildcard **/*.libsonnet) $(wildcard **/*.jsonn
 	@mkdir -p dashboards_out
 	mixtool generate dashboards mixin.libsonnet -d dashboards_out
 
-prometheus_alerts.yaml: mixin.libsonnet $(wildcard vendor/**/alerts.yaml) $(wildcard alerts/*) $(wildcard vendor/**/alerts.libsonnet) $(wildcard alerts.libsonnet) $(wildcard signals/*)
+prometheus_alerts.yaml: mixin.libsonnet $(ALERTS_SOURCE) $(wildcard vendor/**/alerts.yaml) $(wildcard alerts/*) $(wildcard vendor/**/alerts.libsonnet) $(wildcard alerts.libsonnet) $(wildcard signals/*)
 	@mkdir -p prometheus_rules_out
-	@if [ -f alerts.libsonnet -o -d alerts ]; then \
+	@if [ -n "$(ALERTS_SOURCE)" ]; then \
 		mixtool generate alerts mixin.libsonnet -a prometheus_rules_out/prometheus_alerts.yaml; \
 	else \
 		touch prometheus_rules_out/prometheus_alerts.yaml; \
