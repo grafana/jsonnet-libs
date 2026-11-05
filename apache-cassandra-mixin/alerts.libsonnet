@@ -7,7 +7,7 @@
           {
             alert: 'HighReadLatency',
             expr: |||
-              sum(cassandra_table_readlatency_seconds_sum{%(filteringSelector)s}) by (instance) / sum(cassandra_table_readlatency_seconds_count{%(filteringSelector)s}) by (instance) * 1000 > %(alertsCriticalReadLatency5m)s
+              sum(rate(cassandra_table_readlatency_seconds_sum{%(filteringSelector)s}[5m])) by (instance) / sum(rate(cassandra_table_readlatency_seconds_count{%(filteringSelector)s}[5m])) by (instance) * 1000 > %(alertsCriticalReadLatency5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -25,7 +25,7 @@
           {
             alert: 'HighWriteLatency',
             expr: |||
-              sum(cassandra_keyspace_writelatency_seconds_sum{%(filteringSelector)s}) by (instance) / sum(cassandra_keyspace_writelatency_seconds_count{%(filteringSelector)s}) by (instance) * 1000 > %(alertsCriticalWriteLatency5m)s
+              sum(rate(cassandra_keyspace_writelatency_seconds_sum{%(filteringSelector)s}[5m])) by (instance) / sum(rate(cassandra_keyspace_writelatency_seconds_count{%(filteringSelector)s}[5m])) by (instance) * 1000 > %(alertsCriticalWriteLatency5m)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -97,7 +97,7 @@
           {
             alert: 'UnavailableWriteRequestsFound',
             expr: |||
-              sum  without (cassandra_cluster) (cassandra_clientrequest_unavailables_count{%(unavailableWriteSelector)s}) > %(alertsCriticalUnavailableWriteRequests5m)s
+              sum without (cassandra_cluster) (increase(cassandra_clientrequest_unavailables_count{%(unavailableWriteSelector)s}[5m])) > %(alertsCriticalUnavailableWriteRequests5m)s
             ||| % this.config { unavailableWriteSelector: if this.config.filteringSelector != '' then 'clientrequest="Write", ' + this.config.filteringSelector else 'clientrequest="Write"' },
             'for': '5m',
             labels: { severity: 'critical' },
