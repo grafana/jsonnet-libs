@@ -191,67 +191,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ),
 
     instanceTable:
-      g.panel.table.new('Cluster instances')
+      signals.cluster.instanceRole.asTable(name='Cluster instances')
+      + signals.cluster.instanceStatus.asTableColumn()
+      + signals.cluster.instanceUptime.asTableColumn()
+      + signals.cluster.instanceConnectionUtilization.asTableColumn()
+      + signals.cluster.instanceCacheHitRatio.asTableColumn()
+      + signals.cluster.instanceReplicationLag.asTableColumn()
       + g.panel.table.panelOptions.withDescription(
         'All PostgreSQL instances in the cluster. Click a row to view instance details.'
       )
-      + g.panel.table.queryOptions.withTargets([
-        // Instance status
-        signals.cluster.instanceStatus.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-        // Instance role
-        signals.cluster.instanceRole.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-        // Instance uptime
-        signals.cluster.instanceUptime.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-        // Instance connection utilization
-        signals.cluster.instanceConnectionUtilization.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-        // Instance cache hit ratio
-        signals.cluster.instanceCacheHitRatio.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-        // Instance replication lag
-        signals.cluster.instanceReplicationLag.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-      ])
-      + g.panel.table.queryOptions.withTransformations([
-        // Merge all queries by instance
-        g.panel.table.transformation.withId('merge'),
-        // Organize fields
-        g.panel.table.transformation.withId('organize')
-        + g.panel.table.transformation.withOptions({
-          excludeByName: {
-            Time: true,
-            __name__: true,
-          } + { [label]: true for label in config.groupLabels },
-          renameByName: {
-            [instanceLabel]: instanceColumn,
-            'Value #Instance status': 'Status',
-            'Value #Instance role': 'Role',
-            'Value #Instance uptime': 'Uptime',
-            'Value #Instance connection utilization': 'Conn %',
-            'Value #Instance cache hit ratio': 'Cache %',
-            'Value #Instance replication lag': 'Lag',
-          },
-          indexByName: {
-            [instanceLabel]: 0,
-            'Value #Instance role': 1,
-            'Value #Instance status': 2,
-            'Value #Instance uptime': 3,
-            'Value #Instance connection utilization': 4,
-            'Value #Instance cache hit ratio': 5,
-            'Value #Instance replication lag': 6,
-          },
+      + g.panel.table.queryOptions.withTransformationsMixin([
+        g.panel.table.queryOptions.transformation.withId('organize')
+        + g.panel.table.queryOptions.transformation.withOptions({
+          excludeByName: { [commonlib.utils.toSentenceCase(label)]: true for label in config.groupLabels },
         }),
       ])
-      + g.panel.table.standardOptions.withOverrides([
+      + g.panel.table.standardOptions.withOverridesMixin([
         {
           matcher: { id: 'byName', options: instanceColumn },
           properties: [
@@ -266,8 +221,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
         // Status column
         {
-          matcher: { id: 'byName', options: 'Status' },
+          matcher: { id: 'byName', options: 'Instance status' },
           properties: [
+            { id: 'displayName', value: 'Status' },
             { id: 'mappings', value: [
               { type: 'value', options: { '0': { text: '🔴 DOWN', color: 'red' }, '1': { text: '🟢 UP', color: 'green' } } },
             ] },
@@ -277,8 +233,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
         // Role column
         {
-          matcher: { id: 'byName', options: 'Role' },
+          matcher: { id: 'byName', options: 'Instance role' },
           properties: [
+            { id: 'displayName', value: 'Role' },
             { id: 'mappings', value: [
               { type: 'value', options: { '0': { text: 'PRIMARY', color: 'blue' }, '1': { text: 'REPLICA', color: 'purple' } } },
             ] },
@@ -288,15 +245,17 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
         // Uptime column
         {
-          matcher: { id: 'byName', options: 'Uptime' },
+          matcher: { id: 'byName', options: 'Instance uptime' },
           properties: [
+            { id: 'displayName', value: 'Uptime' },
             { id: 'unit', value: 'dtdurations' },
             { id: 'custom.width', value: 120 },
           ],
         },
         {
-          matcher: { id: 'byName', options: 'Conn %' },
+          matcher: { id: 'byName', options: 'Instance connection utilization' },
           properties: [
+            { id: 'displayName', value: 'Conn %' },
             { id: 'custom.width', value: 150 },
             { id: 'unit', value: 'percentunit' },
             { id: 'custom.cellOptions', value: { type: 'gauge', mode: 'lcd', valueDisplayMode: 'color' } },
@@ -311,8 +270,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
         },
         {
-          matcher: { id: 'byName', options: 'Cache %' },
+          matcher: { id: 'byName', options: 'Instance cache hit ratio' },
           properties: [
+            { id: 'displayName', value: 'Cache %' },
             { id: 'custom.width', value: 150 },
             { id: 'unit', value: 'percentunit' },
             { id: 'custom.cellOptions', value: { type: 'gauge', mode: 'lcd', valueDisplayMode: 'color' } },
@@ -328,8 +288,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
         // Lag column
         {
-          matcher: { id: 'byName', options: 'Lag' },
+          matcher: { id: 'byName', options: 'Instance replication lag' },
           properties: [
+            { id: 'displayName', value: 'Lag' },
             { id: 'custom.width', value: 80 },
             { id: 'unit', value: 's' },
             { id: 'custom.cellOptions', value: { type: 'color-text' } },
