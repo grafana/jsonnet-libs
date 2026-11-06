@@ -40,6 +40,11 @@
       expr
     ),
 
+  // Adds extra label matchers, such as 'device!~"loop.*"', to each selector in expr.
+  // Matchers set to '' are left out.
+  withMatchers(expr, matchers)::
+    std.strReplace(expr, '%(queriesSelector)s', std.join(', ', [m for m in matchers if m != ''] + ['%(queriesSelector)s'])),
+
   // Returns the 'otel' and 'otel_with_suffixes' sources for an expression written with plain names.
   // Any extra source options, such as legendCustomTemplate, apply to both.
   sources(expr, extra={}):: {

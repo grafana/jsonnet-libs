@@ -3,7 +3,7 @@ local common = import './common.libsonnet';
 function(this)
   // Only per-interface metrics have a device label; connections and conntrack don't.
   local deviceSources(expr, extra={}) =
-    common.sources(std.strReplace(expr, '%(queriesSelector)s', this.networkInterfaceSelector + ', %(queriesSelector)s'), extra);
+    common.sources(common.withMatchers(expr, [this.networkInterfaceSelector]), extra);
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,

@@ -2,7 +2,7 @@ local common = import './common.libsonnet';
 
 function(this)
   local fsSources(expr, extra={}) =
-    common.sources(std.strReplace(expr, '%(queriesSelector)s', this.filesystemSelector + ', ' + this.filesystemMountpointSelector + ', %(queriesSelector)s'), extra);
+    common.sources(common.withMatchers(expr, [this.filesystemSelector, this.filesystemMountpointSelector]), extra);
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,

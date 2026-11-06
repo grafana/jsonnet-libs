@@ -2,7 +2,7 @@ local common = import './common.libsonnet';
 
 function(this)
   local deviceSources(expr, extra={}) =
-    common.sources(std.strReplace(expr, '%(queriesSelector)s', this.diskDeviceSelector + ', %(queriesSelector)s'), extra);
+    common.sources(common.withMatchers(expr, [this.diskDeviceSelector]), extra);
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
