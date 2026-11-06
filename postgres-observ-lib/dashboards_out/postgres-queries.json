@@ -31,15 +31,23 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Execution time consumption rate per query. Higher values = more resource usage.",
+            "description": "Execution time consumption rate per query. Higher values = more resource usage. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                },
@@ -59,8 +67,8 @@
                ]
             },
             "gridPos": {
-               "h": 14,
-               "w": 12,
+               "h": 8,
+               "w": 24,
                "x": 0,
                "y": 1
             },
@@ -73,7 +81,7 @@
                      "mean"
                   ],
                   "displayMode": "table",
-                  "placement": "bottom",
+                  "placement": "right",
                   "sortBy": "Last *",
                   "sortDesc": true
                },
@@ -82,7 +90,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -104,15 +112,23 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Average execution time per call. Higher values = slower queries.",
+            "description": "Average execution time per call. Higher values = slower queries. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "s"
                },
@@ -132,10 +148,10 @@
                ]
             },
             "gridPos": {
-               "h": 14,
-               "w": 12,
-               "x": 12,
-               "y": 1
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 9
             },
             "options": {
                "legend": {
@@ -146,7 +162,7 @@
                      "mean"
                   ],
                   "displayMode": "table",
-                  "placement": "bottom",
+                  "placement": "right",
                   "sortBy": "Last *",
                   "sortDesc": true
                },
@@ -155,7 +171,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -177,15 +193,23 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Query execution rate. High-frequency queries may benefit from caching.",
+            "description": "Query execution rate. High-frequency queries may benefit from caching. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ops"
                },
@@ -205,10 +229,10 @@
                ]
             },
             "gridPos": {
-               "h": 14,
-               "w": 12,
+               "h": 8,
+               "w": 24,
                "x": 0,
-               "y": 15
+               "y": 17
             },
             "options": {
                "legend": {
@@ -219,7 +243,7 @@
                      "mean"
                   ],
                   "displayMode": "table",
-                  "placement": "bottom",
+                  "placement": "right",
                   "sortBy": "Last *",
                   "sortDesc": true
                },
@@ -228,7 +252,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -250,15 +274,23 @@
                "type": "prometheus",
                "uid": "${datasource}"
             },
-            "description": "Rows returned per query. High values may indicate missing WHERE/LIMIT clauses.",
+            "description": "Rows returned per query. High values may indicate missing WHERE/LIMIT clauses. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "rows/s"
                },
@@ -278,10 +310,10 @@
                ]
             },
             "gridPos": {
-               "h": 14,
-               "w": 12,
-               "x": 12,
-               "y": 15
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 25
             },
             "options": {
                "legend": {
@@ -292,7 +324,7 @@
                      "mean"
                   ],
                   "displayMode": "table",
-                  "placement": "bottom",
+                  "placement": "right",
                   "sortBy": "Last *",
                   "sortDesc": true
                },
@@ -301,7 +333,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -323,7 +355,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Query statistics from pg_stat_statements. Shows all queries - sort by any column to analyze.",
+            "description": "Query statistics from pg_stat_statements. Shows all queries - sort by any column to analyze. Run `SELECT query FROM pg_stat_statements WHERE queryid = <query-id>` to see a query's SQL.",
             "fieldConfig": {
                "overrides": [
                   {
@@ -392,7 +424,7 @@
                "h": 12,
                "w": 24,
                "x": 0,
-               "y": 27
+               "y": 37
             },
             "options": {
                "sortBy": [
@@ -402,7 +434,7 @@
                   }
                ]
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -473,10 +505,8 @@
                         "Time 6": true,
                         "__name__": true,
                         "cluster": true,
-                        "environment": true,
                         "instance": true,
-                        "job": true,
-                        "server_id": true
+                        "job": true
                      },
                      "indexByName": {
                         "Value #CallsRate": 4,
@@ -516,6 +546,7 @@
             "type": "table"
          }
       ],
+      "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
          "postgres",
@@ -562,7 +593,7 @@
                "type": "query"
             },
             {
-               "allValue": null,
+               "allValue": ".+",
                "datasource": {
                   "type": "prometheus",
                   "uid": "${datasource}"
@@ -623,10 +654,10 @@
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-1h",
          "to": "now"
       },
-      "timezone": "utc",
+      "timezone": "",
       "title": "PostgreSQL query performance",
       "uid": "postgres-queries"
    }

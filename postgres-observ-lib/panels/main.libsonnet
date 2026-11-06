@@ -1,11 +1,11 @@
 {
   new(signals, config):: {
-    health: (import './health.libsonnet').new(signals),
+    health: (import './health.libsonnet').new(signals, config),
     problems: (import './problems.libsonnet').new(signals),
     performance: (import './performance.libsonnet').new(signals),
-    maintenance: (import './maintenance.libsonnet').new(signals),
-    queries: (import './queries.libsonnet').new(signals),
-    settings: (import './settings.libsonnet').new(signals),
+    maintenance: (import './maintenance.libsonnet').new(signals, config),
+    queries: (import './queries.libsonnet').new(signals, config),
+    settings: (import './settings.libsonnet').new(signals, config),
     cluster: (import './cluster.libsonnet').new(signals, config),
   },
 }

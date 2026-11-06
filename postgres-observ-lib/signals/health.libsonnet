@@ -101,6 +101,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_database_deadlocks{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: ' Deadlocks',
           },
         },

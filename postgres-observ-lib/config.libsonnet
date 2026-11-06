@@ -1,9 +1,10 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   // Filtering and labels
-  // filteringSelector: used in dashboard queries (empty = uses only $job/$instance from groupLabels/instanceLabels)
-  // alertsFilteringSelector: used in alert rules (no Grafana variables available)
   filteringSelector: '',
-  alertsFilteringSelector: 'job=~".+", instance=~".+"',
+  // Deprecated, use filteringSelector instead.
+  alertsFilteringSelector: self.filteringSelector,
   groupLabels: ['job', 'cluster'],
   instanceLabels: ['instance'],
 
@@ -11,6 +12,9 @@
   uid: 'postgres',
   dashboardNamePrefix: '',
   dashboardTags: ['postgres', 'database'],
+  dashboardPeriod: 'now-1h',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
+  dashboardRefresh: '1m',
 
   // Metrics source - extensible pattern for future sources
   // Currently only 'postgres_exporter' (prometheus community exporter) is implemented
@@ -19,44 +23,29 @@
   // Feature flags
   enableQueryAnalysis: true,  // Requires pg_stat_statements extension
 
-  // Alert thresholds
-  alerts: {
-    connectionUtilization: {
-      warn: 80,  // percentage
-      critical: 95,
-    },
-    cacheHitRatio: {
-      warn: 90,  // percentage, below this triggers warning
-    },
-    replicationLag: {
-      warn: 30,  // seconds
-      critical: 3600,  // 1 hour (from upstream)
-    },
-    deadlocks: {
-      warn: 1,  // per 5m window
-    },
-    longRunningQuery: {
-      warn: 300,  // seconds (5 minutes)
-    },
-    blockedQueries: {
-      warn: 1,  // count
-    },
-    deadTupleRatio: {
-      warn: 10,  // percentage
-      critical: 20,
-    },
-    vacuumAge: {
-      warn: 7,  // days since last vacuum
-    },
-    // From upstream postgres_mixin
-    rollbackRatio: {
-      warn: 10,  // percentage, above this triggers warning
-    },
-    lockUtilization: {
-      warn: 20,  // percentage of max locks
-    },
-    qps: {
-      warn: 10000,  // queries per second
-    },
-  },
+  // Alerts
+  alertHighConnectionUsageWarningThreshold: 80,  // > percent of max_connections
+
+  alertLowCacheHitRatioWarningThreshold: 90,  // < percent
+
+  alertReplicationLagWarningThreshold: 30,  // > seconds
+  alertReplicationLagCriticalThreshold: 3600,  // > seconds
+
+  alertDeadlocksWarningThreshold: 1,  // > deadlocks in 5 minutes
+
+  alertLongRunningQueryWarningThreshold: 300,  // > seconds
+
+  alertBlockedQueriesWarningThreshold: 1,  // > queries
+
+  alertHighDeadTuplesWarningThreshold: 10,  // > percent of tuples that are dead
+  alertHighDeadTuplesMinDeadTuples: 10000,  // > dead tuples
+
+  alertVacuumNotRunningWarningThreshold: 7,  // > days
+  alertVacuumNotRunningDeadTuples: 10000,  // > dead tuples
+
+  alertTooManyRollbacksWarningThreshold: 10,  // > percent of transactions rolled back
+
+  alertTooManyLocksAcquiredWarningThreshold: 20,  // > percent of the lock table size
+
+  alertHighQpsWarningThreshold: 10000,  // > transactions per second
 }

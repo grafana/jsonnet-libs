@@ -136,7 +136,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Read/Write ratio pie chart
     readWriteRatio:
-      g.panel.pieChart.new('Read/Write ratio')
+      g.panel.pieChart.new('Read/write ratio')
       + g.panel.pieChart.panelOptions.withDescription(
         'Ratio of read operations (fetched) to write operations (insert+update+delete).'
       )
@@ -154,7 +154,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Read/Write time series (complements pie chart)
     readWriteTimeSeries:
-      g.panel.timeSeries.new('Read/Write over time')
+      g.panel.timeSeries.new('Read/write over time')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('rows/s')
       + signals.performance.rowsFetched.asPanelMixin()

@@ -17,6 +17,7 @@ local g = import './g.libsonnet';
         panels.cluster.worstCacheHitRatio { gridPos+: { w: 8, h: 6 } },
         panels.cluster.worstConnectionUtilization { gridPos+: { w: 8, h: 6 } },
         panels.cluster.totalDeadlocks { gridPos+: { w: 8, h: 6 } },
+        panels.cluster.alerts { gridPos+: { w: 24, h: 6 } },
       ]),
 
     // Cluster Instances Table with Role History
@@ -76,8 +77,6 @@ local g = import './g.libsonnet';
       + g.panel.row.withPanels([
         panels.cluster.totalConnectionsTimeSeries { gridPos+: { w: 12, h: 8 } },
         panels.cluster.cacheHitRatioByInstanceTimeSeries { gridPos+: { w: 12, h: 8 } },
-        panels.cluster.totalDatabaseSize { gridPos+: { w: 12, h: 8 } },
-        panels.cluster.walPositionTimeSeries { gridPos+: { w: 12, h: 8 } },
       ]),
 
     health:
@@ -95,9 +94,10 @@ local g = import './g.libsonnet';
         panels.health.replicationLag { gridPos+: { w: 8, h: 4 } },
         panels.health.connectedReplicas { gridPos+: { w: 8, h: 4 } },
         panels.health.replicationSlotLag { gridPos+: { w: 8, h: 4 } },
-        // Line 3: Gauges (2 panels x 12 = 24)
-        panels.health.connectionUtilization { gridPos+: { w: 12, h: 6 } },
-        panels.health.cacheHitRatio { gridPos+: { w: 12, h: 6 } },
+        // Line 3: Gauges and alerts (3 panels)
+        panels.health.connectionUtilization { gridPos+: { w: 6, h: 6 } },
+        panels.health.cacheHitRatio { gridPos+: { w: 6, h: 6 } },
+        panels.health.alerts { gridPos+: { w: 12, h: 6 } },
       ]),
 
     // Tier 2: Active Problems - Expands when issues exist
@@ -119,10 +119,10 @@ local g = import './g.libsonnet';
         panels.problems.conflictsDeadlocks { gridPos+: { w: 8, h: 6 } },
       ]),
 
-    // Tier 3: Performance Trends - Time series (collapsed for faster loading)
+    // Tier 3: Performance Trends - Time series
     performance:
       g.panel.row.new('Performance trends')
-      + g.panel.row.withCollapsed(true)
+      + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         panels.performance.transactionsPerSecond { gridPos+: { w: 12, h: 8 } },
         panels.performance.queriesPerSecond { gridPos+: { w: 12, h: 8 } },
@@ -137,10 +137,10 @@ local g = import './g.libsonnet';
         panels.performance.rollbackRatio { gridPos+: { w: 12, h: 8 } },
       ]),
 
-    // Tier 4: Maintenance - Actionable tasks (collapsed for faster loading)
+    // Tier 4: Maintenance - Actionable tasks
     maintenance:
       g.panel.row.new('Maintenance')
-      + g.panel.row.withCollapsed(true)
+      + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         // Row 1: Vacuum - Stats | Time series
         panels.maintenance.tablesNeedingVacuum { gridPos+: { w: 4, h: 8 } },
@@ -165,17 +165,17 @@ local g = import './g.libsonnet';
       g.panel.row.new('Query analysis')
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
-        panels.queries.topQueriesByTotalTime { gridPos+: { w: 12, h: 14 } },
-        panels.queries.slowestQueriesByMeanTime { gridPos+: { w: 12, h: 14 } },
-        panels.queries.mostFrequentQueries { gridPos+: { w: 12, h: 14 } },
-        panels.queries.topQueriesByRows { gridPos+: { w: 12, h: 14 } },
+        panels.queries.topQueriesByTotalTime { gridPos+: { w: 24, h: 8 } },
+        panels.queries.slowestQueriesByMeanTime { gridPos+: { w: 24, h: 8 } },
+        panels.queries.mostFrequentQueries { gridPos+: { w: 24, h: 8 } },
+        panels.queries.topQueriesByRows { gridPos+: { w: 24, h: 8 } },
         panels.queries.queryStatsTable { gridPos+: { w: 24, h: 12 } },
       ]),
 
-    // Tier 6: Settings - PostgreSQL configuration parameters (collapsed for faster loading)
+    // Tier 6: Settings - PostgreSQL configuration parameters
     settings:
       g.panel.row.new('PostgreSQL settings')
-      + g.panel.row.withCollapsed(true)
+      + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels([
         panels.settings.settingsTable { gridPos+: { w: 24, h: 16 } },
       ]),

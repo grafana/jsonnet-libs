@@ -1,14 +1,14 @@
 local g = import '../g.libsonnet';
 
 {
-  new(signals):: {
+  new(signals, config):: {
     local queriesSelector = signals.health.templatingVariables.queriesSelector,
 
     // Settings table - shows all pg_settings_* metrics in a searchable table
     settingsTable:
       g.panel.table.new('PostgreSQL settings')
       + g.panel.table.panelOptions.withDescription(
-        'PostgreSQL configuration settings. Use the Settings Filter variable above to search by setting name (regex). Default .* shows all settings.'
+        'PostgreSQL configuration settings. Use the Settings filter variable above to search by setting name (regex). Default .* shows all settings.'
       )
       + g.panel.table.queryOptions.withTargets([
         {
@@ -29,13 +29,9 @@ local g = import '../g.libsonnet';
             excludeByName: {
               Time: true,
               __name__: false,
-              job: true,
-              cluster: true,
-              instance: true,
+              // postgres_exporter adds a server label to its built-in metrics, which include pg_settings_*.
               server: true,
-              server_id: true,
-              environment: true,
-            },
+            } + { [label]: true for label in config.groupLabels + config.instanceLabels },
             indexByName: {
               __name__: 0,
               Value: 1,

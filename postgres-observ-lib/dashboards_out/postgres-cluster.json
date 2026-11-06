@@ -35,7 +35,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -66,6 +66,7 @@
                      }
                   ],
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "red",
@@ -76,7 +77,8 @@
                            "value": 1
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -108,7 +110,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -142,13 +144,24 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "orange",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
-                  ]
+                  ],
+                  "noValue": "No data",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -172,7 +185,6 @@
                "y": 1
             },
             "options": {
-               "colorMode": "fixed",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -180,7 +192,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -206,7 +218,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -214,13 +226,24 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "red",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
-                  ]
+                  ],
+                  "noValue": "No data",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#5794f2",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -244,7 +267,7 @@
                "y": 1
             },
             "options": {
-               "colorMode": "value",
+               "colorMode": "none",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
@@ -252,7 +275,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -278,7 +301,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -286,14 +309,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "red",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "red",
@@ -308,7 +333,8 @@
                            "value": 2
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -340,7 +366,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -366,7 +392,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -374,14 +400,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "orange",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "yellow",
@@ -392,7 +420,8 @@
                            "value": 1
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -424,7 +453,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -450,7 +479,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -458,14 +487,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -517,7 +548,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -547,8 +578,8 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
@@ -556,6 +587,7 @@
                   ],
                   "max": 1,
                   "min": 0,
+                  "noValue": "No data",
                   "thresholds": {
                      "steps": [
                         {
@@ -604,14 +636,14 @@
                "minVizWidth": 200,
                "showThresholdLabels": false
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "min by (job,cluster) (\n  sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  sum by (instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  +\n  sum by (instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  + 1\n)\n\n)",
+                  "expr": "min by (job,cluster) (\n  sum by (job,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  sum by (job,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  +\n  sum by (job,cluster,instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n)\n\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": "Worst cache hit ratio",
@@ -634,8 +666,8 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "orange",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
@@ -643,6 +675,7 @@
                   ],
                   "max": 1,
                   "min": 0,
+                  "noValue": "No data",
                   "thresholds": {
                      "steps": [
                         {
@@ -691,14 +724,14 @@
                "minVizWidth": 200,
                "showThresholdLabels": false
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,cluster) (\n  sum by (instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\nmax by (instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n\n)",
+                  "expr": "max by (job,cluster) (\n  sum by (job,cluster,instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\nmax by (job,cluster,instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": "Worst connection utilization",
@@ -717,22 +750,25 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
+                  "decimals": 0,
                   "mappings": [
                      {
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -743,7 +779,8 @@
                            "value": 1
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -771,18 +808,18 @@
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
-                     "diff"
+                     "lastNotNull"
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_deadlocks{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,cluster) (\n  increase(pg_stat_database_deadlocks{job=~\"$job\",cluster=~\"$cluster\"}[$__range:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": "{{cluster}}: Total deadlocks",
@@ -793,12 +830,32 @@
             "type": "stat"
          },
          {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "",
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 13
+            },
+            "options": {
+               "alertInstanceLabelFilter": "job=~\"${job:regex}\",cluster=~\"${cluster:regex}\",alertname=~\"PostgreSQL.*\"",
+               "groupMode": "default"
+            },
+            "pluginVersion": "v11.4.0",
+            "title": "PostgreSQL alerts",
+            "type": "alertlist"
+         },
+         {
             "collapsed": false,
             "gridPos": {
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 13
+               "y": 19
             },
             "panels": [ ],
             "title": "Cluster instances",
@@ -806,20 +863,96 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "All PostgreSQL instances in the cluster. Click a row to view instance details.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "filterable": false
+                  },
                   "links": [
                      {
                         "title": "View Instance Details",
                         "url": "/d/postgres-overview?var-instance=${__data.fields.Instance}&${__url_time_range}"
                      }
-                  ]
+                  ],
+                  "unit": "short"
                },
                "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance role"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance status"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance connection utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance cache hit ratio"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance replication lag"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  },
                   {
                      "matcher": {
                         "id": "byName",
@@ -835,7 +968,7 @@
                            "value": [
                               {
                                  "title": "View Instance",
-                                 "url": "/d/postgres-overview?var-instance=${__data.fields.Instance}&${datasource:queryparam}&${job:queryparam}&${cluster:queryparam}"
+                                 "url": "/d/postgres-overview?var-instance=${__data.fields.Instance}&${__url_time_range}&${datasource:queryparam}&${job:queryparam}&${cluster:queryparam}"
                               }
                            ]
                         }
@@ -844,9 +977,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Status"
+                        "options": "Instance status"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Status"
+                        },
                         {
                            "id": "mappings",
                            "value": [
@@ -880,9 +1017,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Role"
+                        "options": "Instance role"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Role"
+                        },
                         {
                            "id": "mappings",
                            "value": [
@@ -916,9 +1057,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Uptime"
+                        "options": "Instance uptime"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Uptime"
+                        },
                         {
                            "id": "unit",
                            "value": "dtdurations"
@@ -932,9 +1077,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Conn %"
+                        "options": "Instance connection utilization"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Conn %"
+                        },
                         {
                            "id": "custom.width",
                            "value": 150
@@ -988,9 +1137,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Cache %"
+                        "options": "Instance cache hit ratio"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Cache %"
+                        },
                         {
                            "id": "custom.width",
                            "value": 150
@@ -1044,9 +1197,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Lag"
+                        "options": "Instance replication lag"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Lag"
+                        },
                         {
                            "id": "custom.width",
                            "value": 80
@@ -1089,26 +1246,15 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 14
+               "y": 20
             },
             "options": {
                "footer": {
                   "enablePagination": false
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "sum by (job,cluster,instance) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-                  "format": "table",
-                  "instant": true,
-                  "legendFormat": "{{instance}}",
-                  "refId": "Instance status"
-               },
                {
                   "datasource": {
                      "type": "prometheus",
@@ -1119,6 +1265,17 @@
                   "instant": true,
                   "legendFormat": "{{instance}}",
                   "refId": "Instance role"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (job,cluster,instance) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "{{instance}}",
+                  "refId": "Instance status"
                },
                {
                   "datasource": {
@@ -1136,7 +1293,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance, instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  max by (job,cluster,instance, instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n)\n\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance) (pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  max by (job,cluster,instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n)\n\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{instance}}",
@@ -1147,7 +1304,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  (\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n    +\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  )\n)\n\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  (\n    sum by (job,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n    +\n    sum by (job,cluster,instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  )\n)\n\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{instance}}",
@@ -1171,33 +1328,42 @@
                   "id": "merge"
                },
                {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value #(.*)",
+                     "renamePattern": "$1"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "^(?!Time).*$"
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "indexByName": {
+                        "cluster": 1,
+                        "instance": 2,
+                        "job": 0
+                     },
+                     "renameByName": {
+                        "Value": "Cluster instances",
+                        "cluster": "Cluster",
+                        "instance": "Instance",
+                        "job": "Job"
+                     }
+                  }
+               },
+               {
                   "id": "organize",
                   "options": {
                      "excludeByName": {
-                        "Time": true,
-                        "__name__": true,
-                        "cluster": true,
-                        "environment": true,
-                        "job": true,
-                        "server_id": true
-                     },
-                     "indexByName": {
-                        "Value #Instance cache hit ratio": 5,
-                        "Value #Instance connection utilization": 4,
-                        "Value #Instance replication lag": 6,
-                        "Value #Instance role": 1,
-                        "Value #Instance status": 2,
-                        "Value #Instance uptime": 3,
-                        "instance": 0
-                     },
-                     "renameByName": {
-                        "Value #Instance cache hit ratio": "Cache %",
-                        "Value #Instance connection utilization": "Conn %",
-                        "Value #Instance replication lag": "Lag",
-                        "Value #Instance role": "Role",
-                        "Value #Instance status": "Status",
-                        "Value #Instance uptime": "Uptime",
-                        "instance": "Instance"
+                        "Cluster": true,
+                        "Job": true
                      }
                   }
                }
@@ -1209,7 +1375,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Timeline showing the role of each instance. Blue = Primary, Purple = Replica. Role changes indicate failover events.",
+            "description": "Instance role (sum): Role of each instance. 0 = Primary, 1 = Replica.  \n",
             "fieldConfig": {
                "defaults": {
                   "mappings": [
@@ -1228,7 +1394,8 @@
                         },
                         "type": "value"
                      }
-                  ]
+                  ],
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1249,7 +1416,7 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 14
+               "y": 20
             },
             "options": {
                "alignValue": "center",
@@ -1261,7 +1428,7 @@
                "rowHeight": 0.80000000000000004,
                "showValue": "never"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1287,17 +1454,19 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "custom": {
                      "drawStyle": "bars",
-                     "fillOpacity": 80,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1330,7 +1499,7 @@
                "h": 6,
                "w": 24,
                "x": 0,
-               "y": 20
+               "y": 26
             },
             "options": {
                "legend": {
@@ -1342,14 +1511,14 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  changes(pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}[5m])\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  changes(pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Role changes",
@@ -1365,7 +1534,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 28
+               "y": 34
             },
             "panels": [ ],
             "title": "Cluster problems",
@@ -1380,7 +1549,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -1388,14 +1557,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1410,7 +1581,8 @@
                            "value": 3
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1431,7 +1603,7 @@
                "h": 6,
                "w": 4,
                "x": 0,
-               "y": 29
+               "y": 35
             },
             "options": {
                "colorMode": "value",
@@ -1442,7 +1614,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1468,7 +1640,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -1476,14 +1648,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1498,7 +1672,8 @@
                            "value": 5
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1519,7 +1694,7 @@
                "h": 6,
                "w": 4,
                "x": 4,
-               "y": 29
+               "y": 35
             },
             "options": {
                "colorMode": "value",
@@ -1530,14 +1705,14 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (\n  pg_locks_count{job=~\"$job\",cluster=~\"$cluster\", mode=\"exclusivelock\"}\n)",
+                  "expr": "sum by (job,cluster) (\n  pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\", wait_event_type=\"Lock\"} or pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"} * 0\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": "{{cluster}}: Blocked queries",
@@ -1556,7 +1731,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -1564,14 +1739,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1586,7 +1763,8 @@
                            "value": 20
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1607,7 +1785,7 @@
                "h": 6,
                "w": 4,
                "x": 8,
-               "y": 29
+               "y": 35
             },
             "options": {
                "colorMode": "value",
@@ -1618,7 +1796,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1644,22 +1822,25 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
+                  "decimals": 0,
                   "mappings": [
                      {
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "orange",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1670,7 +1851,8 @@
                            "value": 1
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1691,25 +1873,25 @@
                "h": 6,
                "w": 4,
                "x": 12,
-               "y": 29
+               "y": 35
             },
             "options": {
                "colorMode": "value",
                "graphMode": "none",
                "reduceOptions": {
                   "calcs": [
-                     "diff"
+                     "lastNotNull"
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_archiver_failed_count{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,cluster) (\n  increase(pg_stat_archiver_failed_count{job=~\"$job\",cluster=~\"$cluster\"}[$__range:] offset -$__interval)\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": "{{cluster}}: WAL archive failures",
@@ -1735,8 +1917,8 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "yellow",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
@@ -1744,6 +1926,7 @@
                   ],
                   "max": 1,
                   "min": 0,
+                  "noValue": "No data",
                   "thresholds": {
                      "steps": [
                         {
@@ -1785,21 +1968,21 @@
                "h": 6,
                "w": 4,
                "x": 16,
-               "y": 29
+               "y": 35
             },
             "options": {
                "minVizHeight": 150,
                "minVizWidth": 150,
                "showThresholdLabels": false
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,cluster) (\n  sum by (instance) (pg_locks_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  max by (instance) (pg_settings_max_locks_per_transaction{job=~\"$job\",cluster=~\"$cluster\"})\n  *\n  max by (instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n)\n\n)",
+                  "expr": "max by (job,cluster) (\n  sum by (job,cluster,instance) (pg_locks_count{job=~\"$job\",cluster=~\"$cluster\"})\n/\n(\n  max by (job,cluster,instance) (pg_settings_max_locks_per_transaction{job=~\"$job\",cluster=~\"$cluster\"})\n  *\n  max by (job,cluster,instance) (pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"})\n)\n\n)",
                   "format": "time_series",
                   "instant": true,
                   "legendFormat": "Worst lock utilization",
@@ -1818,7 +2001,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
-                     "fixedColor": "text",
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "mappings": [
@@ -1826,14 +2009,16 @@
                         "options": {
                            "match": "null",
                            "result": {
-                              "color": "red",
-                              "text": "No data"
+                              "color": "text",
+                              "index": 0
                            }
                         },
                         "type": "special"
                      }
                   ],
+                  "noValue": "No data",
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1844,7 +2029,8 @@
                            "value": 1
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -1865,7 +2051,7 @@
                "h": 6,
                "w": 4,
                "x": 20,
-               "y": 29
+               "y": 35
             },
             "options": {
                "colorMode": "value",
@@ -1876,7 +2062,7 @@
                   ]
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1899,7 +2085,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 35
+               "y": 41
             },
             "panels": [ ],
             "title": "Replication",
@@ -1913,6 +2099,10 @@
             "description": "Replication lag in seconds per replica instance.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -1924,6 +2114,7 @@
                      }
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -1960,7 +2151,7 @@
                "h": 8,
                "w": 8,
                "x": 0,
-               "y": 36
+               "y": 42
             },
             "options": {
                "legend": {
@@ -1972,7 +2163,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1997,6 +2188,10 @@
             "description": "WAL bytes pending per replication slot. High values indicate slow replicas.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
@@ -2008,6 +2203,7 @@
                      }
                   },
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "green",
@@ -2044,7 +2240,7 @@
                "h": 8,
                "w": 8,
                "x": 8,
-               "y": 36
+               "y": 42
             },
             "options": {
                "legend": {
@@ -2056,7 +2252,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -2081,12 +2277,20 @@
             "description": "Current WAL LSN position on the primary. Shows total WAL written over time.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "bytes"
                },
@@ -2109,7 +2313,7 @@
                "h": 8,
                "w": 8,
                "x": 16,
-               "y": 36
+               "y": 42
             },
             "options": {
                "legend": {
@@ -2121,17 +2325,17 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "max by (job,cluster) (\n  pg_stat_replication_pg_current_wal_lsn_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "expr": "label_replace(\n  max by (job,cluster) (\n  pg_stat_replication_pg_current_wal_lsn_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n)\n, \"cluster_prefix\", \"$1: \", \"cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{cluster}}: WAL position",
+                  "legendFormat": "{{cluster_prefix}}WAL position",
                   "refId": "WAL position"
                }
             ],
@@ -2144,7 +2348,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 44
+               "y": 50
             },
             "panels": [ ],
             "title": "Throughput & read/write split",
@@ -2158,12 +2362,20 @@
             "description": "Transactions per second per instance. Compare workload distribution.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ops"
                },
@@ -2186,7 +2398,7 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 45
+               "y": 51
             },
             "options": {
                "legend": {
@@ -2198,7 +2410,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -2223,12 +2435,20 @@
             "description": "Queries per second per instance. Requires pg_stat_statements extension.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "ops"
                },
@@ -2251,7 +2471,7 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 45
+               "y": 51
             },
             "options": {
                "legend": {
@@ -2263,14 +2483,14 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (instance) (\n  rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)\n",
+                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: QPS",
@@ -2285,11 +2505,15 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Write operations (INSERT, UPDATE, DELETE) from the primary instance only.",
+            "description": "Primary inserts (sum): Rows inserted per second on the primary.  \n\nPrimary updates (sum): Rows updated per second on the primary.  \n\nPrimary deletes (sum): Rows deleted per second on the primary.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
-                     "fillOpacity": 50,
+                     "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
@@ -2297,6 +2521,10 @@
                      "stacking": {
                         "mode": "normal"
                      }
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "rows/s"
                },
@@ -2343,7 +2571,7 @@
                "h": 8,
                "w": 8,
                "x": 0,
-               "y": 53
+               "y": 59
             },
             "options": {
                "legend": {
@@ -2355,17 +2583,17 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_inserted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
+                  "expr": "label_replace(\n  sum by (job,cluster) (\n  rate(pg_stat_database_tup_inserted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(job,cluster,instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n\n, \"cluster_prefix\", \"$1: \", \"cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{cluster}}: Inserts",
+                  "legendFormat": "{{cluster_prefix}}Inserts",
                   "refId": "Primary inserts"
                },
                {
@@ -2373,10 +2601,10 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_updated{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
+                  "expr": "label_replace(\n  sum by (job,cluster) (\n  rate(pg_stat_database_tup_updated{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(job,cluster,instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n\n, \"cluster_prefix\", \"$1: \", \"cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{cluster}}: Updates",
+                  "legendFormat": "{{cluster_prefix}}Updates",
                   "refId": "Primary updates"
                },
                {
@@ -2384,10 +2612,10 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_deleted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
+                  "expr": "label_replace(\n  sum by (job,cluster) (\n  rate(pg_stat_database_tup_deleted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(job,cluster,instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n\n, \"cluster_prefix\", \"$1: \", \"cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{cluster}}: Deletes",
+                  "legendFormat": "{{cluster_prefix}}Deletes",
                   "refId": "Primary deletes"
                }
             ],
@@ -2402,12 +2630,20 @@
             "description": "Rows fetched per second per instance. Shows read distribution across primary and replicas.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "rows/s"
                },
@@ -2430,7 +2666,7 @@
                "h": 8,
                "w": 8,
                "x": 8,
-               "y": 53
+               "y": 59
             },
             "options": {
                "legend": {
@@ -2442,7 +2678,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -2464,7 +2700,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Ratio of read operations to write operations cluster-wide.",
+            "description": "Total reads (sum): Total read operations (fetched) per second across all instances.  \n\nTotal writes (sum): Total write operations (insert + update + delete) per second.",
             "fieldConfig": {
                "defaults": {
                   "unit": "rows/s"
@@ -2500,7 +2736,7 @@
                "h": 8,
                "w": 8,
                "x": 16,
-               "y": 53
+               "y": 59
             },
             "options": {
                "displayLabels": [ ],
@@ -2515,17 +2751,17 @@
                },
                "pieType": "donut"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (\n  rate(pg_stat_database_tup_fetched{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)",
+                  "expr": "label_replace(\n  sum by (job,cluster) (\n  rate(pg_stat_database_tup_fetched{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n)\n, \"cluster_prefix\", \"$1: \", \"cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{cluster}}: Total reads",
+                  "legendFormat": "{{cluster_prefix}}Total reads",
                   "refId": "Total reads"
                },
                {
@@ -2533,10 +2769,10 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (\n  (\n    rate(pg_stat_database_tup_inserted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n    +\n    rate(pg_stat_database_tup_updated{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n    +\n    rate(pg_stat_database_tup_deleted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  )\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
+                  "expr": "label_replace(\n  sum by (job,cluster) (\n  (\n    rate(pg_stat_database_tup_inserted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n    +\n    rate(pg_stat_database_tup_updated{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n    +\n    rate(pg_stat_database_tup_deleted{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])\n  )\n  and on(job,cluster,instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n\n, \"cluster_prefix\", \"$1: \", \"cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{cluster}}: Total writes",
+                  "legendFormat": "{{cluster_prefix}}Total writes",
                   "refId": "Total writes"
                }
             ],
@@ -2549,7 +2785,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 61
+               "y": 67
             },
             "panels": [ ],
             "title": "Cluster resources",
@@ -2560,15 +2796,23 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "Total connections across all instances vs total max connections.",
+            "description": "Total connections (sum): Total active connections across all instances.  \n\nTotal max connections (sum): Sum of max_connections across all instances.",
             "fieldConfig": {
                "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
                   "custom": {
                      "fillOpacity": 30,
                      "gradientMode": "opacity",
                      "lineInterpolation": "smooth",
                      "lineWidth": 2,
                      "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
                   },
                   "unit": "short"
                },
@@ -2601,7 +2845,7 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 62
+               "y": 68
             },
             "options": {
                "legend": {
@@ -2613,17 +2857,17 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (\n  pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "expr": "label_replace(\n  sum by (job,cluster) (\n  pg_stat_activity_count{job=~\"$job\",cluster=~\"$cluster\"}\n)\n, \"cluster_prefix\", \"$1: \", \"cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{cluster}}: Total connections",
+                  "legendFormat": "{{cluster_prefix}}Total connections",
                   "refId": "Total connections"
                },
                {
@@ -2631,10 +2875,10 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster) (\n  pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "expr": "label_replace(\n  sum by (job,cluster) (\n  pg_settings_max_connections{job=~\"$job\",cluster=~\"$cluster\"}\n)\n, \"cluster_prefix\", \"$1: \", \"cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{cluster}}: Total max connections",
+                  "legendFormat": "{{cluster_prefix}}Total max connections",
                   "refId": "Total max connections"
                }
             ],
@@ -2650,6 +2894,7 @@
             "fieldConfig": {
                "defaults": {
                   "color": {
+                     "fixedColor": "#5794f2",
                      "mode": "thresholds"
                   },
                   "custom": {
@@ -2665,6 +2910,7 @@
                   "max": 1,
                   "min": 0,
                   "thresholds": {
+                     "mode": "absolute",
                      "steps": [
                         {
                            "color": "red",
@@ -2701,7 +2947,7 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 62
+               "y": 68
             },
             "options": {
                "legend": {
@@ -2719,14 +2965,14 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  (\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n    +\n    sum by (job,cluster,instance, instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  )\n)\n\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  (\n  sum by (job,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n  /\n  (\n    sum by (job,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",cluster=~\"$cluster\"})\n    +\n    sum by (job,cluster,instance) (pg_stat_database_blks_read{job=~\"$job\",cluster=~\"$cluster\"})\n  )\n)\n\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Cache hit ratio",
@@ -2735,146 +2981,9 @@
             ],
             "title": "Cache hit ratio by instance",
             "type": "timeseries"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Total size of all databases on the primary.",
-            "fieldConfig": {
-               "defaults": {
-                  "color": {
-                     "fixedColor": "text",
-                     "mode": "fixed"
-                  },
-                  "mappings": [
-                     {
-                        "options": {
-                           "match": "null",
-                           "result": {
-                              "color": "orange",
-                              "text": "No data"
-                           }
-                        },
-                        "type": "special"
-                     }
-                  ],
-                  "unit": "bytes"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "Total database size"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "bytes"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 0,
-               "y": 70
-            },
-            "options": {
-               "colorMode": "fixed",
-               "graphMode": "area",
-               "reduceOptions": {
-                  "calcs": [
-                     "lastNotNull"
-                  ]
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "sum by (job,cluster) (\n  pg_database_size_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n  and on(instance)\n  (pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"} == 0)\n)\n",
-                  "format": "time_series",
-                  "instant": true,
-                  "legendFormat": "{{cluster}}: Total database size",
-                  "refId": "Total database size"
-               }
-            ],
-            "title": "Total database size",
-            "type": "stat"
-         },
-         {
-            "datasource": {
-               "type": "prometheus",
-               "uid": "${datasource}"
-            },
-            "description": "Current WAL LSN position on the primary. Shows total WAL written over time.",
-            "fieldConfig": {
-               "defaults": {
-                  "custom": {
-                     "fillOpacity": 30,
-                     "gradientMode": "opacity",
-                     "lineInterpolation": "smooth",
-                     "lineWidth": 2,
-                     "showPoints": "never"
-                  },
-                  "unit": "bytes"
-               },
-               "overrides": [
-                  {
-                     "matcher": {
-                        "id": "byFrameRefID",
-                        "options": "WAL position"
-                     },
-                     "properties": [
-                        {
-                           "id": "unit",
-                           "value": "bytes"
-                        }
-                     ]
-                  }
-               ]
-            },
-            "gridPos": {
-               "h": 8,
-               "w": 12,
-               "x": 12,
-               "y": 70
-            },
-            "options": {
-               "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
-               },
-               "tooltip": {
-                  "mode": "multi",
-                  "sort": "desc"
-               }
-            },
-            "pluginVersion": "v11.0.0",
-            "targets": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${datasource}"
-                  },
-                  "expr": "max by (job,cluster) (\n  pg_stat_replication_pg_current_wal_lsn_bytes{job=~\"$job\",cluster=~\"$cluster\"}\n)",
-                  "format": "time_series",
-                  "instant": false,
-                  "legendFormat": "{{cluster}}: WAL position",
-                  "refId": "WAL position"
-               }
-            ],
-            "title": "WAL position",
-            "type": "timeseries"
          }
       ],
+      "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
          "postgres",
@@ -2923,10 +3032,10 @@
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-1h",
          "to": "now"
       },
-      "timezone": "utc",
+      "timezone": "",
       "title": "PostgreSQL cluster overview",
       "uid": "postgres-cluster"
    }

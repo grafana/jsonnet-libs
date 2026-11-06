@@ -23,6 +23,19 @@ function(this)
         },
       },
 
+      longestActiveTransaction: {
+        name: 'Longest active transaction',
+        description: 'Duration of the longest transaction with an active query.',
+        type: 'gauge',
+        unit: 's',
+        aggFunction: 'max',
+        sources: {
+          postgres_exporter: {
+            expr: 'pg_stat_activity_max_tx_duration{state="active", %(queriesSelector)s}',
+          },
+        },
+      },
+
       // Are locks causing waits?
       blockedQueries: {
         name: 'Blocked queries',
@@ -32,9 +45,7 @@ function(this)
         // aggFunction: 'sum' is default, let it handle aggregation
         sources: {
           postgres_exporter: {
-            expr: |||
-              pg_locks_count{%(queriesSelector)s, mode="exclusivelock"}              
-            |||,
+            expr: 'pg_stat_activity_count{wait_event_type="Lock", %(queriesSelector)s} or pg_stat_activity_count{%(queriesSelector)s} * 0',
             legendCustomTemplate: ' Blocked queries',
           },
         },
@@ -63,6 +74,7 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: 'pg_stat_archiver_failed_count{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: ' WAL archive failures',
           },
         },
@@ -88,7 +100,7 @@ function(this)
       conflicts: {
         name: 'Conflicts',
         description: 'Number of queries cancelled due to conflicts with recovery on standby servers.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'short',
         sources: {
           postgres_exporter: {
@@ -124,18 +136,30 @@ function(this)
       inactiveReplicationSlots: {
         name: 'Inactive replication slots',
         description: 'Number of inactive replication slots. Can cause WAL to accumulate.',
+        type: 'raw',
+        unit: 'short',
+        sources: {
+          postgres_exporter: {
+            // Raw: counts the slots at 0 and falls back to 0 when every slot is active.
+            expr: |||
+              count by (%(agg)s) (pg_replication_slots_active{%(queriesSelector)s} == 0)
+              or
+              (0 * group by (%(agg)s) (pg_replication_slots_active{%(queriesSelector)s}))
+            |||,
+            legendCustomTemplate: ' Inactive replication slots',
+          },
+        },
+      },
+
+      replicationSlotActive: {
+        name: 'Replication slot active',
+        description: 'Whether each replication slot is being streamed (1) or not (0).',
         type: 'gauge',
         unit: 'short',
         sources: {
           postgres_exporter: {
-            // Count replicas not in streaming state as a proxy for inactive slots
-            // Returns 0 if no non-streaming slots exist
-            expr: |||
-              count by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s, state!="streaming"})
-              or
-              (0 * group by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}))
-            |||,
-            legendCustomTemplate: ' Inactive replication slots',
+            expr: 'pg_replication_slots_active{%(queriesSelector)s}',
+            aggKeepLabels: ['slot_name'],
           },
         },
       },
