@@ -863,20 +863,96 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "All PostgreSQL instances in the cluster. Click a row to view instance details.",
             "fieldConfig": {
                "defaults": {
+                  "custom": {
+                     "filterable": false
+                  },
                   "links": [
                      {
                         "title": "View Instance Details",
                         "url": "/d/postgres-overview?var-instance=${__data.fields.Instance}&${__url_time_range}"
                      }
-                  ]
+                  ],
+                  "unit": "short"
                },
                "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance role"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance status"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance connection utilization"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance cache hit ratio"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instance replication lag"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  },
                   {
                      "matcher": {
                         "id": "byName",
@@ -901,9 +977,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Status"
+                        "options": "Instance status"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Status"
+                        },
                         {
                            "id": "mappings",
                            "value": [
@@ -937,9 +1017,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Role"
+                        "options": "Instance role"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Role"
+                        },
                         {
                            "id": "mappings",
                            "value": [
@@ -973,9 +1057,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Uptime"
+                        "options": "Instance uptime"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Uptime"
+                        },
                         {
                            "id": "unit",
                            "value": "dtdurations"
@@ -989,9 +1077,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Conn %"
+                        "options": "Instance connection utilization"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Conn %"
+                        },
                         {
                            "id": "custom.width",
                            "value": 150
@@ -1045,9 +1137,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Cache %"
+                        "options": "Instance cache hit ratio"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Cache %"
+                        },
                         {
                            "id": "custom.width",
                            "value": 150
@@ -1101,9 +1197,13 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Lag"
+                        "options": "Instance replication lag"
                      },
                      "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Lag"
+                        },
                         {
                            "id": "custom.width",
                            "value": 80
@@ -1160,22 +1260,22 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{instance}}",
-                  "refId": "Instance status"
+                  "refId": "Instance role"
                },
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  pg_replication_is_replica{job=~\"$job\",cluster=~\"$cluster\"}\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  pg_up{job=~\"$job\",cluster=~\"$cluster\"}\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{instance}}",
-                  "refId": "Instance role"
+                  "refId": "Instance status"
                },
                {
                   "datasource": {
@@ -1228,31 +1328,42 @@
                   "id": "merge"
                },
                {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value #(.*)",
+                     "renamePattern": "$1"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "pattern": "^(?!Time).*$"
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "indexByName": {
+                        "cluster": 1,
+                        "instance": 2,
+                        "job": 0
+                     },
+                     "renameByName": {
+                        "Value": "Cluster instances",
+                        "cluster": "Cluster",
+                        "instance": "Instance",
+                        "job": "Job"
+                     }
+                  }
+               },
+               {
                   "id": "organize",
                   "options": {
                      "excludeByName": {
-                        "Time": true,
-                        "__name__": true,
-                        "cluster": true,
-                        "job": true
-                     },
-                     "indexByName": {
-                        "Value #Instance cache hit ratio": 5,
-                        "Value #Instance connection utilization": 4,
-                        "Value #Instance replication lag": 6,
-                        "Value #Instance role": 1,
-                        "Value #Instance status": 2,
-                        "Value #Instance uptime": 3,
-                        "instance": 0
-                     },
-                     "renameByName": {
-                        "Value #Instance cache hit ratio": "Cache %",
-                        "Value #Instance connection utilization": "Conn %",
-                        "Value #Instance replication lag": "Lag",
-                        "Value #Instance role": "Role",
-                        "Value #Instance status": "Status",
-                        "Value #Instance uptime": "Uptime",
-                        "instance": "Instance"
+                        "Cluster": true,
+                        "Job": true
                      }
                   }
                }
