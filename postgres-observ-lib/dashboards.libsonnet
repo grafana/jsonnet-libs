@@ -1,7 +1,15 @@
 local g = import './g.libsonnet';
 
 {
+  local root = self,
   new(this):
+    local tags = this.config.dashboardTags;
+    local uid = this.config.uid;
+    local links = this.grafana.links.otherDashboards;
+    local timezone = this.config.dashboardTimezone;
+    local refresh = this.config.dashboardRefresh;
+    local period = this.config.dashboardPeriod;
+
     local settingsFilterVar =
       g.dashboard.variable.textbox.new('settingsFilter', default='')
       + g.dashboard.variable.textbox.generalOptions.withLabel('Settings filter (regex)')
@@ -45,13 +53,7 @@ local g = import './g.libsonnet';
     {
       'postgres-cluster.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL cluster overview')
-        + g.dashboard.withVariables(clusterVariables)
-        + g.dashboard.withTags(this.config.dashboardTags + ['cluster'])
-        + g.dashboard.withUid(this.config.uid + '-cluster')
-        + g.dashboard.withLinks(this.grafana.links.otherDashboards)
-        + g.dashboard.withTimezone(this.config.dashboardTimezone)
-        + g.dashboard.withRefresh(this.config.dashboardRefresh)
-        + g.dashboard.time.withFrom(this.config.dashboardPeriod)
+        + root.applyCommon(clusterVariables, uid + '-cluster', tags + ['cluster'], links, timezone, refresh, period)
         + g.dashboard.withDescription(
           |||
             PostgreSQL Cluster monitoring dashboard.
@@ -82,16 +84,7 @@ local g = import './g.libsonnet';
 
       'postgres-overview.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL instance overview')
-        + g.dashboard.withVariables(
-          instanceVariables
-          + [settingsFilterVar]
-        )
-        + g.dashboard.withTags(this.config.dashboardTags + ['instance'])
-        + g.dashboard.withUid(this.config.uid + '-overview')
-        + g.dashboard.withLinks(this.grafana.links.otherDashboards)
-        + g.dashboard.withTimezone(this.config.dashboardTimezone)
-        + g.dashboard.withRefresh(this.config.dashboardRefresh)
-        + g.dashboard.time.withFrom(this.config.dashboardPeriod)
+        + root.applyCommon(instanceVariables + [settingsFilterVar], uid + '-overview', tags + ['instance'], links, timezone, refresh, period)
         + g.dashboard.withDescription(
           |||
             PostgreSQL instance monitoring dashboard.
@@ -116,13 +109,7 @@ local g = import './g.libsonnet';
 
       'postgres-performance-maintenance.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL instance performance and maintenance')
-        + g.dashboard.withVariables(instanceVariables)
-        + g.dashboard.withTags(this.config.dashboardTags + ['instance'])
-        + g.dashboard.withUid(this.config.uid + '-performance-maintenance')
-        + g.dashboard.withLinks(this.grafana.links.otherDashboards)
-        + g.dashboard.withTimezone(this.config.dashboardTimezone)
-        + g.dashboard.withRefresh(this.config.dashboardRefresh)
-        + g.dashboard.time.withFrom(this.config.dashboardPeriod)
+        + root.applyCommon(instanceVariables, uid + '-performance-maintenance', tags + ['instance'], links, timezone, refresh, period)
         + g.dashboard.withDescription(
           |||
             PostgreSQL instance trends and maintenance work.
@@ -143,13 +130,7 @@ local g = import './g.libsonnet';
 
       'postgres-queries.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL query performance')
-        + g.dashboard.withVariables(queriesVariables)
-        + g.dashboard.withTags(this.config.dashboardTags + ['pg_stat_statements'])
-        + g.dashboard.withUid(this.config.uid + '-queries')
-        + g.dashboard.withLinks(this.grafana.links.otherDashboards)
-        + g.dashboard.withTimezone(this.config.dashboardTimezone)
-        + g.dashboard.withRefresh(this.config.dashboardRefresh)
-        + g.dashboard.time.withFrom(this.config.dashboardPeriod)
+        + root.applyCommon(queriesVariables, uid + '-queries', tags + ['pg_stat_statements'], links, timezone, refresh, period)
         + g.dashboard.withDescription(
           |||
             PostgreSQL query performance analysis.            
@@ -163,4 +144,13 @@ local g = import './g.libsonnet';
           ), setPanelIDs=false
         ),
     },
+
+  applyCommon(vars, uid, tags, links, timezone, refresh, period):
+    g.dashboard.withVariables(vars)
+    + g.dashboard.withTags(tags)
+    + g.dashboard.withUid(uid)
+    + g.dashboard.withLinks(links)
+    + g.dashboard.withTimezone(timezone)
+    + g.dashboard.withRefresh(refresh)
+    + g.dashboard.time.withFrom(period),
 }
