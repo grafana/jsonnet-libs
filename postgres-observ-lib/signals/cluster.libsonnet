@@ -1,5 +1,5 @@
 function(this)
-  local instanceLabels = std.join(',', this.instanceLabels);
+  local seriesLabels = std.join(',', this.groupLabels + this.instanceLabels);
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
@@ -107,15 +107,14 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              sum by (%(instance)s) (pg_stat_database_blks_hit{%%(queriesSelector)s})
+              sum by (%(series)s) (pg_stat_database_blks_hit{%%(queriesSelector)s})
               /
               (
-                sum by (%(instance)s) (pg_stat_database_blks_hit{%%(queriesSelector)s})
+                sum by (%(series)s) (pg_stat_database_blks_hit{%%(queriesSelector)s})
                 +
-                sum by (%(instance)s) (pg_stat_database_blks_read{%%(queriesSelector)s})
-                + 1
+                sum by (%(series)s) (pg_stat_database_blks_read{%%(queriesSelector)s})
               )
-            ||| % { instance: instanceLabels },
+            ||| % { series: seriesLabels },
             legendCustomTemplate: 'Worst cache hit ratio',
           },
         },
@@ -130,10 +129,10 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              sum by (%(instance)s) (pg_stat_activity_count{%%(queriesSelector)s})
+              sum by (%(series)s) (pg_stat_activity_count{%%(queriesSelector)s})
               /
-              max by (%(instance)s) (pg_settings_max_connections{%%(queriesSelector)s})
-            ||| % { instance: instanceLabels },
+              max by (%(series)s) (pg_settings_max_connections{%%(queriesSelector)s})
+            ||| % { series: seriesLabels },
             legendCustomTemplate: 'Worst connection utilization',
           },
         },
@@ -294,14 +293,14 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              sum by (%(instance)s) (pg_locks_count{%%(queriesSelector)s})
+              sum by (%(series)s) (pg_locks_count{%%(queriesSelector)s})
               /
               (
-                max by (%(instance)s) (pg_settings_max_locks_per_transaction{%%(queriesSelector)s})
+                max by (%(series)s) (pg_settings_max_locks_per_transaction{%%(queriesSelector)s})
                 *
-                max by (%(instance)s) (pg_settings_max_connections{%%(queriesSelector)s})
+                max by (%(series)s) (pg_settings_max_connections{%%(queriesSelector)s})
               )
-            ||| % { instance: instanceLabels },
+            ||| % { series: seriesLabels },
             legendCustomTemplate: 'Worst lock utilization',
           },
         },
@@ -332,10 +331,10 @@ function(this)
             expr: |||
               sum by (%%(agg)s) (
                 rate(pg_stat_database_tup_inserted{%%(queriesSelector)s}[%%(interval)s])
-                and on(%(instance)s)
+                and on(%(series)s)
                 (pg_replication_is_replica{%%(queriesSelector)s} == 0)
               )
-            ||| % { instance: instanceLabels },
+            ||| % { series: seriesLabels },
             exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
             legendCustomTemplate: '{{cluster_prefix}}Inserts',
           },
@@ -354,10 +353,10 @@ function(this)
             expr: |||
               sum by (%%(agg)s) (
                 rate(pg_stat_database_tup_updated{%%(queriesSelector)s}[%%(interval)s])
-                and on(%(instance)s)
+                and on(%(series)s)
                 (pg_replication_is_replica{%%(queriesSelector)s} == 0)
               )
-            ||| % { instance: instanceLabels },
+            ||| % { series: seriesLabels },
             exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
             legendCustomTemplate: '{{cluster_prefix}}Updates',
           },
@@ -376,10 +375,10 @@ function(this)
             expr: |||
               sum by (%%(agg)s) (
                 rate(pg_stat_database_tup_deleted{%%(queriesSelector)s}[%%(interval)s])
-                and on(%(instance)s)
+                and on(%(series)s)
                 (pg_replication_is_replica{%%(queriesSelector)s} == 0)
               )
-            ||| % { instance: instanceLabels },
+            ||| % { series: seriesLabels },
             exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
             legendCustomTemplate: '{{cluster_prefix}}Deletes',
           },
@@ -453,10 +452,10 @@ function(this)
                   +
                   rate(pg_stat_database_tup_deleted{%%(queriesSelector)s}[%%(interval)s])
                 )
-                and on(%(instance)s)
+                and on(%(series)s)
                 (pg_replication_is_replica{%%(queriesSelector)s} == 0)
               )
-            ||| % { instance: instanceLabels },
+            ||| % { series: seriesLabels },
             exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
             legendCustomTemplate: '{{cluster_prefix}}Total writes',
           },
