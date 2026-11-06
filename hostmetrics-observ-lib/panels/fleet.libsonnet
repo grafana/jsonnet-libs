@@ -59,11 +59,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           {
             targetBlank: false,
             title: 'Drill down to ${__value.text}',
-            url: '/d/%s?%s&${__url_time_range}&${%s:queryparam}' % [
-              common.overviewUid,
-              std.join('&', ['var-%s=${__data.fields.%s}' % [label, label] for label in this.config.instanceLabels]),
-              common.datasourceVariable,
-            ],
+            url: common.drillDownUrl('__data.fields'),
           },
         ]),
       ]),

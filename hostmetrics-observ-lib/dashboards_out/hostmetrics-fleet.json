@@ -725,7 +725,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "max": 100,
@@ -830,7 +830,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "thresholds": {
@@ -917,7 +917,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "max": 100,
@@ -1035,7 +1035,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "thresholds": {
@@ -1130,7 +1130,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "max": 100,
@@ -1236,7 +1236,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "noValue": "No traffic",
@@ -1324,7 +1324,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/hostmetrics-nodes?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "noValue": "No errors",
