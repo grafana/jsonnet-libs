@@ -4,6 +4,8 @@ function(this)
   // Only per-interface metrics have a device label; connections and conntrack don't.
   local deviceSources(expr, extra={}) =
     common.sources(common.withMatchers(expr, [this.networkInterfaceSelector]), extra);
+  local totalSources(expr, extra={}) =
+    common.sources(common.withMatchers(expr, [this.networkInterfaceSelector, 'device!="lo"']), extra);
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
@@ -25,9 +27,9 @@ function(this)
         name: 'Network traffic',
         nameShort: 'Traffic',
         type: 'counter',
-        description: 'Bits received and transmitted across all interfaces.',
+        description: 'Bits received and transmitted across all interfaces except loopback.',
         unit: 'bps',
-        sources: deviceSources('system_network_io{%(queriesSelector)s}', { exprWrappers: [['8 * (', ')']] }),
+        sources: totalSources('system_network_io{%(queriesSelector)s}', { exprWrappers: [['8 * (', ')']] }),
       },
       networkPackets: {
         name: 'Network packets',
@@ -57,17 +59,17 @@ function(this)
         name: 'Network errors',
         nameShort: 'Errors',
         type: 'counter',
-        description: 'Errored packets across all interfaces.',
+        description: 'Errored packets across all interfaces except loopback.',
         unit: 'pps',
-        sources: deviceSources('system_network_errors{%(queriesSelector)s}'),
+        sources: totalSources('system_network_errors{%(queriesSelector)s}'),
       },
       networkDroppedTotal: {
         name: 'Dropped packets',
         nameShort: 'Dropped',
         type: 'counter',
-        description: 'Dropped packets across all interfaces.',
+        description: 'Dropped packets across all interfaces except loopback.',
         unit: 'pps',
-        sources: deviceSources('system_network_dropped{%(queriesSelector)s}'),
+        sources: totalSources('system_network_dropped{%(queriesSelector)s}'),
       },
       networkConnections: {
         name: 'Network connections',

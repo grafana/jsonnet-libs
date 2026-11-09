@@ -1223,7 +1223,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top 25. Bits received and transmitted across all interfaces.",
+            "description": "Top 25. Bits received and transmitted across all interfaces except loopback.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1296,7 +1296,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,\n  8 * (\n  sum by (job,instance) (\n  rate(system_network_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n)\nor\ntopk(25,\n  8 * (\n  sum by (job,instance) (\n  rate(system_network_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n)",
+                  "expr": "topk(25,\n  8 * (\n  sum by (job,instance) (\n  rate(system_network_io_bytes_total{device!=\"\", device!=\"lo\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n)\nor\ntopk(25,\n  8 * (\n  sum by (job,instance) (\n  rate(system_network_io{device!=\"\", device!=\"lo\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1312,7 +1312,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top 25. Errors (sum): Errored packets across all interfaces.  \n\nDropped (sum): Dropped packets across all interfaces.",
+            "description": "Top 25. Errors (sum): Errored packets across all interfaces except loopback.  \n\nDropped (sum): Dropped packets across all interfaces except loopback.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1397,7 +1397,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)\nor\ntopk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)",
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_errors_total{device!=\"\", device!=\"lo\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_errors_total{device!=\"\", device!=\"lo\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)\nor\ntopk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_errors{device!=\"\", device!=\"lo\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_errors{device!=\"\", device!=\"lo\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -1409,7 +1409,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)\nor\ntopk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)",
+                  "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_dropped_total{device!=\"\", device!=\"lo\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_dropped_total{device!=\"\", device!=\"lo\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)\nor\ntopk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_dropped{device!=\"\", device!=\"lo\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_dropped{device!=\"\", device!=\"lo\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
