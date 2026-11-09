@@ -16,7 +16,6 @@ function(this)
         name: 'Memory usage',
         nameShort: 'Memory',
         type: 'gauge',
-        aggFunction: 'sum',
         description: 'Share of physical memory in use.',
         unit: 'percent',
         sources: common.sources(

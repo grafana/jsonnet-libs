@@ -140,7 +140,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * (\n  sum by (job,instance) (\n  system_memory_utilization_ratio{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  sum by (job,instance) (\n  system_memory_utilization{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
+                  "expr": "100 * (\n  max by (job,instance) (\n  system_memory_utilization_ratio{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  max by (job,instance) (\n  system_memory_utilization{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",

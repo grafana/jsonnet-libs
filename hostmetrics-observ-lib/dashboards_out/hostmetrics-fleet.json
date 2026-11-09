@@ -599,7 +599,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "100 * (\n  sum by (job,instance) (\n  system_memory_utilization_ratio{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  sum by (job,instance) (\n  system_memory_utilization{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
+                  "expr": "100 * (\n  max by (job,instance) (\n  system_memory_utilization_ratio{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  max by (job,instance) (\n  system_memory_utilization{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{instance}}",
@@ -990,7 +990,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,\n  100 * (\n  sum by (job,instance) (\n  system_memory_utilization_ratio{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\n)\nor\ntopk(25,\n  100 * (\n  sum by (job,instance) (\n  system_memory_utilization{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\n)",
+                  "expr": "topk(25,\n  100 * (\n  max by (job,instance) (\n  system_memory_utilization_ratio{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\n)\nor\ntopk(25,\n  100 * (\n  max by (job,instance) (\n  system_memory_utilization{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}",
