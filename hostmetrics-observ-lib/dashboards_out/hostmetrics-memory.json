@@ -143,6 +143,7 @@
                   "expr": "100 * (\n  max by (job,instance) (\n  system_memory_utilization_ratio{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  max by (job,instance) (\n  system_memory_utilization{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}",
                   "refId": "Memory usage"
                }
@@ -253,6 +254,7 @@
                   "expr": "sum by (job,instance,state) (\n  system_memory_usage_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,state) (\n  system_memory_usage{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Memory ({{state}})",
                   "refId": "Memory by state"
                }
@@ -358,6 +360,7 @@
                   "expr": "max by (job,instance) (\n  system_linux_memory_available_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_linux_memory_available{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Available",
                   "refId": "Memory available"
                }
@@ -463,6 +466,7 @@
                   "expr": "max by (job,instance) (\n  system_memory_limit_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_memory_limit{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Total",
                   "refId": "Memory total"
                }
@@ -551,6 +555,7 @@
                   "expr": "(\n  (\n  sum by (job,instance,direction) (\n  rate(system_paging_operations_total{type=\"major\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (max by (job,instance,direction) (increase(system_paging_operations_total{type=\"major\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\nor\n(\n  (\n  sum by (job,instance,direction) (\n  rate(system_paging_operations{type=\"major\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (max by (job,instance,direction) (increase(system_paging_operations{type=\"major\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Pages ({{direction}})",
                   "refId": "Memory pages swapping in / out"
                }
@@ -626,6 +631,7 @@
                   "expr": "(\n  (\n  sum by (job,instance,type) (\n  rate(system_paging_faults_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (max by (job,instance,type) (increase(system_paging_faults_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\nor\n(\n  (\n  sum by (job,instance,type) (\n  rate(system_paging_faults{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (max by (job,instance,type) (increase(system_paging_faults{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Faults ({{type}})",
                   "refId": "Memory page faults"
                }
@@ -731,6 +737,7 @@
                   "expr": "sum by (job,instance,state) (\n  system_paging_usage_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,state) (\n  system_paging_usage{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Swap ({{state}})",
                   "refId": "Swap usage"
                }
@@ -848,6 +855,7 @@
                   "expr": "max by (job,instance) (\n  system_linux_memory_dirty_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_linux_memory_dirty{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Dirty",
                   "refId": "Memory dirty"
                },
@@ -859,6 +867,7 @@
                   "expr": "max by (job,instance) (\n  system_memory_linux_shared_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_memory_linux_shared{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Shared",
                   "refId": "Memory shared"
                }

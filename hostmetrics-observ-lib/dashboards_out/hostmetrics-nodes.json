@@ -784,6 +784,7 @@
                   "expr": "100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization_ratio{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"})))\nor\n100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"})))",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}",
                   "refId": "CPU usage"
                }
@@ -925,6 +926,7 @@
                   "expr": "max by (job,instance) (\n  system_cpu_load_average_1m{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: 1m",
                   "refId": "Load average 1m"
                },
@@ -936,6 +938,7 @@
                   "expr": "max by (job,instance) (\n  system_cpu_load_average_5m{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: 5m",
                   "refId": "Load average 5m"
                },
@@ -947,6 +950,7 @@
                   "expr": "max by (job,instance) (\n  system_cpu_load_average_15m{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: 15m",
                   "refId": "Load average 15m"
                },
@@ -958,6 +962,7 @@
                   "expr": "max by (job,instance) (\n  system_cpu_logical_count{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Cores",
                   "refId": "CPU cores"
                }
@@ -1049,6 +1054,7 @@
                   "expr": "100 * (\n  max by (job,instance) (\n  system_memory_utilization_ratio{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  max by (job,instance) (\n  system_memory_utilization{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}",
                   "refId": "Memory usage"
                }
@@ -1154,6 +1160,7 @@
                   "expr": "max by (job,instance) (\n  system_linux_memory_available_bytes{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nmax by (job,instance) (\n  system_linux_memory_available{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Available",
                   "refId": "Memory available"
                }
@@ -1250,6 +1257,7 @@
                   "expr": "100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization_ratio{mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization{mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}} {{mountpoint}}",
                   "refId": "Disk space usage"
                }
@@ -1338,6 +1346,7 @@
                   "expr": "(\n  sum by (job,instance,device,direction) (\n  rate(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device,direction) (increase(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\nor\n(\n  sum by (job,instance,device,direction) (\n  rate(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device,direction) (increase(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: I/O ({{device}} {{direction}})",
                   "refId": "Disk reads/writes"
                }
@@ -1433,6 +1442,7 @@
                   "expr": "(\n  8 * (\n  sum by (job,instance,device,direction) (\n  rate(system_network_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n) and (max by (job,instance,device,direction) (increase(system_network_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\nor\n(\n  8 * (\n  sum by (job,instance,device,direction) (\n  rate(system_network_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n) and (max by (job,instance,device,direction) (increase(system_network_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Traffic ({{device}} {{direction}})",
                   "refId": "Network traffic"
                }
@@ -1520,6 +1530,7 @@
                   "expr": "max by (job,instance) (\n  system_processes_count{status=\"running\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Running",
                   "refId": "Processes running"
                },
@@ -1531,6 +1542,7 @@
                   "expr": "sum by (job,instance) (\n  rate(system_processes_created_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,instance) (\n  rate(system_processes_created{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Created",
                   "refId": "Processes created"
                }

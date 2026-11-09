@@ -27,6 +27,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   // Match the scrapers enabled in the hostmetrics receiver. Panels for disabled scrapers are not rendered.
   enablePagingScraper: true,
   enableNetworkScraper: true,
+  // The receiver's collection_interval, used as the minimum step of time series queries.
+  minInterval: '1m',
 
   // Extra label matchers added to disk, filesystem and network queries in dashboards and alerts, e.g.
   // 'device!~"loop.*"' or 'type!="tmpfs"'. They only hide series from queries; devices excluded in the

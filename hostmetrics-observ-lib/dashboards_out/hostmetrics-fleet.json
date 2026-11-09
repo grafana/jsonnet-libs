@@ -801,6 +801,7 @@
                   "expr": "topk(25,\n  100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization_ratio{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"})))\n)\nor\ntopk(25,\n  100 * (1 - avg by (job,instance) (sum by (job,instance, cpu) (system_cpu_utilization{state=~\"idle|wait\", job!=\"\",job=~\"$job\",instance=~\"$instance\"})))\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}",
                   "refId": "CPU usage"
                }
@@ -887,6 +888,7 @@
                   "expr": "topk(25,\n  max by (job,instance) (\n  system_cpu_load_average_1m{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: 1m",
                   "refId": "Load average 1m"
                }
@@ -993,6 +995,7 @@
                   "expr": "topk(25,\n  100 * (\n  max by (job,instance) (\n  system_memory_utilization_ratio{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\n)\nor\ntopk(25,\n  100 * (\n  max by (job,instance) (\n  system_memory_utilization{state=\"used\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}",
                   "refId": "Memory usage"
                }
@@ -1100,6 +1103,7 @@
                   "expr": "topk(25,\n  sum by (job,instance) (\n  rate(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\nor\ntopk(25,\n  sum by (job,instance) (\n  rate(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: I/O",
                   "refId": "Disk I/O"
                }
@@ -1206,6 +1210,7 @@
                   "expr": "topk(25,\n  100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization_ratio{mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\n)\nor\ntopk(25,\n  100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization{mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}} {{mountpoint}}",
                   "refId": "Disk space usage"
                }
@@ -1294,6 +1299,7 @@
                   "expr": "topk(25,\n  8 * (\n  sum by (job,instance) (\n  rate(system_network_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n)\nor\ntopk(25,\n  8 * (\n  sum by (job,instance) (\n  rate(system_network_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Traffic",
                   "refId": "Network traffic"
                }
@@ -1394,6 +1400,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_errors_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)\nor\ntopk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_errors{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Errors",
                   "refId": "Network errors"
                },
@@ -1405,6 +1412,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_dropped_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)\nor\ntopk(25,\n  (\n  sum by (job,instance) (\n  rate(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance) (increase(system_network_dropped{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Dropped",
                   "refId": "Dropped packets"
                }

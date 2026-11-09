@@ -14,8 +14,12 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local annotations = this.grafana.annotations;
     local panels = this.grafana.panels;
     local rows = this.grafana.rows;
+    local withMinStep(panel) =
+      if panel.type == 'timeseries'
+      then panel { targets: [t { interval: this.config.minInterval } for t in panel.targets] }
+      else panel;
     local layout(items, w, h) =
-      g.dashboard.withPanels(g.util.panel.resolveCollapsedFlagOnRows(g.util.grid.wrapPanels(items, w, h)));
+      g.dashboard.withPanels(std.map(withMinStep, g.util.panel.resolveCollapsedFlagOnRows(g.util.grid.wrapPanels(items, w, h))));
     local common(vars, name, links) =
       root.applyCommon(vars, uid + '-' + name, tags, links, annotations, timezone, refresh, period);
     local logsLabels = this.config.logsGroupLabels + this.config.logsInstanceLabels + this.config.extraLogLabels;

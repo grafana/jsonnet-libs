@@ -148,6 +148,7 @@
                   "expr": "100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization_ratio{mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)\nor\n100 * (\n  max by (job,instance,mountpoint) (\n  system_filesystem_utilization{mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}} {{mountpoint}}",
                   "refId": "Disk space usage"
                }
@@ -224,6 +225,7 @@
                   "expr": "sum by (job,instance,mountpoint) (\n  system_filesystem_usage_bytes{state=\"free\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,mountpoint) (\n  system_filesystem_usage{state=\"free\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Available ({{mountpoint}})",
                   "refId": "Filesystem space available"
                }
@@ -299,6 +301,7 @@
                   "expr": "sum by (job,instance,mountpoint,state) (\n  system_filesystem_usage_bytes{type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\nsum by (job,instance,mountpoint,state) (\n  system_filesystem_usage{type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Space ({{mountpoint}} {{state}})",
                   "refId": "Filesystem space by state"
                }
@@ -382,6 +385,7 @@
                   "expr": "100 * max by (job,instance, mountpoint) (system_filesystem_inodes_usage{state=\"used\", mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"} / ignoring(state) sum without (state) (system_filesystem_inodes_usage{mode!=\"ro\", type!=\"\", mountpoint!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}} {{mountpoint}}",
                   "refId": "Inode usage"
                }
@@ -483,6 +487,7 @@
                   "expr": "(\n  sum by (job,instance,device,direction) (\n  rate(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device,direction) (increase(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\nor\n(\n  sum by (job,instance,device,direction) (\n  rate(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device,direction) (increase(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: I/O ({{device}} {{direction}})",
                   "refId": "Disk reads/writes"
                }
@@ -565,6 +570,7 @@
                   "expr": "(\n  sum by (job,instance,device,direction) (\n  rate(system_disk_operations_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device,direction) (increase(system_disk_operations_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\nor\n(\n  sum by (job,instance,device,direction) (\n  rate(system_disk_operations{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device,direction) (increase(system_disk_operations{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Ops ({{device}} {{direction}})",
                   "refId": "Disk operations"
                }
@@ -640,6 +646,7 @@
                   "expr": "(\n  sum by (job,instance,device) (\n  rate(system_disk_io_time_seconds_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device) (increase(system_disk_io_time_seconds_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\nor\n(\n  sum by (job,instance,device) (\n  rate(system_disk_io_time{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device) (increase(system_disk_io_time{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: I/O time ({{device}})",
                   "refId": "Disk I/O time"
                }
@@ -717,6 +724,7 @@
                   "expr": "sum by (job,instance, device, direction) (rate(system_disk_operation_time_seconds_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n/\n(sum by (job,instance, device, direction) (rate(system_disk_operations_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) > 0)\n\nor\nsum by (job,instance, device, direction) (rate(system_disk_operation_time{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n/\n(sum by (job,instance, device, direction) (rate(system_disk_operations{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) > 0)\n",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}} {{device}} {{direction}}",
                   "refId": "Disk average wait time"
                }
@@ -794,6 +802,7 @@
                   "expr": "(\n  sum by (job,instance,device) (\n  rate(system_disk_weighted_io_time_seconds_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device) (increase(system_disk_weighted_io_time_seconds_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\nor\n(\n  sum by (job,instance,device) (\n  rate(system_disk_weighted_io_time{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device) (increase(system_disk_weighted_io_time{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Queue ({{device}})",
                   "refId": "Disk average queue"
                }
@@ -869,6 +878,7 @@
                   "expr": "max by (job,instance,device) (\n  system_disk_pending_operations{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Pending ({{device}})",
                   "refId": "Disk pending operations"
                }
@@ -949,6 +959,7 @@
                   "expr": "(\n  sum by (job,instance,device,direction) (\n  rate(system_disk_merged_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device,direction) (increase(system_disk_merged_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\nor\n(\n  sum by (job,instance,device,direction) (\n  rate(system_disk_merged{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) and (max by (job,instance,device,direction) (increase(system_disk_merged{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)",
                   "format": "time_series",
                   "instant": false,
+                  "interval": "1m",
                   "legendFormat": "{{instance}}: Merged ({{device}} {{direction}})",
                   "refId": "Disk merged operations"
                }
