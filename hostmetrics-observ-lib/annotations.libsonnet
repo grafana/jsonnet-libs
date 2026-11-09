@@ -16,14 +16,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     osChange:
       commonlib.annotations.base.new(
         title='OS or kernel change',
-        target=signals.host.osChanges.asTarget(),
+        target=signals.host.osChanges.asTarget()
+               + { expr: '(%s) * 1000 > $__from < $__to' % signals.host.osChanges.asPanelExpression() },
       )
       + commonlib.annotations.base.withTagKeys(tagKeys)
-      + commonlib.annotations.base.withTextFormat('')
+      + commonlib.annotations.base.withTextFormat('{{os_description}}')
       + {
         hide: true,
         iconColor: 'light-blue',
-        step: '5m',
+        useValueForTime: 'on',
       },
   },
 }

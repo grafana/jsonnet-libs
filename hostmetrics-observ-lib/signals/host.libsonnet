@@ -56,14 +56,21 @@ function(this)
         unit: 'dateTimeAsIso',
         sources: common.sources('max by (%(agg)s) (round(timestamp(system_uptime{%(queriesSelector)s}) - system_uptime{%(queriesSelector)s}, 60))'),
       },
-      // Raw: counts os_description changes with a subquery, for an annotation only.
+      // Raw, for an annotation only: when each os_description first appeared in the dashboard's range,
+      // leaving out ones the host already had before the range and hosts that only appeared during it.
       osChanges: {
         name: 'OS or kernel change',
         nameShort: 'OS change',
         type: 'raw',
-        description: 'The reported distribution or kernel changed.',
-        unit: 'short',
-        sources: common.sources('changes(sum by (%(agg)s) (group by (%(agg)s, os_description) (target_info{os_description!="", %(queriesSelector)s}))[$__interval:1m] offset -$__interval) > 1'),
+        description: 'When the reported distribution or kernel changed, in seconds since the Unix epoch.',
+        unit: 'dateTimeAsIso',
+        sources: common.sources(
+          |||
+            min by (%(agg)s, os_description) (min_over_time(timestamp(target_info{os_description!="", %(queriesSelector)s})[$__range:1m] @ end()))
+            unless on (%(agg)s, os_description) last_over_time(target_info{os_description!="", %(queriesSelector)s}[1h] @ start())
+            and on (%(agg)s) last_over_time(target_info{os_description!="", %(queriesSelector)s}[1h] @ start())
+          |||
+        ),
       },
       cpuCount: {
         name: 'CPU cores',

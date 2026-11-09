@@ -7,14 +7,14 @@
                   "uid": "${prometheus_datasource}"
                },
                "enable": true,
-               "expr": "changes(sum by (job,instance) (group by (job,instance, os_description) (target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}))[$__interval:1m] offset -$__interval) > 1",
+               "expr": "(min by (job,instance, os_description) (min_over_time(timestamp(target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"})[$__range:1m] @ end()))\nunless on (job,instance, os_description) last_over_time(target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[1h] @ start())\nand on (job,instance) last_over_time(target_info{os_description!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[1h] @ start())\n) * 1000 > $__from < $__to",
                "hide": true,
                "iconColor": "light-blue",
                "name": "OS or kernel change",
-               "step": "5m",
                "tagKeys": "job,instance",
-               "textFormat": "",
-               "titleFormat": "OS or kernel change"
+               "textFormat": "{{os_description}}",
+               "titleFormat": "OS or kernel change",
+               "useValueForTime": "on"
             },
             {
                "datasource": {

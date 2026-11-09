@@ -90,6 +90,7 @@ local hostmetrics =
   hostmetricslib.new()
   + hostmetricslib.withConfigMixin({
     filteringSelector: 'job="integrations/linux-hostmetrics"',
+    logsFilteringSelector: 'service_namespace="integrations", service_name="linux-hostmetrics"',
     uid: 'linux-hostmetrics',
     dashboardNamePrefix: 'Linux Hostmetrics / ',
     dashboardTags: ['linux-hostmetrics'],
