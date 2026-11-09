@@ -28,12 +28,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       hideZeros: { options+: { tooltip+: { hideZeros: true } } },
       // Keeps series that are above 0 at some point in the dashboard's time range.
       activeInRange(signal)::
-        local expr = signal.withInterval('$__range').asPanelExpression();
-        local inRange =
-          // Counters. common-lib rewrites increase into a subquery, so build rate and swap it.
-          if std.length(std.findSubstr('rate(', expr)) > 0 then std.strReplace(expr, 'rate(', 'increase(')
-          else 'max_over_time((%s)[$__range:])' % expr;
-        signal.withExprWrappersMixin(['(', ') and ((%s) > 0)' % inRange]),
+        signal.withExprWrappersMixin(['(', ') and (max_over_time((%s)[$__range:] @ end()) > 0)' % signal.asPanelExpression()]),
       hostTextSize: g.panel.stat.options.text.withValueSize(24),
       capacityTextSize: g.panel.stat.options.text.withValueSize(40),
       // Shared settings only: the full config would replace alerts-observ-lib's signals.
