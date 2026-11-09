@@ -38,7 +38,7 @@ tests:
       - series: 'system_uptime{job="integrations/hostmetrics", instance="host1"}'
         values: '1000+60x30 _x30'
       - series: 'system_uptime{job="integrations/hostmetrics", instance="host2"}'
-        values: '1000+60x60'
+        values: '1000+60x70'
 
     alert_rule_test:
       - eval_time: 20m
@@ -106,8 +106,13 @@ tests:
         alertname: HostmetricsHostDown
         exp_alerts: []
 
-      # Last sample at 30m: silent for 5m from 35m, firing after 5m more.
-      - eval_time: 45m
+      # Last sample at 30m: silent for 4m, so not down yet.
+      - eval_time: 34m
+        alertname: HostmetricsHostDown
+        exp_alerts: []
+
+      # Firing once it has been silent for 5m.
+      - eval_time: 36m
         alertname: HostmetricsHostDown
         exp_alerts:
           - exp_labels:

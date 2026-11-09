@@ -19,7 +19,6 @@ groups:
             max_over_time(
               system_uptime{job!=""}
             [5m]))
-          for: 5m
           keep_firing_for: 5m
           labels:
             severity: critical

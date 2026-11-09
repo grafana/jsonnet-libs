@@ -15,7 +15,6 @@
         // Seen within the lookback period but silent for the window. The alert resolves
         // once a host has been silent for the lookback period
         expr: 'max by (%s) (%s) unless max by (%s) (%s)' % [by, seenWithin(config.alertsHostDownLookback), by, seenWithin(config.alertsHostDownWindow)],
-        'for': '5m',
         labels: { severity: config.alertsHostDownSeverity },
         annotations: {
           summary: 'No host metrics received.',
