@@ -36,20 +36,19 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   filesystemMountpointSelector: 'mountpoint!=""',
   networkInterfaceSelector: 'device!=""',
 
-  // Loki logs dashboard, for logs collected with the same job and instance labels.
-  // Logs sent over OTLP are labeled from resource attributes instead, i.e. service_name and
-  // service_instance_id: set the logs selector and labels to match.
+  // Loki logs dashboard, for logs sent over OTLP. Loki labels them from resource attributes:
+  // service_name and service_instance_id where the metrics have job and instance.
   enableLokiLogs: true,
-  logsGroupLabels: self.groupLabels,
-  logsInstanceLabels: self.instanceLabels,
-  extraLogLabels: ['transport', 'unit', 'level'],
-  logsVolumeGroupBy: 'level',
+  logsGroupLabels: ['service_name'],
+  logsInstanceLabels: ['service_instance_id'],
+  extraLogLabels: [],
+  logsVolumeGroupBy: 'detected_level',
   showLogsVolume: true,
-  logsFilteringSelector: self.filteringSelector,
+  logsFilteringSelector: 'service_name!=""',
   logsExtraFilters:
     |||
       | label_format timestamp="{{__timestamp__}}"
-      | line_format `{{ if eq "[[instance]]" ".*" }}{{alignLeft 25 .instance}}|{{alignLeft 25 .unit}}|{{else}}{{alignLeft 25 .unit}}|{{end}} {{__line__}}`
+      | line_format `{{ if eq "[[instance]]" ".*" }}{{alignLeft 25 .service_instance_id}}|{{end}} {{__line__}}`
     |||,
 
   // Alerts thresholds

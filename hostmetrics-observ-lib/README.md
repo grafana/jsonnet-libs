@@ -104,19 +104,19 @@ hostmetrics.asMonitoringMixin()
 
 ## Logs
 
-The logs dashboard is on by default. Set `enableLokiLogs: false` to leave it out. By default it expects logs with the same `job` and `instance` labels as the metrics.
+The logs dashboard is on by default. Set `enableLokiLogs: false` to leave it out. By default it expects logs sent over OTLP, which Loki labels from resource attributes: `service_name` and `service_instance_id` where the metrics have `job` and `instance`. Set `logsFilteringSelector` to pick out your hosts' logs, for example `'service_namespace="integrations", service_name="linux-hostmetrics"'`.
 
-Logs sent over OTLP are labeled from resource attributes instead. Set the logs options to match, for example:
+For logs pushed to Loki with the same `job` and `instance` labels as the metrics, such as journald logs collected with Alloy's `loki.source.journal`, set the logs options to match, for example:
 
 ```jsonnet
-logsFilteringSelector: 'service_namespace="integrations", service_name="linux-hostmetrics"',
-logsGroupLabels: ['service_name'],
-logsInstanceLabels: ['service_instance_id'],
-extraLogLabels: [],
-logsVolumeGroupBy: 'detected_level',
+logsFilteringSelector: 'job!=""',
+logsGroupLabels: ['job'],
+logsInstanceLabels: ['instance'],
+extraLogLabels: ['transport', 'unit', 'level'],
+logsVolumeGroupBy: 'level',
 logsExtraFilters:
   |||
-    | line_format `{{ if eq "[[instance]]" ".*" }}{{alignLeft 25 .service_instance_id}}|{{end}} {{__line__}}`
+    | line_format `{{ if eq "[[instance]]" ".*" }}{{alignLeft 25 .instance}}|{{end}}{{alignLeft 25 .unit}}| {{__line__}}`
   |||,
 ```
 

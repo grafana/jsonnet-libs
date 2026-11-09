@@ -64,7 +64,7 @@
                "type": "loki",
                "uid": "${loki_datasource}"
             },
-            "description": "Logs volume grouped by \"level\" label.",
+            "description": "Logs volume grouped by \"detected_level\" label.",
             "fieldConfig": {
                "defaults": {
                   "custom": {
@@ -206,8 +206,8 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "sum by (level) (count_over_time({job!=\"\",job=~\"$job\",instance=~\"$instance\",transport=~\"$transport\",unit=~\"$unit\",level=~\"$level\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
-                  "legendFormat": "{{ level }}"
+                  "expr": "sum by (detected_level) (count_over_time({service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$instance\"}\n|~ \"$regex_search\"\n\n[$__auto]))\n",
+                  "legendFormat": "{{ detected_level }}"
                }
             ],
             "title": "Logs volume",
@@ -248,7 +248,7 @@
                      "type": "loki",
                      "uid": "${loki_datasource}"
                   },
-                  "expr": "{job!=\"\",job=~\"$job\",instance=~\"$instance\",transport=~\"$transport\",unit=~\"$unit\",level=~\"$level\"} \n|~ \"$regex_search\"\n\n| label_format timestamp=\"{{__timestamp__}}\"\n| line_format `{{ if eq \"[[instance]]\" \".*\" }}{{alignLeft 25 .instance}}|{{alignLeft 25 .unit}}|{{else}}{{alignLeft 25 .unit}}|{{end}} {{__line__}}`\n\n"
+                  "expr": "{service_name!=\"\",service_name=~\"$service_name\",service_instance_id=~\"$instance\"} \n|~ \"$regex_search\"\n\n| label_format timestamp=\"{{__timestamp__}}\"\n| line_format `{{ if eq \"[[instance]]\" \".*\" }}{{alignLeft 25 .service_instance_id}}|{{end}} {{__line__}}`\n\n"
                }
             ],
             "title": "Logs",
@@ -276,10 +276,10 @@
                   "uid": "${loki_datasource}"
                },
                "includeAll": true,
-               "label": "Job",
+               "label": "Service name",
                "multi": true,
-               "name": "job",
-               "query": "label_values({job!=\"\"}, job)",
+               "name": "service_name",
+               "query": "label_values({service_name!=\"\"}, service_name)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -294,52 +294,7 @@
                "label": "Instance",
                "multi": true,
                "name": "instance",
-               "query": "label_values({job!=\"\",job=~\"$job\"}, instance)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Transport",
-               "multi": true,
-               "name": "transport",
-               "query": "label_values({job!=\"\",job=~\"$job\",instance=~\"$instance\"}, transport)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Unit",
-               "multi": true,
-               "name": "unit",
-               "query": "label_values({job!=\"\",job=~\"$job\",instance=~\"$instance\",transport=~\"$transport\"}, unit)",
-               "refresh": 2,
-               "sort": 1,
-               "type": "query"
-            },
-            {
-               "allValue": ".*",
-               "datasource": {
-                  "type": "loki",
-                  "uid": "${loki_datasource}"
-               },
-               "includeAll": true,
-               "label": "Level",
-               "multi": true,
-               "name": "level",
-               "query": "label_values({job!=\"\",job=~\"$job\",instance=~\"$instance\",transport=~\"$transport\",unit=~\"$unit\"}, level)",
+               "query": "label_values({service_name!=\"\",service_name=~\"$service_name\"}, service_instance_id)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -369,6 +324,22 @@
                "query": "prometheus",
                "regex": "",
                "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "hide": 2,
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({__name__=~\"system_uptime|system_uptime_seconds\",job!=\"\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
             }
          ]
       },
