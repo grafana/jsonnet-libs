@@ -26,9 +26,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.options.legend.withCalcs(['mean', 'max', 'lastNotNull']),
       hideZeros: { options+: { tooltip+: { hideZeros: true } } },
-      // Keeps series that are above 0 at some point in the dashboard's time range.
-      activeInRange(signal)::
-        signal.withExprWrappersMixin(['(', ') and (max_over_time((%s)[$__range:] @ end()) > 0)' % signal.asPanelExpression()]),
+      // Returns signals[group][name], keeping only series with activity in the dashboard's time range:
+      // counters that increased and gauges that were above 0. Reads raw samples, so the panel's step doesn't matter.
+      activeInRange(group, name)::
+        local signal = this.signals[group][name];
+        local type = this.config.signals[group].signals[name].type;
+        local overRange = { counter: 'increase', gauge: 'max_over_time' };
+        assert std.objectHas(overRange, type) : 'activeInRange supports counter and gauge signals, not %s (%s)' % [type, name];
+        assert signal.aggLevel != 'none' : 'activeInRange needs an aggregated signal (%s)' % name;
+        signal {
+          sourceMaps: [
+            source {
+              exprWrappers+: [['(', ') and (max by (%%(agg)s) (%s(%s[$__range] @ end())) > 0)' % [overRange[type], source.expr]]],
+            }
+            for source in signal.sourceMaps
+          ],
+        },
       hostTextSize: g.panel.stat.options.text.withValueSize(24),
       capacityTextSize: g.panel.stat.options.text.withValueSize(40),
       // Shared settings only: the full config would replace alerts-observ-lib's signals.

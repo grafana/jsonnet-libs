@@ -21,7 +21,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.cpu.timeSeries.utilization.stylize()
       + common.hideZeros,
     cpuUsageByMode:
-      common.activeInRange(signals.cpu.cpuUsageByMode).asTimeSeries()
+      common.activeInRange('cpu', 'cpuUsageByMode').asTimeSeries()
       + commonlib.panels.cpu.timeSeries.utilizationByMode.stylize()
       + common.hideZeros,
     cpuUsagePerCore:
@@ -30,11 +30,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + common.hideZeros
       + common.tableLegend,
     cpuTimeByMode:
-      common.activeInRange(signals.cpu.cpuTimeByMode).asTimeSeries()
+      common.activeInRange('cpu', 'cpuTimeByMode').asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + common.hideZeros,
     cpuFrequency:
-      common.activeInRange(signals.cpu.cpuFrequency).asTimeSeries()
+      common.activeInRange('cpu', 'cpuFrequency').asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + common.hideZeros
       + common.tableLegend,
