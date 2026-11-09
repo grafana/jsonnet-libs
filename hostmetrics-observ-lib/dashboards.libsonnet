@@ -121,6 +121,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
              formatParser=null,
              showLogsVolume=this.config.showLogsVolume,
              logsVolumeGroupBy=this.config.logsVolumeGroupBy,
+             customAllValue='.*',
              extraFilters=this.config.logsExtraFilters
            )
            {
