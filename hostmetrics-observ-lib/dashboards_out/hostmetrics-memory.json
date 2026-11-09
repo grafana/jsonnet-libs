@@ -548,7 +548,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "(\n  (\n  sum by (job,instance,direction) (\n  rate(system_paging_operations_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (max by (job,instance,direction) (increase(system_paging_operations_total{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\nor\n(\n  (\n  sum by (job,instance,direction) (\n  rate(system_paging_operations{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (max by (job,instance,direction) (increase(system_paging_operations{job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)",
+                  "expr": "(\n  (\n  sum by (job,instance,direction) (\n  rate(system_paging_operations_total{type=\"major\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (max by (job,instance,direction) (increase(system_paging_operations_total{type=\"major\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)\nor\n(\n  (\n  sum by (job,instance,direction) (\n  rate(system_paging_operations{type=\"major\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n) / 4096\n) and (max by (job,instance,direction) (increase(system_paging_operations{type=\"major\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__range] @ end())) > 0)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Pages ({{direction}})",

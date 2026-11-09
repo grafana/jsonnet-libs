@@ -80,7 +80,7 @@ function(this)
         aggFunction: 'sum',
         description: 'Pages moved between memory and swap.',
         unit: 'ops',
-        sources: common.sources('system_paging_operations{%(queriesSelector)s}', { aggKeepLabels: ['direction'], exprWrappers: [pagingCount] }),
+        sources: common.sources('system_paging_operations{type="major", %(queriesSelector)s}', { aggKeepLabels: ['direction'], exprWrappers: [pagingCount] }),
       },
       pageFaults: {
         name: 'Memory page faults',
