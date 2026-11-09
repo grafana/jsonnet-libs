@@ -63,7 +63,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           rows.fleetStorageAndNetwork,
         ], 12, 8)
         // hide link to self
-        + common(vars.multiInstance, 'fleet', links { backToFleet+:: {}, backToOverview+:: {} }),
+        + common(vars.multiInstance, 'fleet', links { backToFleet+:: {}, backToHostSummary+:: {} }),
 
       'hostmetrics-nodes.json':
         g.dashboard.new(prefix + 'host summary')
@@ -76,7 +76,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           rows.nodesDisk,
           rows.nodesNetworkAndProcesses,
         ], 6, 4)
-        + common(vars.singleInstance, 'nodes', links { backToOverview+:: {} }),
+        + common(vars.singleInstance, 'nodes', links { backToHostSummary+:: {} }),
 
       'hostmetrics-system.json':
         g.dashboard.new(prefix + 'CPU and system')

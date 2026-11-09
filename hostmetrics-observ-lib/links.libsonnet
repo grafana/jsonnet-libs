@@ -10,7 +10,7 @@ local g = import './g.libsonnet';
       + link.link.options.withIncludeVars(true),
 
     backToFleet: backTo('fleet overview', 'hostmetrics-fleet.json'),
-    backToOverview: backTo('host summary', 'hostmetrics-nodes.json'),
+    backToHostSummary: backTo('host summary', 'hostmetrics-nodes.json'),
     otherDashboards:
       link.dashboards.new('All ' + prefix + 'dashboards', this.config.dashboardTags)
       + link.dashboards.options.withIncludeVars(true)

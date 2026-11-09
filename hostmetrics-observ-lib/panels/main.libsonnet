@@ -3,13 +3,13 @@ local alertsOverviewlib = import 'alerts-observ-lib/main.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(this): {
-    local overviewUid = this.grafana.dashboards['hostmetrics-nodes.json'].uid,
+    local hostSummaryUid = this.grafana.dashboards['hostmetrics-nodes.json'].uid,
     local datasourceVariable = this.grafana.variables.datasources.prometheus.name,
     local fleetTopK = 25,
     // Link to the host summary for the host in ref, i.e. '__field.labels' on series or '__data.fields' in tables.
     // common-lib's withDataLink always passes ${datasource}, but the variable is prometheus_datasource when Loki logs are enabled.
     local drillDownUrl(ref) = '/d/%s?%s&${__url_time_range}&${%s:queryparam}' % [
-      overviewUid,
+      hostSummaryUid,
       std.join('&', ['var-%s=${%s.%s}' % [label, ref, label] for label in this.config.instanceLabels]),
       datasourceVariable,
     ],
