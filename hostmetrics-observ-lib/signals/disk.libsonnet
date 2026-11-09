@@ -3,6 +3,8 @@ local common = import './common.libsonnet';
 function(this)
   local deviceSources(expr, extra={}) =
     common.sources(common.withMatchers(expr, [this.diskDeviceSelector]), extra);
+  local totalSources(expr, extra={}) =
+    common.sources(common.withMatchers(expr, [this.diskDeviceSelector, 'device!~"dm-.*|md.*"']), extra);
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
@@ -24,9 +26,9 @@ function(this)
         name: 'Disk I/O',
         nameShort: 'I/O',
         type: 'counter',
-        description: 'Bytes read and written across all devices.',
+        description: 'Bytes read and written across all disks.',
         unit: 'Bps',
-        sources: deviceSources('system_disk_io{%(queriesSelector)s}'),
+        sources: totalSources('system_disk_io{%(queriesSelector)s}'),
       },
       diskOperations: {
         name: 'Disk operations',

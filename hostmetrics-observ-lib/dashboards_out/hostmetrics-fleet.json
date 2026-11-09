@@ -1021,7 +1021,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Top 25. Bytes read and written across all devices.",
+            "description": "Top 25. Bytes read and written across all disks.",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1100,7 +1100,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,\n  sum by (job,instance) (\n  rate(system_disk_io_bytes_total{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\nor\ntopk(25,\n  sum by (job,instance) (\n  rate(system_disk_io{device!=\"\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)",
+                  "expr": "topk(25,\n  sum by (job,instance) (\n  rate(system_disk_io_bytes_total{device!=\"\", device!~\"dm-.*|md.*\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)\nor\ntopk(25,\n  sum by (job,instance) (\n  rate(system_disk_io{device!=\"\", device!~\"dm-.*|md.*\", job!=\"\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
