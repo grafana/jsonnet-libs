@@ -24,6 +24,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + {
         hide: true,
         iconColor: 'light-blue',
+        step: '5m',
         useValueForTime: 'on',
       },
   },

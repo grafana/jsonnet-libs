@@ -2,7 +2,7 @@
 
 This observ lib can be used to generate an observ package for hosts monitored with the [hostmetrics receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver), with metrics sent over OTLP.
 
-Metric names follow OpenTelemetry semantic conventions. Dashboards cover Linux hosts: fleet overview, host summary, CPU and system, memory, filesystem and disks, and network.
+Metric names follow OpenTelemetry semantic conventions. Dashboards cover Linux hosts: fleet overview, host summary, CPU and system, memory, filesystem and disks, network, and logs.
 
 ## Import
 

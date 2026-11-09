@@ -67,8 +67,8 @@ function(this)
         sources: common.sources(
           |||
             min by (%(agg)s, os_description) (min_over_time(timestamp(target_info{os_description!="", %(queriesSelector)s})[$__range:1m] @ end()))
-            unless on (%(agg)s, os_description) last_over_time(target_info{os_description!="", %(queriesSelector)s}[1h] @ start())
-            and on (%(agg)s) last_over_time(target_info{os_description!="", %(queriesSelector)s}[1h] @ start())
+            unless on (%(agg)s, os_description) last_over_time(target_info{os_description!="", %(queriesSelector)s}[1d] @ start())
+            and on (%(agg)s) last_over_time(target_info{os_description!="", %(queriesSelector)s}[1d] @ start())
           |||
         ),
       },
