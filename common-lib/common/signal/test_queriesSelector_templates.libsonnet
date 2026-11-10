@@ -159,7 +159,7 @@ local test = import 'jsonnetunit/test.libsonnet';
       testResult: test.suite({
         testExpression: {
           actual: raw,
-          expect: 'increase(test_counter_total{job="integrations/agent"}[5m:] offset -5m)',
+          expect: 'increase(test_counter_total{job="integrations/agent"}[5m])',
         },
       }),
     },

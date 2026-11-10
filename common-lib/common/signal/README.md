@@ -60,7 +60,7 @@ These functions return signals view as one of the Grafana panels, its part, or a
 ### Expressions
 When one of built-in functions are used (asTimeSeries(), asPanelsMixin(), asTarget()...) signals' base expressions are converted automatically based on the type:
 
-- counter: is wrapped into `<rangeFunction>(<base>[<interval>])`. When rendered into tables (for example via `asTable()` / `asTableColumn()`), counters use the full dashboard range (`$__range`) instead of `$__interval` when summing values.
+- counter: is wrapped into `<rangeFunction>(<base>[<interval>])`. When rendered into tables (for example via `asTable()` / `asTableColumn()`), counters use the full dashboard range (`$__range`) instead of `$__interval` when summing values. For `increase`/`delta`/`idelta`, dashboard queries use a forward-shifted subquery (`[$__interval:] offset -$__interval`) so that totals line up with each bucket; `asRuleExpression()` always uses the plain trailing `[<alertsInterval>]` range, because rules are evaluated at the current time and have no samples to read ahead.
 - gauge: no transformation
 - histogram: wrapped into `histogram_quantile(q, <aggFunction>(rate(<base>[<interval>])) by (le,<agg>))`, where `q` defaults to `0.95` and can be overridden with `withQuantile(quantile)`.
 - info: no transformation

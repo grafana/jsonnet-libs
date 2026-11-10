@@ -1,4 +1,4 @@
-FROM golang:latest@sha256:2920bb124f1a2e12a1d39f0cab756ae0068441ee1da7655dec7f5e374944095b
+FROM golang:latest@sha256:a386c44c1c90025ad5bc66feea3fef23052bef3bace3609f7e3e10e1f9314f45
 
 RUN apt-get update && \
     apt-get install -y libsnmp-dev p7zip-full unzip && \
