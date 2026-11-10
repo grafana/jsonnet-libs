@@ -9,7 +9,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   // 'uid' - UID to prefix all dashboards original uids
   groupLabels: ['job'],
   instanceLabels: ['instance'],
-  filteringSelector: 'job!=""',  // set to apply static filters to all queries and alerts, i.e. job="integrations/linux-hostmetrics"
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="integrations/linux-hostmetrics"
   dashboardTags: ['hostmetrics'],
   uid: 'hostmetrics',
   dashboardNamePrefix: 'Hostmetrics / ',

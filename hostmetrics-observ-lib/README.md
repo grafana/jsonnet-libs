@@ -26,7 +26,7 @@ The default is both, `['otel', 'otel_with_suffixes']`, so dashboards and alerts 
 
 The dashboards and alerts use metrics and resource attributes that the hostmetrics receiver and the `system` resource detector don't send by default. The config below sends all of them. The `job` label is `service.name`, or `service.namespace/service.name` if you set a namespace. The `instance` label is `service.instance.id`.
 
-The default `filteringSelector`, `job!=""`, matches any job. To show only these hosts, set it to `job="<your-namespace>/<your-service-name>"`.
+The default `filteringSelector` is empty, so it matches any job. To show only these hosts, set it to `job="<your-namespace>/<your-service-name>"`.
 
 ```yaml
 receivers:
@@ -122,6 +122,23 @@ logsExtraFilters:
 ```
 
 The links at the top of each dashboard keep the selected host when you move between dashboards, including to and from the logs dashboard. To enable that with OTLP logs the logs dashboard's host variable is named `instance` even though it filters on `service_instance_id`.
+
+## Alerts
+
+| Alert | Summary |
+|---|---|
+| `HostmetricsHostDown` | No host metrics received. |
+| `HostmetricsCPUHighUsage` | Host CPU usage is high. |
+| `HostmetricsMemoryHighUtilization` | Host memory usage is high. |
+| `HostmetricsDiskSpaceLow` | Filesystem is nearly full (warning) or critically full (critical). |
+| `HostmetricsInodesLow` | Filesystem is running out of inodes (warning) or almost out (critical). |
+| `HostmetricsSystemSaturation` | Host load average is high relative to core count. |
+| `HostmetricsDiskIOSaturation` | Disk I/O queue is high. |
+| `HostmetricsProcessesHigh` | Many processes are running. |
+| `HostmetricsHostRebooted` | Host has rebooted. |
+| `HostmetricsNetworkErrors` | Network interface has a high error rate. Needs `enableNetworkScraper`. |
+| `HostmetricsConntrackHighUsage` | Connection tracking table is filling up. Needs `enableNetworkScraper`. |
+| `HostmetricsMemoryMajorPageFaults` | Memory major page faults are high. Needs `enablePagingScraper`. |
 
 ## Options
 
