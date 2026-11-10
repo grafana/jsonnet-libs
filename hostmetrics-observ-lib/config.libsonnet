@@ -16,7 +16,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   dashboardPeriod: 'now-1h',
   dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
-  customAllValue: '.+',
+  customAllValue: '.*',
 
   // Metric names as stored in Prometheus-compatible backends after OTLP ingestion.
   // 'otel' - semantic convention names without unit suffixes, i.e. system_cpu_utilization.

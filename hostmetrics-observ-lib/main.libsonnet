@@ -26,7 +26,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         groupLabels=this.config.groupLabels,
         instanceLabels=this.config.instanceLabels,
         varMetric=[common.discoveryMetric[source] for source in this.config.metricsSource],
-        customAllValue=this.config.customAllValue,
         enableLokiLogs=this.config.enableLokiLogs,
       ),
       annotations: annotations.new(this),
