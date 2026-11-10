@@ -32,6 +32,11 @@ local link_data = import 'link_data.libsonnet';
       // For example proxy-pass of /grafana path will be passed as '%(path)s/grafana' to the upstream.
       normalized: true,
 
+      // location_regex is the regular expression of the nginx location of the entry.
+      location_regex: '^/%s(/?)(.*)$' % self.path,
+      // proxy_uri is the part of the proxied URL after url. It can refer to the capture groups of location_regex.
+      proxy_uri: if self.normalized then '$2$is_args$args' else '$request_uri',
+
       // backwards compatible, service level config allows for more granular configuration
       read_timeout: this._config.nginx_proxy_read_timeout,
       send_timeout: this._config.nginx_proxy_send_timeout,
