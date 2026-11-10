@@ -22,6 +22,11 @@
       //    allowWebsockets: false,
       //    subfilter: false,
       //    custom: [],
+      //    # Regular expression of the nginx location. Default: '^/<path>(/?)(.*)$'.
+      //    location_regex: '^/(pod-[0-9]+)/(.*)$',
+      //    # Part of the proxied URL after url. It can refer to the capture groups of location_regex.
+      //    # Default: '$2$is_args$args', or '$request_uri' when normalized is false.
+      //    proxy_uri: '$2$is_args$args',
       //  },
     ],
 
