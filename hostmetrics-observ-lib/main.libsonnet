@@ -5,7 +5,6 @@ local dashboards = import './dashboards.libsonnet';
 local links = import './links.libsonnet';
 local panels = import './panels/main.libsonnet';
 local rows = import './rows.libsonnet';
-local common = import './signals/common.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
@@ -21,13 +20,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         for sig in std.objectFields(this.config.signals)
       },
     grafana: {
-      variables: commonlib.variables.new(
-        filteringSelector=this.config.filteringSelector,
-        groupLabels=this.config.groupLabels,
-        instanceLabels=this.config.instanceLabels,
-        varMetric=[common.discoveryMetric[source] for source in this.config.metricsSource],
-        enableLokiLogs=this.config.enableLokiLogs,
-      ),
+      variables: this.signals.host.getVariables(),
       annotations: annotations.new(this),
       links: links.new(this),
       panels: panels.new(this),

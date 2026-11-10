@@ -16,7 +16,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   dashboardPeriod: 'now-1h',
   dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
-  customAllValue: '.*',
 
   // Metric names as stored in Prometheus-compatible backends after OTLP ingestion.
   // 'otel' - semantic convention names without unit suffixes, i.e. system_cpu_utilization.
@@ -52,6 +51,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       | label_format timestamp="{{__timestamp__}}"
       | line_format `{{ if eq "[[instance]]" ".*" }}{{alignLeft 25 .service_instance_id}}|{{end}} {{__line__}}`
     |||,
+  customAllValue: '.*',
 
   // Alerts thresholds
   alertsCPUHighUsageThreshold: 90,  // %
