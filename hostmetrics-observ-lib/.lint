@@ -1,0 +1,9 @@
+exclusions:
+  template-instance-rule:
+    reason: "These dashboards are designed to be single instance"
+    entries:
+      - dashboard: Hostmetrics / host summary
+      - dashboard: Hostmetrics / CPU and system
+      - dashboard: Hostmetrics / memory
+      - dashboard: Hostmetrics / filesystem and disks
+      - dashboard: Hostmetrics / network
