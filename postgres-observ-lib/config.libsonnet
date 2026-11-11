@@ -21,9 +21,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     'prometheus_pg17_plus',  // For queries that changed in PostgreSQL 17 and later. Needs the stat_checkpointer collector.
   ],
 
-  // Feature flags
-  enableQueryAnalysis: true,  // Requires pg_stat_statements extension
-
   // Alerts
   alertHighConnectionUsageWarningThreshold: 80,  // > percent of max_connections
 

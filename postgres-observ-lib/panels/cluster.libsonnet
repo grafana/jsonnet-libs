@@ -16,7 +16,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       groupQueryParams,
     ],
 
-    // Helper to convert stat panel queries to instant queries for current status
     local withInstantQuery = {
       targets: std.map(function(t) t { instant: true }, super.targets),
     },
@@ -30,11 +29,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + g.panel.stat.options.withReduceOptions({ calcs: ['lastNotNull'] })
       + g.panel.stat.standardOptions.color.withMode('thresholds')
       + g.panel.stat.options.withColorMode('value'),
-
-    // Helper to convert gauge panel queries to instant queries
-    local withInstantQueryGauge = {
-      targets: std.map(function(t) t { instant: true }, super.targets),
-    },
 
     clusterStatus:
       signals.cluster.clusterStatus.asStat()
@@ -131,7 +125,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
     worstCacheHitRatio:
       signals.cluster.worstCacheHitRatio.asGauge()
-      + withInstantQueryGauge
+      + withInstantQuery
       + g.panel.gauge.standardOptions.withUnit('percentunit')
       + g.panel.gauge.standardOptions.withMin(0)
       + g.panel.gauge.standardOptions.withMax(1)
@@ -152,7 +146,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
     worstConnectionUtilization:
       signals.cluster.worstConnectionUtilization.asGauge()
-      + withInstantQueryGauge
+      + withInstantQuery
       + g.panel.gauge.standardOptions.withUnit('percentunit')
       + g.panel.gauge.standardOptions.withMin(0)
       + g.panel.gauge.standardOptions.withMax(1)
@@ -202,8 +196,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + signals.cluster.instanceStatus.asTableColumn()
       + signals.cluster.instanceUptime.asTableColumn()
       + signals.cluster.instanceConnectionUtilization.asTableColumn()
-      + signals.cluster.instanceCacheHitRatio.asTableColumn()
-      + signals.cluster.instanceReplicationLag.asTableColumn()
+      + signals.cluster.cacheHitRatioByInstance.asTableColumn()
+      + signals.cluster.replicationLagByInstance.asTableColumn()
       + g.panel.table.panelOptions.withDescription(
         'All PostgreSQL instances in the cluster. Click a row to view instance details.'
       )
@@ -277,7 +271,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           ],
         },
         {
-          matcher: { id: 'byName', options: 'Instance cache hit ratio' },
+          matcher: { id: 'byName', options: 'Cache hit ratio by instance' },
           properties: [
             { id: 'displayName', value: 'Cache %' },
             { id: 'custom.width', value: 150 },
@@ -295,7 +289,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
         },
         // Lag column
         {
-          matcher: { id: 'byName', options: 'Instance replication lag' },
+          matcher: { id: 'byName', options: 'Replication lag by instance' },
           properties: [
             { id: 'displayName', value: 'Lag' },
             { id: 'custom.width', value: 80 },
@@ -472,7 +466,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
     worstLockUtilization:
       signals.cluster.worstLockUtilization.asGauge()
-      + withInstantQueryGauge
+      + withInstantQuery
       + g.panel.gauge.standardOptions.withUnit('percentunit')
       + g.panel.gauge.standardOptions.withMin(0)
       + g.panel.gauge.standardOptions.withMax(1)
@@ -605,8 +599,5 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + g.panel.timeSeries.options.legend.withDisplayMode('table')
       + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'max', 'mean']),
-
-    // WAL position time series (already defined above, reuse)
-    // walPositionTimeSeries is defined in Row 4
   },
 }
