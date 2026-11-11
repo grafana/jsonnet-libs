@@ -338,17 +338,14 @@ function(this)
       primaryInserts: {
         name: 'Primary inserts',
         description: 'Rows inserted per second on the primary.',
-        // Raw: the join keeps only the primary's series before they are aggregated.
-        type: 'raw',
+        type: 'gauge',
         unit: 'rows/s',
         sources: {
           prometheus: {
             expr: |||
-              sum by (%%(agg)s) (
-                rate(pg_stat_database_tup_inserted{%%(queriesSelector)s}[%%(interval)s])
-                and on(%(series)s)
-                (pg_replication_is_replica{%%(queriesSelector)s} == 0)
-              )
+              rate(pg_stat_database_tup_inserted{%%(queriesSelector)s}[%%(interval)s])
+              and on(%(series)s)
+              (pg_replication_is_replica{%%(queriesSelector)s} == 0)
             ||| % { series: seriesLabels },
             exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}Inserts',
@@ -360,17 +357,14 @@ function(this)
       primaryUpdates: {
         name: 'Primary updates',
         description: 'Rows updated per second on the primary.',
-        // Raw: the join keeps only the primary's series before they are aggregated.
-        type: 'raw',
+        type: 'gauge',
         unit: 'rows/s',
         sources: {
           prometheus: {
             expr: |||
-              sum by (%%(agg)s) (
-                rate(pg_stat_database_tup_updated{%%(queriesSelector)s}[%%(interval)s])
-                and on(%(series)s)
-                (pg_replication_is_replica{%%(queriesSelector)s} == 0)
-              )
+              rate(pg_stat_database_tup_updated{%%(queriesSelector)s}[%%(interval)s])
+              and on(%(series)s)
+              (pg_replication_is_replica{%%(queriesSelector)s} == 0)
             ||| % { series: seriesLabels },
             exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}Updates',
@@ -382,17 +376,14 @@ function(this)
       primaryDeletes: {
         name: 'Primary deletes',
         description: 'Rows deleted per second on the primary.',
-        // Raw: the join keeps only the primary's series before they are aggregated.
-        type: 'raw',
+        type: 'gauge',
         unit: 'rows/s',
         sources: {
           prometheus: {
             expr: |||
-              sum by (%%(agg)s) (
-                rate(pg_stat_database_tup_deleted{%%(queriesSelector)s}[%%(interval)s])
-                and on(%(series)s)
-                (pg_replication_is_replica{%%(queriesSelector)s} == 0)
-              )
+              rate(pg_stat_database_tup_deleted{%%(queriesSelector)s}[%%(interval)s])
+              and on(%(series)s)
+              (pg_replication_is_replica{%%(queriesSelector)s} == 0)
             ||| % { series: seriesLabels },
             exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}Deletes',
@@ -453,23 +444,20 @@ function(this)
       totalWrites: {
         name: 'Total writes',
         description: 'Total write operations (insert + update + delete) per second.',
-        // Raw: the join keeps only the primary's series before they are aggregated.
-        type: 'raw',
+        type: 'gauge',
         unit: 'rows/s',
         sources: {
           prometheus: {
             expr: |||
-              sum by (%%(agg)s) (
-                (
-                  rate(pg_stat_database_tup_inserted{%%(queriesSelector)s}[%%(interval)s])
-                  +
-                  rate(pg_stat_database_tup_updated{%%(queriesSelector)s}[%%(interval)s])
-                  +
-                  rate(pg_stat_database_tup_deleted{%%(queriesSelector)s}[%%(interval)s])
-                )
-                and on(%(series)s)
-                (pg_replication_is_replica{%%(queriesSelector)s} == 0)
+              (
+                rate(pg_stat_database_tup_inserted{%%(queriesSelector)s}[%%(interval)s])
+                +
+                rate(pg_stat_database_tup_updated{%%(queriesSelector)s}[%%(interval)s])
+                +
+                rate(pg_stat_database_tup_deleted{%%(queriesSelector)s}[%%(interval)s])
               )
+              and on(%(series)s)
+              (pg_replication_is_replica{%%(queriesSelector)s} == 0)
             ||| % { series: seriesLabels },
             exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}Total writes',

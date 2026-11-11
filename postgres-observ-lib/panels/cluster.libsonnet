@@ -1,12 +1,20 @@
 local g = import '../g.libsonnet';
 local alertsOverviewlib = import 'alerts-observ-lib/main.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
 {
-  new(signals, config):: {
-    local instanceLabel = config.instanceLabels[0],
+  new(signals, config, dashboards):: {
+    local instanceLabel = xtd.array.slice(config.instanceLabels, -1)[0],
     local instanceColumn = commonlib.utils.toSentenceCase(instanceLabel),
     local groupQueryParams = std.join('&', ['${%s:queryparam}' % label for label in config.groupLabels]),
+    local instanceUrl = '/d/%s?var-%s=${__data.fields.%s}&${__url_time_range}&${%s:queryparam}&%s' % [
+      dashboards['postgres-overview.json'].uid,
+      instanceLabel,
+      instanceColumn,
+      signals.cluster.datasource,
+      groupQueryParams,
+    ],
 
     // Helper to convert stat panel queries to instant queries for current status
     local withInstantQuery = {
@@ -213,8 +221,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             { id: 'custom.minWidth', value: 350 },
             { id: 'links', value: [
               {
-                title: 'View Instance',
-                url: '/d/' + config.uid + '-overview?var-' + instanceLabel + '=${__data.fields.' + instanceColumn + '}&${__url_time_range}&${datasource:queryparam}&' + groupQueryParams,
+                title: 'View instance',
+                url: instanceUrl,
               },
             ] },
           ],
@@ -309,8 +317,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           defaults+: {
             links: [
               {
-                title: 'View Instance Details',
-                url: '/d/' + config.uid + '-overview?var-' + instanceLabel + '=${__data.fields.' + instanceColumn + '}&${__url_time_range}',
+                title: 'View instance details',
+                url: instanceUrl,
               },
             ],
           },
@@ -501,12 +509,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ),
 
     writeOperations:
-      g.panel.timeSeries.new('Write operations (primary)')
+      signals.cluster.primaryInserts.asTimeSeries('Write operations (primary)')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.panelOptions.withDescription(
         'Write operations (INSERT, UPDATE, DELETE) from the primary instance only.'
       )
-      + signals.cluster.primaryInserts.asPanelMixin()
       + signals.cluster.primaryUpdates.asPanelMixin()
       + signals.cluster.primaryDeletes.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withUnit('rows/s')
@@ -545,6 +552,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Read/Write ratio pie chart
     readWriteRatio:
       g.panel.pieChart.new('Read/write ratio')
+      + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${%s}' % signals.cluster.datasource)
       + g.panel.pieChart.panelOptions.withDescription(
         'Ratio of read operations to write operations cluster-wide.'
       )
@@ -559,12 +567,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.pieChart.standardOptions.withUnit('rows/s'),
 
     totalConnectionsTimeSeries:
-      g.panel.timeSeries.new('Total connections')
+      signals.cluster.totalConnections.asTimeSeries('Total connections')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.panelOptions.withDescription(
         'Total connections across all instances vs total max connections.'
       )
-      + signals.cluster.totalConnections.asPanelMixin()
       + signals.cluster.totalMaxConnections.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withUnit('short')
       + g.panel.timeSeries.standardOptions.withOverrides([

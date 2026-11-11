@@ -1,9 +1,10 @@
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
+
 {
   new(this): {
     local config = this.config,
     local signals = this.signals,
-    local agg = std.join(', ', config.groupLabels + config.instanceLabels),
-    local instanceLabel = config.instanceLabels[0],
+    local instanceLabel = xtd.array.slice(config.instanceLabels, -1)[0],
 
     groups: [
       {
@@ -56,7 +57,7 @@
           },
           {
             alert: 'PostgreSQLDeadlocks',
-            expr: 'increase(pg_stat_database_deadlocks{%(filteringSelector)s}[5m]) > %(alertDeadlocksWarningThreshold)s' % config,
+            expr: '(%s) > %s' % [signals.health.deadlocks.asRuleExpression(), config.alertDeadlocksWarningThreshold],
             'for': '5m',
             keep_firing_for: '5m',
             labels: { severity: 'warning' },
@@ -80,7 +81,7 @@
           },
           {
             alert: 'PostgreSQLBlockedQueries',
-            expr: 'sum by (%s) (%s) > %s' % [agg, signals.problems.blockedQueries.asRuleExpression(), config.alertBlockedQueriesWarningThreshold],
+            expr: 'sum by (%s) (%s) > %s' % [signals.problems.blockedQueries.vars.agg, signals.problems.blockedQueries.asRuleExpression(), config.alertBlockedQueriesWarningThreshold],
             'for': '5m',
             keep_firing_for: '5m',
             labels: { severity: 'warning' },
@@ -104,10 +105,10 @@
           // Maintenance Alerts
           {
             alert: 'PostgreSQLHighDeadTuples',
-            expr: '(%s) > %g and pg_stat_user_tables_n_dead_tup{%s} > %s' % [
+            expr: '(%s) > %g and (%s) > %s' % [
               signals.maintenance.deadTupleRatio.asRuleExpression(),
               config.alertHighDeadTuplesWarningThreshold / 100,
-              config.filteringSelector,
+              signals.maintenance.deadTuples.asRuleExpression(),
               config.alertHighDeadTuplesMinDeadTuples,
             ],
             'for': '30m',
@@ -198,7 +199,7 @@
           },
           {
             alert: 'PostgreSQLHighQps',
-            expr: 'sum by (%s) (%s) > %s' % [agg, signals.performance.transactionsPerSecond.asRuleExpression(), config.alertHighQpsWarningThreshold],
+            expr: 'sum by (%s) (%s) > %s' % [signals.performance.transactionsPerSecond.vars.agg, signals.performance.transactionsPerSecond.asRuleExpression(), config.alertHighQpsWarningThreshold],
             'for': '5m',
             keep_firing_for: '5m',
             labels: { severity: 'warning' },
@@ -212,7 +213,7 @@
             expr: '((%s) > %s) and on (%s) ((%s) == 1)' % [
               signals.health.replicationLag.asRuleExpression(),
               config.alertReplicationLagCriticalThreshold,
-              agg,
+              signals.health.isReplica.vars.agg,
               signals.health.isReplica.asRuleExpression(),
             ],
             'for': '5m',

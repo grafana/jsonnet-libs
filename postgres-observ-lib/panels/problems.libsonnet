@@ -103,10 +103,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Conflicts and Deadlocks
     conflictsDeadlocks:
-      g.panel.timeSeries.new('Conflicts & deadlocks')
+      signals.health.deadlocks.withRangeFunction('rate').asTimeSeries('Conflicts & deadlocks')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('short')
-      + signals.health.deadlocks.withRangeFunction('rate').asPanelMixin()
       + signals.problems.conflicts.asPanelMixin()
       + g.panel.timeSeries.panelOptions.withDescription(
         'Deadlocks and conflicts (replica recovery cancellations).'
