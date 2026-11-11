@@ -1,19 +1,4 @@
 exclusions:
-  panel-datasource-rule:
-    reason: "grafonnet created panels use --Mixed-- datasource by default"
-    entries:
-      - panel: "Buffers activity"
-      - panel: "Cluster instances"
-      - panel: "Conflicts & deadlocks"
-      - panel: "PostgreSQL settings"
-      - panel: "Query statistics"
-      - panel: "Read/write over time"
-      - panel: "Table analyze status"
-      - panel: "Table vacuum status"
-      - panel: "Total connections"
-      - panel: "Unused indexes"
-      - panel: "Write operations (primary)"
-
   template-instance-rule:
     reason: "Instance selector is single-select for instance-specific dashboards; Cluster dashboard is cluster-wide"
     entries:
@@ -28,12 +13,10 @@ exclusions:
       - dashboard: "PostgreSQL cluster overview"
 
   panel-units-rule:
-    reason: "rows/s is semantically correct; table panels don't require units"
+    reason: "Grafana has no unit id for rows per second"
     entries:
       - panel: "Write operations (primary)"
       - panel: "Read operations by instance"
       - panel: "Rows activity"
       - panel: "Top queries by rows"
-      - panel: "Unused indexes"
-      - panel: "PostgreSQL settings"
       - panel: "Read/write over time"

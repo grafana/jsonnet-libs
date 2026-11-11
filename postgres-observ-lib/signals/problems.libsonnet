@@ -136,11 +136,10 @@ function(this)
       inactiveReplicationSlots: {
         name: 'Inactive replication slots',
         description: 'Number of inactive replication slots. Can cause WAL to accumulate.',
-        type: 'raw',
+        type: 'gauge',
         unit: 'short',
         sources: {
           prometheus: {
-            // Raw: counts the slots at 0 and falls back to 0 when every slot is active.
             expr: |||
               count by (%(agg)s) (pg_replication_slots_active{%(queriesSelector)s} == 0)
               or

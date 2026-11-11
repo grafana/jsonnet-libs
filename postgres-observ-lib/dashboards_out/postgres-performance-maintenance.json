@@ -174,8 +174,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "Rows fetched (sum): Number of rows fetched by queries per second.  \n\nRows inserted (sum): Number of rows inserted per second.  \n\nRows updated (sum): Number of rows updated per second.  \n\nRows deleted (sum): Number of rows deleted per second.",
             "fieldConfig": {
@@ -304,8 +304,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "Read (fetched) and write (insert/update/delete) operations over time.",
             "fieldConfig": {
@@ -554,8 +554,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "Buffer pool activity: allocations, cleaned by bgwriter, and max written stops (I/O pressure indicator).",
             "fieldConfig": {
@@ -1416,11 +1416,17 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "Dead tuple ratio (sum): Ratio of dead to total tuples per table. > 10% needs vacuum.  \n\nLast vacuum age (sum): Time since each table was last vacuumed.",
+            "description": "Tables with dead tuple ratio and time since last vacuum. Sort by dead tuple ratio to find tables needing VACUUM.",
             "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  },
+                  "unit": "percentunit"
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -1803,10 +1809,32 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "Indexes with zero buffer hits and disk reads since stats reset. Candidates for removal to save disk space.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Unused indexes"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
             "gridPos": {
                "h": 8,
                "w": 16,
@@ -1820,10 +1848,11 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "(\n  (pg_statio_user_indexes_idx_blks_hit_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\n  and\n  (pg_statio_user_indexes_idx_blks_read_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"} == 0)\n)\n",
+                  "expr": "(\n  (pg_statio_user_indexes_idx_blks_hit_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"} == bool 0)\n*\n(pg_statio_user_indexes_idx_blks_read_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"} == bool 0)\n\n) == 1",
                   "format": "table",
                   "instant": true,
-                  "refId": "UnusedIndexes"
+                  "legendFormat": " Unused indexes",
+                  "refId": "Unused indexes"
                }
             ],
             "title": "Unused indexes",
@@ -1967,11 +1996,17 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
-            "description": "Last analyze age (sum): Time since each table was last analyzed.  \n",
+            "description": "Tables with time since last analyze. Stale statistics can cause poor query plans.",
             "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  },
+                  "unit": "s"
+               },
                "overrides": [
                   {
                      "matcher": {

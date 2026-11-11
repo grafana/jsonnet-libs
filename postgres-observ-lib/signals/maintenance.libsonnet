@@ -79,6 +79,20 @@ function(this)
         },
       },
 
+      deadTuples: {
+        name: 'Dead tuples',
+        description: 'Number of dead tuples per table.',
+        type: 'gauge',
+        unit: 'short',
+        sources: {
+          prometheus: {
+            expr: 'pg_stat_user_tables_n_dead_tup{%(queriesSelector)s}',
+            aggKeepLabels: ['schemaname', 'relname'],
+            legendCustomTemplate: ' {{ schemaname }}.{{ relname }}',
+          },
+        },
+      },
+
       // Last vacuum time per table
       lastVacuumAge: {
         name: 'Last vacuum age',

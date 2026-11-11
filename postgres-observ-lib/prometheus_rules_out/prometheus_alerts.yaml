@@ -53,7 +53,7 @@ groups:
           annotations:
             description: PostgreSQL {{ $labels.instance }} database {{ $labels.datname }} has deadlocks.
             summary: PostgreSQL deadlocks detected.
-          expr: increase(pg_stat_database_deadlocks{}[5m]) > 1
+          expr: (increase(pg_stat_database_deadlocks{}[5m])) > 1
           for: 5m
           keep_firing_for: 5m
           labels:
@@ -71,7 +71,7 @@ groups:
           annotations:
             description: PostgreSQL {{ $labels.instance }} has {{ $value }} queries waiting for locks.
             summary: PostgreSQL has blocked queries.
-          expr: sum by (job, postgres_cluster, cluster, instance) (pg_stat_activity_count{wait_event_type="Lock", } or pg_stat_activity_count{} * 0) > 1
+          expr: sum by (job,postgres_cluster,cluster,instance) (pg_stat_activity_count{wait_event_type="Lock", } or pg_stat_activity_count{} * 0) > 1
           for: 5m
           keep_firing_for: 5m
           labels:
@@ -95,7 +95,7 @@ groups:
               /
               (pg_stat_user_tables_n_live_tup{} + pg_stat_user_tables_n_dead_tup{} + 1)
             )
-            ) > 0.1 and pg_stat_user_tables_n_dead_tup{} > 10000
+            ) > 0.1 and (pg_stat_user_tables_n_dead_tup{}) > 10000
           for: 30m
           keep_firing_for: 5m
           labels:
@@ -183,7 +183,7 @@ groups:
             description: PostgreSQL {{ $labels.instance }} has {{ $value | humanize }} queries per second.
             summary: PostgreSQL has high QPS.
           expr: |-
-            sum by (job, postgres_cluster, cluster, instance) (rate(pg_stat_database_xact_commit{}[5m])
+            sum by (job,postgres_cluster,cluster,instance) (rate(pg_stat_database_xact_commit{}[5m])
             +
             rate(pg_stat_database_xact_rollback{}[5m])
             ) > 10000
@@ -195,7 +195,7 @@ groups:
           annotations:
             description: Replica {{ $labels.instance }} is {{ printf "%.0f" $value }}s behind primary. Check for network issues or load imbalances.
             summary: PostgreSQL replication lag exceeds 1 hour.
-          expr: ((pg_replication_lag_seconds{}) > 3600) and on (job, postgres_cluster, cluster, instance) ((pg_replication_is_replica{}) == 1)
+          expr: ((pg_replication_lag_seconds{}) > 3600) and on (job,postgres_cluster,cluster,instance) ((pg_replication_is_replica{}) == 1)
           for: 5m
           keep_firing_for: 5m
           labels:

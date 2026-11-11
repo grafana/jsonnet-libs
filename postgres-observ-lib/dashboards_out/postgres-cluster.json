@@ -874,8 +874,8 @@
                   },
                   "links": [
                      {
-                        "title": "View Instance Details",
-                        "url": "/d/postgres-overview?var-instance=${__data.fields.Instance}&${__url_time_range}"
+                        "title": "View instance details",
+                        "url": "/d/postgres-overview?var-instance=${__data.fields.Instance}&${__url_time_range}&${datasource:queryparam}&${job:queryparam}&${postgres_cluster:queryparam}&${cluster:queryparam}"
                      }
                   ],
                   "unit": "short"
@@ -967,7 +967,7 @@
                            "id": "links",
                            "value": [
                               {
-                                 "title": "View Instance",
+                                 "title": "View instance",
                                  "url": "/d/postgres-overview?var-instance=${__data.fields.Instance}&${__url_time_range}&${datasource:queryparam}&${job:queryparam}&${postgres_cluster:queryparam}&${cluster:queryparam}"
                               }
                            ]
@@ -2505,8 +2505,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "Primary inserts (sum): Rows inserted per second on the primary.  \n\nPrimary updates (sum): Rows updated per second on the primary.  \n\nPrimary deletes (sum): Rows deleted per second on the primary.",
             "fieldConfig": {
@@ -2593,7 +2593,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "label_replace(\n  sum by (job,postgres_cluster,cluster) (\n  rate(pg_stat_database_tup_inserted{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(job,postgres_cluster,cluster,instance)\n  (pg_replication_is_replica{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"} == 0)\n)\n\n, \"cluster_prefix\", \"$1: \", \"postgres_cluster\", \"(.+)\")",
+                  "expr": "label_replace(\n  sum by (job,postgres_cluster,cluster) (\n  rate(pg_stat_database_tup_inserted{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\nand on(job,postgres_cluster,cluster,instance)\n(pg_replication_is_replica{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"} == 0)\n\n)\n, \"cluster_prefix\", \"$1: \", \"postgres_cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{cluster_prefix}}Inserts",
@@ -2604,7 +2604,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "label_replace(\n  sum by (job,postgres_cluster,cluster) (\n  rate(pg_stat_database_tup_updated{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(job,postgres_cluster,cluster,instance)\n  (pg_replication_is_replica{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"} == 0)\n)\n\n, \"cluster_prefix\", \"$1: \", \"postgres_cluster\", \"(.+)\")",
+                  "expr": "label_replace(\n  sum by (job,postgres_cluster,cluster) (\n  rate(pg_stat_database_tup_updated{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\nand on(job,postgres_cluster,cluster,instance)\n(pg_replication_is_replica{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"} == 0)\n\n)\n, \"cluster_prefix\", \"$1: \", \"postgres_cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{cluster_prefix}}Updates",
@@ -2615,7 +2615,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "label_replace(\n  sum by (job,postgres_cluster,cluster) (\n  rate(pg_stat_database_tup_deleted{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\n  and on(job,postgres_cluster,cluster,instance)\n  (pg_replication_is_replica{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"} == 0)\n)\n\n, \"cluster_prefix\", \"$1: \", \"postgres_cluster\", \"(.+)\")",
+                  "expr": "label_replace(\n  sum by (job,postgres_cluster,cluster) (\n  rate(pg_stat_database_tup_deleted{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\nand on(job,postgres_cluster,cluster,instance)\n(pg_replication_is_replica{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"} == 0)\n\n)\n, \"cluster_prefix\", \"$1: \", \"postgres_cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{cluster_prefix}}Deletes",
@@ -2700,8 +2700,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "Total reads (sum): Total read operations (fetched) per second across all instances.  \n\nTotal writes (sum): Total write operations (insert + update + delete) per second.",
             "fieldConfig": {
@@ -2772,7 +2772,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "label_replace(\n  sum by (job,postgres_cluster,cluster) (\n  (\n    rate(pg_stat_database_tup_inserted{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\n    +\n    rate(pg_stat_database_tup_updated{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\n    +\n    rate(pg_stat_database_tup_deleted{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\n  )\n  and on(job,postgres_cluster,cluster,instance)\n  (pg_replication_is_replica{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"} == 0)\n)\n\n, \"cluster_prefix\", \"$1: \", \"postgres_cluster\", \"(.+)\")",
+                  "expr": "label_replace(\n  sum by (job,postgres_cluster,cluster) (\n  (\n  rate(pg_stat_database_tup_inserted{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\n  +\n  rate(pg_stat_database_tup_updated{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\n  +\n  rate(pg_stat_database_tup_deleted{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval])\n)\nand on(job,postgres_cluster,cluster,instance)\n(pg_replication_is_replica{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"} == 0)\n\n)\n, \"cluster_prefix\", \"$1: \", \"postgres_cluster\", \"(.+)\")",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{cluster_prefix}}Total writes",
@@ -2796,8 +2796,8 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "Total connections (sum): Total active connections across all instances.  \n\nTotal max connections (sum): Sum of max_connections across all instances.",
             "fieldConfig": {

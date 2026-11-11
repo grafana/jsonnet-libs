@@ -13,12 +13,11 @@ function(this)
       topQueriesByTotalTime: {
         name: 'Top queries by total time',
         description: 'Queries consuming the most cumulative execution time. Primary optimization targets.',
-        // Raw: a typed signal would aggregate before $topk ranks individual queries.
-        type: 'raw',
+        type: 'counter',
         unit: 's',
         sources: {
           prometheus: {
-            expr: 'topk($topk, rate(pg_stat_statements_seconds_total{%(queriesSelector)s}[%(interval)s]))',
+            expr: 'pg_stat_statements_seconds_total{%(queriesSelector)s}',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },
@@ -29,19 +28,14 @@ function(this)
       slowestQueriesByMeanTime: {
         name: 'Slowest queries by mean time',
         description: 'Queries with highest average execution time (total time / calls).',
-        // Raw: a ratio of two counters, ranked by $topk.
-        type: 'raw',
+        type: 'gauge',
         unit: 's',
         sources: {
           prometheus: {
             expr: |||
-              topk($topk,
-                (
-                  pg_stat_statements_seconds_total{%(queriesSelector)s}
-                  /
-                  (pg_stat_statements_calls_total{%(queriesSelector)s} + 1)
-                )
-              )
+              sum by (%(agg)s) (pg_stat_statements_seconds_total{%(queriesSelector)s})
+              /
+              (sum by (%(agg)s) (pg_stat_statements_calls_total{%(queriesSelector)s}) + 1)
             |||,
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
@@ -53,12 +47,11 @@ function(this)
       mostFrequentQueries: {
         name: 'Most frequent queries',
         description: 'Most frequently executed queries. Even fast queries can impact if called often.',
-        // Raw: a typed signal would aggregate before $topk ranks individual queries.
-        type: 'raw',
+        type: 'counter',
         unit: 'ops',
         sources: {
           prometheus: {
-            expr: 'topk($topk, rate(pg_stat_statements_calls_total{%(queriesSelector)s}[%(interval)s]))',
+            expr: 'pg_stat_statements_calls_total{%(queriesSelector)s}',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },
@@ -69,12 +62,25 @@ function(this)
       topQueriesByRows: {
         name: 'Top queries by rows',
         description: 'Queries returning the most rows. May indicate full table scans.',
-        // Raw: a typed signal would aggregate before $topk ranks individual queries.
-        type: 'raw',
+        type: 'counter',
         unit: 'rows/s',
         sources: {
           prometheus: {
-            expr: 'topk($topk, rate(pg_stat_statements_rows_total{%(queriesSelector)s}[%(interval)s]))',
+            expr: 'pg_stat_statements_rows_total{%(queriesSelector)s}',
+            aggKeepLabels: ['queryid', 'datname', 'user'],
+            legendCustomTemplate: '{{ queryid }} ({{ datname }})',
+          },
+        },
+      },
+
+      queryTotalTime: {
+        name: 'Query total time',
+        description: 'Execution time of each query since its statistics were reset.',
+        type: 'gauge',
+        unit: 's',
+        sources: {
+          prometheus: {
+            expr: 'pg_stat_statements_seconds_total{%(queriesSelector)s}',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
           },

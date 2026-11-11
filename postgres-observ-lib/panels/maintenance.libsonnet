@@ -3,7 +3,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(signals, config):: {
-    local queriesSelector = signals.maintenance.templatingVariables.queriesSelector,
     local labelColumns = { [label]: true for label in config.groupLabels + config.instanceLabels },
 
     // Helper to convert stat panel queries to instant queries for current status
@@ -77,12 +76,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Table vacuum status - dead tuple ratio + last vacuum time
     tableVacuumStatus:
-      g.panel.table.new('Table vacuum status')
+      signals.maintenance.deadTupleRatio.asTable(name='Table vacuum status')
+      + signals.maintenance.lastVacuumAge.asTableColumn(override='byName', format='table')
       + g.panel.table.panelOptions.withDescription(
         'Tables with dead tuple ratio and time since last vacuum. Sort by dead tuple ratio to find tables needing VACUUM.'
       )
-      + signals.maintenance.deadTupleRatio.asTableColumn(override='byName', format='table')
-      + signals.maintenance.lastVacuumAge.asTableColumn(override='byName', format='table')
       + g.panel.table.queryOptions.withTransformations([
         g.panel.table.queryOptions.transformation.withId('merge'),
         g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
@@ -181,25 +179,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Unused indexes table
     unusedIndexesTable:
-      g.panel.table.new('Unused indexes')
+      signals.maintenance.unusedIndexes
+      .withAgglevel('none')
+      .withExprWrappersMixin(['(', ') == 1'])
+      .asTable(name='Unused indexes')
       + g.panel.table.panelOptions.withDescription(
         'Indexes with zero buffer hits and disk reads since stats reset. Candidates for removal to save disk space.'
       )
-      + g.panel.table.queryOptions.withTargets([
-        {
-          datasource: { type: 'prometheus', uid: '${datasource}' },
-          expr: |||
-            (
-              (pg_statio_user_indexes_idx_blks_hit_total{%(queriesSelector)s} == 0)
-              and
-              (pg_statio_user_indexes_idx_blks_read_total{%(queriesSelector)s} == 0)
-            )
-          ||| % { queriesSelector: queriesSelector },
-          format: 'table',
-          instant: true,
-          refId: 'UnusedIndexes',
-        },
-      ])
       + g.panel.table.queryOptions.withTransformations([
         g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
         + g.panel.table.queryOptions.transformation.withOptions({
@@ -257,11 +243,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Table analyze status
     tableAnalyzeStatus:
-      g.panel.table.new('Table analyze status')
+      signals.maintenance.lastAnalyzeAge.asTable(name='Table analyze status')
       + g.panel.table.panelOptions.withDescription(
         'Tables with time since last analyze. Stale statistics can cause poor query plans.'
       )
-      + signals.maintenance.lastAnalyzeAge.asTableColumn(override='byName', format='table')
       + g.panel.table.queryOptions.withTransformations([
         g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
         + g.panel.table.queryOptions.transformation.withOptions({
