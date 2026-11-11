@@ -7,7 +7,7 @@ function(this)
     aggLevel: 'group',  // Aggregate at cluster level, not instance
     aggFunction: 'sum',
     discoveryMetric: {
-      postgres_exporter: 'pg_up',
+      prometheus: 'pg_up',
     },
     signals: {
       clusterStatus: {
@@ -17,7 +17,7 @@ function(this)
         unit: 'short',
         aggFunction: 'min',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}}: Cluster status',
           },
@@ -32,7 +32,7 @@ function(this)
         unit: 'short',
         aggFunction: 'count',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}}: Total instances',
           },
@@ -46,7 +46,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}}: Up instances',
           },
@@ -61,7 +61,7 @@ function(this)
         unit: 'short',
         aggFunction: 'count',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_is_replica{%(queriesSelector)s} == 0',
             legendCustomTemplate: '{{cluster}}: Primary count',
           },
@@ -76,7 +76,7 @@ function(this)
         unit: 'short',
         aggFunction: 'count',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_is_replica{%(queriesSelector)s} == 1',
             legendCustomTemplate: '{{cluster}}: Replica count',
           },
@@ -91,7 +91,7 @@ function(this)
         unit: 's',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}}: Max replication lag',
           },
@@ -105,7 +105,7 @@ function(this)
         unit: 'percentunit',
         aggFunction: 'min',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%(series)s) (rate(pg_stat_database_blks_hit{%%(queriesSelector)s}[%%(interval)s]))
               /
@@ -127,7 +127,7 @@ function(this)
         unit: 'percentunit',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%(series)s) (pg_stat_activity_count{%%(queriesSelector)s})
               /
@@ -145,7 +145,7 @@ function(this)
         type: 'counter',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_deadlocks{%(queriesSelector)s}',
             rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}}: Total deadlocks',
@@ -160,7 +160,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_is_replica{%(queriesSelector)s}',
             aggKeepLabels: this.instanceLabels,
             legendCustomTemplate: '%(keepLabelsLegend)s',
@@ -175,7 +175,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'changes(pg_replication_is_replica{%(queriesSelector)s}[%(interval)s])',
             aggKeepLabels: this.instanceLabels,
             legendCustomTemplate: '%(keepLabelsLegend)s: Role changes',
@@ -189,7 +189,7 @@ function(this)
         type: 'gauge',
         unit: 's',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
             aggKeepLabels: this.instanceLabels,
             legendCustomTemplate: '%(keepLabelsLegend)s: Replication lag',
@@ -204,7 +204,7 @@ function(this)
         type: 'gauge',
         unit: 'bytes',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}',
             aggKeepLabels: this.instanceLabels + ['client_addr', 'application_name', 'state'],
             legendCustomTemplate: '{{client_addr}} ({{state}})',
@@ -220,7 +220,7 @@ function(this)
         unit: 'bytes',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_replication_pg_current_wal_lsn_bytes{%(queriesSelector)s}',
             exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
             legendCustomTemplate: '{{cluster_prefix}}WAL position',
@@ -234,7 +234,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_long_running_transactions{%(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}}: Long-running queries',
           },
@@ -248,7 +248,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_activity_count{wait_event_type="Lock", %(queriesSelector)s} or pg_stat_activity_count{%(queriesSelector)s} * 0',
             legendCustomTemplate: '{{cluster}}: Blocked queries',
           },
@@ -262,7 +262,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_activity_count{state="idle in transaction", %(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}}: Idle in transaction',
           },
@@ -276,7 +276,7 @@ function(this)
         type: 'counter',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_archiver_failed_count{%(queriesSelector)s}',
             rangeFunction: 'increase',
             legendCustomTemplate: '{{cluster}}: WAL archive failures',
@@ -291,7 +291,7 @@ function(this)
         unit: 'percentunit',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%(series)s) (pg_locks_count{%%(queriesSelector)s})
               /
@@ -313,7 +313,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_exporter_last_scrape_error{%(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}}: Exporter errors',
           },
@@ -327,7 +327,7 @@ function(this)
         type: 'raw',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%%(agg)s) (
                 rate(pg_stat_database_tup_inserted{%%(queriesSelector)s}[%%(interval)s])
@@ -349,7 +349,7 @@ function(this)
         type: 'raw',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%%(agg)s) (
                 rate(pg_stat_database_tup_updated{%%(queriesSelector)s}[%%(interval)s])
@@ -371,7 +371,7 @@ function(this)
         type: 'raw',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%%(agg)s) (
                 rate(pg_stat_database_tup_deleted{%%(queriesSelector)s}[%%(interval)s])
@@ -392,7 +392,7 @@ function(this)
         type: 'counter',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_tup_fetched{%(queriesSelector)s}',
             aggKeepLabels: this.instanceLabels,
             legendCustomTemplate: '%(keepLabelsLegend)s: Fetched',
@@ -407,7 +407,7 @@ function(this)
         type: 'gauge',
         unit: 'ops',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               rate(pg_stat_database_xact_commit{%(queriesSelector)s}[%(interval)s])
               +
@@ -426,7 +426,7 @@ function(this)
         type: 'counter',
         unit: 'ops',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_statements_calls_total{%(queriesSelector)s}',
             aggKeepLabels: this.instanceLabels,
             legendCustomTemplate: '%(keepLabelsLegend)s: QPS',
@@ -442,7 +442,7 @@ function(this)
         type: 'raw',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%%(agg)s) (
                 (
@@ -469,7 +469,7 @@ function(this)
         type: 'counter',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_tup_fetched{%(queriesSelector)s}',
             exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
             legendCustomTemplate: '{{cluster_prefix}}Total reads',
@@ -483,7 +483,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_activity_count{%(queriesSelector)s}',
             exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
             legendCustomTemplate: '{{cluster_prefix}}Total connections',
@@ -498,7 +498,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_settings_max_connections{%(queriesSelector)s}',
             exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
             legendCustomTemplate: '{{cluster_prefix}}Total max connections',
@@ -513,7 +513,7 @@ function(this)
         type: 'gauge',
         unit: 'percentunit',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               (
                 sum by (%(agg)s) (rate(pg_stat_database_blks_hit{%(queriesSelector)s}[%(interval)s]))
@@ -537,7 +537,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
             aggKeepLabels: this.instanceLabels,
             legendCustomTemplate: '%(keepLabelsLegend)s',
@@ -552,7 +552,7 @@ function(this)
         type: 'gauge',
         unit: 's',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'time() - pg_postmaster_start_time_seconds{%(queriesSelector)s}',
             aggKeepLabels: this.instanceLabels,
             legendCustomTemplate: '%(keepLabelsLegend)s',
@@ -567,7 +567,7 @@ function(this)
         type: 'gauge',
         unit: 'percentunit',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               (
                 sum by (%(agg)s) (pg_stat_activity_count{%(queriesSelector)s})
@@ -588,7 +588,7 @@ function(this)
         type: 'gauge',
         unit: 'percentunit',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               (
                 sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
@@ -613,7 +613,7 @@ function(this)
         type: 'gauge',
         unit: 's',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
             aggKeepLabels: this.instanceLabels,
             legendCustomTemplate: '%(keepLabelsLegend)s',

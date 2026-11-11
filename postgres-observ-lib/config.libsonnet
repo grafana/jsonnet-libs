@@ -16,9 +16,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   dashboardTimezone: commonlib.dashboards.defaultTimezone,
   dashboardRefresh: '1m',
 
-  // Metrics source - extensible pattern for future sources
-  // Currently only 'postgres_exporter' (prometheus community exporter) is implemented
-  metricsSource: ['postgres_exporter'],
+  metricsSource: [
+    'prometheus',  // Default for every query
+    'prometheus_pg17_plus',  // For queries that changed in PostgreSQL 17 and later. Needs the stat_checkpointer collector.
+  ],
 
   // Feature flags
   enableQueryAnalysis: true,  // Requires pg_stat_statements extension
