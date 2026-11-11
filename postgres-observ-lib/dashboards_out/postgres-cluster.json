@@ -932,7 +932,7 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Instance cache hit ratio"
+                        "options": "Cache hit ratio by instance"
                      },
                      "properties": [
                         {
@@ -944,7 +944,7 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Instance replication lag"
+                        "options": "Replication lag by instance"
                      },
                      "properties": [
                         {
@@ -1137,7 +1137,7 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Instance cache hit ratio"
+                        "options": "Cache hit ratio by instance"
                      },
                      "properties": [
                         {
@@ -1197,7 +1197,7 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Instance replication lag"
+                        "options": "Replication lag by instance"
                      },
                      "properties": [
                         {
@@ -1304,11 +1304,11 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,postgres_cluster,cluster,instance) (\n  (\n  sum by (job,postgres_cluster,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"})\n  /\n  (\n    sum by (job,postgres_cluster,cluster,instance) (pg_stat_database_blks_hit{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"})\n    +\n    sum by (job,postgres_cluster,cluster,instance) (pg_stat_database_blks_read{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"})\n  )\n)\n\n)",
+                  "expr": "sum by (job,postgres_cluster,cluster,instance) (\n  (\n  sum by (job,postgres_cluster,cluster,instance) (rate(pg_stat_database_blks_hit{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval]))\n  /\n  (\n    sum by (job,postgres_cluster,cluster,instance) (rate(pg_stat_database_blks_hit{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval]))\n    +\n    sum by (job,postgres_cluster,cluster,instance) (rate(pg_stat_database_blks_read{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}[$__rate_interval]))\n  )\n)\n\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{instance}}",
-                  "refId": "Instance cache hit ratio"
+                  "legendFormat": "{{instance}}: Cache hit ratio",
+                  "refId": "Cache hit ratio by instance"
                },
                {
                   "datasource": {
@@ -1318,8 +1318,8 @@
                   "expr": "sum by (job,postgres_cluster,cluster,instance) (\n  pg_replication_lag_seconds{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{instance}}",
-                  "refId": "Instance replication lag"
+                  "legendFormat": "{{instance}}: Replication lag",
+                  "refId": "Replication lag by instance"
                }
             ],
             "title": "Cluster instances",

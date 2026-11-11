@@ -583,45 +583,5 @@ function(this)
           },
         },
       },
-
-      // Instance cache hit ratio for table
-      instanceCacheHitRatio: {
-        name: 'Instance cache hit ratio',
-        description: 'Cache hit ratio per instance.',
-        type: 'gauge',
-        unit: 'percentunit',
-        sources: {
-          prometheus: {
-            expr: |||
-              (
-                sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
-                /
-                (
-                  sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
-                  +
-                  sum by (%(agg)s) (pg_stat_database_blks_read{%(queriesSelector)s})
-                )
-              )
-            |||,
-            aggKeepLabels: this.instanceLabels,
-            legendCustomTemplate: '%(keepLabelsLegend)s',
-          },
-        },
-      },
-
-      // Instance replication lag for table
-      instanceReplicationLag: {
-        name: 'Instance replication lag',
-        description: 'Replication lag per instance (replicas only).',
-        type: 'gauge',
-        unit: 's',
-        sources: {
-          prometheus: {
-            expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
-            aggKeepLabels: this.instanceLabels,
-            legendCustomTemplate: '%(keepLabelsLegend)s',
-          },
-        },
-      },
     },
   }

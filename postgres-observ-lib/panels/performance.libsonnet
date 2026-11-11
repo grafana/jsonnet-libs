@@ -100,24 +100,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Percentage of transactions rolled back. High values indicate application issues.'
       ),
 
-    rowsActivity:
-      g.panel.timeSeries.new('Rows activity')
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('rows/s')
-      + signals.performance.rowsFetched.asPanelMixin()
-      + signals.performance.rowsReturned.asPanelMixin()
-      + signals.performance.rowsInserted.asPanelMixin()
-      + signals.performance.rowsUpdated.asPanelMixin()
-      + signals.performance.rowsDeleted.asPanelMixin()
-      + g.panel.timeSeries.options.legend.withDisplayMode('table')
-      + g.panel.timeSeries.options.legend.withPlacement('right')
-      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull'])
-      + g.panel.timeSeries.options.legend.withSortBy('Last *')
-      + g.panel.timeSeries.options.legend.withSortDesc(true)
-      + g.panel.timeSeries.panelOptions.withDescription(
-        'Row-level activity showing reads (fetched/returned) and writes (inserted/updated/deleted).'
-      ),
-
     buffersActivity:
       signals.performance.buffersAlloc.asTimeSeries('Buffers activity')
       + commonlib.panels.generic.timeSeries.base.stylize()

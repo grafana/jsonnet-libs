@@ -17,6 +17,5 @@ exclusions:
     entries:
       - panel: "Write operations (primary)"
       - panel: "Read operations by instance"
-      - panel: "Rows activity"
       - panel: "Top queries by rows"
       - panel: "Read/write over time"

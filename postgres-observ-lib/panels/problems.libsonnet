@@ -3,7 +3,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(signals):: {
-    // Helper to convert stat panel queries to instant queries for current status
     local withInstantQuery = {
       targets: std.map(function(t) t { instant: true }, super.targets),
     },
@@ -111,15 +110,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Deadlocks and conflicts (replica recovery cancellations).'
       ),
 
-    // Helper to convert gauge panel queries to instant queries
-    local withInstantQueryGauge = {
-      targets: std.map(function(t) t { instant: true }, super.targets),
-    },
-
     // Lock utilization
     lockUtilization:
       signals.problems.lockUtilization.asGauge()
-      + withInstantQueryGauge
+      + withInstantQuery
       + g.panel.gauge.standardOptions.withUnit('percentunit')
       + g.panel.gauge.standardOptions.withMin(0)
       + g.panel.gauge.standardOptions.withMax(1)

@@ -4,7 +4,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(signals, config):: {
-    // Helper to convert stat panel queries to instant queries for current status
     local withInstantQuery = {
       targets: std.map(function(t) t { instant: true }, super.targets),
     },
@@ -51,15 +50,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.standardOptions.withNoValue('No data')
       + g.panel.stat.standardOptions.withMappings([noDataTextColor]),
 
-    // Helper to convert gauge panel queries to instant queries
-    local withInstantQueryGauge = {
-      targets: std.map(function(t) t { instant: true }, super.targets),
-    },
-
     // Connection utilization gauge
     connectionUtilization:
       signals.health.connectionUtilization.asGauge()
-      + withInstantQueryGauge
+      + withInstantQuery
       + g.panel.gauge.standardOptions.withUnit('percentunit')
       + g.panel.gauge.standardOptions.withMin(0)
       + g.panel.gauge.standardOptions.withMax(1)
@@ -92,7 +86,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Cache hit ratio gauge
     cacheHitRatio:
       signals.health.cacheHitRatio.asGauge()
-      + withInstantQueryGauge
+      + withInstantQuery
       + g.panel.gauge.standardOptions.withUnit('percentunit')
       + g.panel.gauge.standardOptions.withMin(0)
       + g.panel.gauge.standardOptions.withMax(1)

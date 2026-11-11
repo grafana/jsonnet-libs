@@ -57,50 +57,6 @@ local g = import '../g.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: 'Job',
-          },
-          properties: [
-            {
-              id: 'custom.width',
-              value: 150,
-            },
-            {
-              id: 'custom.filterable',
-              value: true,
-            },
-          ],
-        },
-        {
-          matcher: {
-            id: 'byName',
-            options: 'Cluster',
-          },
-          properties: [
-            {
-              id: 'custom.width',
-              value: 150,
-            },
-            {
-              id: 'custom.filterable',
-              value: true,
-            },
-          ],
-        },
-        {
-          matcher: {
-            id: 'byName',
-            options: 'Instance',
-          },
-          properties: [
-            {
-              id: 'custom.filterable',
-              value: true,
-            },
-          ],
-        },
-        {
-          matcher: {
-            id: 'byName',
             options: 'Value',
           },
           properties: [

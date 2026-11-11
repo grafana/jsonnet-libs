@@ -5,7 +5,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   new(signals, config):: {
     local labelColumns = { [label]: true for label in config.groupLabels + config.instanceLabels },
 
-    // Helper to convert stat panel queries to instant queries for current status
     local withInstantQuery = {
       targets: std.map(function(t) t { instant: true }, super.targets),
     },
