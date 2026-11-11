@@ -670,7 +670,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_buffers_checkpoint_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "expr": "sum by (job,cluster,instance) (\n  rate(pg_stat_bgwriter_buffers_checkpoint_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nsum by (job,cluster,instance) (\n  rate(pg_stat_checkpointer_buffers_written_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": " Checkpoint",

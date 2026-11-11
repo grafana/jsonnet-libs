@@ -6,7 +6,7 @@ function(this)
     aggLevel: 'instance',
     aggFunction: 'sum',
     discoveryMetric: {
-      postgres_exporter: 'pg_stat_statements_calls_total',
+      prometheus: 'pg_stat_statements_calls_total',
     },
     signals: {
       // What consumes most resources? (optimization target)
@@ -17,7 +17,7 @@ function(this)
         type: 'raw',
         unit: 's',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'topk($topk, rate(pg_stat_statements_seconds_total{%(queriesSelector)s}[%(interval)s]))',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
@@ -33,7 +33,7 @@ function(this)
         type: 'raw',
         unit: 's',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               topk($topk,
                 (
@@ -57,7 +57,7 @@ function(this)
         type: 'raw',
         unit: 'ops',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'topk($topk, rate(pg_stat_statements_calls_total{%(queriesSelector)s}[%(interval)s]))',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',
@@ -73,7 +73,7 @@ function(this)
         type: 'raw',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'topk($topk, rate(pg_stat_statements_rows_total{%(queriesSelector)s}[%(interval)s]))',
             aggKeepLabels: ['queryid', 'datname', 'user'],
             legendCustomTemplate: '{{ queryid }} ({{ datname }})',

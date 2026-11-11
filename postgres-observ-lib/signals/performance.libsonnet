@@ -6,7 +6,7 @@ function(this)
     aggLevel: 'instance',
     aggFunction: 'sum',
     discoveryMetric: {
-      postgres_exporter: 'pg_stat_database_xact_commit',
+      prometheus: 'pg_stat_database_xact_commit',
     },
     signals: {
       // What's my throughput?
@@ -17,7 +17,7 @@ function(this)
         unit: 'ops',
         // aggFunction: 'sum' is default, let it handle aggregation
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               rate(pg_stat_database_xact_commit{%(queriesSelector)s}[%(interval)s])
               +
@@ -35,7 +35,7 @@ function(this)
         type: 'counter',
         unit: 'ops',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_statements_calls_total{%(queriesSelector)s}',
             legendCustomTemplate: ' QPS',
           },
@@ -49,7 +49,7 @@ function(this)
         type: 'counter',
         unit: 'bytes',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_temp_bytes{%(queriesSelector)s}',
             legendCustomTemplate: ' Temp bytes',
           },
@@ -63,7 +63,7 @@ function(this)
         type: 'counter',
         unit: 'ops',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_blks_read{%(queriesSelector)s}',
             legendCustomTemplate: ' Disk reads',
           },
@@ -77,7 +77,7 @@ function(this)
         type: 'counter',
         unit: 'ops',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             // Note: type='counter' automatically applies rate()
             expr: 'pg_stat_bgwriter_buffers_alloc_total{%(queriesSelector)s}',
             legendCustomTemplate: ' Buffers allocated',
@@ -93,7 +93,7 @@ function(this)
         unit: 'percentunit',
         aggFunction: 'avg',  // Use avg for ratio, not sum
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%(agg)s) (rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[%(interval)s]))
               /
@@ -114,7 +114,7 @@ function(this)
         type: 'counter',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_tup_fetched{%(queriesSelector)s}',
             legendCustomTemplate: ' Fetched',
           },
@@ -128,7 +128,7 @@ function(this)
         type: 'counter',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_tup_returned{%(queriesSelector)s}',
             legendCustomTemplate: ' Returned',
           },
@@ -142,7 +142,7 @@ function(this)
         type: 'counter',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_tup_inserted{%(queriesSelector)s}',
             legendCustomTemplate: ' Inserted',
           },
@@ -156,7 +156,7 @@ function(this)
         type: 'counter',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_tup_updated{%(queriesSelector)s}',
             legendCustomTemplate: ' Updated',
           },
@@ -170,7 +170,7 @@ function(this)
         type: 'counter',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_tup_deleted{%(queriesSelector)s}',
             legendCustomTemplate: ' Deleted',
           },
@@ -183,7 +183,7 @@ function(this)
         type: 'counter',
         unit: 'ops',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_bgwriter_buffers_alloc_total{%(queriesSelector)s}',
             legendCustomTemplate: ' Allocated',
           },
@@ -196,8 +196,12 @@ function(this)
         type: 'counter',
         unit: 'ops',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_bgwriter_buffers_checkpoint_total{%(queriesSelector)s}',
+            legendCustomTemplate: ' Checkpoint',
+          },
+          prometheus_pg17_plus: {
+            expr: 'pg_stat_checkpointer_buffers_written_total{%(queriesSelector)s}',
             legendCustomTemplate: ' Checkpoint',
           },
         },
@@ -209,7 +213,7 @@ function(this)
         type: 'counter',
         unit: 'ops',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_bgwriter_buffers_clean_total{%(queriesSelector)s}',
             legendCustomTemplate: ' Clean total',
           },
@@ -223,7 +227,7 @@ function(this)
         type: 'counter',
         unit: 'cps',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_bgwriter_maxwritten_clean_total{%(queriesSelector)s}',
             legendCustomTemplate: ' Max written stops',
           },

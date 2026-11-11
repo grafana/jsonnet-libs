@@ -6,7 +6,7 @@ function(this)
     aggLevel: 'instance',
     aggFunction: 'sum',
     discoveryMetric: {
-      postgres_exporter: 'pg_stat_user_tables_n_dead_tup',
+      prometheus: 'pg_stat_user_tables_n_dead_tup',
     },
     signals: {
       // Which tables need vacuum? (ratio of tables needing vacuum)
@@ -17,7 +17,7 @@ function(this)
         unit: 'percentunit',
         aggFunction: 'avg',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%(agg)s) (
                 (
@@ -42,7 +42,7 @@ function(this)
         unit: 's',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             // aggFunction: 'max' handles the outer aggregation
             expr: |||
               time() - (
@@ -65,7 +65,7 @@ function(this)
         type: 'gauge',
         unit: 'percentunit',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               (
                 pg_stat_user_tables_n_dead_tup{%(queriesSelector)s}
@@ -86,7 +86,7 @@ function(this)
         type: 'gauge',
         unit: 's',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               time() - (
                 (
@@ -110,7 +110,7 @@ function(this)
         unit: 'percentunit',
         aggFunction: 'avg',  // Use avg to not double-sum the ratio
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%(agg)s) (pg_stat_user_tables_seq_scan{%(queriesSelector)s})
               /
@@ -133,7 +133,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             // Count indexes with zero buffer hits AND zero disk reads
             expr: |||
               (pg_statio_user_indexes_idx_blks_hit_total{%(queriesSelector)s} == bool 0)
@@ -153,7 +153,7 @@ function(this)
         unit: 'bytes',
         // aggFunction: 'sum' is default, expression should not have sum
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_database_size_bytes{%(queriesSelector)s}',
             legendCustomTemplate: ' Database size',
           },
@@ -168,7 +168,7 @@ function(this)
         unit: 's',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               (time() - pg_stat_user_tables_last_autoanalyze{%(queriesSelector)s})
               and
@@ -186,7 +186,7 @@ function(this)
         type: 'gauge',
         unit: 's',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               (
                 time() - pg_stat_user_tables_last_autoanalyze{%(queriesSelector)s}
