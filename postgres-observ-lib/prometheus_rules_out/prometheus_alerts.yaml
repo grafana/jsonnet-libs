@@ -28,12 +28,12 @@ groups:
             description: PostgreSQL {{ $labels.instance }} cache hit ratio is {{ $value | humanizePercentage }}. Consider increasing shared_buffers.
             summary: PostgreSQL cache hit ratio is low.
           expr: |-
-            (sum by (job,cluster,instance) (pg_stat_database_blks_hit{})
+            (sum by (job,cluster,instance) (rate(pg_stat_database_blks_hit{}[5m]))
             /
             (
-              sum by (job,cluster,instance) (pg_stat_database_blks_hit{})
+              sum by (job,cluster,instance) (rate(pg_stat_database_blks_hit{}[5m]))
               +
-              sum by (job,cluster,instance) (pg_stat_database_blks_read{})
+              sum by (job,cluster,instance) (rate(pg_stat_database_blks_read{}[5m]))
             )
             ) < 0.9
           for: 15m

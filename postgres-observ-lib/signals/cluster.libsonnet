@@ -107,12 +107,12 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              sum by (%(series)s) (pg_stat_database_blks_hit{%%(queriesSelector)s})
+              sum by (%(series)s) (rate(pg_stat_database_blks_hit{%%(queriesSelector)s}[%%(interval)s]))
               /
               (
-                sum by (%(series)s) (pg_stat_database_blks_hit{%%(queriesSelector)s})
+                sum by (%(series)s) (rate(pg_stat_database_blks_hit{%%(queriesSelector)s}[%%(interval)s]))
                 +
-                sum by (%(series)s) (pg_stat_database_blks_read{%%(queriesSelector)s})
+                sum by (%(series)s) (rate(pg_stat_database_blks_read{%%(queriesSelector)s}[%%(interval)s]))
               )
             ||| % { series: seriesLabels },
             legendCustomTemplate: 'Worst cache hit ratio',
@@ -249,7 +249,7 @@ function(this)
         unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: 'pg_stat_activity_count{%(queriesSelector)s, wait_event_type="Lock"} or pg_stat_activity_count{%(queriesSelector)s} * 0',
+            expr: 'pg_stat_activity_count{wait_event_type="Lock", %(queriesSelector)s} or pg_stat_activity_count{%(queriesSelector)s} * 0',
             legendCustomTemplate: '{{cluster}}: Blocked queries',
           },
         },
@@ -263,7 +263,7 @@ function(this)
         unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: 'pg_stat_activity_count{%(queriesSelector)s, state="idle in transaction"}',
+            expr: 'pg_stat_activity_count{state="idle in transaction", %(queriesSelector)s}',
             legendCustomTemplate: '{{cluster}}: Idle in transaction',
           },
         },
@@ -516,12 +516,12 @@ function(this)
           postgres_exporter: {
             expr: |||
               (
-                sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                sum by (%(agg)s) (rate(pg_stat_database_blks_hit{%(queriesSelector)s}[%(interval)s]))
                 /
                 (
-                  sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                  sum by (%(agg)s) (rate(pg_stat_database_blks_hit{%(queriesSelector)s}[%(interval)s]))
                   +
-                  sum by (%(agg)s) (pg_stat_database_blks_read{%(queriesSelector)s})
+                  sum by (%(agg)s) (rate(pg_stat_database_blks_read{%(queriesSelector)s}[%(interval)s]))
                 )
               )
             |||,
