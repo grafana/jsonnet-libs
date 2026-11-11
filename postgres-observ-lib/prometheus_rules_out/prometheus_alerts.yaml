@@ -180,8 +180,8 @@ groups:
             severity: critical
         - alert: PostgreSQLHighQps
           annotations:
-            description: PostgreSQL {{ $labels.instance }} has {{ $value | humanize }} queries per second.
-            summary: PostgreSQL has high QPS.
+            description: PostgreSQL {{ $labels.instance }} has {{ $value | humanize }} transactions per second.
+            summary: PostgreSQL has high transactions per second.
           expr: |-
             sum by (job,postgres_cluster,cluster,instance) (rate(pg_stat_database_xact_commit{}[5m])
             +
@@ -193,8 +193,8 @@ groups:
             severity: warning
         - alert: PostgreSQLReplicationLagCritical
           annotations:
-            description: Replica {{ $labels.instance }} is {{ printf "%.0f" $value }}s behind primary. Check for network issues or load imbalances.
-            summary: PostgreSQL replication lag exceeds 1 hour.
+            description: Replica {{ $labels.instance }} is {{ printf "%.0f" $value }}s behind primary. The threshold is 3600s. Check for network issues or load imbalances.
+            summary: PostgreSQL replication lag is critically high.
           expr: ((pg_replication_lag_seconds{}) > 3600) and on (job,postgres_cluster,cluster,instance) ((pg_replication_is_replica{}) == 1)
           for: 5m
           keep_firing_for: 5m
