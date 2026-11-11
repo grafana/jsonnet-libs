@@ -91,6 +91,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withUnit('percentunit')
       + g.panel.timeSeries.standardOptions.withMax(1)
       + g.panel.timeSeries.standardOptions.thresholds.withSteps([
+        { value: null, color: 'green' },
         { value: 0.05, color: 'yellow' },
         { value: 0.1, color: 'red' },
       ])

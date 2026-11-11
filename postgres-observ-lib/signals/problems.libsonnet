@@ -59,7 +59,7 @@ function(this)
         unit: 'short',
         sources: {
           postgres_exporter: {
-            expr: 'pg_stat_activity_count{%(queriesSelector)s, state="idle in transaction"}',
+            expr: 'pg_stat_activity_count{state="idle in transaction", %(queriesSelector)s}',
             legendCustomTemplate: ' Idle in transaction',
           },
         },

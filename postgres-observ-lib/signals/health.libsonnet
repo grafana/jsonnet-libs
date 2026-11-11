@@ -64,12 +64,12 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
+              sum by (%(agg)s) (rate(pg_stat_database_blks_hit{%(queriesSelector)s}[%(interval)s]))
               /
               (
-                sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                sum by (%(agg)s) (rate(pg_stat_database_blks_hit{%(queriesSelector)s}[%(interval)s]))
                 +
-                sum by (%(agg)s) (pg_stat_database_blks_read{%(queriesSelector)s})
+                sum by (%(agg)s) (rate(pg_stat_database_blks_read{%(queriesSelector)s}[%(interval)s]))
               )
             |||,
             legendCustomTemplate: ' Cache hit ratio',

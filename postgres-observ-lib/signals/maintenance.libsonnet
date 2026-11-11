@@ -15,20 +15,19 @@ function(this)
         description: 'Ratio of tables with dead tuple ratio > 10% to total tables.',
         type: 'gauge',
         unit: 'percentunit',
+        aggFunction: 'avg',
         sources: {
           postgres_exporter: {
             expr: |||
-              avg by (%(agg)s) (
-                sum(
-                  (
-                    pg_stat_user_tables_n_dead_tup{%(queriesSelector)s}
-                    /
-                    (pg_stat_user_tables_n_live_tup{%(queriesSelector)s} + pg_stat_user_tables_n_dead_tup{%(queriesSelector)s} + 1)
-                  ) > bool 0.1
-                )
-                /
-                count(pg_stat_user_tables_n_live_tup{%(queriesSelector)s})
+              sum by (%(agg)s) (
+                (
+                  pg_stat_user_tables_n_dead_tup{%(queriesSelector)s}
+                  /
+                  (pg_stat_user_tables_n_live_tup{%(queriesSelector)s} + pg_stat_user_tables_n_dead_tup{%(queriesSelector)s} + 1)
+                ) > bool 0.1
               )
+              /
+              count by (%(agg)s) (pg_stat_user_tables_n_live_tup{%(queriesSelector)s})
             |||,
             legendCustomTemplate: 'Tables needing vacuum',
           },
@@ -113,12 +112,12 @@ function(this)
         sources: {
           postgres_exporter: {
             expr: |||
-              sum(pg_stat_user_tables_seq_scan{%(queriesSelector)s})
+              sum by (%(agg)s) (pg_stat_user_tables_seq_scan{%(queriesSelector)s})
               /
               (
-                sum(pg_stat_user_tables_seq_scan{%(queriesSelector)s})
+                sum by (%(agg)s) (pg_stat_user_tables_seq_scan{%(queriesSelector)s})
                 +
-                sum(pg_stat_user_tables_idx_scan{%(queriesSelector)s})
+                sum by (%(agg)s) (pg_stat_user_tables_idx_scan{%(queriesSelector)s})
                 + 1
               )
             |||,

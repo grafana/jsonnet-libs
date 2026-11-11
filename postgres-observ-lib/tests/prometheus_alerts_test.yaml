@@ -40,11 +40,14 @@ tests:
   interval: 1m
   input_series:
   - series: pg_stat_database_blks_hit{job="integrations/postgres_exporter",instance="pg-1",datname="app"}
-    values: 80+80x30
+    values: 0+990x600 594050+50x40
   - series: pg_stat_database_blks_read{job="integrations/postgres_exporter",instance="pg-1",datname="app"}
-    values: 20+20x30
+    values: 0+10x600 6050+50x40
   alert_rule_test:
-  - eval_time: 20m
+  - eval_time: 590m
+    alertname: PostgreSQLLowCacheHitRatio
+    exp_alerts: []
+  - eval_time: 625m
     alertname: PostgreSQLLowCacheHitRatio
     exp_alerts:
     - exp_labels:
@@ -53,7 +56,7 @@ tests:
         severity: warning
       exp_annotations:
         summary: PostgreSQL cache hit ratio is low.
-        description: PostgreSQL pg-1 cache hit ratio is 80%. Consider increasing shared_buffers.
+        description: PostgreSQL pg-1 cache hit ratio is 50%. Consider increasing shared_buffers.
 - name: PostgreSQLReplicationLag
   interval: 1m
   input_series:
