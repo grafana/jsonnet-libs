@@ -12,8 +12,8 @@ This library is designed around what DBAs actually need to know, organized in ti
 | **2. Problems** | What needs immediate attention? | Alert-worthy |
 | **3. Performance** | Is performance acceptable? | Time series |
 | **4. Maintenance** | What needs maintenance? | Actionable tasks |
-| **6. Settings** | What's the PostgreSQL configuration? | Reference |
 | **5. Queries** | Which query is causing issues? | Root cause analysis |
+| **6. Settings** | What's the PostgreSQL configuration? | Reference |
 
 ## Installation as Library
 
@@ -38,25 +38,27 @@ postgres.new()
 Generate Grafana dashboards and Prometheus alerts:
 
 ```sh
-make build
+make
 ```
 
 This will:
 1. Install dependencies (`jb install`)
 2. Generate dashboards to `dashboards_out/`
 3. Generate alerts to `prometheus_rules_out/`
+4. Run the alert tests in `tests/`
 
 ### Available Make Commands
 
 | Command | Description |
 |---------|-------------|
-| `make build` | Install deps + generate dashboards and alerts |
-| `make dashboards` | Generate only dashboards |
-| `make alerts` | Generate only alerts |
+| `make` | Install deps, generate dashboards and alerts, and run the alert tests |
+| `make build` | Install deps |
+| `make dashboards_out` | Generate only dashboards |
+| `make prometheus_alerts.yaml` | Generate only alerts |
 | `make clean` | Remove generated files |
 | `make lint` | Lint jsonnet files |
 | `make fmt` | Format jsonnet files |
-| `make test` | Run lint + build |
+| `make test` | Run the alert tests with promtool |
 
 ### Output Files
 
@@ -145,7 +147,7 @@ Trends and maintenance work for one instance:
 │              [Buffers] [Disk Reads] [Temp Bytes] [Checkpoint]│
 ├──────────────────────────────────────────────────────────────┤
 │ Maintenance: [Vacuum Needed] [Oldest Vacuum] [Seq Scans]    │
-│              [Unused Indexes] [DB Size] [WAL Size]          │
+│              [Unused Indexes] [DB Size]                     │
 │              [Vacuum Table] [Index Table] [Analyze Status]  │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -187,7 +189,6 @@ Requires `pg_stat_statements` extension:
 | `idleInTransaction` | Connections holding locks without work |
 | `walArchiveFailures` | Backup problems! |
 | `checkpointWarnings` | I/O pressure indicator |
-| `backendWrites` | bgwriter can't keep up |
 | `conflicts` | Queries cancelled due to recovery conflicts |
 | `lockUtilization` | Lock usage percentage |
 | `inactiveReplicationSlots` | Slots not actively streaming |
@@ -199,7 +200,6 @@ Requires `pg_stat_statements` extension:
 |--------|-------------------|
 | `transactionsPerSecond` | Throughput |
 | `queriesPerSecond` | Query rate (requires pg_stat_statements) |
-| `activeConnections` | Connection trend |
 | `tempBytesWritten` | work_mem too small? |
 | `diskReadWriteRatio` | Cache misses |
 | `checkpointDuration` | Buffer allocation rate |
@@ -219,13 +219,11 @@ Requires `pg_stat_statements` extension:
 | `tablesNeedingVacuum` | Ratio of tables with >10% dead tuples |
 | `oldestVacuum` | Is vacuum keeping up? |
 | `deadTupleRatio` | Per-table vacuum priority |
+| `deadTuples` | Dead tuples per table |
 | `lastVacuumAge` | Time since each table was vacuumed |
 | `sequentialScanRatio` | Missing indexes? |
 | `unusedIndexes` | Wasted disk space |
-| `unusedIndexesList` | Detailed unused index list |
-| `indexTableSize` | Index size per table |
 | `databaseSize` | Capacity planning |
-| `walSize` | WAL accumulation |
 | `oldestAnalyze` | Is autoanalyze working? |
 | `lastAnalyzeAge` | Time since each table was analyzed |
 
@@ -237,7 +235,13 @@ Requires `pg_stat_statements` extension:
 | `slowestQueriesByMeanTime` | Slowest individual queries |
 | `mostFrequentQueries` | Cache candidates |
 | `topQueriesByRows` | Queries returning most rows |
-| `queryStats` | Full query statistics |
+| `queryTotalTime` | Execution time per query since stats reset |
+
+### Tier 6: Settings (Reference)
+
+| Signal | What it tells you |
+|--------|-------------------|
+| `allSettings` | PostgreSQL configuration parameters |
 
 ### Cluster Signals
 
@@ -254,7 +258,6 @@ For cluster-wide monitoring:
 | `worstCacheHitRatio` | Lowest cache efficiency |
 | `worstConnectionUtilization` | Highest connection usage |
 | `totalDeadlocks` | Cluster-wide deadlocks |
-| `currentPrimary` | Current primary instance |
 | `instanceRole` | Role per instance |
 | `roleChanges` | Failover detection |
 | `tpsByInstance` | TPS per instance |
@@ -336,14 +339,32 @@ The `alert<Name><Tier>Threshold` keys replace the nested `alerts` object. Update
 
 ## Configuration
 
-Override any setting from `config.libsonnet` with `withConfigMixin`. This example changes the dashboard name prefix.
+Override any setting from `config.libsonnet` with `withConfigMixin`. This example lists each setting other than the alert thresholds, with its default.
 
 ```jsonnet
 local postgres = import 'postgres-observ-lib/main.libsonnet';
 
 postgres.new()
 + postgres.withConfigMixin({
-  dashboardNamePrefix: 'Production / ',
+  // Label matchers added to every query and alert, such as 'job="integrations/postgres_exporter"'
+  filteringSelector: '',
+  // Labels that group instances. Each one is a dashboard variable.
+  groupLabels: ['job', 'postgres_cluster', 'cluster'],
+  // Labels that identify an instance
+  instanceLabels: ['instance'],
+
+  // Prefix of the dashboard UIDs
+  uid: 'postgres',
+  // Text added before each dashboard title, such as 'Production / '
+  dashboardNamePrefix: '',
+  dashboardTags: ['postgres', 'database'],
+  dashboardPeriod: 'now-1h',
+  // Empty uses the Grafana default
+  dashboardTimezone: '',
+  dashboardRefresh: '1m',
+
+  // See "PostgreSQL Version Compatibility"
+  metricsSource: ['prometheus', 'prometheus_pg17_plus'],
 })
 ```
 
@@ -363,8 +384,24 @@ Uses standard `postgres_exporter` metrics with the following collectors enabled:
 8. `stat_bgwriter`
 9. `stat_database`
 10. `stat_user_tables`
+11. `stat_checkpointer`, on PostgreSQL 17 and later
 
-Tested with postgres_exporter version 0.18.1 and PostgreSQL v17.
+In Alloy, list the collectors in `enabled_collectors` in `prometheus.exporter.postgres`. With a standalone `postgres_exporter`, enable each one with `--collector.<name>`.
+
+Tested with PostgreSQL 16 and the `postgres_exporter` embedded in Grafana Alloy v1.21.3, Grafana's version of `postgres_exporter` v0.19.0.
+
+### PostgreSQL Cluster Label
+
+The PostgreSQL cluster overview dashboard groups servers by the `postgres_cluster` label. Give a primary and its replicas the same `postgres_cluster` value where they are scraped. For example, in Alloy, add this rule to the `discovery.relabel` block:
+
+```alloy
+rule {
+  target_label = "postgres_cluster"
+  replacement  = "<your-cluster-name>"
+}
+```
+
+Servers without the label appear as one cluster.
 
 ### Query Analysis (Tier 5)
 
@@ -378,28 +415,50 @@ shared_preload_libraries = 'pg_stat_statements'
 CREATE EXTENSION pg_stat_statements;
 ```
 
+## PostgreSQL Version Compatibility
+
+PostgreSQL 17 moved the checkpoint statistics from `pg_stat_bgwriter` to a new view, `pg_stat_checkpointer`. `postgres_exporter` reports buffers written by checkpoints under a different metric name depending on the PostgreSQL version:
+
+- **PostgreSQL 16 and earlier**: `pg_stat_bgwriter_buffers_checkpoint_total`, from the `stat_bgwriter` collector
+- **PostgreSQL 17 and later**: `pg_stat_checkpointer_buffers_written_total`, from the `stat_checkpointer` collector
+
+By default, `metricsSource` lists two metrics sources, `prometheus` and `prometheus_pg17_plus`. The dashboards work on either PostgreSQL version, and on a fleet that runs both.
+
+On PostgreSQL 17 and later, enable the `stat_checkpointer` collector. It is off by default in `postgres_exporter`. If the Buffers activity panel shows no checkpoint writes for a PostgreSQL 17 server, the collector is off.
+
+If all your servers run one PostgreSQL version, you can list only its metrics source:
+
+```jsonnet
+postgres.new()
++ postgres.withConfigMixin({
+  // PostgreSQL 16 and earlier only
+  metricsSource: ['prometheus'],
+
+  // OR PostgreSQL 17 and later only
+  metricsSource: ['prometheus_pg17_plus'],
+})
+```
+
 ## Extensibility
 
 ### Adding New Metrics Sources
 
-The library uses a multi-source signal pattern. To add a new metrics source (e.g., CloudWatch):
+The library uses a multi-source signal pattern. `prometheus_pg17_plus` shows how a metrics source is added:
 
-1. Add the source to `config.libsonnet`:
+1. Add the source to `metricsSource` in `config.libsonnet`:
 ```jsonnet
 {
-  metricsSource: ['postgres_exporter', 'cloudwatch'],
+  metricsSource: ['prometheus', 'prometheus_pg17_plus'],
 }
 ```
 
-2. Add expressions for the new source in each signal file:
+2. Add an expression for the new metrics source to each signal whose metric differs. Signals without one use the `prometheus` expression:
 ```jsonnet
-// signals/health.libsonnet
-signals: {
-  up: {
-    sources: {
-      postgres_exporter: { expr: 'pg_up{%(queriesSelector)s}' },
-      cloudwatch: { expr: 'aws_rds_...' },  // Add new source
-    },
+// signals/performance.libsonnet
+buffersCheckpoint: {
+  sources: {
+    prometheus: { expr: 'pg_stat_bgwriter_buffers_checkpoint_total{%(queriesSelector)s}' },
+    prometheus_pg17_plus: { expr: 'pg_stat_checkpointer_buffers_written_total{%(queriesSelector)s}' },
   },
 }
 ```
@@ -416,7 +475,7 @@ function(config) {
   aggLevel: 'instance',
   aggFunction: 'sum',
   discoveryMetric: {
-    postgres_exporter: 'pg_up',
+    prometheus: 'pg_up',
   },
   signals: {
     mySignal: {
@@ -425,7 +484,7 @@ function(config) {
       type: 'gauge',  // or 'counter', 'raw'
       unit: 'short',  // Grafana unit
       sources: {
-        postgres_exporter: {
+        prometheus: {
           expr: 'my_metric{%(queriesSelector)s}',
         },
       },
