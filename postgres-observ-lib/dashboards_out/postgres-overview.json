@@ -1048,7 +1048,7 @@
                "type": "datasource",
                "uid": "-- Mixed --"
             },
-            "description": "",
+            "description": "Currently firing alerts.",
             "gridPos": {
                "h": 6,
                "w": 12,

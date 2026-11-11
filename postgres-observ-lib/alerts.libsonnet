@@ -204,8 +204,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             keep_firing_for: '5m',
             labels: { severity: 'warning' },
             annotations: {
-              summary: 'PostgreSQL has high QPS.',
-              description: 'PostgreSQL {{ $labels.%s }} has {{ $value | humanize }} queries per second.' % instanceLabel,
+              summary: 'PostgreSQL has high transactions per second.',
+              description: 'PostgreSQL {{ $labels.%s }} has {{ $value | humanize }} transactions per second.' % instanceLabel,
             },
           },
           {
@@ -220,8 +220,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             keep_firing_for: '5m',
             labels: { severity: 'critical' },
             annotations: {
-              summary: 'PostgreSQL replication lag exceeds 1 hour.',
-              description: 'Replica {{ $labels.%s }} is {{ printf "%%.0f" $value }}s behind primary. Check for network issues or load imbalances.' % instanceLabel,
+              summary: 'PostgreSQL replication lag is critically high.',
+              description: 'Replica {{ $labels.%s }} is {{ printf "%%.0f" $value }}s behind primary. The threshold is %ss. Check for network issues or load imbalances.' % [instanceLabel, config.alertReplicationLagCriticalThreshold],
             },
           },
         ],

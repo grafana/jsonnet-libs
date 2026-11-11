@@ -178,7 +178,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
          instanceLabels: config.instanceLabels,
        })).grafana.panels.alertsOverview
       + g.panel.alertList.panelOptions.withTitle('PostgreSQL alerts')
-      + g.panel.alertList.panelOptions.withDescription('')
       // The library's filter also lists other integrations' alerts on the same job.
       + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(signals.cluster.getVariables().queriesSelectorAdvancedSyntax + ',alertname=~"PostgreSQL.*"'),
 

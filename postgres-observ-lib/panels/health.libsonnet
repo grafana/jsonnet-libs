@@ -145,7 +145,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
          instanceLabels: config.instanceLabels,
        })).grafana.panels.alertsOverview
       + g.panel.alertList.panelOptions.withTitle('PostgreSQL alerts')
-      + g.panel.alertList.panelOptions.withDescription('')
       // The library's filter also lists other integrations' alerts on the same job.
       + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(signals.health.getVariables().queriesSelectorAdvancedSyntax + ',alertname=~"PostgreSQL.*"'),
 

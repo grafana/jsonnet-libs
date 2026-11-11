@@ -352,8 +352,8 @@ tests:
         instance: pg-1
         severity: warning
       exp_annotations:
-        summary: PostgreSQL has high QPS.
-        description: PostgreSQL pg-1 has 12k queries per second.
+        summary: PostgreSQL has high transactions per second.
+        description: PostgreSQL pg-1 has 12k transactions per second.
 - name: PostgreSQLReplicationLagCritical
   interval: 1m
   input_series:
@@ -371,5 +371,5 @@ tests:
         server: localhost:5432
         severity: critical
       exp_annotations:
-        summary: PostgreSQL replication lag exceeds 1 hour.
-        description: Replica pg-2 is 4000s behind primary. Check for network issues or load imbalances.
+        summary: PostgreSQL replication lag is critically high.
+        description: Replica pg-2 is 4000s behind primary. The threshold is 3600s. Check for network issues or load imbalances.
