@@ -311,6 +311,16 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
         else error 'Unknown format, must be "table" or "time_series"'
       )
       + self.asOverride(override=override, format=format)
+      // Grafana's table fills each row from every field, hidden or not, keyed by display name. The info label
+      // field takes the signal's short name, which can equal the value field's name, so the value field is removed.
+      + (if type == 'info' && format == 'table' then
+           g.panel.table.queryOptions.withTransformationsMixin([
+             g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
+             + g.panel.table.queryOptions.transformation.withOptions({
+               exclude: { names: [this.signalName] },
+             }),
+           ])
+         else {})
       + self.renderDescription(),
 
     getValueMappings(sourceMaps)::
@@ -320,11 +330,10 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
     asOverride(name=this.signalName, override='byQuery', format='time_series'):
       g.panel.timeSeries.standardOptions.withOverridesMixin(
-        [
+        if type == 'info' && format == 'table' then [] else [
           if override == 'byQuery' then
             g.panel.timeSeries.fieldOverride.byQuery.new(name)
             + (if format == 'table' && hasValueMaps then g.panel.table.fieldOverride.byName.withProperty('custom.cellOptions', { type: 'color-text' }) else {})
-            + (if format == 'table' && type == 'info' then g.panel.table.fieldOverride.byName.withProperty('custom.hidden', true) else {})
             + (if format == 'table' && type != 'info' && name != this.nameShort then g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(this.nameShort)) else {})
             + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
               (if hasValueMaps then
@@ -335,7 +344,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           else if override == 'byName' then
             g.panel.timeSeries.fieldOverride.byName.new(name)
             + (if format == 'table' && hasValueMaps then g.panel.table.fieldOverride.byName.withProperty('custom.cellOptions', { type: 'color-text' }) else {})
-            + (if format == 'table' && type == 'info' then g.panel.table.fieldOverride.byName.withProperty('custom.hidden', true) else {})
             + (if format == 'table' && type != 'info' && name != this.nameShort then g.panel.table.fieldOverride.byName.withProperty('displayName', utils.toSentenceCase(this.nameShort)) else {})
             + g.panel.timeSeries.fieldOverride.byName.withPropertiesFromOptions(
               (if hasValueMaps then
@@ -489,6 +497,10 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             g.panel.table.queryOptions.transformation.withId('organize')
             + g.panel.table.queryOptions.transformation.withOptions(
               {
+                // Removes an info signal's value field. Left in, its 1s replace the label's text.
+                // asTableColumn() adds its own step to remove it, but withTransformations() overwrites that step here.
+                // The key matches only in a table with one query, where the field is still named 'Value'.
+                [if type == 'info' then 'excludeByName']: { Value: true },
                 indexByName: {
                   [label.el]: label.index
                   for label in

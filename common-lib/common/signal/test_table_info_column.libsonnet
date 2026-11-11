@@ -27,18 +27,19 @@ local m1 = signal.init(
         testOverrides: {
           actual: raw.fieldConfig.overrides,
           expect: [
-            //hide value
-            {
-              matcher: { id: 'byName', options: 'Go version' },
-              properties: [
-                { id: 'custom.hidden', value: true },
-                { id: 'unit', value: 'short' },
-              ],
-            },
             //show infoLabel as column instead:
             {
               matcher: { id: 'byName', options: 'version' },
               properties: [{ id: 'displayName', value: 'Version' }],
+            },
+          ],
+        },
+        testTransformations: {
+          actual: raw.transformations,
+          expect: [
+            {
+              id: 'filterFieldsByName',
+              options: { exclude: { names: ['Go version'] } },
             },
           ],
         },
@@ -56,6 +57,25 @@ local m1 = signal.init(
           ],
         },
 
+      }),
+    },
+  asTable:
+    {
+      local raw = m1.asTable(),
+      testResult: test.suite({
+        testOverrides: {
+          actual: raw.fieldConfig.overrides,
+          expect: [
+            {
+              matcher: { id: 'byName', options: 'version' },
+              properties: [{ id: 'displayName', value: 'Version' }],
+            },
+          ],
+        },
+        testExcludeValue: {
+          actual: raw.transformations[3].options.excludeByName,
+          expect: { Value: true },
+        },
       }),
     },
 
