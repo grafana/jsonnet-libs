@@ -5,7 +5,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   filteringSelector: '',
   // Deprecated, use filteringSelector instead.
   alertsFilteringSelector: self.filteringSelector,
-  groupLabels: ['job', 'cluster'],
+  groupLabels: ['job', 'postgres_cluster', 'cluster'],
   instanceLabels: ['instance'],
 
   // Dashboard settings
