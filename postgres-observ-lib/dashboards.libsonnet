@@ -34,17 +34,19 @@ local g = import './g.libsonnet';
       for v in vars
     ];
 
-    // Helper to make cluster label optional with .* (matches empty labels too)
+    // Matches servers without a cluster label: .* also matches an empty label.
+    // The framework's default label would be "Postgres_cluster".
     local makeClusterOptional(vars) = [
-      if v.name == 'cluster' then v { allValue: '.*' } else v
+      (if v.name == 'postgres_cluster' then v { label: 'PostgreSQL cluster' } else v)
+      + (if std.member(['postgres_cluster', 'cluster'], v.name) && std.get(v, 'includeAll', false) then { allValue: '.*' } else {})
       for v in vars
     ];
 
-    // Cluster dashboard variables: exclude instance, make cluster single-select
-    local clusterVariables = makeSingleSelectByName(
+    // The cluster overview shows one PostgreSQL cluster and all of its instances.
+    local clusterVariables = makeClusterOptional(makeSingleSelectByName(
       std.filter(function(v) !std.member(this.config.instanceLabels, v.name), this.signals.cluster.getVariablesMultiChoice()),
-      ['cluster']
-    );
+      ['postgres_cluster']
+    ));
 
     local instanceVariables = makeClusterOptional(this.signals.health.getVariablesSingleChoice());
 

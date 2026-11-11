@@ -97,7 +97,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "topk($topk, rate(pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "topk($topk, rate(pg_stat_statements_seconds_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ queryid }} ({{ datname }})",
@@ -178,7 +178,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "topk($topk,\n  (\n    pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}\n    /\n    (pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)\n  )\n)\n",
+                  "expr": "topk($topk,\n  (\n    pg_stat_statements_seconds_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}\n    /\n    (pg_stat_statements_calls_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)\n  )\n)\n",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ queryid }} ({{ datname }})",
@@ -259,7 +259,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "topk($topk, rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "topk($topk, rate(pg_stat_statements_calls_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ queryid }} ({{ datname }})",
@@ -340,7 +340,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "topk($topk, rate(pg_stat_statements_rows_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+                  "expr": "topk($topk, rate(pg_stat_statements_rows_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ queryid }} ({{ datname }})",
@@ -441,7 +441,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(pg_stat_statements_seconds_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "table",
                   "instant": true,
                   "refId": "TimeRate"
@@ -451,7 +451,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(pg_stat_statements_calls_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "table",
                   "instant": true,
                   "refId": "CallsRate"
@@ -461,7 +461,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "rate(pg_stat_statements_rows_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+                  "expr": "rate(pg_stat_statements_rows_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
                   "format": "table",
                   "instant": true,
                   "refId": "RowsRate"
@@ -471,7 +471,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} / (pg_stat_statements_calls_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)",
+                  "expr": "pg_stat_statements_seconds_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"} / (pg_stat_statements_calls_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"} + 1)",
                   "format": "table",
                   "instant": true,
                   "refId": "MeanTime"
@@ -481,7 +481,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "pg_stat_statements_seconds_total{job=~\"$job\",cluster=~\"$cluster\",instance=~\"$instance\"}",
+                  "expr": "pg_stat_statements_seconds_total{job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\",instance=~\"$instance\"}",
                   "format": "table",
                   "instant": true,
                   "refId": "TotalTime"
@@ -506,7 +506,8 @@
                         "__name__": true,
                         "cluster": true,
                         "instance": true,
-                        "job": true
+                        "job": true,
+                        "postgres_cluster": true
                      },
                      "indexByName": {
                         "Value #CallsRate": 4,
@@ -584,10 +585,25 @@
                   "uid": "${datasource}"
                },
                "includeAll": true,
+               "label": "PostgreSQL cluster",
+               "multi": true,
+               "name": "postgres_cluster",
+               "query": "label_values({__name__=~\"pg_stat_statements_calls_total\",job=~\"$job\"}, postgres_cluster)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".*",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
                "label": "Cluster",
                "multi": true,
                "name": "cluster",
-               "query": "label_values({__name__=~\"pg_stat_statements_calls_total\",job=~\"$job\"}, cluster)",
+               "query": "label_values({__name__=~\"pg_stat_statements_calls_total\",job=~\"$job\",postgres_cluster=~\"$postgres_cluster\"}, cluster)",
                "refresh": 2,
                "sort": 1,
                "type": "query"
@@ -602,7 +618,7 @@
                "label": "Instance",
                "multi": false,
                "name": "instance",
-               "query": "label_values({__name__=~\"pg_stat_statements_calls_total\",job=~\"$job\",cluster=~\"$cluster\"}, instance)",
+               "query": "label_values({__name__=~\"pg_stat_statements_calls_total\",job=~\"$job\",postgres_cluster=~\"$postgres_cluster\",cluster=~\"$cluster\"}, instance)",
                "refresh": 2,
                "sort": 1,
                "type": "query"

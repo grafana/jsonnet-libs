@@ -1,5 +1,8 @@
 function(this)
   local seriesLabels = std.join(',', this.groupLabels + this.instanceLabels);
+  // label_replace adds the prefix only where postgres_cluster is set.
+  // A plain '{{postgres_cluster}}: ' legend leaves a stray ': ' on servers without the label.
+  local clusterPrefix = ['label_replace(', ', "cluster_prefix", "$1: ", "postgres_cluster", "(.+)")'];
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
@@ -19,7 +22,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Cluster status',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Cluster status',
           },
         },
       },
@@ -34,7 +38,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Total instances',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Total instances',
           },
         },
       },
@@ -48,7 +53,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Up instances',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Up instances',
           },
         },
       },
@@ -63,7 +69,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_replication_is_replica{%(queriesSelector)s} == 0',
-            legendCustomTemplate: '{{cluster}}: Primary count',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Primary count',
           },
         },
       },
@@ -78,7 +85,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_replication_is_replica{%(queriesSelector)s} == 1',
-            legendCustomTemplate: '{{cluster}}: Replica count',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Replica count',
           },
         },
       },
@@ -93,7 +101,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Max replication lag',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Max replication lag',
           },
         },
       },
@@ -148,7 +157,8 @@ function(this)
           prometheus: {
             expr: 'pg_stat_database_deadlocks{%(queriesSelector)s}',
             rangeFunction: 'increase',
-            legendCustomTemplate: '{{cluster}}: Total deadlocks',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Total deadlocks',
           },
         },
       },
@@ -222,7 +232,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_stat_replication_pg_current_wal_lsn_bytes{%(queriesSelector)s}',
-            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}WAL position',
           },
         },
@@ -236,7 +246,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_long_running_transactions{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Long-running queries',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Long-running queries',
           },
         },
       },
@@ -250,7 +261,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_stat_activity_count{wait_event_type="Lock", %(queriesSelector)s} or pg_stat_activity_count{%(queriesSelector)s} * 0',
-            legendCustomTemplate: '{{cluster}}: Blocked queries',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Blocked queries',
           },
         },
       },
@@ -264,7 +276,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_stat_activity_count{state="idle in transaction", %(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Idle in transaction',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Idle in transaction',
           },
         },
       },
@@ -279,7 +292,8 @@ function(this)
           prometheus: {
             expr: 'pg_stat_archiver_failed_count{%(queriesSelector)s}',
             rangeFunction: 'increase',
-            legendCustomTemplate: '{{cluster}}: WAL archive failures',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}WAL archive failures',
           },
         },
       },
@@ -315,7 +329,8 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_exporter_last_scrape_error{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Exporter errors',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Exporter errors',
           },
         },
       },
@@ -335,7 +350,7 @@ function(this)
                 (pg_replication_is_replica{%%(queriesSelector)s} == 0)
               )
             ||| % { series: seriesLabels },
-            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}Inserts',
           },
         },
@@ -357,7 +372,7 @@ function(this)
                 (pg_replication_is_replica{%%(queriesSelector)s} == 0)
               )
             ||| % { series: seriesLabels },
-            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}Updates',
           },
         },
@@ -379,7 +394,7 @@ function(this)
                 (pg_replication_is_replica{%%(queriesSelector)s} == 0)
               )
             ||| % { series: seriesLabels },
-            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}Deletes',
           },
         },
@@ -456,7 +471,7 @@ function(this)
                 (pg_replication_is_replica{%%(queriesSelector)s} == 0)
               )
             ||| % { series: seriesLabels },
-            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}Total writes',
           },
         },
@@ -471,7 +486,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_stat_database_tup_fetched{%(queriesSelector)s}',
-            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}Total reads',
           },
         },
@@ -485,7 +500,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_stat_activity_count{%(queriesSelector)s}',
-            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}Total connections',
           },
         },
@@ -500,7 +515,7 @@ function(this)
         sources: {
           prometheus: {
             expr: 'pg_settings_max_connections{%(queriesSelector)s}',
-            exprWrappers: [['label_replace(', ', "cluster_prefix", "$1: ", "cluster", "(.+)")']],
+            exprWrappers: [clusterPrefix],
             legendCustomTemplate: '{{cluster_prefix}}Total max connections',
           },
         },
