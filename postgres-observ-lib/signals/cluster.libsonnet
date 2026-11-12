@@ -1,4 +1,8 @@
 function(this)
+  local seriesLabels = std.join(',', this.groupLabels + this.instanceLabels);
+  // label_replace adds the prefix only where postgres_cluster is set.
+  // A plain '{{postgres_cluster}}: ' legend leaves a stray ': ' on servers without the label.
+  local clusterPrefix = ['label_replace(', ', "cluster_prefix", "$1: ", "postgres_cluster", "(.+)")'];
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
@@ -6,7 +10,7 @@ function(this)
     aggLevel: 'group',  // Aggregate at cluster level, not instance
     aggFunction: 'sum',
     discoveryMetric: {
-      postgres_exporter: 'pg_up',
+      prometheus: 'pg_up',
     },
     signals: {
       clusterStatus: {
@@ -16,9 +20,10 @@ function(this)
         unit: 'short',
         aggFunction: 'min',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Cluster status',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Cluster status',
           },
         },
       },
@@ -31,9 +36,10 @@ function(this)
         unit: 'short',
         aggFunction: 'count',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Total instances',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Total instances',
           },
         },
       },
@@ -45,9 +51,10 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Up instances',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Up instances',
           },
         },
       },
@@ -60,9 +67,10 @@ function(this)
         unit: 'short',
         aggFunction: 'count',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_is_replica{%(queriesSelector)s} == 0',
-            legendCustomTemplate: '{{cluster}}: Primary count',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Primary count',
           },
         },
       },
@@ -75,9 +83,10 @@ function(this)
         unit: 'short',
         aggFunction: 'count',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_is_replica{%(queriesSelector)s} == 1',
-            legendCustomTemplate: '{{cluster}}: Replica count',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Replica count',
           },
         },
       },
@@ -90,9 +99,10 @@ function(this)
         unit: 's',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Max replication lag',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Max replication lag',
           },
         },
       },
@@ -104,17 +114,16 @@ function(this)
         unit: 'percentunit',
         aggFunction: 'min',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
-              sum by (instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
+              sum by (%(series)s) (rate(pg_stat_database_blks_hit{%%(queriesSelector)s}[%%(interval)s]))
               /
               (
-                sum by (instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                sum by (%(series)s) (rate(pg_stat_database_blks_hit{%%(queriesSelector)s}[%%(interval)s]))
                 +
-                sum by (instance) (pg_stat_database_blks_read{%(queriesSelector)s})
-                + 1
+                sum by (%(series)s) (rate(pg_stat_database_blks_read{%%(queriesSelector)s}[%%(interval)s]))
               )
-            |||,
+            ||| % { series: seriesLabels },
             legendCustomTemplate: 'Worst cache hit ratio',
           },
         },
@@ -127,12 +136,12 @@ function(this)
         unit: 'percentunit',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
-              sum by (instance) (pg_stat_activity_count{%(queriesSelector)s})
+              sum by (%(series)s) (pg_stat_activity_count{%%(queriesSelector)s})
               /
-              max by (instance) (pg_settings_max_connections{%(queriesSelector)s})
-            |||,
+              max by (%(series)s) (pg_settings_max_connections{%%(queriesSelector)s})
+            ||| % { series: seriesLabels },
             legendCustomTemplate: 'Worst connection utilization',
           },
         },
@@ -145,9 +154,11 @@ function(this)
         type: 'counter',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_deadlocks{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Total deadlocks',
+            rangeFunction: 'increase',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Total deadlocks',
           },
         },
       },
@@ -159,10 +170,10 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_is_replica{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s',
           },
         },
       },
@@ -174,10 +185,10 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
-            expr: 'changes(pg_replication_is_replica{%(queriesSelector)s}[5m])',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: Role changes',
+          prometheus: {
+            expr: 'changes(pg_replication_is_replica{%(queriesSelector)s}[%(interval)s])',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: Role changes',
           },
         },
       },
@@ -188,10 +199,10 @@ function(this)
         type: 'gauge',
         unit: 's',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: Replication lag',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: Replication lag',
           },
         },
       },
@@ -203,9 +214,9 @@ function(this)
         type: 'gauge',
         unit: 'bytes',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}',
-            aggKeepLabels: ['instance', 'client_addr', 'application_name', 'state'],
+            aggKeepLabels: this.instanceLabels + ['client_addr', 'application_name', 'state'],
             legendCustomTemplate: '{{client_addr}} ({{state}})',
           },
         },
@@ -219,9 +230,10 @@ function(this)
         unit: 'bytes',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_replication_pg_current_wal_lsn_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: WAL position',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}WAL position',
           },
         },
       },
@@ -232,9 +244,10 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_long_running_transactions{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Long-running queries',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Long-running queries',
           },
         },
       },
@@ -246,9 +259,10 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
-            expr: 'pg_locks_count{%(queriesSelector)s, mode="exclusivelock"}',
-            legendCustomTemplate: '{{cluster}}: Blocked queries',
+          prometheus: {
+            expr: 'pg_stat_activity_count{wait_event_type="Lock", %(queriesSelector)s} or pg_stat_activity_count{%(queriesSelector)s} * 0',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Blocked queries',
           },
         },
       },
@@ -260,9 +274,10 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
-            expr: 'pg_stat_activity_count{%(queriesSelector)s, state="idle in transaction"}',
-            legendCustomTemplate: '{{cluster}}: Idle in transaction',
+          prometheus: {
+            expr: 'pg_stat_activity_count{state="idle in transaction", %(queriesSelector)s}',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Idle in transaction',
           },
         },
       },
@@ -274,9 +289,11 @@ function(this)
         type: 'counter',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_archiver_failed_count{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: WAL archive failures',
+            rangeFunction: 'increase',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}WAL archive failures',
           },
         },
       },
@@ -288,16 +305,16 @@ function(this)
         unit: 'percentunit',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
-              sum by (instance) (pg_locks_count{%(queriesSelector)s})
+              sum by (%(series)s) (pg_locks_count{%%(queriesSelector)s})
               /
               (
-                max by (instance) (pg_settings_max_locks_per_transaction{%(queriesSelector)s})
+                max by (%(series)s) (pg_settings_max_locks_per_transaction{%%(queriesSelector)s})
                 *
-                max by (instance) (pg_settings_max_connections{%(queriesSelector)s})
+                max by (%(series)s) (pg_settings_max_connections{%%(queriesSelector)s})
               )
-            |||,
+            ||| % { series: seriesLabels },
             legendCustomTemplate: 'Worst lock utilization',
           },
         },
@@ -310,9 +327,10 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_exporter_last_scrape_error{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Exporter errors',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Exporter errors',
           },
         },
       },
@@ -320,18 +338,17 @@ function(this)
       primaryInserts: {
         name: 'Primary inserts',
         description: 'Rows inserted per second on the primary.',
-        type: 'raw',
+        type: 'gauge',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
-              sum by (%(agg)s) (
-                rate(pg_stat_database_tup_inserted{%(queriesSelector)s}[$__rate_interval])
-                and on(instance)
-                (pg_replication_is_replica{%(queriesSelector)s} == 0)
-              )
-            |||,
-            legendCustomTemplate: '{{cluster}}: Inserts',
+              rate(pg_stat_database_tup_inserted{%%(queriesSelector)s}[%%(interval)s])
+              and on(%(series)s)
+              (pg_replication_is_replica{%%(queriesSelector)s} == 0)
+            ||| % { series: seriesLabels },
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Inserts',
           },
         },
       },
@@ -340,18 +357,17 @@ function(this)
       primaryUpdates: {
         name: 'Primary updates',
         description: 'Rows updated per second on the primary.',
-        type: 'raw',
+        type: 'gauge',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
-              sum by (%(agg)s) (
-                rate(pg_stat_database_tup_updated{%(queriesSelector)s}[$__rate_interval])
-                and on(instance)
-                (pg_replication_is_replica{%(queriesSelector)s} == 0)
-              )
-            |||,
-            legendCustomTemplate: '{{cluster}}: Updates',
+              rate(pg_stat_database_tup_updated{%%(queriesSelector)s}[%%(interval)s])
+              and on(%(series)s)
+              (pg_replication_is_replica{%%(queriesSelector)s} == 0)
+            ||| % { series: seriesLabels },
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Updates',
           },
         },
       },
@@ -360,18 +376,17 @@ function(this)
       primaryDeletes: {
         name: 'Primary deletes',
         description: 'Rows deleted per second on the primary.',
-        type: 'raw',
+        type: 'gauge',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
-              sum by (%(agg)s) (
-                rate(pg_stat_database_tup_deleted{%(queriesSelector)s}[$__rate_interval])
-                and on(instance)
-                (pg_replication_is_replica{%(queriesSelector)s} == 0)
-              )
-            |||,
-            legendCustomTemplate: '{{cluster}}: Deletes',
+              rate(pg_stat_database_tup_deleted{%%(queriesSelector)s}[%%(interval)s])
+              and on(%(series)s)
+              (pg_replication_is_replica{%%(queriesSelector)s} == 0)
+            ||| % { series: seriesLabels },
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Deletes',
           },
         },
       },
@@ -380,13 +395,13 @@ function(this)
       readsByInstance: {
         name: 'Reads by instance',
         description: 'Rows fetched per second per instance.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_fetched{%(queriesSelector)s}[$__rate_interval])',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: Fetched',
+          prometheus: {
+            expr: 'pg_stat_database_tup_fetched{%(queriesSelector)s}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: Fetched',
           },
         },
       },
@@ -398,14 +413,14 @@ function(this)
         type: 'gauge',
         unit: 'ops',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
-              rate(pg_stat_database_xact_commit{%(queriesSelector)s}[$__rate_interval])
+              rate(pg_stat_database_xact_commit{%(queriesSelector)s}[%(interval)s])
               +
-              rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[$__rate_interval])
+              rate(pg_stat_database_xact_rollback{%(queriesSelector)s}[%(interval)s])
             |||,
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: TPS',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: TPS',
           },
         },
       },
@@ -414,17 +429,13 @@ function(this)
       qpsByInstance: {
         name: 'QPS by instance',
         description: 'Queries per second per instance. Requires pg_stat_statements extension.',
-        type: 'raw',
+        type: 'counter',
         unit: 'ops',
         sources: {
-          postgres_exporter: {
-            expr: |||
-              sum by (instance) (
-                rate(pg_stat_statements_calls_total{%(queriesSelector)s}[$__rate_interval])
-              )
-            |||,
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: QPS',
+          prometheus: {
+            expr: 'pg_stat_statements_calls_total{%(queriesSelector)s}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: QPS',
           },
         },
       },
@@ -433,24 +444,23 @@ function(this)
       totalWrites: {
         name: 'Total writes',
         description: 'Total write operations (insert + update + delete) per second.',
-        type: 'raw',
+        type: 'gauge',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
-              sum by (%(agg)s) (
-                (
-                  rate(pg_stat_database_tup_inserted{%(queriesSelector)s}[$__rate_interval])
-                  +
-                  rate(pg_stat_database_tup_updated{%(queriesSelector)s}[$__rate_interval])
-                  +
-                  rate(pg_stat_database_tup_deleted{%(queriesSelector)s}[$__rate_interval])
-                )
-                and on(instance)
-                (pg_replication_is_replica{%(queriesSelector)s} == 0)
+              (
+                rate(pg_stat_database_tup_inserted{%%(queriesSelector)s}[%%(interval)s])
+                +
+                rate(pg_stat_database_tup_updated{%%(queriesSelector)s}[%%(interval)s])
+                +
+                rate(pg_stat_database_tup_deleted{%%(queriesSelector)s}[%%(interval)s])
               )
-            |||,
-            legendCustomTemplate: '{{cluster}}: Total writes',
+              and on(%(series)s)
+              (pg_replication_is_replica{%%(queriesSelector)s} == 0)
+            ||| % { series: seriesLabels },
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Total writes',
           },
         },
       },
@@ -459,12 +469,13 @@ function(this)
       totalReads: {
         name: 'Total reads',
         description: 'Total read operations (fetched) per second across all instances.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'rows/s',
         sources: {
-          postgres_exporter: {
-            expr: 'rate(pg_stat_database_tup_fetched{%(queriesSelector)s}[$__rate_interval])',
-            legendCustomTemplate: '{{cluster}}: Total reads',
+          prometheus: {
+            expr: 'pg_stat_database_tup_fetched{%(queriesSelector)s}',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Total reads',
           },
         },
       },
@@ -475,9 +486,10 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_activity_count{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Total connections',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Total connections',
           },
         },
       },
@@ -489,9 +501,10 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_settings_max_connections{%(queriesSelector)s}',
-            legendCustomTemplate: '{{cluster}}: Total max connections',
+            exprWrappers: [clusterPrefix],
+            legendCustomTemplate: '{{cluster_prefix}}Total max connections',
           },
         },
       },
@@ -503,40 +516,20 @@ function(this)
         type: 'gauge',
         unit: 'percentunit',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               (
-                sum by (%(agg)s, instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                sum by (%(agg)s) (rate(pg_stat_database_blks_hit{%(queriesSelector)s}[%(interval)s]))
                 /
                 (
-                  sum by (%(agg)s, instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                  sum by (%(agg)s) (rate(pg_stat_database_blks_hit{%(queriesSelector)s}[%(interval)s]))
                   +
-                  sum by (%(agg)s, instance) (pg_stat_database_blks_read{%(queriesSelector)s})
+                  sum by (%(agg)s) (rate(pg_stat_database_blks_read{%(queriesSelector)s}[%(interval)s]))
                 )
               )
             |||,
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}: Cache hit ratio',
-          },
-        },
-      },
-
-      // Total database size (from primary only to avoid double counting)
-      totalDatabaseSize: {
-        name: 'Total database size',
-        description: 'Total size of all databases on the primary.',
-        type: 'raw',
-        unit: 'bytes',
-        sources: {
-          postgres_exporter: {
-            expr: |||
-              sum by (%(agg)s) (
-                pg_database_size_bytes{%(queriesSelector)s}
-                and on(instance)
-                (pg_replication_is_replica{%(queriesSelector)s} == 0)
-              )
-            |||,
-            legendCustomTemplate: '{{cluster}}: Total database size',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s: Cache hit ratio',
           },
         },
       },
@@ -547,10 +540,10 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s',
           },
         },
       },
@@ -562,10 +555,10 @@ function(this)
         type: 'gauge',
         unit: 's',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'time() - pg_postmaster_start_time_seconds{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s',
           },
         },
       },
@@ -577,56 +570,16 @@ function(this)
         type: 'gauge',
         unit: 'percentunit',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               (
-                sum by (%(agg)s, instance) (pg_stat_activity_count{%(queriesSelector)s})
+                sum by (%(agg)s) (pg_stat_activity_count{%(queriesSelector)s})
                 /
-                max by (%(agg)s, instance) (pg_settings_max_connections{%(queriesSelector)s})
+                max by (%(agg)s) (pg_settings_max_connections{%(queriesSelector)s})
               )
             |||,
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
-          },
-        },
-      },
-
-      // Instance cache hit ratio for table
-      instanceCacheHitRatio: {
-        name: 'Instance cache hit ratio',
-        description: 'Cache hit ratio per instance.',
-        type: 'gauge',
-        unit: 'percentunit',
-        sources: {
-          postgres_exporter: {
-            expr: |||
-              (
-                sum by (%(agg)s, instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
-                /
-                (
-                  sum by (%(agg)s, instance) (pg_stat_database_blks_hit{%(queriesSelector)s})
-                  +
-                  sum by (%(agg)s, instance) (pg_stat_database_blks_read{%(queriesSelector)s})
-                )
-              )
-            |||,
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
-          },
-        },
-      },
-
-      // Instance replication lag for table
-      instanceReplicationLag: {
-        name: 'Instance replication lag',
-        description: 'Replication lag per instance (replicas only).',
-        type: 'gauge',
-        unit: 's',
-        sources: {
-          postgres_exporter: {
-            expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
-            aggKeepLabels: ['instance'],
-            legendCustomTemplate: '{{instance}}',
+            aggKeepLabels: this.instanceLabels,
+            legendCustomTemplate: '%(keepLabelsLegend)s',
           },
         },
       },

@@ -13,6 +13,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       maintenance: (import './signals/maintenance.libsonnet')(this.config),
       queries: (import './signals/queries.libsonnet')(this.config),
       cluster: (import './signals/cluster.libsonnet')(this.config),
+      settings: (import './signals/settings.libsonnet')(this.config),
     },
 
     signals: {
@@ -21,7 +22,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     },
 
     grafana: {
-      panels: (import './panels/main.libsonnet').new(this.signals, this.config),
+      panels: (import './panels/main.libsonnet').new(this),
       rows: (import './rows.libsonnet').new(this.grafana.panels, type=this.config.metricsSource),
 
       links: {

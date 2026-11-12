@@ -6,7 +6,7 @@ function(this)
     aggLevel: 'instance',
     aggFunction: 'sum',
     discoveryMetric: {
-      postgres_exporter: 'pg_up',
+      prometheus: 'pg_up',
     },
     signals: {
       // Is the database responding?
@@ -16,7 +16,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_up{%(queriesSelector)s}',
             legendCustomTemplate: ' PostgreSQL status',
           },
@@ -30,7 +30,7 @@ function(this)
         type: 'gauge',
         unit: 's',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'time() - pg_postmaster_start_time_seconds{%(queriesSelector)s}',
             legendCustomTemplate: ' Uptime',
           },
@@ -44,7 +44,7 @@ function(this)
         type: 'gauge',
         unit: 'percentunit',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%(agg)s) (pg_stat_activity_count{%(queriesSelector)s})
               /
@@ -62,14 +62,14 @@ function(this)
         type: 'gauge',
         unit: 'percentunit',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
-              sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
+              sum by (%(agg)s) (rate(pg_stat_database_blks_hit{%(queriesSelector)s}[%(interval)s]))
               /
               (
-                sum by (%(agg)s) (pg_stat_database_blks_hit{%(queriesSelector)s})
+                sum by (%(agg)s) (rate(pg_stat_database_blks_hit{%(queriesSelector)s}[%(interval)s]))
                 +
-                sum by (%(agg)s) (pg_stat_database_blks_read{%(queriesSelector)s})
+                sum by (%(agg)s) (rate(pg_stat_database_blks_read{%(queriesSelector)s}[%(interval)s]))
               )
             |||,
             legendCustomTemplate: ' Cache hit ratio',
@@ -85,7 +85,7 @@ function(this)
         unit: 's',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_lag_seconds{%(queriesSelector)s}',
             legendCustomTemplate: ' Replication lag',
           },
@@ -99,8 +99,9 @@ function(this)
         type: 'counter',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_deadlocks{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: ' Deadlocks',
           },
         },
@@ -113,7 +114,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_replication_is_replica{%(queriesSelector)s}',
             legendCustomTemplate: ' Node role',
           },
@@ -128,7 +129,7 @@ function(this)
         unit: 'short',
         aggFunction: 'count',  // Use count aggregation
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}',
             legendCustomTemplate: ' Connected replicas',
           },
@@ -143,7 +144,7 @@ function(this)
         unit: 'bytes',
         aggFunction: 'max',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}',
             legendCustomTemplate: ' Replication slot lag',
           },
