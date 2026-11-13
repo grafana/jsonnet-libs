@@ -7,7 +7,7 @@
           {
             alert: 'ApacheTomcatAlertsHighCpuUsage',
             expr: |||
-              sum by (%(agg)s) (jvm_process_cpu_load{%(filteringSelector)s}) > %(alertsCriticalCpuUsage)s
+              sum by (%(agg)s) (jvm_process_cpu_load{%(filteringSelector)s}) * 100 > %(alertsCriticalCpuUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
             labels: {
