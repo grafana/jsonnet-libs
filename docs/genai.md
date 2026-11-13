@@ -51,7 +51,31 @@ trade-offs of what you're proposing.
 - File automated, bot-driven issues or PRs from tools the maintainers have not approved.
 - Submit PRs or issues that ignore the project templates.
 
-Approved bots (for example dependency bots) are fine when clearly marked as bot-generated.
+Approved bots (for example dependency bots) are fine when clearly marked as bot-generated. See
+[Maintainer-operated automation](#maintainer-operated-automation).
+
+## Maintainer-operated automation
+
+Maintainers may run approved AI review tooling from CI. This tooling is not a contributor, so the
+contributor rules above do not apply to it. Instead, it must follow these rules:
+
+- It runs only under the bot account listed below, never under a personal account.
+- Every comment says it is automated and gives the tool name.
+- It posts findings only. It does not approve, request changes, merge, push commits, or reply in
+  discussion threads.
+- A maintainer owns the review conclusion. Findings are input to that review, not the review
+  itself.
+- It runs on any PR in scope, whoever the author is. Contributors are held to the same rules
+  whether they are maintainers or external.
+
+Contributors don't have to act on an automated finding unless a maintainer endorses it in their own
+review.
+
+| Bot account       | Tool           | Scope                                                         |
+| ----------------- | -------------- | ------------------------------------------------------------- |
+| `<app-name>[bot]` | `mixin-review` | PRs that change `*-mixin/` or `*-observ-lib/` directories     |
+
+To add, change, or remove an entry, open a pull request that maintainers approve.
 
 ## Disclosure
 
