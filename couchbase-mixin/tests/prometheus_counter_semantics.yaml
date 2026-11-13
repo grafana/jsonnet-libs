@@ -1,0 +1,99 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: sustained spike of 5 ejections per minute fires, then clears
+  interval: 1m
+  input_series:
+  - series: kv_ep_num_value_ejects{instance="cb-3",bucket="b1",couchbase_cluster="c1"}
+    values: 0+5x15 75x45
+  alert_rule_test:
+  - eval_time: 12m
+    alertname: CouchbaseMemoryEvictionRate
+    exp_alerts:
+    - exp_labels:
+        severity: warning
+        instance: cb-3
+        bucket: b1
+        couchbase_cluster: c1
+      exp_annotations:
+        summary: There is a spike in evictions in a bucket, which indicates high memory pressure.
+        description: 25 evictions in the last 5 minutes in bucket b1, on node cb-3, and on cluster c1, which is
+          above the threshold of 10.
+  - eval_time: 40m
+    alertname: CouchbaseMemoryEvictionRate
+    exp_alerts: []
+- name: the old burst no longer latches
+  interval: 1m
+  input_series:
+  - series: kv_ep_num_value_ejects{instance="cb-1",bucket="b1",couchbase_cluster="c1"}
+    values: 0x4 20x55
+  alert_rule_test:
+  - eval_time: 60m
+    alertname: CouchbaseMemoryEvictionRate
+    exp_alerts: []
+- name: control, one ejection per hour stays silent
+  interval: 1m
+  input_series:
+  - series: kv_ep_num_value_ejects{instance="cb-2",bucket="b1",couchbase_cluster="c1"}
+    values: 0x59 1x59 2x59 3x59 4x59 5x59 6x59 7x59 8x59 9x59 10x59 11x59 12x59 13x59 14x59 15x59 16x59 17x59 18x59
+      19x59 20x59 21x59 22x59 23x59 24
+  alert_rule_test:
+  - eval_time: 24h
+    alertname: CouchbaseMemoryEvictionRate
+    exp_alerts: []
+- name: missing series do not invent an alert
+  interval: 1m
+  input_series: []
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: CouchbaseMemoryEvictionRate
+    exp_alerts: []
+- name: evictions remain pending before five minutes
+  interval: 1m
+  input_series:
+  - series: kv_ep_num_value_ejects{instance="cb-3",bucket="b1",couchbase_cluster="c1"}
+    values: 0+5x30
+  alert_rule_test:
+  - eval_time: 6m
+    alertname: CouchbaseMemoryEvictionRate
+    exp_alerts: []
+- name: exactly ten evictions per window stays silent
+  interval: 1m
+  input_series:
+  - series: kv_ep_num_value_ejects{instance="cb-3",bucket="b1",couchbase_cluster="c1"}
+    values: 0+2x30
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: CouchbaseMemoryEvictionRate
+    exp_alerts: []
+- name: single brief burst does not survive five minute pending
+  interval: 1m
+  input_series:
+  - series: kv_ep_num_value_ejects{instance="cb-3",bucket="b1",couchbase_cluster="c1"}
+    values: 0x9 20x20
+  alert_rule_test:
+  - eval_time: 14m
+    alertname: CouchbaseMemoryEvictionRate
+    exp_alerts: []
+  - eval_time: 20m
+    alertname: CouchbaseMemoryEvictionRate
+    exp_alerts: []
+- name: counter reset does not discard subsequent sustained evictions
+  interval: 1m
+  input_series:
+  - series: kv_ep_num_value_ejects{instance="cb-3",bucket="b1",couchbase_cluster="c1"}
+    values: 100+5x9 0+5x20
+  alert_rule_test:
+  - eval_time: 20m
+    alertname: CouchbaseMemoryEvictionRate
+    exp_alerts:
+    - exp_labels:
+        severity: warning
+        instance: cb-3
+        bucket: b1
+        couchbase_cluster: c1
+      exp_annotations:
+        summary: There is a spike in evictions in a bucket, which indicates high memory pressure.
+        description: 25 evictions in the last 5 minutes in bucket b1, on node cb-3, and on cluster c1, which is
+          above the threshold of 10.
