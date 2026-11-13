@@ -64,6 +64,12 @@ maintainers. Full policy: [docs/genai.md](docs/genai.md).
 
 - Write or refine a PR title and PR template sections that are **not** marked `HUMAN ONLY` when
   opening or updating a PR.
+- When running in CI as a bot account listed in
+  [Maintainer-operated automation](docs/genai.md#maintainer-operated-automation): post review
+  findings as that bot, within the rules listed there. This is the only exception to the rules in
+  this file that keep review discussion with humans and forbid automated replies or AI text in
+  GitHub discussion. It does not allow acting for a human contributor, and all other rules still
+  apply.
 - Produce **local-only** scratch notes for the human **if they explicitly ask**, and only after
   reminding them that `HUMAN ONLY` sections and discussion must be rewritten in their own words.
   Never treat those notes as ready to paste into `HUMAN ONLY` sections or comments.
