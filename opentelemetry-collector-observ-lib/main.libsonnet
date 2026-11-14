@@ -28,7 +28,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       },
     grafana: {
       panels:
-        (import './panels.libsonnet').new(this.signals, this.process)
+        (import './panels.libsonnet').new(this.signals, this.process, this.config)
         // add panels from process lib
         + this.process.grafana.panels,
       rows:
