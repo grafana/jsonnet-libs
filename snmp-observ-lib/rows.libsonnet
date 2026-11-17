@@ -7,6 +7,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels(
         [
+          panels.alerts.alerts { gridPos+: { w: 24, h: 6 } },
           panels.fleet.deviceTable { gridPos+: { w: 24, h: 12 } },
           panels.fleet.traffic { gridPos+: { w: 24, h: 8 } },
           panels.fleet.errors { gridPos+: { w: 12, h: 8 } },
@@ -38,6 +39,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           panels.system.sysName { gridPos+: { w: 8, h: 4 } },
           panels.system.version { gridPos+: { w: 8, h: 4 } },
           panels.system.uptime { gridPos+: { w: 8, h: 4 } },
+          panels.alerts.alerts { gridPos+: { w: 24, h: 6 } },
           panels.cpu.cpuUsage { gridPos+: { w: 12, h: 5 } },
           panels.memory.memoryUsage { gridPos+: { w: 12, h: 5 } },
         ]

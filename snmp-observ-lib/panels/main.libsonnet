@@ -1,5 +1,6 @@
 {
   new(signals, this):: {
+    alerts: (import './alerts.libsonnet').new(signals, this),
     cpu: (import './cpu.libsonnet').new(signals, this),
     fleet: (import './fleet.libsonnet').new(signals, this),
     memory: (import './memory.libsonnet').new(signals, this),
