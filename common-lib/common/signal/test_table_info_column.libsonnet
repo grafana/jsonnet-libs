@@ -74,7 +74,7 @@ local m1 = signal.init(
         },
         testExcludeValue: {
           actual: raw.transformations[3].options.excludeByName,
-          expect: { Value: true },
+          expect: { Value: true, 'Go version': true },
         },
       }),
     },

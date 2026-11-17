@@ -497,10 +497,10 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             g.panel.table.queryOptions.transformation.withId('organize')
             + g.panel.table.queryOptions.transformation.withOptions(
               {
-                // Removes an info signal's value field. Left in, its 1s replace the label's text.
+                // Removes an info signal's value field. Left in, its 1s replace the label's text when nameShort equals the signal's name.
                 // asTableColumn() adds its own step to remove it, but withTransformations() overwrites that step here.
-                // The key matches only in a table with one query, where the field is still named 'Value'.
-                [if type == 'info' then 'excludeByName']: { Value: true },
+                // The field is named 'Value' in a table with one query. With more queries, renameByRegex names it after the signal.
+                [if type == 'info' then 'excludeByName']: { Value: true, [this.signalName]: true },
                 indexByName: {
                   [label.el]: label.index
                   for label in
