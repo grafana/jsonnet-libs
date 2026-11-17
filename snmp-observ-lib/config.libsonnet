@@ -16,8 +16,6 @@
   metricsSource: ['generic', 'cisco', 'mikrotik', 'juniper'],
 
   // only fire alerts 'interface is down' for the following selector:
-  // deprecated, use alertInterfaceDownSelectorWarning, alertInterfaceDownSelectorCritical, alertInterfaceDownSelectorInfo instead
-  alertInterfaceDownSelector: self.alertInterfaceDownSelectorWarning,
   alertInterfaceDownSelectorWarning: 'ifAlias=~".*(?i:(uplink|internet|WAN|ISP)).*"',
   // change according to your org naming conventions
   alertInterfaceDownSelectorCritical: 'ifAlias=~".*(?i:(critical)).*"',
@@ -35,11 +33,18 @@
   mikrotikMemorySelector: 'hrStorageDescr="main memory",hrStorageIndex="65536"',
   // ignore interface sensors
   ciscoTemperatureSelector: 'entSensorType="8", entPhysicalName!~".+(\\\\d+/\\\\d+(/\\\\d+)?).*"',
-  alertMemoryUsageThresholdCritical: 90,
-  alertsCPUThresholdWarning: 90,
-  alertsPacketsDroppedPerSecThresholdWarning: 0,
-  alertsErrorsPerSecThresholdWarning: 0,
-  alertsSlowScrapeThresholdInfo: 50,
+
+  // Alerts
+  alertNodeCPUHighUsageWarningThreshold: 90,  // > percent
+
+  alertNodeMemoryUtilizationInfoThreshold: 90,  // > percent
+
+  alertInterfaceDropsWarningThreshold: 5,  // > percent of packets
+
+  alertInterfaceErrorsWarningThreshold: 1,  // > percent of packets
+
+  alertExporterSlowScrapeInfoThreshold: 25,  // > seconds
+
   signals+:
     {
       cpu: (import './signals/cpu.libsonnet')(this),
@@ -52,6 +57,7 @@
       fans: (import './signals/fans.libsonnet')(this),
       fiber: (import './signals/fiber.libsonnet')(this),
       alerts: (import './signals/alerts.libsonnet')(this),
+      exporter: (import './signals/exporter.libsonnet')(this),
       logs: (import './signals/logs.libsonnet')(this),
     },
 
