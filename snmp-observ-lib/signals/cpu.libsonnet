@@ -32,7 +32,6 @@ function(this)
     signals: {
       cpuUsage: {
         name: 'CPU utilization',
-        description: 'CPU usage.',
         type: 'gauge',
         unit: 'percent',
         sources: {

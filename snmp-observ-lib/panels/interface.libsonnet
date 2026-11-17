@@ -5,7 +5,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   new(signals, this):: {
     interfacesTable:
       signals.interface.ifOperStatus.asTable(name='Interfaces', format='table', filterable=true)
-      + g.panel.table.panelOptions.withDescription('Network interfaces overview.')
       + signals.interface.ifAdminStatus.asTableColumn(format='table')
       + signals.interface.ifHighSpeed.asTableColumn(format='table')
       + signals.interface.ifType_info.asTableColumn(format='table')
@@ -15,6 +14,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.interface.ifLastChange.asTableColumn(format='table')
       + signals.interface.ifPhysAddress.asTableColumn(format='table')
       + commonlib.panels.system.table.uptime.stylizeByName('Interface last change')
+      // asTableColumn() appends each column's description to the table's. These columns' descriptions only repeated their titles.
+      + g.panel.table.panelOptions.withDescription('')
       + {
         options+: {
           sortBy: [

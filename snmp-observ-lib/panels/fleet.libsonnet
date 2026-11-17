@@ -8,7 +8,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     deviceTable:
       local fieldOverride = g.panel.table.fieldOverride;
       signals.fleetInterface.interfacesCount.asTable(name='Network devices', format='table', filterable=true)
-      + g.panel.table.panelOptions.withDescription('Network devices overview.')
       + signals.system.sysName.asTableColumn(format='table')
       + signals.system.version.asTableColumn(format='table')
       + signals.system.uptime.asTableColumn(format='table')
@@ -28,6 +27,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + signals.alerts.alertsCritical
         .withExprWrappersMixin(['count by (%s)(' % std.join(',', this.config.instanceLabels + this.config.groupLabels), ')'])
         .asTableColumn(format='table')
+      // asTableColumn() appends each column's description to the table's. These columns' descriptions only repeated their titles.
+      + g.panel.table.panelOptions.withDescription('')
       + {
         options+: {
           sortBy: [

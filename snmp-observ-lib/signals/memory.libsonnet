@@ -32,7 +32,6 @@ function(this)
     signals: {
       memoryUsage: {
         name: 'Memory utilization',
-        description: 'Memory utilization.',
         type: 'gauge',
         unit: 'percent',
         sources: {

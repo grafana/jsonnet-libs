@@ -3,15 +3,14 @@ exclusions:
     reason: "These dashboards are designed to be single instance"
     entries:
       - dashboard: SNMP overview
-  target-job-rule:
-    reason: "Linter it not detecting right for these panels"
+  panel-title-description-rule:
+    reason: "The title fully describes these panels"
     entries:
-      - panel: Power
-      - panel: DC voltage
-      - panel: Temperature
-  target-instance-rule:
-    reason: "Linter it not detecting right for these panels"
-    entries:
-      - panel: Power
-      - panel: DC voltage
-      - panel: Temperature
+      - panel: System name
+      - panel: Version
+      - panel: CPU usage
+      - panel: Memory utilization
+      - panel: Receive/transmit power
+      - panel: Fan speed
+      - panel: Network devices
+      - panel: Interfaces

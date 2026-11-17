@@ -23,14 +23,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   alertInterfaceDownSelectorCritical: 'ifAlias=~".*(?i:(critical)).*"',
 
   // Enable to workaround issue with counters on Cisco NX-OS overloading issue.
-  // This will clamp max interface traffic possible to 1000Gbps.
+  // This will clamp max interface traffic possible to 100Gbps.
   clampQueryEnabled: true,
-  clampSpeed: '100*10^9',  // 1000 GBps
+  clampSpeed: '100*10^9',  // 100 Gbps
 
-  // cpuSelector for metricsSources with HOST-RESOURCE-MIB:
+  // cpuSelector for metricsSources with HOST-RESOURCES-MIB:
   cpuSelector: 'hrDeviceType="1.3.6.1.2.1.25.3.1.3"',
-  // memorySelector for metricsSources with HOST-RESOURCE-MIB:
-  // ignore buffers for now:
+  // memorySelector for metricsSources with HOST-RESOURCES-MIB:
   memorySelector: 'hrStorageDescr!~".*(?i:(cache|buffer)).*", hrStorageType="1.3.6.1.2.1.25.2.1.2"',
   mikrotikMemorySelector: 'hrStorageDescr="main memory",hrStorageIndex="65536"',
   // ignore interface sensors

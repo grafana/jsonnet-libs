@@ -77,9 +77,6 @@ function(this)
       },
       rxtxPower: {
         name: 'Receive/transmit power',
-        description: |||
-          Receive/Transmit power.
-        |||,
         type: 'gauge',
         unit: 'dBm',
         optional: true,

@@ -111,6 +111,7 @@ function(this, level='interface')
         networkAllErrorsPerSec: {
           name: 'Network interface errors and drops',
           nameShort: 'errors and drops',
+          // raw: a counter over several metric names fails once irate drops __name__, as the in and out series share a label set.
           type: 'raw',
           unit: 'pps',
           sources: {
@@ -503,7 +504,7 @@ function(this, level='interface')
           name: 'Network interface broadcast packets out',
           nameShort: 'broadcast out',
           description: |||
-            'Network interface broadcast packets out.',
+            Network interface broadcast packets out.
           |||,
           type: 'counter',
           unit: 'pps',
@@ -866,10 +867,7 @@ function(this, level='interface')
             ifLastChange: {
               name: 'Interface last change',
               nameShort: 'Last change',
-              description: |||
-                Interface last change.
-              |||,
-              type: 'raw',
+              type: 'gauge',
               unit: 'dtdurations',
               sources: {
                 generic:
@@ -877,10 +875,8 @@ function(this, level='interface')
 
                     expr:
                       |||
-                        # ignore when ifLastCHange == 0 as invalid
-                        sum by (%%(agg)s) (
-                          (sysUpTime{%s} - on(%s) group_right () (ifLastChange{%%(queriesSelector)s})!=0)
-                        )/100
+                        # ignore when ifLastChange == 0 as invalid
+                        (sysUpTime{%s} - on(%s) group_right () (ifLastChange{%%(queriesSelector)s})!=0)/100
                       |||
                       %
                       [
@@ -944,9 +940,6 @@ function(this, level='interface')
             ifPhysAddress: {
               name: 'Interface physical address',
               nameShort: 'MAC',
-              description: |||
-                MAC.
-              |||,
               type: 'info',
 
               sources: {
