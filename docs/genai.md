@@ -71,9 +71,9 @@ contributor rules above do not apply to it. Instead, it must follow these rules:
 Contributors don't have to act on an automated finding unless a maintainer endorses it in their own
 review.
 
-| Bot account       | Tool           | Scope                                                         |
-| ----------------- | -------------- | ------------------------------------------------------------- |
-| `<app-name>[bot]` | `mixin-review` | PRs that change `*-mixin/` or `*-observ-lib/` directories     |
+| Bot account           | Tool           | Scope                                                         |
+| --------------------- | -------------- | ------------------------------------------------------------- |
+| `mixin-review[bot]`   | `mixin-review` | PRs that change `*-mixin/` or `*-observ-lib/` directories     |
 
 To add, change, or remove an entry, open a pull request that maintainers approve.
 
