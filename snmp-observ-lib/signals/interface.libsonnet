@@ -116,12 +116,17 @@ function(this, level='interface')
           sources: {
             generic:
               {
+                // The Cisco MDS 9148S doesn't report ifInUnknownProtos, so that term falls back to 0.
                 expr: |||
                   %(aggFunction)s by (%(agg)s) (irate(ifOutErrors{%(queriesSelector)s}[%(interval)s])) +
                   %(aggFunction)s by (%(agg)s) (irate(ifInErrors{%(queriesSelector)s}[%(interval)s])) +
                   %(aggFunction)s by (%(agg)s) (irate(ifInDiscards{%(queriesSelector)s}[%(interval)s])) +
-                  %(aggFunction)s by (%(agg)s) (irate(ifOutDiscards{%(queriesSelector)s}[%(interval)s]))+ 
-                  %(aggFunction)s by (%(agg)s) (irate(ifInUnknownProtos{%(queriesSelector)s}[%(interval)s]))
+                  %(aggFunction)s by (%(agg)s) (irate(ifOutDiscards{%(queriesSelector)s}[%(interval)s])) +
+                  (
+                    %(aggFunction)s by (%(agg)s) (irate(ifInUnknownProtos{%(queriesSelector)s}[%(interval)s]))
+                    or
+                    %(aggFunction)s by (%(agg)s) (irate(ifInErrors{%(queriesSelector)s}[%(interval)s])) * 0
+                  )
                 |||,
               },
             arista_sw: self.generic,

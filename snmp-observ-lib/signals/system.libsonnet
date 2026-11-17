@@ -104,7 +104,7 @@ function(this)
         type: 'info',
         sources: {
           generic: {
-            expr: 'label_replace(sysDescr{sysDescr=~".+Version.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+Version (.+?) .+")',
+            expr: 'label_replace(sysDescr{sysDescr=~".+Version.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+Version ([^ ,]+).*")',
             infoLabel: 'version',
           },
           arista_sw: self.generic,
@@ -127,10 +127,14 @@ function(this)
           hpe: self.generic,
           huawei: self.generic,
           juniper: {
-            expr: 'label_replace(sysDescr{sysDescr=~".+JUNOS.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+JUNOS (.+?) .+")',
+            expr: 'label_replace(sysDescr{sysDescr=~".+JUNOS.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+JUNOS ([^ ,]+).*")',
             infoLabel: 'version',
           },
-          mikrotik: self.generic,
+          // RouterOS's sysDescr names only the model, such as "RouterOS RB941-2nD".
+          mikrotik: {
+            expr: 'label_replace(mtxrLicVersion{%(queriesSelector)s}, "version", "$1", "mtxrLicVersion", "(.+)")',
+            infoLabel: 'version',
+          },
           netgear: self.generic,
           qtech: self.generic,
           tplink: self.generic,
