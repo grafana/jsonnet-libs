@@ -9,7 +9,7 @@
                "enable": true,
                "expr": "count by (job,instance,alertname) (max_over_time(ALERTS{alertstate=\"firing\", severity=\"critical\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n  * on(job,instance) group_left group by (job,instance) (sysUpTime{job=~\"$job\",instance=~\"$instance\"})\n",
                "hide": true,
-               "iconColor": "light-purple",
+               "iconColor": "#ff7383",
                "name": "Critical alert",
                "tagKeys": "job,instance",
                "textFormat": "{{alertname}}",
@@ -23,7 +23,7 @@
                "enable": true,
                "expr": "{job=\"syslog\",job=~\"$job\",instance=~\"$instance\", level=~\"critical|fatal|alert|error\"}\n",
                "hide": true,
-               "iconColor": "light-purple",
+               "iconColor": "#ff7383",
                "name": "Critical event logged",
                "tagKeys": "job,instance,sysname,syslog_app_name,level",
                "titleFormat": "Critical event logged"
@@ -58,15 +58,36 @@
       "panels": [
          {
             "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Currently firing alerts.",
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "options": {
+               "alertInstanceLabelFilter": "job=~\"${job:regex}\",instance=~\"${instance:regex}\",alertname=~\"SNMP.*\"",
+               "groupMode": "default"
+            },
+            "pluginVersion": "v11.4.0",
+            "title": "Alerts",
+            "type": "alertlist"
+         },
+         {
+            "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network devices overview.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
                   "custom": {
                      "filterable": true
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -449,7 +470,7 @@
                               {
                                  "targetBlank": false,
                                  "title": "Drill down to ${__field.name} ${__value.text}",
-                                 "url": "d/snmp-overview?var-instance=${__data.fields.instance}&${__url_time_range}&${datasource:queryparam}"
+                                 "url": "d/snmp-overview?var-instance=${__data.fields.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                               }
                            ]
                         }
@@ -471,7 +492,7 @@
                               {
                                  "targetBlank": false,
                                  "title": "Filter by ${__field.name}",
-                                 "url": "d/snmp-fleet?var-${__field.name}=${__value.text}&${__url_time_range}&${datasource:queryparam}"
+                                 "url": "d/snmp-fleet?var-${__field.name}=${__value.text}&${__url_time_range}&${prometheus_datasource:queryparam}"
                               }
                            ]
                         }
@@ -483,7 +504,7 @@
                "h": 12,
                "w": 24,
                "x": 0,
-               "y": 0
+               "y": 12
             },
             "options": {
                "sortBy": [
@@ -493,7 +514,7 @@
                   }
                ]
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -522,7 +543,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance,version) (\n  label_replace(\n  ciscoImageString{ciscoImageString=~\"CW_VERSION.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"ciscoImageString\", \"CW_VERSION\\\\$(.+)\\\\$\"\n)\n\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{sysDescr=~\".+JUNOS.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".+JUNOS (.+?) .+\")\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{sysDescr=~\".+Version.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".+Version (.+?) .+\")\n)",
+                  "expr": "sum by (job,instance,version) (\n  label_replace(\n  ciscoImageString{ciscoImageString=~\"CW_VERSION.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"ciscoImageString\", \"CW_VERSION\\\\$(.+)\\\\$\"\n)\n\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(mtxrLicVersion{job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"mtxrLicVersion\", \"(.+)\")\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{sysDescr=~\".+JUNOS.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".+JUNOS ([^ ,]+).*\")\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{sysDescr=~\".+Version.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".+Version ([^ ,]+).*\")\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{instance}}: Version",
@@ -544,7 +565,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  cpmCPUTotal1minRev{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  hrProcessorLoad{hrDeviceType=\"1.3.6.1.2.1.25.3.1.3\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  jnxOperatingCPU{jnxOperatingContentsIndex=\"9\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job,instance) (\n  cpmCPUTotal1minRev{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  hrProcessorLoad{hrDeviceType=\"1.3.6.1.2.1.25.3.1.3\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  max by (job,instance) (jnxOperatingCPU{jnxOperatingContentsIndex=\"9\", jnxOperatingL2Index=\"0\", job=~\"$job\",instance=~\"$instance\"})\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{instance}}: CPU utilization",
@@ -555,7 +576,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  # NX-OS:\n(\n  cpmCPUMemoryUsed{job=~\"$job\",instance=~\"$instance\"}\n  /\n  (cpmCPUMemoryUsed{job=~\"$job\",instance=~\"$instance\"} + cpmCPUMemoryFree{job=~\"$job\",instance=~\"$instance\"}) * 100\n)\nor\n# cisco CISCO-ENHANCED-MEMPOOL-MIB\n# cempMemPoolType=\"10\" - virtual memory, i.e in ASA(v).\n(\n  (\n    cempMemPoolUsed{job=~\"$job\",instance=~\"$instance\"}\n    /\n    (cempMemPoolUsed{job=~\"$job\",instance=~\"$instance\"} + cempMemPoolFree{job=~\"$job\",instance=~\"$instance\"}) * 100\n  ) * on (instance, cempMemPoolIndex, entPhysicalIndex) group_left () \n        (cempMemPoolType{job=~\"$job\",instance=~\"$instance\"} == 10)/10\n)\nor\n# cisco firmwares that supports only CISCO-MEMORY-POOL-MIB\n# ciscoMemoryPoolType=\"1\" - Processor\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"}\n/\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"} + ciscoMemoryPoolFree{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"}) * 100)\n\n)\nor\navg by (job,instance) (\n  hrStorageUsed{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", job=~\"$job\",instance=~\"$instance\"}/hrStorageSize{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", job=~\"$job\",instance=~\"$instance\"}*100\n\n)\nor\navg by (job,instance) (\n  hrStorageUsed{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", job=~\"$job\",instance=~\"$instance\"}/hrStorageSize{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", job=~\"$job\",instance=~\"$instance\"}*100\n\n)\nor\navg by (job,instance) (\n  jnxOperatingBuffer{jnxOperatingContentsIndex=\"9\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job,instance) (\n  # cisco CISCO-ENHANCED-MEMPOOL-MIB\n# cempMemPoolType=\"10\" - virtual memory, i.e in ASA(v).\n(\n  (\n    cempMemPoolUsed{job=~\"$job\",instance=~\"$instance\"}\n    /\n    (cempMemPoolUsed{job=~\"$job\",instance=~\"$instance\"} + cempMemPoolFree{job=~\"$job\",instance=~\"$instance\"}) * 100\n  ) * on (job,instance, cempMemPoolIndex, entPhysicalIndex) group_left ()\n        (cempMemPoolType{job=~\"$job\",instance=~\"$instance\"} == 10)/10\n)\nor\n# cisco firmwares that supports only CISCO-MEMORY-POOL-MIB\n# ciscoMemoryPoolType=\"1\" - Processor\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"}\n/\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"} + ciscoMemoryPoolFree{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"}) * 100)\n\n)\nor\navg by (job,instance) (\n  # net-snmp 5.9.1 and later:\navg by (job,instance) (\n  100 * (1 - hrStorageSize{hrStorageDescr=\"Available memory\", job=~\"$job\",instance=~\"$instance\"}\n  / on (job,instance) hrStorageSize{hrStorageDescr=\"Physical memory\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\n# earlier net-snmp: cached memory and buffers are subtracted\navg by (job,instance) (\n  100 * (hrStorageUsed{hrStorageDescr=\"Physical memory\", job=~\"$job\",instance=~\"$instance\"}\n  - on (job,instance) hrStorageUsed{hrStorageDescr=\"Cached memory\", job=~\"$job\",instance=~\"$instance\"}\n  - on (job,instance) hrStorageUsed{hrStorageDescr=\"Memory buffers\", job=~\"$job\",instance=~\"$instance\"})\n  / on (job,instance) hrStorageSize{hrStorageDescr=\"Physical memory\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  hrStorageUsed{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", job=~\"$job\",instance=~\"$instance\"}/hrStorageSize{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", job=~\"$job\",instance=~\"$instance\"}*100\n)\n\n)\nor\navg by (job,instance) (\n  hrStorageUsed{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", job=~\"$job\",instance=~\"$instance\"}/hrStorageSize{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", job=~\"$job\",instance=~\"$instance\"}*100\n\n)\nor\navg by (job,instance) (\n  max by (job,instance) (jnxOperatingBuffer{jnxOperatingContentsIndex=\"9\", jnxOperatingL2Index=\"0\", job=~\"$job\",instance=~\"$instance\"})\n)",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{instance}}: Memory utilization",
@@ -588,7 +609,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance) (irate(ifOutErrors{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) +\nsum by (job,instance) (irate(ifInErrors{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) +\nsum by (job,instance) (irate(ifInDiscards{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) +\nsum by (job,instance) (irate(ifOutDiscards{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))+ \nsum by (job,instance) (irate(ifInUnknownProtos{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n",
+                  "expr": "sum by (job,instance) (irate(ifOutErrors{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) +\nsum by (job,instance) (irate(ifInErrors{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) +\nsum by (job,instance) (irate(ifInDiscards{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) +\nsum by (job,instance) (irate(ifOutDiscards{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) +\n(\n  sum by (job,instance) (irate(ifInUnknownProtos{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n  or\n  sum by (job,instance) (irate(ifInErrors{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) * 0\n)\n",
                   "format": "table",
                   "instant": true,
                   "legendFormat": "{{instance}}: errors and drops",
@@ -659,7 +680,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface traffic out.\n",
+            "description": "transmitted (sum): Network interface traffic out.\n  \n\nreceived (sum): Network interface traffic in.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -693,7 +714,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -708,7 +729,7 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 8
+               "y": 20
             },
             "interval": "2m",
             "options": {
@@ -729,7 +750,7 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -762,7 +783,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface errors in.\n",
+            "description": "errors in (sum): Network interface errors in.\n  \n\nerrors out (sum): Network interface errors out.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -796,7 +817,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -811,20 +832,28 @@
                "h": 8,
                "w": 12,
                "x": 0,
-               "y": 16
+               "y": 28
             },
             "interval": "2m",
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Mean",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -857,7 +886,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface discards in.\n",
+            "description": "dropped in (sum): Network interface discards in.\n  \n\ndropped out (sum): Network interface discards out.\n  \n\nunknown dropped in (sum): The number of packets received via the interface\nwhich were discarded because of an unknown or\nunsupported protocol.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -891,7 +920,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -906,20 +935,28 @@
                "h": 8,
                "w": 12,
                "x": 12,
-               "y": 16
+               "y": 28
             },
             "interval": "2m",
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Mean",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -963,7 +1000,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface unicast packets in.\n",
+            "description": "unicast in (sum): Network interface unicast packets in.\n  \n\nunicast out (sum): Network interface unicast packets out.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -997,7 +1034,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -1010,22 +1047,30 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 12,
                "x": 0,
-               "y": 24
+               "y": 36
             },
             "interval": "2m",
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Mean",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1058,7 +1103,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface broadcast packets in.\n",
+            "description": "broadcast in (sum): Network interface broadcast packets in.\n  \n\nbroadcast out (sum): Network interface broadcast packets out.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1092,7 +1137,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -1105,22 +1150,30 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
-               "y": 24
+               "w": 12,
+               "x": 12,
+               "y": 36
             },
             "interval": "2m",
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Mean",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1153,7 +1206,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface multicast packets in.\n",
+            "description": "multicast in (sum): Network interface multicast packets in.\n  \n\nmulticast out (sum): Network interface multicast packets out.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1187,7 +1240,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -1200,22 +1253,30 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 24
+               "w": 24,
+               "x": 0,
+               "y": 44
             },
             "interval": "2m",
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Mean",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1244,7 +1305,7 @@
             "type": "timeseries"
          }
       ],
-      "refresh": "5m",
+      "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
          "snmp"
@@ -1309,7 +1370,7 @@
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-1h",
          "to": "now"
       },
       "timezone": "",
