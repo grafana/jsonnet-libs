@@ -47,10 +47,11 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             {
               targetBlank: false,
               title: 'Drill down to ${__field.name} ${__value.text}',
-              url: 'd/%s?var-%s=${__data.fields.%s}&${__url_time_range}&${datasource:queryparam}' % [
+              url: 'd/%s?var-%s=${__data.fields.%s}&${__url_time_range}&${%s:queryparam}' % [
                 this.grafana.dashboards['snmp-overview.json'].uid,
                 xtd.array.slice(this.config.instanceLabels, -1)[0],
                 xtd.array.slice(this.config.instanceLabels, -1)[0],
+                signals.system.datasource,
               ],
             },
           ]),
@@ -61,7 +62,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             {
               targetBlank: false,
               title: 'Filter by ${__field.name}',
-              url: 'd/%s?var-${__field.name}=${__value.text}&${__url_time_range}&${datasource:queryparam}' % [this.grafana.dashboards['snmp-fleet.json'].uid],
+              url: 'd/%s?var-${__field.name}=${__value.text}&${__url_time_range}&${%s:queryparam}' % [this.grafana.dashboards['snmp-fleet.json'].uid, signals.system.datasource],
             },
           ]),
         ]
