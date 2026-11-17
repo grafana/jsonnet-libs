@@ -76,7 +76,7 @@ function(this)
         },
       },
       rxtxPower: {
-        name: 'Receive/Transmit power',
+        name: 'Receive/transmit power',
         description: |||
           Receive/Transmit power.
         |||,

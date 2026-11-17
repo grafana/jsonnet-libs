@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="integrations/snmp"
@@ -6,9 +8,9 @@
   uid: 'snmp',
   dashboardNamePrefix: 'SNMP',
   dashboardTags: ['snmp'],
-  dashboardPeriod: 'now-6h',
-  dashboardRefresh: '5m',
-  dashboardTimezone: '',
+  dashboardPeriod: 'now-1h',
+  dashboardRefresh: '1m',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
 
   //increase min interval to match max SNMP polling interval used:
   minInterval: '2m',
