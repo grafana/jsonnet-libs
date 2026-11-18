@@ -16,25 +16,12 @@ local g = (import 'grafana-builder/grafana.libsonnet');
       .addMultiTemplate('job', 'memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster",namespace=~"$namespace"}', 'job')
       .addMultiTemplate('instance', 'memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster",namespace=~"$namespace",job=~"$job"}', 'instance')
       .addRow(
-        g.row('Hits')
+        g.row('Ops')
         .addPanel(
           g.panel('Hit Rate') +
           g.queryPanel('sum(rate(memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance", command="get", status="hit"}[$__rate_interval])) / sum(rate(memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance", command="get"}[$__rate_interval]))', 'Hit Rate') +
           { yaxes: g.yaxes('percentunit') },
         )
-        .addPanel(
-          g.panel('Top 20 Highest Connection Usage') +
-          g.queryPanel(|||
-            topk(20,
-              max by (%s, job, instance) (
-                memcached_current_connections{%s=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"} / memcached_max_connections{%s=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"}
-            ))
-          ||| % [$._config.clusterLabel, $._config.clusterLabel, $._config.clusterLabel], '{{ ' + $._config.clusterLabel + ' }} / {{ job }} / {{ instance }}') +
-          { yaxes: g.yaxes('percentunit') },
-        )
-      )
-      .addRow(
-        g.row('Ops')
         .addPanel(
           g.panel('Commands') +
           g.queryPanel('sum by(command, status) (rate(memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"}[$__rate_interval]))', '{{command}} {{status}}')
@@ -46,6 +33,41 @@ local g = (import 'grafana-builder/grafana.libsonnet');
         .addPanel(
           g.panel('Stored') +
           g.queryPanel('sum by(instance) (rate(memcached_items_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"}[$__rate_interval]))', '{{instance}}')
+        )
+      )
+      .addRow(
+        g.row('Connections')
+        .addPanel(
+          g.panel('Top 20 Highest Connection Usage') +
+          g.queryPanel(|||
+            topk(20,
+              max by (%s, job, instance) (
+                memcached_current_connections{%s=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"} / memcached_max_connections{%s=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"}
+            ))
+          ||| % [$._config.clusterLabel, $._config.clusterLabel, $._config.clusterLabel], '{{ ' + $._config.clusterLabel + ' }} / {{ job }} / {{ instance }}') +
+          { yaxes: g.yaxes('percentunit') },
+        )
+        .addPanel(
+          g.panel('Connections / sec') +
+          g.queryPanel([
+            'sum by(instance) (rate(memcached_connections_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+          ], [
+            '{{instance}}',
+          ])
+        )
+        .addPanel(
+          g.panel('Rejected Connections / sec') +
+          g.queryPanel('sum by(instance) (rate(last_over_time(memcached_connections_rejected_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"}[1h])[$__rate_interval:]))', '{{instance}}') +
+          {
+            description: 'Connections that memcached rejected at its connection limit. The exporter cannot scrape an instance at the limit. The rejects counted during that gap show when the exporter can scrape again. The query keeps the last counter value for up to 1h. Rejects from a longer gap do not show.',
+          },
+        )
+        .addPanel(
+          g.panel('Unreachable Instances') +
+          g.queryPanel('sum by (job) (memcached_up{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"} == bool 0)', '{{job}}') +
+          {
+            description: 'Instances with memcached_up 0. In the default maxconns_fast mode, memcached rejects the exporter connection at its connection limit. Thus this panel includes instances at the limit. It also includes instances where memcached is down or starting while the exporter runs. An instance with no running exporter has no memcached_up series and does not show here.',
+          },
         )
       )
       .addRow(
@@ -72,9 +94,6 @@ local g = (import 'grafana-builder/grafana.libsonnet');
           g.queryPanel('sum by(instance) (memcached_current_items{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"})', '{{instance}}') +
           g.stack,
         )
-      )
-      .addRow(
-        g.row('Network')
         .addPanel(
           g.panel('Current Connections') +
           g.queryPanel([
@@ -86,14 +105,9 @@ local g = (import 'grafana-builder/grafana.libsonnet');
             'Max Connections (min setting across all instances)',
           ])
         )
-        .addPanel(
-          g.panel('Connections / sec') +
-          g.queryPanel([
-            'sum by(instance) (rate(memcached_connections_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"}[$__rate_interval]))',
-          ], [
-            '{{instance}}',
-          ])
-        )
+      )
+      .addRow(
+        g.row('Network')
         .addPanel(
           g.panel('Bytes received') +
           g.queryPanel('sum by(instance) (rate(memcached_read_bytes_total{' + $._config.clusterLabel + '=~"$cluster", namespace=~"$namespace", job=~"$job", instance=~"$instance"}[$__rate_interval]))', '{{instance}}') +
