@@ -1,10 +1,18 @@
 local g = import './g.libsonnet';
 
 {
+  local root = self,
   new(this):
+    local tags = this.config.dashboardTags;
+    local uid = this.config.uid;
+    local links = this.grafana.links.otherDashboards;
+    local timezone = this.config.dashboardTimezone;
+    local refresh = this.config.dashboardRefresh;
+    local period = this.config.dashboardPeriod;
+
     local settingsFilterVar =
       g.dashboard.variable.textbox.new('settingsFilter', default='')
-      + g.dashboard.variable.textbox.generalOptions.withLabel('Settings Filter (regex)')
+      + g.dashboard.variable.textbox.generalOptions.withLabel('Settings filter (regex)')
       + g.dashboard.variable.textbox.generalOptions.withDescription('Regex pattern to filter pg_settings_* metrics. Leave empty to show all settings.');
 
     // Variable for topk query limit (10 is first = default)
@@ -26,39 +34,28 @@ local g = import './g.libsonnet';
       for v in vars
     ];
 
-    // Helper to make cluster label optional with .* (matches empty labels too)
+    // Matches servers without a cluster label: .* also matches an empty label.
+    // The framework's default label would be "Postgres_cluster".
     local makeClusterOptional(vars) = [
-      if v.name == 'cluster' then v { allValue: '.*' } else v
+      (if v.name == 'postgres_cluster' then v { label: 'PostgreSQL cluster' } else v)
+      + (if std.member(['postgres_cluster', 'cluster'], v.name) && std.get(v, 'includeAll', false) then { allValue: '.*' } else {})
       for v in vars
     ];
 
-    // Cluster dashboard variables: exclude instance, make cluster single-select
-    local clusterVariables = makeSingleSelectByName(
-      std.filter(function(v) v.name != 'instance', this.signals.cluster.getVariablesMultiChoice()),
-      ['cluster']
-    );
+    // The cluster overview shows one PostgreSQL cluster and all of its instances.
+    local clusterVariables = makeClusterOptional(makeSingleSelectByName(
+      std.filter(function(v) !std.member(this.config.instanceLabels, v.name), this.signals.cluster.getVariablesMultiChoice()),
+      ['postgres_cluster']
+    ));
 
-    local instanceVariables = makeClusterOptional(
-      makeSingleSelectByName(
-        this.signals.health.getVariablesMultiChoice(),
-        ['instance']
-      )
-    );
+    local instanceVariables = makeClusterOptional(this.signals.health.getVariablesSingleChoice());
 
-    local queriesVariables = makeClusterOptional(
-      makeSingleSelectByName(
-        this.signals.queries.getVariablesMultiChoice(),
-        ['instance']
-      )
-    ) + [topkVar];
+    local queriesVariables = makeClusterOptional(this.signals.queries.getVariablesSingleChoice()) + [topkVar];
 
     {
       'postgres-cluster.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL cluster overview')
-        + g.dashboard.withVariables(clusterVariables)
-        + g.dashboard.withTags(this.config.dashboardTags + ['cluster'])
-        + g.dashboard.withUid(this.config.uid + '-cluster')
-        + g.dashboard.withLinks(this.grafana.links.otherDashboards)
+        + root.applyCommon(clusterVariables, uid + '-cluster', tags + ['cluster'], links, timezone, refresh, period)
         + g.dashboard.withDescription(
           |||
             PostgreSQL Cluster monitoring dashboard.
@@ -89,13 +86,7 @@ local g = import './g.libsonnet';
 
       'postgres-overview.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL instance overview')
-        + g.dashboard.withVariables(
-          instanceVariables
-          + [settingsFilterVar]
-        )
-        + g.dashboard.withTags(this.config.dashboardTags + ['instance'])
-        + g.dashboard.withUid(this.config.uid + '-overview')
-        + g.dashboard.withLinks(this.grafana.links.otherDashboards)
+        + root.applyCommon(instanceVariables + [settingsFilterVar], uid + '-overview', tags + ['instance'], links, timezone, refresh, period)
         + g.dashboard.withDescription(
           |||
             PostgreSQL instance monitoring dashboard.
@@ -105,8 +96,6 @@ local g = import './g.libsonnet';
             Sections:
             - Health: At-a-glance status
             - Problems: Issues needing attention
-            - Performance: Throughput and resource trends
-            - Maintenance: Vacuum, bloat, and capacity planning
             - Settings: PostgreSQL configuration parameters
           |||
         )
@@ -115,19 +104,35 @@ local g = import './g.libsonnet';
             g.util.grid.wrapPanels([
               this.grafana.rows.health,
               this.grafana.rows.problems,
+              this.grafana.rows.settings,
+            ])
+          ), setPanelIDs=false
+        ),
+
+      'postgres-performance-maintenance.json':
+        g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL instance performance and maintenance')
+        + root.applyCommon(instanceVariables, uid + '-performance-maintenance', tags + ['instance'], links, timezone, refresh, period)
+        + g.dashboard.withDescription(
+          |||
+            PostgreSQL instance trends and maintenance work.
+
+            Sections:
+            - Performance: Throughput and resource trends
+            - Maintenance: Vacuum, bloat, and capacity planning
+          |||
+        )
+        + g.dashboard.withPanels(
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels([
               this.grafana.rows.performance,
               this.grafana.rows.maintenance,
-              this.grafana.rows.settings,
             ])
           ), setPanelIDs=false
         ),
 
       'postgres-queries.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL query performance')
-        + g.dashboard.withVariables(queriesVariables)
-        + g.dashboard.withTags(this.config.dashboardTags + ['pg_stat_statements'])
-        + g.dashboard.withUid(this.config.uid + '-queries')
-        + g.dashboard.withLinks(this.grafana.links.otherDashboards)
+        + root.applyCommon(queriesVariables, uid + '-queries', tags + ['pg_stat_statements'], links, timezone, refresh, period)
         + g.dashboard.withDescription(
           |||
             PostgreSQL query performance analysis.            
@@ -141,4 +146,13 @@ local g = import './g.libsonnet';
           ), setPanelIDs=false
         ),
     },
+
+  applyCommon(vars, uid, tags, links, timezone, refresh, period):
+    g.dashboard.withVariables(vars)
+    + g.dashboard.withTags(tags)
+    + g.dashboard.withUid(uid)
+    + g.dashboard.withLinks(links)
+    + g.dashboard.withTimezone(timezone)
+    + g.dashboard.withRefresh(refresh)
+    + g.dashboard.time.withFrom(period),
 }
