@@ -1,8 +1,3 @@
-// criticalEvents:
-//   lokiQuery.new(
-//     '${' + variables.datasources.loki.name + '}',
-//     '{%(queriesSelector)s, channel="System", level="Critical"} | json' % variables
-//   ),
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 function(this)
@@ -39,6 +34,7 @@ function(this)
         name: 'Critical alert',
         nameShort: 'Critical',
         description: 'Critical alerts.',
+        // raw: counts distinct alert names per device. A typed signal's aggregation would count alert instances.
         type: 'raw',
         unit: 'none',
         sources: {
@@ -72,6 +68,7 @@ function(this)
         name: 'Warning alert',
         nameShort: 'Warnings',
         description: 'Warning alerts.',
+        // raw: counts distinct alert names per device. A typed signal's aggregation would count alert instances.
         type: 'raw',
         unit: 'none',
         sources: {

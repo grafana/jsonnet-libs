@@ -66,9 +66,6 @@ function(this)
       },
       sysName: {
         name: 'System name',
-        description: |||
-          System name.
-        |||,
         type: 'info',
         sources: {
           generic:
@@ -98,13 +95,10 @@ function(this)
       },
       version: {
         name: 'Version',
-        description: |||
-          System version.
-        |||,
         type: 'info',
         sources: {
           generic: {
-            expr: 'label_replace(sysDescr{sysDescr=~".+Version.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+Version (.+?) .+")',
+            expr: 'label_replace(sysDescr{sysDescr=~".+Version.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+Version ([^ ,]+).*")',
             infoLabel: 'version',
           },
           arista_sw: self.generic,
@@ -127,10 +121,14 @@ function(this)
           hpe: self.generic,
           huawei: self.generic,
           juniper: {
-            expr: 'label_replace(sysDescr{sysDescr=~".+JUNOS.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+JUNOS (.+?) .+")',
+            expr: 'label_replace(sysDescr{sysDescr=~".+JUNOS.+", %(queriesSelector)s}, "version", "$1", "sysDescr", ".+JUNOS ([^ ,]+).*")',
             infoLabel: 'version',
           },
-          mikrotik: self.generic,
+          // RouterOS's sysDescr names only the model, such as "RouterOS RB941-2nD".
+          mikrotik: {
+            expr: 'label_replace(mtxrLicVersion{%(queriesSelector)s}, "version", "$1", "mtxrLicVersion", "(.+)")',
+            infoLabel: 'version',
+          },
           netgear: self.generic,
           qtech: self.generic,
           tplink: self.generic,
@@ -140,7 +138,7 @@ function(this)
       fruOperStatus: {
         name: 'FRU status',
         nameShort: 'FRU status',
-        description: 'Field replaceable unit status',
+        description: 'Field replaceable unit status.',
         type: 'info',
         optional: true,
         sources: {
@@ -151,73 +149,6 @@ function(this)
             exprWrappers: [
               ['(', ')!=0'],
             ],
-            // valueMappings: [
-            //   {
-            //     options: {
-            //       '1': {
-            //         color: 'orange',
-            //         index: 1,
-            //         text: 'offEnvOther',
-            //       },
-            //       '2': {
-            //         color: 'green',
-            //         index: 0,
-            //         text: 'on',
-            //       },
-            //       '3': {
-            //         color: 'orange',
-            //         index: 2,
-            //         text: 'offAdmin',
-            //       },
-            //       '4': {
-            //         color: 'orange',
-            //         index: 4,
-            //         text: 'offEnvPower',
-            //       },
-            //       '5': {
-            //         color: 'orange',
-            //         index: 5,
-            //         text: 'offEnvFan',
-            //       },
-            //       '6': {
-            //         color: 'red',
-            //         index: 6,
-            //         text: 'offEnvTemp',
-            //       },
-            //       '7': {
-            //         color: 'red',
-            //         index: 7,
-            //         text: 'offEnvFan',
-            //       },
-            //       '8': {
-            //         color: 'red',
-            //         index: 8,
-            //         text: 'failed',
-            //       },
-            //       '9': {
-            //         color: 'red',
-            //         index: 9,
-            //         text: 'onButFanFail',
-            //       },
-            //       '10': {
-            //         color: 'red',
-            //         index: 10,
-            //         text: 'offCooling',
-            //       },
-            //       '11': {
-            //         color: 'red',
-            //         index: 11,
-            //         text: 'offConnectorRating',
-            //       },
-            //       '12': {
-            //         color: 'yellow',
-            //         index: 12,
-            //         text: 'onButInlinePowerFail',
-            //       },
-            //     },
-            //     type: 'value',
-            //   },
-            // ],
             // offEnvOther(1)   FRU is powered off because of a problem not
             //                          listed below.
 
@@ -258,30 +189,3 @@ function(this)
       },
     },
   }
-
-// - uuid: 64128e7f2adf44988b0ca3edd76cba61
-//   name: 'JUNIPER-ALARM-MIB::jnxOperatingState'
-//   mappings:
-//     - value: '1'
-//       newvalue: unknown
-//     - value: '2'
-//       newvalue: running
-//     - value: '3'
-//       newvalue: ready
-//     - value: '4'
-//       newvalue: reset
-//     - value: '5'
-//       newvalue: runningAtFullSpeed
-//     - value: '6'
-//       newvalue: 'down or off'
-//     - value: '7'
-//       newvalue: standby
-// - uuid: 3aaa451c55cd4e72ab84b65dd8310564
-//   name: 'JUNIPER-ALARM-MIB::jnxRedAlarmState'
-//   mappings:
-//     - value: '1'
-//       newvalue: other
-//     - value: '2'
-//       newvalue: 'off'
-//     - value: '3'
-//       newvalue: 'on - RedAlarm'

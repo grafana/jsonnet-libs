@@ -52,7 +52,7 @@ function(this, level='interface')
         },
 
         fcIfTxWaitCount: {
-          name: 'FC wait due to lack of transmit credits.',
+          name: 'FC wait due to lack of transmit credits',
           nameShort: 'fcIfTxWaitCount',
           description: |||
             The number of times the FC-port waited due to lack of transmit credits.
@@ -136,7 +136,7 @@ function(this, level='interface')
         },
 
         fcIfInvalidCrcs: {
-          name: 'FC invalid CRCc detected',
+          name: 'FC invalid CRCs detected',
           nameShort: 'fcIfInvalidCrcs',
           description: |||
             The number of invalid CRCs detected by the FC-Port.

@@ -1,3 +1,5 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 {
   local this = self,
   filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="integrations/snmp"
@@ -6,9 +8,9 @@
   uid: 'snmp',
   dashboardNamePrefix: 'SNMP',
   dashboardTags: ['snmp'],
-  dashboardPeriod: 'now-6h',
-  dashboardRefresh: '5m',
-  dashboardTimezone: '',
+  dashboardPeriod: 'now-1h',
+  dashboardRefresh: '1m',
+  dashboardTimezone: commonlib.dashboards.defaultTimezone,
 
   //increase min interval to match max SNMP polling interval used:
   minInterval: '2m',
@@ -16,30 +18,34 @@
   metricsSource: ['generic', 'cisco', 'mikrotik', 'juniper'],
 
   // only fire alerts 'interface is down' for the following selector:
-  // deprecated, use alertInterfaceDownSelectorWarning, alertInterfaceDownSelectorCritical, alertInterfaceDownSelectorInfo instead
-  alertInterfaceDownSelector: self.alertInterfaceDownSelectorWarning,
   alertInterfaceDownSelectorWarning: 'ifAlias=~".*(?i:(uplink|internet|WAN|ISP)).*"',
   // change according to your org naming conventions
   alertInterfaceDownSelectorCritical: 'ifAlias=~".*(?i:(critical)).*"',
 
   // Enable to workaround issue with counters on Cisco NX-OS overloading issue.
-  // This will clamp max interface traffic possible to 1000Gbps.
+  // This will clamp max interface traffic possible to 100Gbps.
   clampQueryEnabled: true,
-  clampSpeed: '100*10^9',  // 1000 GBps
+  clampSpeed: '100*10^9',  // 100 Gbps
 
-  // cpuSelector for metricsSources with HOST-RESOURCE-MIB:
+  // cpuSelector for metricsSources with HOST-RESOURCES-MIB:
   cpuSelector: 'hrDeviceType="1.3.6.1.2.1.25.3.1.3"',
-  // memorySelector for metricsSources with HOST-RESOURCE-MIB:
-  // ignore buffers for now:
+  // memorySelector for metricsSources with HOST-RESOURCES-MIB:
   memorySelector: 'hrStorageDescr!~".*(?i:(cache|buffer)).*", hrStorageType="1.3.6.1.2.1.25.2.1.2"',
   mikrotikMemorySelector: 'hrStorageDescr="main memory",hrStorageIndex="65536"',
   // ignore interface sensors
   ciscoTemperatureSelector: 'entSensorType="8", entPhysicalName!~".+(\\\\d+/\\\\d+(/\\\\d+)?).*"',
-  alertMemoryUsageThresholdCritical: 90,
-  alertsCPUThresholdWarning: 90,
-  alertsPacketsDroppedPerSecThresholdWarning: 0,
-  alertsErrorsPerSecThresholdWarning: 0,
-  alertsSlowScrapeThresholdInfo: 50,
+
+  // Alerts
+  alertNodeCPUHighUsageWarningThreshold: 90,  // > percent
+
+  alertNodeMemoryUtilizationInfoThreshold: 90,  // > percent
+
+  alertInterfaceDropsWarningThreshold: 5,  // > percent of packets
+
+  alertInterfaceErrorsWarningThreshold: 1,  // > percent of packets
+
+  alertExporterSlowScrapeInfoThreshold: 25,  // > seconds
+
   signals+:
     {
       cpu: (import './signals/cpu.libsonnet')(this),
@@ -52,6 +58,7 @@
       fans: (import './signals/fans.libsonnet')(this),
       fiber: (import './signals/fiber.libsonnet')(this),
       alerts: (import './signals/alerts.libsonnet')(this),
+      exporter: (import './signals/exporter.libsonnet')(this),
       logs: (import './signals/logs.libsonnet')(this),
     },
 

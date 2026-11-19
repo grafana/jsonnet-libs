@@ -11,7 +11,7 @@ The library supports multiple metrics sources that corresponds to different netw
 |generic           |Generic SNMP device|IF-MIB,SNMPv2-MIB    |default choice||system,if_mib,hrDevice,hrStorage|
 |cisco             | Cisco ASA, IOS, NX-OS, and IOS-XR devices |IF-MIB,SNMPv2-MIB, Cisco private mibs|Cisco C2900, Cisco C7600, Cisco Nexus 93180, Cisco MDS|https://www.cisco.com/c/en/us/td/docs/security/asa/asa918/configuration/general/asa-918-general-config/monitor-snmp.html|system,if_mib,cisco_device,cisco_fc_fe|
 |arista_sw            | Arista devices    |IF-MIB,SNMPv2-MIB,HOST-RESOURCES-MIB|-||system,if_mib,hrDevice,hrStorage,arista_sw|
-|brocade_fcs       | Brocade           |IF-MIB,SNMPv2-MIB,SW-MIB|Brocade 6520 v7.4.1c, Brocade 300 v7.0.0c,Brocade BL 5480 v6.3.1c|https://techdocs.broadcom.com/us/en/fibre-channel-networking/fabric-os/fabric-os-mib/9-1-x/understanding-brocade-snmp/loading-brocade-mibs/brocade-mib-files.html|system,if_mib|
+|brocade_fc        | Brocade           |IF-MIB,SNMPv2-MIB,SW-MIB|Brocade 6520 v7.4.1c, Brocade 300 v7.0.0c,Brocade BL 5480 v6.3.1c|https://techdocs.broadcom.com/us/en/fibre-channel-networking/fabric-os/fabric-os-mib/9-1-x/understanding-brocade-snmp/loading-brocade-mibs/brocade-mib-files.html|system,if_mib|
 |brocade_foundry | Brocade Foundry | FOUNDRY-SN-AGENT-MIB | Brocade MLXe (System Mode: MLX), IronWare Version V5.4.0eT163, Foundry FLS648 Foundry Networks, Inc. FLS648, IronWare Version 04.1.00bT7e1, Foundry FWSX424 Foundry Networks, Inc. FWSX424, IronWare Version 02.0.00aT1e0||system,if_mib|
 |dell_network | Dell Force S-Series, Dell Force10 MXL 10 | IF-MIB,SNMPv2-MIB,DELL-NETWORKING-CHASSIS-MIB | Dell Force S-Series |https://www.dell.com/support/kbdoc/en-us/000181922/dell-networking-mibs|system,if_mib,dell_network|
 |dlink_des | D-Link DES series | IF-MIB,SNMPv2-MIB,AGENT-GENERAL-MIB | DGS-3420-26SC Gigabit Ethernet ||system,if_mib,dlink|
@@ -64,13 +64,71 @@ snmp.asMonitoringMixin()
 
 You can quickly generate dashboards and alerts by using monitoring-mixin mixin.libsonnet:
 
-- Adjust config.libsonnet to your needs. For example, pick metricSources that correspond to network vendors you use on your network.
+- Adjust config.libsonnet to your needs. For example, pick metricsSource values that correspond to network vendors you use on your network.
 - Run
 ```
 make dashboards_out
 make prometheus_alerts.yaml
 ```
 
+
+### Dashboards
+
+- **SNMP fleet overview**: every device with its uptime, CPU and memory usage, traffic, errors and firing alerts, and the busiest interfaces across the fleet.
+- **SNMP overview**: one device's system details, interfaces, traffic and packets, with Cisco FRU and Fibre Channel rows and hardware sensors.
+- **SNMP logs**: syslog messages from the devices, when `enableLokiLogs` is on.
+
+### Alerts
+
+| Alert | Default threshold | Severity |
+|-------|-------------------|----------|
+| `SNMPInterfaceFCerrors` | Discarded frames, invalid CRCs or invalid transmission words on a Fibre Channel interface for 15m | warning |
+| `SNMPNodeHasRebooted` | Uptime below 10 minutes | info |
+| `SNMPFRUComponentProblem` | A field replaceable unit's power status is not on | warning |
+| `SNMPNodeCPUHighUsage` | >90% for 15m | warning |
+| `SNMPNodeMemoryUtilization` | >90% | info |
+| `SNMPInterfaceDown` | An interface matching `alertInterfaceDownSelectorCritical` is down while administratively up, for 5m | critical |
+| `SNMPInterfaceDown` | An interface matching `alertInterfaceDownSelectorWarning` is down while administratively up, for 5m | warning |
+| `SNMPInterfaceDrops` | >5% of an interface's packets discarded, averaged over 5 minutes, for 30m | warning |
+| `SNMPInterfaceErrors` | >1% of an interface's packets with errors, averaged over 5 minutes, for 15m | warning |
+| `SNMPInterfaceIsFlapping` | >5 status changes in 15 minutes | warning |
+| `SNMPExporterEmptyResponse` | 1 or fewer PDUs returned for 10m | warning |
+| `SNMPExporterSlowScrape` | >25s for 10m | info |
+| `SNMPExporterNoResponse` | Scrape fails for 10m. Only generated when `filteringSelector` is set | warning |
+
+Default thresholds can be modified in `config.libsonnet`:
+
+```jsonnet
+{
+  alertNodeCPUHighUsageWarningThreshold: 90,  // > percent
+
+  alertNodeMemoryUtilizationInfoThreshold: 90,  // > percent
+
+  alertInterfaceDropsWarningThreshold: 5,  // > percent of packets
+
+  alertInterfaceErrorsWarningThreshold: 1,  // > percent of packets
+
+  alertExporterSlowScrapeInfoThreshold: 25,  // > seconds
+
+  alertInterfaceDownSelectorWarning: 'ifAlias=~".*(?i:(uplink|internet|WAN|ISP)).*"',
+  alertInterfaceDownSelectorCritical: 'ifAlias=~".*(?i:(critical)).*"',
+}
+```
+
+#### Upgrading from earlier alert keys
+
+The `alert<Name><Tier>Threshold` keys replace the earlier threshold keys. Update custom configurations to use the new keys below.
+
+| Old key | New key |
+|---------|---------|
+| `alertsCPUThresholdWarning` | `alertNodeCPUHighUsageWarningThreshold` |
+| `alertMemoryUsageThresholdCritical` | `alertNodeMemoryUtilizationInfoThreshold` |
+| `alertsPacketsDroppedPerSecThresholdWarning` | `alertInterfaceDropsWarningThreshold` |
+| `alertsErrorsPerSecThresholdWarning` | `alertInterfaceErrorsWarningThreshold` |
+| `alertsSlowScrapeThresholdInfo` | `alertExporterSlowScrapeInfoThreshold` |
+| `alertInterfaceDownSelector` | `alertInterfaceDownSelectorWarning` |
+
+`SNMPInterfaceErrors` and `SNMPInterfaceDrops` compare a percent of the interface's packets, where they compared packets per second. Each evaluation divides the errors or discards of the last 5 minutes by the packets of the same 5 minutes. That average must stay above the threshold for the whole `for` period. Errors that arrive only in some minutes count toward the average. The thresholds `alertInterfaceErrorsWarningThreshold` and `alertInterfaceDropsWarningThreshold` are percentages, 1 and 5 by default.
 
 ### Logs support
 
@@ -132,10 +190,10 @@ For cisco devices, set origin option: `logging origin-id hostname`.
 
 ## Examples
 SNMP fleet:
-![fleet](snmp_fleet.png)
+![fleet](https://storage.googleapis.com/grafanalabs-integration-assets/snmp/screenshots/v2/snmp_fleet.png)
 
 SNMP overview:
-![overview](snmp_overview.png)
+![overview](https://storage.googleapis.com/grafanalabs-integration-assets/snmp/screenshots/v2/snmp_overview.png)
 
 SNMP logs:
-![logs](snmp_logs.png)
+![logs](https://storage.googleapis.com/grafanalabs-integration-assets/snmp/screenshots/v2/snmp_logs.png)
