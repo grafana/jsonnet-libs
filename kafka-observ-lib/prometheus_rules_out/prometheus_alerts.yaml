@@ -6,9 +6,13 @@ groups:
             description: 'Kafka lag keeps increasing over the last 15 minutes for consumer group: {{$labels.consumergroup}}, topic: {{$labels.topic}}.'
             summary: Kafka lag keeps increasing.
           expr: |-
-            sum by (kafka_cluster, topic, consumergroup) (delta(kafka_consumergroup_lag{topic!="__consumer_offsets",consumergroup!="",}[5m])
+            sum by (kafka_cluster, topic, consumergroup) (delta(
+              kafka_consumergroup_lag{topic!="__consumer_offsets",consumergroup!="",}
+            [5m])
             or
-            delta(kafka_consumergroup_uncommitted_offsets{topic!="__consumer_offsets",consumergroup!="",}[5m])) > 0
+            delta(
+              kafka_consumergroup_uncommitted_offsets{topic!="__consumer_offsets",consumergroup!="",}
+            [5m])) > 0
           for: 15m
           keep_firing_for: 10m
           labels:
@@ -18,9 +22,13 @@ groups:
             description: 'Total kafka lag across all partitions is too high ({{ printf "%.0f" $value }}) for consumer group: {{$labels.consumergroup}}, topic: {{$labels.topic}}.'
             summary: Kafka lag is too high.
           expr: |-
-            sum by (kafka_cluster, topic, consumergroup) (kafka_consumergroup_lag{topic!="__consumer_offsets",consumergroup!="",}
+            sum by (kafka_cluster, topic, consumergroup) ((
+              kafka_consumergroup_lag{topic!="__consumer_offsets",consumergroup!="",}
+            ) != -1
             or
-            kafka_consumergroup_uncommitted_offsets{topic!="__consumer_offsets",consumergroup!="",} != -1) > 100
+            (
+              kafka_consumergroup_uncommitted_offsets{topic!="__consumer_offsets",consumergroup!="",}
+            ) != -1) > 100
           for: 15m
           keep_firing_for: 5m
           labels:

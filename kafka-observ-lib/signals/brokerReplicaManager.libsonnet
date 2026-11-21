@@ -14,6 +14,10 @@ function(this)
     },
     signals: {
       local s = this,
+      local electionCounters = {
+        grafanacloud: 'kafka_controller_controllerstats_uncleanleaderelectionspersec{%(queriesSelector)s}',
+        prometheus: 'kafka_controller_controllerstats_uncleanleaderelections_total{%(queriesSelector)s}',
+      },
       isrShrinks: {
         name: 'ISR shrinks',
         description: |||
@@ -192,14 +196,20 @@ function(this)
         aggFunction: 'sum',
         optional: true,
         sources: {
-          grafanacloud:
-            {
-              expr: '%(aggFunction)s by (%(agg)s) (kafka_controller_controllerstats_uncleanleaderelectionspersec{%(queriesSelector)s})',
-            },
-          prometheus:
-            {
-              expr: '%(aggFunction)s by (%(agg)s) (rate(kafka_controller_controllerstats_uncleanleaderelections_total{%(queriesSelector)s}[%(interval)s]))',
-            },
+          grafanacloud: { expr: '%(aggFunction)s by (%(agg)s) (' + electionCounters.grafanacloud + ')' },
+          prometheus: { expr: '%(aggFunction)s by (%(agg)s) (rate(' + electionCounters.prometheus + '[%(interval)s]))' },
+        },
+      },
+      uncleanLeaderElectionCount: {
+        name: 'Unclean leader election count',
+        description: 'Number of unclean leader elections in the interval.',
+        type: 'raw',
+        unit: 'short',
+        aggFunction: 'sum',
+        optional: true,
+        sources: {
+          [source]: { expr: '%(aggFunction)s by (%(agg)s) (increase(' + electionCounters[source] + '[%(interval)s]))' }
+          for source in std.objectFields(electionCounters)
         },
       },
       preferredReplicaImbalance: {
