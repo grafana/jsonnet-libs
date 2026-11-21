@@ -21,10 +21,10 @@ groups:
             severity: critical
         - alert: CouchbaseMemoryEvictionRate
           annotations:
-            description: '{{ printf "%.0f" $value }} evictions in bucket {{$labels.bucket}}, on node {{$labels.instance}}, and on cluster {{$labels.couchbase_cluster}}, which is above the threshold of 10.'
+            description: '{{ printf "%.0f" $value }} evictions in the last 5 minutes in bucket {{$labels.bucket}}, on node {{$labels.instance}}, and on cluster {{$labels.couchbase_cluster}}, which is above the threshold of 10.'
             summary: There is a spike in evictions in a bucket, which indicates high memory pressure.
           expr: |
-            (kv_ep_num_value_ejects) > 10
+            increase(kv_ep_num_value_ejects[5m]) > 10
           for: 5m
           labels:
             severity: warning

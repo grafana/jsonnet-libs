@@ -11,13 +11,14 @@ groups:
             description: 'Application {{ $labels.name }} has sync status as {{ $labels.sync_status }}.'
         
         - alert: ArgoAppSyncFailed                              
-          expr: argocd_app_sync_total{phase!="Succeeded"} == 1  
+          # Observe counter changes, not the first nonzero sample of a discovered series.
+          expr: increase(argocd_app_sync_total{phase!="Succeeded"}[5m]) > 0
           for: 1m                                               
           labels:                                               
             severity: warning
           annotations:                                          
             summary: 'Application Sync Failed.' 
-            description: 'Application {{ $labels.name }} has sync phase as {{ $labels.phase }}.'
+            description: 'Application {{ $labels.name }} had a sync with phase {{ $labels.phase }} observed in the last 5 minutes.'
         
         - alert: ArgoAppMissing                                 
           expr: absent(argocd_app_info)                         

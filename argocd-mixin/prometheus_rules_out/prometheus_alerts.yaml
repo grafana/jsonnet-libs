@@ -11,9 +11,9 @@ groups:
             severity: warning
         - alert: ArgoAppSyncFailed
           annotations:
-            description: Application {{ $labels.name }} has sync phase as {{ $labels.phase }}.
+            description: Application {{ $labels.name }} had a sync with phase {{ $labels.phase }} observed in the last 5 minutes.
             summary: Application Sync Failed.
-          expr: argocd_app_sync_total{phase!="Succeeded"} == 1
+          expr: increase(argocd_app_sync_total{phase!="Succeeded"}[5m]) > 0
           for: 1m
           labels:
             severity: warning
