@@ -4,6 +4,10 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
   new(this): {
     local instanceLabel = xtd.array.slice(this.config.instanceLabels, -1)[0],
     local groupLabel = xtd.array.slice(this.config.groupLabels, -1)[0],
+    local electionCount = this.signals.brokerReplicaManager.uncleanLeaderElectionCount.withAlertsInterval('10m') {
+      // Keep source order (Grafana first) when both exporters report the same broker.
+      combineUniqueExpressions(expressions):: std.join('\nor\n', std.uniq(expressions)),
+    },
     groups+: [
       {
         name: this.config.uid + '-kafka-alerts',
@@ -14,14 +18,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               expr: 'sum by (%s, topic, consumergroup) (%s) > 0' %
                     [
                       std.join(',', this.config.groupLabels),
-                      // split back combined string to wrap in delta, then join back:
-                      std.join(
-                        '\nor\n',
-                        std.map(
-                          function(x) 'delta(%s[5m])' % x,
-                          std.split(this.signals.consumerGroup.consumerGroupLag.asRuleExpression(), '\nor\n')
-                        )
-                      ),
+                      this.signals.consumerGroup.consumerGroupLag.withExprWrappersMixin(['delta(', '[5m])']).asRuleExpression(),
                     ],
               'for': '15m',
               keep_firing_for: '10m',
@@ -38,7 +35,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               expr: 'sum by (%s, topic, consumergroup) (%s) > %s' %
                     [
                       std.join(',', this.config.groupLabels),
-                      this.signals.consumerGroup.consumerGroupLag.asRuleExpression(),
+                      this.signals.consumerGroup.consumerGroupLag.withExprWrappersMixin(['(', ') != -1']).asRuleExpression(),
                       this.config.alertKafkaLagTooHighThreshold,
                     ],
               'for': '15m',
@@ -318,7 +315,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             },
             {
               alert: 'KafkaUncleanLeaderElection',
-              expr: '(%s) != 0' % this.signals.brokerReplicaManager.uncleanLeaderElection.asRuleExpression(),
+              expr: '(%s) != 0' % electionCount.asRuleExpression(),
               'for': '5m',
               keep_firing_for: '5m',
               labels: {
@@ -327,7 +324,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'Kafka has unclean leader elections.',
                 description: |||
-                  Kafka cluster {{ $labels.%s }} has {{ $value }} unclean partition leader elections reported in the last 5 minutes.
+                  Kafka cluster {{ $labels.%s }} has {{ $value }} unclean partition leader elections reported in the last 10 minutes.
 
                   CRITICAL Impact - DATA LOSS RISK:
                   Unclean leader election occurs when no in-sync replica (ISR) is available to become the leader, forcing Kafka to elect an out-of-sync replica. This WILL result in data loss for any messages that were committed to the previous leader but not replicated to the new leader. This compromises data durability guarantees and can cause:
