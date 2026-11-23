@@ -37,25 +37,30 @@ function(this)
         sources: {
           generic: {
             // net-snmp's Physical memory row counts page cache as used. Its Available memory row, from net-snmp 5.9.1, is the kernel's MemAvailable.
-            expr: |||
-              # net-snmp 5.9.1 and later:
+            local agg = std.join(',', this.groupLabels + this.instanceLabels),
+            local bySelector(selector) = |||
               avg by (%(agg)s) (
-                100 * (1 - hrStorageSize{hrStorageDescr="Available memory", %%(queriesSelector)s}
-                / on (%(agg)s) hrStorageSize{hrStorageDescr="Physical memory", %%(queriesSelector)s})
+                hrStorageUsed{%(selector)s, %%(queriesSelector)s}/hrStorageSize{%(selector)s, %%(queriesSelector)s}*100
               )
-              or
-              # earlier net-snmp: cached memory and buffers are subtracted
-              avg by (%(agg)s) (
-                100 * (hrStorageUsed{hrStorageDescr="Physical memory", %%(queriesSelector)s}
-                - on (%(agg)s) hrStorageUsed{hrStorageDescr="Cached memory", %%(queriesSelector)s}
-                - on (%(agg)s) hrStorageUsed{hrStorageDescr="Memory buffers", %%(queriesSelector)s})
-                / on (%(agg)s) hrStorageSize{hrStorageDescr="Physical memory", %%(queriesSelector)s}
-              )
-              or
-              avg by (%(agg)s) (
-                hrStorageUsed{%(memorySelector)s, %%(queriesSelector)s}/hrStorageSize{%(memorySelector)s, %%(queriesSelector)s}*100
-              )
-            ||| % { memorySelector: this.memorySelector, agg: std.join(',', this.groupLabels + this.instanceLabels) },
+            ||| % { agg: agg, selector: selector },
+            expr:
+              if this.memorySelector != '' then bySelector(this.memorySelector)
+              else |||
+                # net-snmp 5.9.1 and later:
+                avg by (%(agg)s) (
+                  100 * (1 - hrStorageSize{hrStorageDescr="Available memory", %%(queriesSelector)s}
+                  / on (%(agg)s) hrStorageSize{hrStorageDescr="Physical memory", %%(queriesSelector)s})
+                )
+                or
+                # earlier net-snmp: cached memory and buffers are subtracted
+                avg by (%(agg)s) (
+                  100 * (hrStorageUsed{hrStorageDescr="Physical memory", %%(queriesSelector)s}
+                  - on (%(agg)s) hrStorageUsed{hrStorageDescr="Cached memory", %%(queriesSelector)s}
+                  - on (%(agg)s) hrStorageUsed{hrStorageDescr="Memory buffers", %%(queriesSelector)s})
+                  / on (%(agg)s) hrStorageSize{hrStorageDescr="Physical memory", %%(queriesSelector)s}
+                )
+                or
+              ||| % { agg: agg } + bySelector('hrStorageDescr!~".*(?i:(cache|buffer)).*", hrStorageType="1.3.6.1.2.1.25.2.1.2"'),
           },
           arista_sw: self.generic,
           brocade_fc: {
