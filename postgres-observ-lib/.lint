@@ -1,12 +1,10 @@
 exclusions:
-  panel-datasource-rule:
-    reason: "grafonnet created panels use --Mixed-- datasource by default"
-
   template-instance-rule:
     reason: "Instance selector is single-select for instance-specific dashboards; Cluster dashboard is cluster-wide"
     entries:
       - dashboard: "PostgreSQL cluster overview"
       - dashboard: "PostgreSQL instance overview"
+      - dashboard: "PostgreSQL instance performance and maintenance"
       - dashboard: "PostgreSQL query performance"
 
   target-instance-rule:
@@ -15,12 +13,9 @@ exclusions:
       - dashboard: "PostgreSQL cluster overview"
 
   panel-units-rule:
-    reason: "rows/s is semantically correct; table panels don't require units"
+    reason: "Grafana has no unit id for rows per second"
     entries:
       - panel: "Write operations (primary)"
       - panel: "Read operations by instance"
-      - panel: "Rows activity"
       - panel: "Top queries by rows"
-      - panel: "Unused indexes"
-      - panel: "PostgreSQL settings"
-      - panel: "Read/Write over time"
+      - panel: "Read/write over time"

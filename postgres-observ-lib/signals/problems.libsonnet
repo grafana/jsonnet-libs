@@ -6,7 +6,7 @@ function(this)
     aggLevel: 'instance',
     aggFunction: 'sum',
     discoveryMetric: {
-      postgres_exporter: 'pg_stat_activity_count',
+      prometheus: 'pg_stat_activity_count',
     },
     signals: {
       // Is something stuck?
@@ -16,9 +16,22 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_long_running_transactions{%(queriesSelector)s}',
             legendCustomTemplate: ' Long-running queries',
+          },
+        },
+      },
+
+      longestActiveTransaction: {
+        name: 'Longest active transaction',
+        description: 'Duration of the longest transaction with an active query.',
+        type: 'gauge',
+        unit: 's',
+        aggFunction: 'max',
+        sources: {
+          prometheus: {
+            expr: 'pg_stat_activity_max_tx_duration{state="active", %(queriesSelector)s}',
           },
         },
       },
@@ -31,10 +44,8 @@ function(this)
         unit: 'short',
         // aggFunction: 'sum' is default, let it handle aggregation
         sources: {
-          postgres_exporter: {
-            expr: |||
-              pg_locks_count{%(queriesSelector)s, mode="exclusivelock"}              
-            |||,
+          prometheus: {
+            expr: 'pg_stat_activity_count{wait_event_type="Lock", %(queriesSelector)s} or pg_stat_activity_count{%(queriesSelector)s} * 0',
             legendCustomTemplate: ' Blocked queries',
           },
         },
@@ -47,8 +58,8 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
-            expr: 'pg_stat_activity_count{%(queriesSelector)s, state="idle in transaction"}',
+          prometheus: {
+            expr: 'pg_stat_activity_count{state="idle in transaction", %(queriesSelector)s}',
             legendCustomTemplate: ' Idle in transaction',
           },
         },
@@ -61,8 +72,9 @@ function(this)
         type: 'counter',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_archiver_failed_count{%(queriesSelector)s}',
+            rangeFunction: 'increase',
             legendCustomTemplate: ' WAL archive failures',
           },
         },
@@ -75,7 +87,7 @@ function(this)
         type: 'counter',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             // Use maxwritten_clean as proxy for checkpoint pressure
             // This counts times bgwriter had to stop due to writing too many buffers
             // Note: type='counter' automatically applies rate()
@@ -88,10 +100,10 @@ function(this)
       conflicts: {
         name: 'Conflicts',
         description: 'Number of queries cancelled due to conflicts with recovery on standby servers.',
-        type: 'gauge',
+        type: 'counter',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_stat_database_conflicts{%(queriesSelector)s}',
             legendCustomTemplate: ' Conflicts',
           },
@@ -105,7 +117,7 @@ function(this)
         type: 'gauge',
         unit: 'percentunit',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: |||
               sum by (%(agg)s) (pg_locks_count{%(queriesSelector)s})
               /
@@ -127,15 +139,26 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
-            // Count replicas not in streaming state as a proxy for inactive slots
-            // Returns 0 if no non-streaming slots exist
+          prometheus: {
             expr: |||
-              count by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s, state!="streaming"})
+              count by (%(agg)s) (pg_replication_slots_active{%(queriesSelector)s} == 0)
               or
-              (0 * group by (%(agg)s) (pg_stat_replication_pg_wal_lsn_diff{%(queriesSelector)s}))
+              (0 * group by (%(agg)s) (pg_replication_slots_active{%(queriesSelector)s}))
             |||,
             legendCustomTemplate: ' Inactive replication slots',
+          },
+        },
+      },
+
+      replicationSlotActive: {
+        name: 'Replication slot active',
+        description: 'Whether each replication slot is being streamed (1) or not (0).',
+        type: 'gauge',
+        unit: 'short',
+        sources: {
+          prometheus: {
+            expr: 'pg_replication_slots_active{%(queriesSelector)s}',
+            aggKeepLabels: ['slot_name'],
           },
         },
       },
@@ -147,7 +170,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          postgres_exporter: {
+          prometheus: {
             expr: 'pg_exporter_last_scrape_error{%(queriesSelector)s}',
             legendCustomTemplate: ' Exporter errors',
           },

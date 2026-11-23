@@ -2,15 +2,14 @@ local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
-  new(signals):: {
-    // Helper to convert stat panel queries to instant queries for current status
+  new(signals, config):: {
+    local labelColumns = { [label]: true for label in config.groupLabels + config.instanceLabels },
+
     local withInstantQuery = {
       targets: std.map(function(t) t { instant: true }, super.targets),
     },
 
-    // No data mappings by severity
-    local noDataOrange = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'orange' } } },
-    local noDataYellow = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'yellow' } } },
+    local noDataTextColor = { type: 'special', options: { match: 'null', result: { color: 'text', index: 0 } } },
 
     local statWithThresholds =
       commonlib.panels.generic.stat.base.stylize()
@@ -30,7 +29,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.1, color: 'orange' },  // 10% of tables
         { value: 0.2, color: 'red' },  // 20% of tables
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataOrange])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Ratio of tables with > 10% dead tuples. Run VACUUM on these tables.'
       ),
@@ -45,7 +45,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 604800, color: 'yellow' },  // 7 days
         { value: 1209600, color: 'red' },  // 14 days
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataOrange])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Time since oldest table was vacuumed. > 7 days is warning.'
       ),
@@ -74,12 +75,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Table vacuum status - dead tuple ratio + last vacuum time
     tableVacuumStatus:
-      g.panel.table.new('Table vacuum status')
+      signals.maintenance.deadTupleRatio.asTable(name='Table vacuum status')
+      + signals.maintenance.lastVacuumAge.asTableColumn(override='byName', format='table')
       + g.panel.table.panelOptions.withDescription(
         'Tables with dead tuple ratio and time since last vacuum. Sort by dead tuple ratio to find tables needing VACUUM.'
       )
-      + signals.maintenance.deadTupleRatio.asTableColumn(override='byName', format='table')
-      + signals.maintenance.lastVacuumAge.asTableColumn(override='byName', format='table')
       + g.panel.table.queryOptions.withTransformations([
         g.panel.table.queryOptions.transformation.withId('merge'),
         g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
@@ -90,11 +90,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         }),
         g.panel.table.queryOptions.transformation.withId('organize')
         + g.panel.table.queryOptions.transformation.withOptions({
-          excludeByName: {
-            job: true,
-            instance: true,
-            cluster: true,
-          },
+          excludeByName: labelColumns,
           renameByName: {
             schemaname: 'Schema',
             relname: 'Table',
@@ -158,7 +154,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.4, color: 'orange' },
         { value: 0.6, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Ratio of seq scans to total. High values indicate missing indexes.'
       ),
@@ -173,32 +170,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 5, color: 'yellow' },
         { value: 10, color: 'orange' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Indexes with zero scans. Candidates for removal.'
       ),
 
     // Unused indexes table
     unusedIndexesTable:
-      g.panel.table.new('Unused indexes')
+      signals.maintenance.unusedIndexes
+      .withAgglevel('none')
+      .withExprWrappersMixin(['(', ') == 1'])
+      .asTable(name='Unused indexes')
       + g.panel.table.panelOptions.withDescription(
         'Indexes with zero buffer hits and disk reads since stats reset. Candidates for removal to save disk space.'
       )
-      + g.panel.table.queryOptions.withTargets([
-        {
-          datasource: { type: 'prometheus', uid: '${datasource}' },
-          expr: |||
-            (
-              (pg_statio_user_indexes_idx_blks_hit_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"} == 0)
-              and
-              (pg_statio_user_indexes_idx_blks_read_total{job=~"$job",cluster=~"$cluster",instance=~"$instance"} == 0)
-            )
-          |||,
-          format: 'table',
-          instant: true,
-          refId: 'UnusedIndexes',
-        },
-      ])
       + g.panel.table.queryOptions.withTransformations([
         g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
         + g.panel.table.queryOptions.transformation.withOptions({
@@ -227,7 +213,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + withInstantQuery
       + commonlib.panels.disk.stat.total.stylize()
       + g.panel.stat.options.withGraphMode('area')
-      + g.panel.stat.standardOptions.withMappings([noDataOrange]),
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor]),
 
     databaseSizeTimeSeries:
       signals.maintenance.databaseSize.asTimeSeries()
@@ -247,18 +234,18 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 604800, color: 'orange' },  // 7 days in seconds
         { value: 1209600, color: 'red' },  // 14 days in seconds
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataOrange])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Time since oldest table was last analyzed. Stale stats can lead to poor query plans.'
       ),
 
     // Table analyze status
     tableAnalyzeStatus:
-      g.panel.table.new('Table analyze status')
+      signals.maintenance.lastAnalyzeAge.asTable(name='Table analyze status')
       + g.panel.table.panelOptions.withDescription(
         'Tables with time since last analyze. Stale statistics can cause poor query plans.'
       )
-      + signals.maintenance.lastAnalyzeAge.asTableColumn(override='byName', format='table')
       + g.panel.table.queryOptions.withTransformations([
         g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
         + g.panel.table.queryOptions.transformation.withOptions({
@@ -268,11 +255,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         }),
         g.panel.table.queryOptions.transformation.withId('organize')
         + g.panel.table.queryOptions.transformation.withOptions({
-          excludeByName: {
-            job: true,
-            instance: true,
-            cluster: true,
-          },
+          excludeByName: labelColumns,
           renameByName: {
             schemaname: 'Schema',
             relname: 'Table',
@@ -284,7 +267,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             Value: 2,
           },
         }),
-        commonlib.panels.generic.table.base.transformations.sortBy('Last Analyze Age', desc=true),
+        commonlib.panels.generic.table.base.transformations.sortBy('Last analyze age', desc=true),
       ])
       + g.panel.table.standardOptions.withOverrides([
         g.panel.table.fieldOverride.byName.new('Last analyze age')
