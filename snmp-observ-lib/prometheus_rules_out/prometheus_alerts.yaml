@@ -4,7 +4,7 @@ groups:
         - alert: SNMPInterfaceFCerrors
           annotations:
             description: |
-                Too many packets with errors (fcIfFramesDiscard) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+                Too many packets with errors (fcIfFramesDiscard) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above 0 per second for extended period of time (15m).
             summary: Too many packets with errors (fcIfFramesDiscard) on the FC network interface.
           expr: |
             (irate(fcIfFramesDiscard{}[5m])) > 0
@@ -15,7 +15,7 @@ groups:
         - alert: SNMPInterfaceFCerrors
           annotations:
             description: |
-                Too many packets with errors (fcIfInvalidCrcs) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+                Too many packets with errors (fcIfInvalidCrcs) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above 0 per second for extended period of time (15m).
             summary: Too many packets with errors (fcIfInvalidCrcs) on the FC network interface.
           expr: |
             (irate(fcIfInvalidCrcs{}[5m])) > 0
@@ -26,7 +26,7 @@ groups:
         - alert: SNMPInterfaceFCerrors
           annotations:
             description: |
-                Too many packets with errors (fcIfInvalidTxWords) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+                Too many packets with errors (fcIfInvalidTxWords) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above 0 per second for extended period of time (15m).
             summary: Too many packets with errors (fcIfInvalidTxWords) on the FC network interface.
           expr: |
             (irate(fcIfInvalidTxWords{}[5m])) > 0
@@ -46,6 +46,7 @@ groups:
             )/100) < 600 and ((
               (sysUpTime{} offset 10m)
             )/100) > 600
+          for: 5m
           labels:
             severity: info
         - alert: SNMPFRUComponentProblem
@@ -56,6 +57,7 @@ groups:
             ((
               cefcFRUPowerOperStatus{cefcFRUPowerOperStatus!="on"}
             )!=0) == 1
+          for: 5m
           labels:
             severity: warning
         - alert: SNMPNodeCPUHighUsage
@@ -120,6 +122,7 @@ groups:
 
             or
             max by (job,instance) (jnxOperatingBuffer{jnxOperatingContentsIndex="9", jnxOperatingL2Index="0", })) > 90
+          for: 15m
           labels:
             severity: info
         - alert: SNMPInterfaceDown
@@ -154,7 +157,7 @@ groups:
           expr: |
             (100 * ((
               rate(ifInDiscards{}[5m])
-            )>0) / ((((
+            )>0) / (((((
               rate(ifHCInUcastPkts{}[5m])
             )>0) or ((
               rate(ifInDiscards{}[5m])
@@ -168,11 +171,11 @@ groups:
               rate(ifInDiscards{}[5m])
             )>0) * 0) + ((
               rate(ifInDiscards{}[5m])
-            )>0))) > 5
+            )>0)) > 0)) > 5
             or
             (100 * ((
               rate(ifOutDiscards{}[5m])
-            )>0) / ((((
+            )>0) / (((((
               rate(ifHCOutUcastPkts{}[5m])
             )>0) or ((
               rate(ifOutDiscards{}[5m])
@@ -184,7 +187,7 @@ groups:
               rate(ifHCOutBroadcastPkts{}[5m])
             )>0) or ((
               rate(ifOutDiscards{}[5m])
-            )>0) * 0))) > 5
+            )>0) * 0)) > 0)) > 5
           for: 30m
           keep_firing_for: 5m
           labels:
@@ -197,7 +200,7 @@ groups:
           expr: |
             (100 * ((
               rate(ifInErrors{}[5m])
-            )>0) / ((((
+            )>0) / (((((
               rate(ifHCInUcastPkts{}[5m])
             )>0) or ((
               rate(ifInErrors{}[5m])
@@ -211,11 +214,11 @@ groups:
               rate(ifInErrors{}[5m])
             )>0) * 0) + ((
               rate(ifInErrors{}[5m])
-            )>0))) > 1
+            )>0)) > 0)) > 1
             or
             (100 * ((
               rate(ifOutErrors{}[5m])
-            )>0) / ((((
+            )>0) / (((((
               rate(ifHCOutUcastPkts{}[5m])
             )>0) or ((
               rate(ifOutErrors{}[5m])
@@ -227,7 +230,7 @@ groups:
               rate(ifHCOutBroadcastPkts{}[5m])
             )>0) or ((
               rate(ifOutErrors{}[5m])
-            )>0) * 0))) > 1
+            )>0) * 0)) > 0)) > 1
           for: 15m
           keep_firing_for: 5m
           labels:
@@ -239,6 +242,7 @@ groups:
             summary: Network interface is flapping.
           expr: |
             changes(ifOperStatus{}[15m]) > 5
+          for: 5m
           keep_firing_for: 5m
           labels:
             severity: warning

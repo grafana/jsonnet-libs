@@ -82,16 +82,16 @@ make prometheus_alerts.yaml
 
 | Alert | Default threshold | Severity |
 |-------|-------------------|----------|
-| `SNMPInterfaceFCerrors` | Discarded frames, invalid CRCs or invalid transmission words on a Fibre Channel interface for 15m | warning |
-| `SNMPNodeHasRebooted` | Uptime below 10 minutes | info |
-| `SNMPFRUComponentProblem` | A field replaceable unit's power status is not on | warning |
+| `SNMPInterfaceFCerrors` | >0 discarded frames, invalid CRCs or invalid transmission words per second on a Fibre Channel interface, between every two scrapes for 15m | warning |
+| `SNMPNodeHasRebooted` | Uptime below 10 minutes, for 5m | info |
+| `SNMPFRUComponentProblem` | A field replaceable unit's power status is not on, for 5m | warning |
 | `SNMPNodeCPUHighUsage` | >90% for 15m | warning |
-| `SNMPNodeMemoryUtilization` | >90% | info |
+| `SNMPNodeMemoryUtilization` | >90% for 15m | info |
 | `SNMPInterfaceDown` | An interface matching `alertInterfaceDownSelectorCritical` is down while administratively up, for 5m | critical |
 | `SNMPInterfaceDown` | An interface matching `alertInterfaceDownSelectorWarning` is down while administratively up, for 5m | warning |
 | `SNMPInterfaceDrops` | >5% of an interface's packets discarded, averaged over 5 minutes, for 30m | warning |
 | `SNMPInterfaceErrors` | >1% of an interface's packets with errors, averaged over 5 minutes, for 15m | warning |
-| `SNMPInterfaceIsFlapping` | >5 status changes in 15 minutes | warning |
+| `SNMPInterfaceIsFlapping` | >5 status changes in 15 minutes, for 5m | warning |
 | `SNMPExporterEmptyResponse` | 1 or fewer PDUs returned for 10m | warning |
 | `SNMPExporterSlowScrape` | >25s for 10m | info |
 | `SNMPExporterNoResponse` | Scrape fails for 10m. Only generated when `filteringSelector` is set | warning |
@@ -100,15 +100,17 @@ Default thresholds can be modified in `config.libsonnet`:
 
 ```jsonnet
 {
-  alertNodeCPUHighUsageWarningThreshold: 90,  // > percent
+  alertsNodeCPUHighUsageWarning: 90,  // > percent
 
-  alertNodeMemoryUtilizationInfoThreshold: 90,  // > percent
+  alertsNodeMemoryUtilizationInfo: 90,  // > percent
 
-  alertInterfaceDropsWarningThreshold: 5,  // > percent of packets
+  alertsInterfaceDropsWarning: 5,  // > percent of packets
 
-  alertInterfaceErrorsWarningThreshold: 1,  // > percent of packets
+  alertsInterfaceErrorsWarning: 1,  // > percent of packets
 
-  alertExporterSlowScrapeInfoThreshold: 25,  // > seconds
+  alertsInterfaceFCErrorsWarning: 0,  // > errors per second
+
+  alertsExporterSlowScrapeInfo: 25,  // > seconds
 
   alertInterfaceDownSelectorWarning: 'ifAlias=~".*(?i:(uplink|internet|WAN|ISP)).*"',
   alertInterfaceDownSelectorCritical: 'ifAlias=~".*(?i:(critical)).*"',
@@ -117,18 +119,18 @@ Default thresholds can be modified in `config.libsonnet`:
 
 #### Upgrading from earlier alert keys
 
-The `alert<Name><Tier>Threshold` keys replace the earlier threshold keys. Update custom configurations to use the new keys below.
+The `alerts<Name><Severity>` keys replace the earlier threshold keys. Update custom configurations to use the new keys below. A value set on a deprecated key still applies. A value set on either per-second key stops the build with a message that names its replacement.
 
-| Old key | New key |
-|---------|---------|
-| `alertsCPUThresholdWarning` | `alertNodeCPUHighUsageWarningThreshold` |
-| `alertMemoryUsageThresholdCritical` | `alertNodeMemoryUtilizationInfoThreshold` |
-| `alertsPacketsDroppedPerSecThresholdWarning` | `alertInterfaceDropsWarningThreshold` |
-| `alertsErrorsPerSecThresholdWarning` | `alertInterfaceErrorsWarningThreshold` |
-| `alertsSlowScrapeThresholdInfo` | `alertExporterSlowScrapeInfoThreshold` |
-| `alertInterfaceDownSelector` | `alertInterfaceDownSelectorWarning` |
+| Old key | New key | Old key status |
+|---------|---------|----------------|
+| `alertsCPUThresholdWarning` | `alertsNodeCPUHighUsageWarning` | Deprecated |
+| `alertMemoryUsageThresholdCritical` | `alertsNodeMemoryUtilizationInfo` | Deprecated |
+| `alertsSlowScrapeThresholdInfo` | `alertsExporterSlowScrapeInfo` | Deprecated |
+| `alertsPacketsDroppedPerSecThresholdWarning` | `alertsInterfaceDropsWarning` | Stops the build: the new key is a percent of packets |
+| `alertsErrorsPerSecThresholdWarning` | `alertsInterfaceErrorsWarning` | Stops the build: the new key is a percent of packets |
+| `alertInterfaceDownSelector` | `alertInterfaceDownSelectorWarning` | Removed: no alert read it |
 
-`SNMPInterfaceErrors` and `SNMPInterfaceDrops` compare a percent of the interface's packets, where they compared packets per second. Each evaluation divides the errors or discards of the last 5 minutes by the packets of the same 5 minutes. That average must stay above the threshold for the whole `for` period. Errors that arrive only in some minutes count toward the average. The thresholds `alertInterfaceErrorsWarningThreshold` and `alertInterfaceDropsWarningThreshold` are percentages, 1 and 5 by default.
+`SNMPInterfaceErrors` and `SNMPInterfaceDrops` compare a percent of the interface's packets, where they compared packets per second. Each evaluation divides the errors or discards of the last 5 minutes by the packets of the same 5 minutes. That average must stay above the threshold for the whole `for` period. Errors that arrive only in some minutes count toward the average. The thresholds `alertsInterfaceErrorsWarning` and `alertsInterfaceDropsWarning` are percentages, 1 and 5 by default.
 
 ### Logs support
 

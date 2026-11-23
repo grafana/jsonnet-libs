@@ -109,44 +109,12 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "System name"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hidden",
-                           "value": true
-                        },
-                        {
-                           "id": "unit",
-                           "value": "short"
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
                         "options": "sysName"
                      },
                      "properties": [
                         {
                            "id": "displayName",
                            "value": "System name"
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
-                        "options": "Version"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hidden",
-                           "value": true
-                        },
-                        {
-                           "id": "unit",
-                           "value": "short"
                         }
                      ]
                   },
@@ -671,6 +639,26 @@
                         "job": "Job"
                      }
                   }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "exclude": {
+                        "names": [
+                           "System name"
+                        ]
+                     }
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "exclude": {
+                        "names": [
+                           "Version"
+                        ]
+                     }
+                  }
                }
             ],
             "type": "table"
@@ -700,7 +688,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "noValue": "No traffic",
@@ -803,7 +791,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "noValue": "No errors",
@@ -906,7 +894,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "noValue": "No dropped packets",
@@ -1020,7 +1008,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "noValue": "No unicast packets",
@@ -1123,7 +1111,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "noValue": "No broadcast packets",
@@ -1226,7 +1214,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
+                        "url": "/d/snmp-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${prometheus_datasource:queryparam}"
                      }
                   ],
                   "noValue": "No multicast packets",
