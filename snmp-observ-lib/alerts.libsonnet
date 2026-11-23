@@ -28,10 +28,11 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 local rule = self,
                 alert: 'SNMPInterfaceFCerrors',
                 expr: |||
-                        (%s) > 0
+                        (%s) > %s
                       |||
                       % [
                         fiber.fcIfFramesDiscard.asRuleExpression(),
+                        this.config.alertsInterfaceFCErrorsWarning,
                       ],
                 labels: {
                   severity: 'warning',
@@ -39,8 +40,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 annotations: {
                   summary: 'Too many packets with errors (fcIfFramesDiscard) on the FC network interface.',
                   description: |||
-                    Too many packets with errors (fcIfFramesDiscard) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (%s).
-                  ||| % [instanceLabel, rule['for']],
+                    Too many packets with errors (fcIfFramesDiscard) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above %s per second for extended period of time (%s).
+                  ||| % [instanceLabel, this.config.alertsInterfaceFCErrorsWarning, rule['for']],
                 },
                 'for': '15m',
                 keep_firing_for: '5m',
@@ -49,10 +50,11 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 local rule = self,
                 alert: 'SNMPInterfaceFCerrors',
                 expr: |||
-                        (%s) > 0
+                        (%s) > %s
                       |||
                       % [
                         fiber.fcIfInvalidCrcs.asRuleExpression(),
+                        this.config.alertsInterfaceFCErrorsWarning,
                       ],
                 labels: {
                   severity: 'warning',
@@ -60,8 +62,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 annotations: {
                   summary: 'Too many packets with errors (fcIfInvalidCrcs) on the FC network interface.',
                   description: |||
-                    Too many packets with errors (fcIfInvalidCrcs) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (%s).
-                  ||| % [instanceLabel, rule['for']],
+                    Too many packets with errors (fcIfInvalidCrcs) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above %s per second for extended period of time (%s).
+                  ||| % [instanceLabel, this.config.alertsInterfaceFCErrorsWarning, rule['for']],
                 },
                 'for': '15m',
                 keep_firing_for: '5m',
@@ -70,10 +72,11 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 local rule = self,
                 alert: 'SNMPInterfaceFCerrors',
                 expr: |||
-                        (%s) > 0
+                        (%s) > %s
                       |||
                       % [
                         fiber.fcIfInvalidTxWords.asRuleExpression(),
+                        this.config.alertsInterfaceFCErrorsWarning,
                       ],
                 labels: {
                   severity: 'warning',
@@ -81,8 +84,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 annotations: {
                   summary: 'Too many packets with errors (fcIfInvalidTxWords) on the FC network interface.',
                   description: |||
-                    Too many packets with errors (fcIfInvalidTxWords) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (%s).
-                  ||| % [instanceLabel, rule['for']],
+                    Too many packets with errors (fcIfInvalidTxWords) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above %s per second for extended period of time (%s).
+                  ||| % [instanceLabel, this.config.alertsInterfaceFCErrorsWarning, rule['for']],
                 },
                 'for': '15m',
                 keep_firing_for: '5m',

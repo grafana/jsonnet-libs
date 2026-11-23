@@ -25,7 +25,7 @@ tests:
             exp_annotations:
               summary: Too many packets with errors (fcIfFramesDiscard) on the FC network interface.
               description: |
-                Too many packets with errors (fcIfFramesDiscard) on net.cisco.mds9148s, FC interface fc1/1 (esx01 hba0) for extended period of time (15m).
+                Too many packets with errors (fcIfFramesDiscard) on net.cisco.mds9148s, FC interface fc1/1 (esx01 hba0): above 0 per second for extended period of time (15m).
 
   - name: SNMPInterfaceFCerrors on invalid CRCs
     interval: 1m
@@ -50,7 +50,7 @@ tests:
             exp_annotations:
               summary: Too many packets with errors (fcIfInvalidCrcs) on the FC network interface.
               description: |
-                Too many packets with errors (fcIfInvalidCrcs) on net.cisco.mds9148s, FC interface fc1/1 (esx01 hba0) for extended period of time (15m).
+                Too many packets with errors (fcIfInvalidCrcs) on net.cisco.mds9148s, FC interface fc1/1 (esx01 hba0): above 0 per second for extended period of time (15m).
 
   - name: SNMPInterfaceFCerrors on invalid transmission words
     interval: 1m
@@ -72,7 +72,7 @@ tests:
             exp_annotations:
               summary: Too many packets with errors (fcIfInvalidTxWords) on the FC network interface.
               description: |
-                Too many packets with errors (fcIfInvalidTxWords) on net.cisco.mds9148s, FC interface fc1/4 (isl mds9148s-02 fc1/4) for extended period of time (15m).
+                Too many packets with errors (fcIfInvalidTxWords) on net.cisco.mds9148s, FC interface fc1/4 (isl mds9148s-02 fc1/4): above 0 per second for extended period of time (15m).
 
   - name: SNMPNodeHasRebooted
     interval: 1m

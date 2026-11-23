@@ -50,6 +50,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   assert !std.objectHasAll(self, 'alertsErrorsPerSecThresholdWarning') :
          'alertsErrorsPerSecThresholdWarning is replaced by alertsInterfaceErrorsWarning, a percent of the interface packets.',
 
+  alertsInterfaceFCErrorsWarning: 0,  // > errors per second
+
   alertsExporterSlowScrapeInfo: self.alertsSlowScrapeThresholdInfo,  // > seconds
   alertsSlowScrapeThresholdInfo: 25,  // Deprecated, use alertsExporterSlowScrapeInfo instead.
 
