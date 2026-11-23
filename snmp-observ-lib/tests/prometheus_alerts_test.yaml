@@ -99,15 +99,18 @@ tests:
     interval: 1m
     input_series:
       - series: cefcFRUPowerOperStatus{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",entPhysicalIndex="470",entPhysicalName="PowerSupply-1",cefcFRUPowerOperStatus="on"}
-        values: 0x5
+        values: 0x10
       - series: cefcFRUPowerOperStatus{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",entPhysicalIndex="470",entPhysicalName="PowerSupply-1",cefcFRUPowerOperStatus="failed"}
-        values: 1x5
+        values: 1x10
       - series: cefcFRUPowerOperStatus{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",entPhysicalIndex="471",entPhysicalName="PowerSupply-2",cefcFRUPowerOperStatus="on"}
-        values: 1x5
+        values: 1x10
       - series: cefcFRUPowerOperStatus{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",entPhysicalIndex="471",entPhysicalName="PowerSupply-2",cefcFRUPowerOperStatus="failed"}
-        values: 0x5
+        values: 0x10
     alert_rule_test:
       - eval_time: 2m
+        alertname: SNMPFRUComponentProblem
+        exp_alerts: []
+      - eval_time: 7m
         alertname: SNMPFRUComponentProblem
         exp_alerts:
           - exp_labels:
@@ -168,7 +171,7 @@ tests:
               summary: High CPU usage on SNMP node.
               description: |
                 CPU usage on SNMP node net.juniper.srx is above 90%. The current value is 95.00%.
-      - eval_time: 2m
+      - eval_time: 17m
         alertname: SNMPNodeMemoryUtilization
         exp_alerts:
           - exp_labels:
@@ -184,11 +187,14 @@ tests:
     interval: 1m
     input_series:
       - series: ciscoMemoryPoolUsed{job="integrations/snmp/net.cisco.c2911",instance="net.cisco.c2911",ciscoMemoryPoolType="1"}
-        values: 95x5
+        values: 95x20
       - series: ciscoMemoryPoolFree{job="integrations/snmp/net.cisco.c2911",instance="net.cisco.c2911",ciscoMemoryPoolType="1"}
-        values: 5x5
+        values: 5x20
     alert_rule_test:
-      - eval_time: 2m
+      - eval_time: 10m
+        alertname: SNMPNodeMemoryUtilization
+        exp_alerts: []
+      - eval_time: 17m
         alertname: SNMPNodeMemoryUtilization
         exp_alerts:
           - exp_labels:
@@ -205,45 +211,45 @@ tests:
     input_series:
       # Mostly page cache: the kernel reports 90% of memory available.
       - series: hrStorageSize{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
-        values: 4000000x5
+        values: 4000000x20
       - series: hrStorageUsed{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
-        values: 3900000x5
+        values: 3900000x20
       - series: hrStorageSize{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Available memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="11"}
-        values: 3600000x5
+        values: 3600000x20
       - series: hrStorageUsed{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Available memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="11"}
-        values: 0x5
+        values: 0x20
       - series: hrStorageSize{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Cached memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="7"}
-        values: 3000000x5
+        values: 3000000x20
       - series: hrStorageUsed{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Cached memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="7"}
-        values: 3000000x5
+        values: 3000000x20
       - series: hrStorageSize{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Memory buffers",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="6"}
-        values: 4000000x5
+        values: 4000000x20
       - series: hrStorageUsed{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Memory buffers",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="6"}
-        values: 100000x5
+        values: 100000x20
       # 4% of memory available.
       - series: hrStorageSize{job="integrations/snmp/linux-2",instance="linux-2",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
-        values: 4000000x5
+        values: 4000000x20
       - series: hrStorageUsed{job="integrations/snmp/linux-2",instance="linux-2",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
-        values: 3950000x5
+        values: 3950000x20
       - series: hrStorageSize{job="integrations/snmp/linux-2",instance="linux-2",hrStorageDescr="Available memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="11"}
-        values: 160000x5
+        values: 160000x20
       - series: hrStorageUsed{job="integrations/snmp/linux-2",instance="linux-2",hrStorageDescr="Available memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="11"}
-        values: 0x5
+        values: 0x20
       # Before net-snmp 5.9.1, no Available memory row: 3,900,000 used less 100,000 cached and 100,000 buffers is 92.5%.
       - series: hrStorageSize{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
-        values: 4000000x5
+        values: 4000000x20
       - series: hrStorageUsed{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
-        values: 3900000x5
+        values: 3900000x20
       - series: hrStorageSize{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Cached memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="7"}
-        values: 100000x5
+        values: 100000x20
       - series: hrStorageUsed{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Cached memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="7"}
-        values: 100000x5
+        values: 100000x20
       - series: hrStorageSize{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Memory buffers",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="6"}
-        values: 4000000x5
+        values: 4000000x20
       - series: hrStorageUsed{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Memory buffers",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="6"}
-        values: 100000x5
+        values: 100000x20
     alert_rule_test:
-      - eval_time: 2m
+      - eval_time: 17m
         alertname: SNMPNodeMemoryUtilization
         exp_alerts:
           - exp_labels:

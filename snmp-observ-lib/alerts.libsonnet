@@ -114,6 +114,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 description: 'SNMP node {{ $labels.%(instanceLabel)s }} has rebooted {{ $value | humanize }} seconds ago.'
                              % this.config { instanceLabel: instanceLabel },
               },
+              'for': '5m',
             },
           ] + (if hasSource(fruOperStatus) then [
                  {
@@ -131,6 +132,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                      description: 'SNMP field replaceable unit is in {{ $labels.cefcFRUPowerOperStatus }} status on {{ $labels.%(instanceLabel)s }}.'
                                   % this.config { instanceLabel: instanceLabel },
                    },
+                   'for': '5m',
                  },
                ] else []) + [
             {
@@ -172,6 +174,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                   Memory usage on SNMP node {{ $labels.%(instanceLabel)s }} is above %(alertsNodeMemoryUtilizationInfo)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
                 ||| % this.config { instanceLabel: instanceLabel },
               },
+              'for': '15m',
             },
             {
               alert: 'SNMPInterfaceDown',
@@ -292,6 +295,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                   Network interface {{ $labels.ifName }} ({{$labels.ifAlias}}) is flapping on {{ $labels.%s }}. It has changed its status more than 5 times in the last %d minutes.
                 ||| % [instanceLabel, windowMinutes],
               },
+              'for': '5m',
               keep_firing_for: '5m',
             },
           ],
