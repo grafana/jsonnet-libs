@@ -36,15 +36,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   ciscoTemperatureSelector: 'entSensorType="8", entPhysicalName!~".+(\\\\d+/\\\\d+(/\\\\d+)?).*"',
 
   // Alerts
-  alertNodeCPUHighUsageWarningThreshold: 90,  // > percent
+  alertsNodeCPUHighUsageWarning: self.alertsCPUThresholdWarning,  // > percent
+  alertsCPUThresholdWarning: 90,  // Deprecated, use alertsNodeCPUHighUsageWarning instead.
 
-  alertNodeMemoryUtilizationInfoThreshold: 90,  // > percent
+  alertsNodeMemoryUtilizationInfo: self.alertMemoryUsageThresholdCritical,  // > percent
+  alertMemoryUsageThresholdCritical: 90,  // Deprecated, use alertsNodeMemoryUtilizationInfo instead.
 
-  alertInterfaceDropsWarningThreshold: 5,  // > percent of packets
+  alertsInterfaceDropsWarning: 5,  // > percent of packets
+  assert !std.objectHasAll(self, 'alertsPacketsDroppedPerSecThresholdWarning') :
+         'alertsPacketsDroppedPerSecThresholdWarning is replaced by alertsInterfaceDropsWarning, a percent of the interface packets.',
 
-  alertInterfaceErrorsWarningThreshold: 1,  // > percent of packets
+  alertsInterfaceErrorsWarning: 1,  // > percent of packets
+  assert !std.objectHasAll(self, 'alertsErrorsPerSecThresholdWarning') :
+         'alertsErrorsPerSecThresholdWarning is replaced by alertsInterfaceErrorsWarning, a percent of the interface packets.',
 
-  alertExporterSlowScrapeInfoThreshold: 25,  // > seconds
+  alertsExporterSlowScrapeInfo: self.alertsSlowScrapeThresholdInfo,  // > seconds
+  alertsSlowScrapeThresholdInfo: 25,  // Deprecated, use alertsExporterSlowScrapeInfo instead.
 
   signals+:
     {

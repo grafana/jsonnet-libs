@@ -141,7 +141,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               ||| % [
                 std.join(',', this.config.groupLabels + this.config.instanceLabels),
                 this.signals.cpu.cpuUsage.asRuleExpression(),
-                this.config.alertNodeCPUHighUsageWarningThreshold,
+                this.config.alertsNodeCPUHighUsageWarning,
               ],
               'for': '15m',
               keep_firing_for: '5m',
@@ -151,7 +151,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'High CPU usage on SNMP node.',
                 description: |||
-                  CPU usage on SNMP node {{ $labels.%(instanceLabel)s }} is above %(alertNodeCPUHighUsageWarningThreshold)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
+                  CPU usage on SNMP node {{ $labels.%(instanceLabel)s }} is above %(alertsNodeCPUHighUsageWarning)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
                 ||| % this.config { instanceLabel: instanceLabel },
               },
             },
@@ -162,7 +162,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               ||| % [
                 std.join(',', this.config.groupLabels + this.config.instanceLabels),
                 this.signals.memory.memoryUsage.asRuleExpression(),
-                this.config.alertNodeMemoryUtilizationInfoThreshold,
+                this.config.alertsNodeMemoryUtilizationInfo,
               ],
               labels: {
                 severity: 'info',
@@ -170,7 +170,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'High memory usage on SNMP node.',
                 description: |||
-                  Memory usage on SNMP node {{ $labels.%(instanceLabel)s }} is above %(alertNodeMemoryUtilizationInfoThreshold)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
+                  Memory usage on SNMP node {{ $labels.%(instanceLabel)s }} is above %(alertsNodeMemoryUtilizationInfo)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
                 ||| % this.config { instanceLabel: instanceLabel },
               },
             },
@@ -232,9 +232,9 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                     |||
                     % [
                       percentOfPackets(interface.networkInDroppedPerSec, interface.networkInUnicastPacketsPerSec, interface.networkInMulticastPacketsPerSec, interface.networkInBroadcastPacketsPerSec, inbound=true),
-                      this.config.alertInterfaceDropsWarningThreshold,
+                      this.config.alertsInterfaceDropsWarning,
                       percentOfPackets(interface.networkOutDroppedPerSec, interface.networkOutUnicastPacketsPerSec, interface.networkOutMulticastPacketsPerSec, interface.networkOutBroadcastPacketsPerSec, inbound=false),
-                      this.config.alertInterfaceDropsWarningThreshold,
+                      this.config.alertsInterfaceDropsWarning,
                     ],
               labels: {
                 severity: 'warning',
@@ -243,7 +243,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 summary: 'Too many packets discarded on the network interface.',
                 description: |||
                   Too many packets discarded on {{ $labels.%s }}, interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above %s%% of packets for extended period of time (%s).
-                ||| % [instanceLabel, this.config.alertInterfaceDropsWarningThreshold, rule['for']],
+                ||| % [instanceLabel, this.config.alertsInterfaceDropsWarning, rule['for']],
               },
               'for': '30m',
               keep_firing_for: '5m',
@@ -258,9 +258,9 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                     |||
                     % [
                       percentOfPackets(interface.networkInErrorsPerSec, interface.networkInUnicastPacketsPerSec, interface.networkInMulticastPacketsPerSec, interface.networkInBroadcastPacketsPerSec, inbound=true),
-                      this.config.alertInterfaceErrorsWarningThreshold,
+                      this.config.alertsInterfaceErrorsWarning,
                       percentOfPackets(interface.networkOutErrorsPerSec, interface.networkOutUnicastPacketsPerSec, interface.networkOutMulticastPacketsPerSec, interface.networkOutBroadcastPacketsPerSec, inbound=false),
-                      this.config.alertInterfaceErrorsWarningThreshold,
+                      this.config.alertsInterfaceErrorsWarning,
                     ],
               labels: {
                 severity: 'warning',
@@ -269,7 +269,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 summary: 'Too many packets with errors on the network interface.',
                 description: |||
                   Too many packets with errors on {{ $labels.%s }}, interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above %s%% of packets for extended period of time (%s).
-                ||| % [instanceLabel, this.config.alertInterfaceErrorsWarningThreshold, rule['for']],
+                ||| % [instanceLabel, this.config.alertsInterfaceErrorsWarning, rule['for']],
               },
               'for': '15m',
               keep_firing_for: '5m',
@@ -318,7 +318,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             },
             {
               alert: 'SNMPExporterSlowScrape',
-              expr: 'min_over_time(%s[5m]) > %s' % [this.signals.exporter.scrapeDuration.asRuleExpression(), this.config.alertExporterSlowScrapeInfoThreshold],
+              expr: 'min_over_time(%s[5m]) > %s' % [this.signals.exporter.scrapeDuration.asRuleExpression(), this.config.alertsExporterSlowScrapeInfo],
               labels: {
                 severity: 'info',
               },
@@ -326,7 +326,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 summary: 'SNMP exporter scrape is slow.',
                 description: |||
                   SNMP exporter scrape of {{ $labels.%s }} is taking more than %s seconds. Please check SNMP modules polled and that snmp_exporter is located on the same network as the SNMP target.
-                ||| % [instanceLabel, this.config.alertExporterSlowScrapeInfoThreshold],
+                ||| % [instanceLabel, this.config.alertsExporterSlowScrapeInfo],
               },
               'for': '10m',
               keep_firing_for: '5m',
