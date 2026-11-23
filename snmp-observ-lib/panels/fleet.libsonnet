@@ -5,6 +5,16 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
 {
   new(signals, this):: {
+    // common-lib's withDataLink links with ${datasource}. With logs on, the Prometheus variable is prometheus_datasource.
+    local drillDownLink =
+      g.panel.timeSeries.standardOptions.withLinks({
+        title: 'Drill down to this instance',
+        url: '/d/%s?%s&${__url_time_range}&${%s:queryparam}' % [
+          this.grafana.dashboards['snmp-overview.json'].uid,
+          std.join('&', ['var-%s=${__field.labels.%s}' % [l, l] for l in this.config.instanceLabels]),
+          signals.system.datasource,
+        ],
+      }),
     deviceTable:
       local fieldOverride = g.panel.table.fieldOverride;
       signals.fleetInterface.interfacesCount.asTable(name='Network devices', format='table', filterable=true)
@@ -73,7 +83,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       signals.fleetInterface.networkOutBitPerSec.withTopK().asTimeSeries('Traffic')
       + signals.fleetInterface.networkInBitPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.traffic.stylize()
-      + commonlib.panels.network.timeSeries.traffic.withDataLink(this.config.instanceLabels, this.grafana.dashboards['snmp-overview.json'].uid)
+      + drillDownLink
       + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
       + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
@@ -82,7 +92,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       signals.fleetInterface.networkInErrorsPerSec.withTopK().asTimeSeries('Network errors')
       + signals.fleetInterface.networkOutErrorsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.errors.stylize()
-      + commonlib.panels.network.timeSeries.errors.withDataLink(this.config.instanceLabels, this.grafana.dashboards['snmp-overview.json'].uid)
+      + drillDownLink
       + commonlib.panels.network.timeSeries.errors.withNegateOutPackets()
       + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
@@ -92,7 +102,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + signals.fleetInterface.networkOutDroppedPerSec.withTopK().asPanelMixin()
       + signals.fleetInterface.ifInUnknownProtos.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.dropped.stylize()
-      + commonlib.panels.network.timeSeries.dropped.withDataLink(this.config.instanceLabels, this.grafana.dashboards['snmp-overview.json'].uid)
+      + drillDownLink
       + commonlib.panels.network.timeSeries.dropped.withNegateOutPackets()
       + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
@@ -101,7 +111,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       signals.fleetInterface.networkInUnicastPacketsPerSec.withTopK().asTimeSeries('Unicast')
       + signals.fleetInterface.networkOutUnicastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.unicast.stylize()
-      + commonlib.panels.network.timeSeries.unicast.withDataLink(this.config.instanceLabels, this.grafana.dashboards['snmp-overview.json'].uid)
+      + drillDownLink
       + commonlib.panels.network.timeSeries.unicast.withNegateOutPackets()
       + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
@@ -110,7 +120,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       signals.fleetInterface.networkInBroadcastPacketsPerSec.withTopK().asTimeSeries('Broadcast')
       + signals.fleetInterface.networkOutBroadcastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.broadcast.stylize()
-      + commonlib.panels.network.timeSeries.broadcast.withDataLink(this.config.instanceLabels, this.grafana.dashboards['snmp-overview.json'].uid)
+      + drillDownLink
       + commonlib.panels.network.timeSeries.broadcast.withNegateOutPackets()
       + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
@@ -119,7 +129,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       signals.fleetInterface.networkInMulticastPacketsPerSec.withTopK().asTimeSeries('Multicast')
       + signals.fleetInterface.networkOutMulticastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.multicast.stylize()
-      + commonlib.panels.network.timeSeries.multicast.withDataLink(this.config.instanceLabels, this.grafana.dashboards['snmp-overview.json'].uid)
+      + drillDownLink
       + commonlib.panels.network.timeSeries.multicast.withNegateOutPackets()
       + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
