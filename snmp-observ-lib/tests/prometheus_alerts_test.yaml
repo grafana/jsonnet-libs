@@ -391,6 +391,9 @@ tests:
         values: 0x30
       - series: ifHCInUcastPkts{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/29",ifAlias="spare",ifDescr="GigabitEthernet1/29",ifIndex="29"}
         values: 0x30
+      # Outbound errors on an interface that reports no outbound packet counters.
+      - series: ifOutErrors{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/30",ifAlias="no counters",ifDescr="GigabitEthernet1/30",ifIndex="30"}
+        values: 0+60x30
     alert_rule_test:
       - eval_time: 10m
         alertname: SNMPInterfaceErrors

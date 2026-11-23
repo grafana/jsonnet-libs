@@ -5,13 +5,9 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     local instanceLabel = xtd.array.slice(this.config.instanceLabels, -1)[0],
     local groupLabel = xtd.array.slice(this.config.groupLabels, -1)[0],
     local interface = this.signals.interface,
-    // Percent of an interface's packets that a counter such as ifInErrors counted, averaged over the alert interval.
-    // Inbound unicast, multicast and broadcast counts leave out errored and discarded packets, so the counter joins the total.
-    // Outbound counts already include them (RFC 2863).
-    // A packet counter that is absent or zero counts as 0, so an interface whose every packet errored still alerts.
     local percentOfPackets(counter, unicast, multicast, broadcast, inbound) =
       local rated(signal) = '(%s)' % signal.withRangeFunction('rate').asRuleExpression();
-      '100 * %(c)s / ((%(u)s or %(c)s * 0) + (%(m)s or %(c)s * 0) + (%(b)s or %(c)s * 0)%(total)s)' % {
+      '100 * %(c)s / (((%(u)s or %(c)s * 0) + (%(m)s or %(c)s * 0) + (%(b)s or %(c)s * 0)%(total)s) > 0)' % {
         total: if inbound then ' + %s' % rated(counter) else '',
         c: rated(counter),
         u: rated(unicast),
