@@ -52,7 +52,7 @@ local snmp =
         dashboardNamePrefix: 'Network',
         dashboardTags: ['networking'],
         // pick vendors you have:
-        metricsSource: ['juniper','mikrotik'],
+        metricsSource: ['generic','juniper','mikrotik'],
         enableLokiLogs: false,
     }
   );
