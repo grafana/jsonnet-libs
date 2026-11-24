@@ -23,9 +23,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
   alertInterfaceDownSelectorCritical: 'ifAlias=~".*(?i:(critical)).*"',
 
   // Enable to workaround issue with counters on Cisco NX-OS overloading issue.
-  // This will clamp max interface traffic possible to 100Gbps.
+  // This clamps interface traffic to 1 Tbps.
   clampQueryEnabled: true,
-  clampSpeed: '100*10^9',  // 100 Gbps
+  clampSpeed: '10^12',  // 1 Tbps
 
   // cpuSelector for metricsSources with HOST-RESOURCES-MIB:
   cpuSelector: 'hrDeviceType="1.3.6.1.2.1.25.3.1.3"',
