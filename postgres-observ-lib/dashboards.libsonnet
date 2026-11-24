@@ -111,7 +111,7 @@ local g = import './g.libsonnet';
 
       'postgres-performance-maintenance.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'PostgreSQL instance performance and maintenance')
-        + root.applyCommon(instanceVariables, uid + '-performance-maintenance', tags + ['instance'], links, timezone, refresh, period)
+        + root.applyCommon(instanceVariables, uid + '-perf-maintenance', tags + ['instance'], links, timezone, refresh, period)
         + g.dashboard.withDescription(
           |||
             PostgreSQL instance trends and maintenance work.
