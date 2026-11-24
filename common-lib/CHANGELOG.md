@@ -1,3 +1,6 @@
+# 0.6.5
+- [Signal] fix: Info signal table columns show the label's text instead of 1 when `nameShort` equals the signal's name.
+
 # 0.6.4
 - [Signal] fix: `asRuleExpression()` no longer wraps `increase`/`delta`/`idelta` counters in a `[<interval>:] offset -<interval>` subquery. Rules are evaluated at the current time, so the forward-shifted window held no samples and the expression always returned 0, which prevented alerts such as `increase(...) > 0` from ever firing. Rule expressions now use `<rangeFunction>(<expr>[<alertsInterval>])`. Dashboard queries are unchanged.
 

@@ -91,6 +91,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withUnit('percentunit')
       + g.panel.timeSeries.standardOptions.withMax(1)
       + g.panel.timeSeries.standardOptions.thresholds.withSteps([
+        { value: null, color: 'green' },
         { value: 0.05, color: 'yellow' },
         { value: 0.1, color: 'red' },
       ])
@@ -99,29 +100,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Percentage of transactions rolled back. High values indicate application issues.'
       ),
 
-    rowsActivity:
-      g.panel.timeSeries.new('Rows activity')
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('rows/s')
-      + signals.performance.rowsFetched.asPanelMixin()
-      + signals.performance.rowsReturned.asPanelMixin()
-      + signals.performance.rowsInserted.asPanelMixin()
-      + signals.performance.rowsUpdated.asPanelMixin()
-      + signals.performance.rowsDeleted.asPanelMixin()
-      + g.panel.timeSeries.options.legend.withDisplayMode('table')
-      + g.panel.timeSeries.options.legend.withPlacement('right')
-      + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull'])
-      + g.panel.timeSeries.options.legend.withSortBy('Last *')
-      + g.panel.timeSeries.options.legend.withSortDesc(true)
-      + g.panel.timeSeries.panelOptions.withDescription(
-        'Row-level activity showing reads (fetched/returned) and writes (inserted/updated/deleted).'
-      ),
-
     buffersActivity:
-      g.panel.timeSeries.new('Buffers activity')
+      signals.performance.buffersAlloc.asTimeSeries('Buffers activity')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('ops')
-      + signals.performance.buffersAlloc.asPanelMixin()
       + signals.performance.buffersCheckpoint.asPanelMixin()
       + signals.performance.buffersClean.asPanelMixin()
       + signals.performance.buffersBackend.asPanelMixin()
@@ -136,7 +118,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Read/Write ratio pie chart
     readWriteRatio:
-      g.panel.pieChart.new('Read/Write ratio')
+      g.panel.pieChart.new('Read/write ratio')
+      + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${%s}' % signals.performance.datasource)
       + g.panel.pieChart.panelOptions.withDescription(
         'Ratio of read operations (fetched) to write operations (insert+update+delete).'
       )
@@ -154,10 +137,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Read/Write time series (complements pie chart)
     readWriteTimeSeries:
-      g.panel.timeSeries.new('Read/Write over time')
+      signals.performance.rowsFetched.asTimeSeries('Read/write over time')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('rows/s')
-      + signals.performance.rowsFetched.asPanelMixin()
       + signals.performance.rowsInserted.asPanelMixin()
       + signals.performance.rowsUpdated.asPanelMixin()
       + signals.performance.rowsDeleted.asPanelMixin()
