@@ -1064,7 +1064,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,\n  \n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCOutOctets{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"} [$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<100*10^9\n)",
+                  "expr": "topk(25,\n  \n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCOutOctets{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"} [$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<10^12\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ifName}}: transmitted ({{ifAlias}} {{ifDescr}})",
@@ -1075,7 +1075,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,\n  \n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCInOctets{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<100*10^9\n)",
+                  "expr": "topk(25,\n  \n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCInOctets{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<10^12\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{ifName}}: received ({{ifAlias}} {{ifDescr}})",

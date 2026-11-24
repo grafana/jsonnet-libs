@@ -171,7 +171,7 @@ groups:
               rate(ifInDiscards{}[5m])
             )>0) * 0) + ((
               rate(ifInDiscards{}[5m])
-            )>0)) > 0)) > 5
+            )>0)) > 0) and (ifHCInUcastPkts{} or ifHCInMulticastPkts{} or ifHCInBroadcastPkts{})) > 5
             or
             (100 * ((
               rate(ifOutDiscards{}[5m])
@@ -214,7 +214,7 @@ groups:
               rate(ifInErrors{}[5m])
             )>0) * 0) + ((
               rate(ifInErrors{}[5m])
-            )>0)) > 0)) > 1
+            )>0)) > 0) and (ifHCInUcastPkts{} or ifHCInMulticastPkts{} or ifHCInBroadcastPkts{})) > 1
             or
             (100 * ((
               rate(ifOutErrors{}[5m])
