@@ -29,8 +29,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
   // cpuSelector for metricsSources with HOST-RESOURCES-MIB:
   cpuSelector: 'hrDeviceType="1.3.6.1.2.1.25.3.1.3"',
-  // memorySelector for metricsSources with HOST-RESOURCES-MIB:
-  memorySelector: '',
+  // memorySelector for metricsSources with HOST-RESOURCES-MIB, on devices without net-snmp's memory rows:
+  memorySelector: 'hrStorageDescr!~".*(?i:(cache|buffer)).*", hrStorageType="1.3.6.1.2.1.25.2.1.2"',
   mikrotikMemorySelector: 'hrStorageDescr="main memory",hrStorageIndex="65536"',
   // ignore interface sensors
   ciscoTemperatureSelector: 'entSensorType="8", entPhysicalName!~".+(\\\\d+/\\\\d+(/\\\\d+)?).*"',
