@@ -5,10 +5,16 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     local instanceLabel = xtd.array.slice(this.config.instanceLabels, -1)[0],
     local groupLabel = xtd.array.slice(this.config.groupLabels, -1)[0],
     local interface = this.signals.interface,
+    // Inbound packet counts leave out errored and discarded packets, and outbound counts include them (RFC 2863).
+    // An interface that reports no inbound packet counts would read 100% on its first inbound error.
     local percentOfPackets(counter, unicast, multicast, broadcast, inbound) =
       local rated(signal) = '(%s)' % signal.withRangeFunction('rate').asRuleExpression();
-      '100 * %(c)s / (((%(u)s or %(c)s * 0) + (%(m)s or %(c)s * 0) + (%(b)s or %(c)s * 0)%(total)s) > 0)' % {
+      '100 * %(c)s / (((%(u)s or %(c)s * 0) + (%(m)s or %(c)s * 0) + (%(b)s or %(c)s * 0)%(total)s) > 0)%(reported)s' % {
         total: if inbound then ' + %s' % rated(counter) else '',
+        reported: if inbound then ' and (%s)' % std.join(' or ', [
+          '%s{%s}' % [metric, this.config.filteringSelector]
+          for metric in ['ifHCInUcastPkts', 'ifHCInMulticastPkts', 'ifHCInBroadcastPkts']
+        ]) else '',
         c: rated(counter),
         u: rated(unicast),
         m: rated(multicast),

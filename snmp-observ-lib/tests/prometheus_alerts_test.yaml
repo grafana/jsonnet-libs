@@ -400,6 +400,9 @@ tests:
       # Outbound errors on an interface that reports no outbound packet counters.
       - series: ifOutErrors{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/30",ifAlias="no counters",ifDescr="GigabitEthernet1/30",ifIndex="30"}
         values: 0+60x30
+      # Inbound errors on an interface that reports no inbound packet counters.
+      - series: ifInErrors{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/31",ifAlias="no counters",ifDescr="GigabitEthernet1/31",ifIndex="31"}
+        values: 0+60x30
     alert_rule_test:
       - eval_time: 10m
         alertname: SNMPInterfaceErrors
