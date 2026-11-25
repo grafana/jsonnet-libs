@@ -4,6 +4,8 @@ This observ lib can be used to generate an observ package for hosts monitored wi
 
 Metric names follow OpenTelemetry semantic conventions. Dashboards cover Linux hosts: fleet overview, host summary, CPU and system, memory, filesystem and disks, network, and logs.
 
+This lib has testing for its dashboards with data hosted here [linux-hostmetrics sample-app](https://github.com/grafana/integration-sample-apps/tree/main/sample-apps/linux-hostmetrics).
+
 ## Import
 
 ```sh

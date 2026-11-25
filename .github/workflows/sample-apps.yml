@@ -1,0 +1,164 @@
+name: Sample apps
+
+# Runs the sample-apps of the mixins a pull request changes, from
+# grafana/integration-sample-apps, and comments their metric results and the
+# pull request's dashboards rendered with each sample-app's data.
+
+permissions: {}
+
+on:
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: sample-apps-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  changed:
+    name: Find changed mixins
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      mixins: ${{ steps.changed.outputs.mixins }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # sample-apps ignores directories that no tests/dashboards names
+      - name: Find changed mixins
+        id: changed
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          set -euo pipefail
+          mixins=$(git diff --name-only "origin/${BASE_REF}...HEAD" | { grep / || true; } | cut -d/ -f1 | sort -u | paste -sd, -)
+          echo "Changed: ${mixins:-nothing}"
+          echo "mixins=${mixins}" >> "${GITHUB_OUTPUT}"
+
+  # Runs code from grafana/integration-sample-apps, so it gets no permissions
+  sample-apps:
+    name: Sample apps
+    needs: [changed]
+    if: needs.changed.outputs.mixins != ''
+    permissions: {}
+    # TODO: pin a commit of grafana/integration-sample-apps main once this is merged there
+    uses: grafana/integration-sample-apps/.github/workflows/sample-app.yml@4ba71a9bdee0d1e684b59d3ad787d0f957529df5 # sample-app-workflow
+    with:
+      mixins: ${{ needs.changed.outputs.mixins }}
+      jsonnet-libs-ref: ${{ github.event.pull_request.head.sha }}
+      # TODO: drop once sample-apps' Go control plane is on its main
+      ref: 4ba71a9bdee0d1e684b59d3ad787d0f957529df5
+
+  comment:
+    name: Comment results
+    needs: [sample-apps]
+    # Fork pull requests get a read-only token, so their results stay in the run's artifacts
+    if: >-
+      !cancelled() && needs.sample-apps.result != 'skipped'
+      && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      # Store the images under refs/screenshots/
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Download screenshots
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: screenshots-*
+          merge-multiple: true
+          path: screenshots
+
+      - name: Comment on the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          # The download creates no directory when no sample-app produced screenshots
+          mkdir -p screenshots && cd screenshots
+          shopt -s nullglob
+          # <app>/summary.md and <app>/<ref>/<mixin>/<dashboard>.png. The names come from sample-apps code, so skip any others
+          segment='[A-Za-z0-9][A-Za-z0-9_.-]*'
+          summaries=()
+          for summary in */summary.md; do
+            if [[ "${summary}" =~ ^${segment}/summary\.md$ ]]; then summaries+=("${summary}"); fi
+          done
+          images=()
+          for image in */*/*/*.png; do
+            if [[ "${image}" =~ ^${segment}/${segment}/${segment}/[A-Za-z0-9_-]+\.png$ ]]; then images+=("${image}"); fi
+          done
+          if [[ ${#summaries[@]} -eq 0 && ${#images[@]} -eq 0 ]]; then
+            echo "No sample-app produced results or screenshots"
+            exit 0
+          fi
+
+          base=""
+          if [[ ${#images[@]} -gt 0 ]]; then
+            git init --quiet
+            git add -- "${images[@]}"
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit --quiet --message "Sample-app screenshots for #${PR}"
+            if git push --quiet "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}" \
+              "HEAD:refs/screenshots/pr-${PR}/run-${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ATTEMPT}"; then
+              url="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/$(git rev-parse HEAD)"
+              # The links take a moment to work
+              for _ in 1 2 3 4 5; do
+                if curl --silent --fail --head --output /dev/null "${url}/${images[0]}"; then base="${url}"; break; fi
+                sleep 3
+              done
+            fi
+          fi
+
+          run="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          marker="<!-- sample-apps-screenshots -->"
+          {
+            echo "${marker}"
+            echo "### Sample apps"
+            echo
+            echo "Results at ${SHA::7} from [run ${GITHUB_RUN_NUMBER}](${run}). The dashboards are rendered from the data each sample-app produced, covering its last 5 minutes."
+            for summary in "${summaries[@]}"; do
+              echo
+              echo "**${summary%/summary.md} sample-app**"
+              echo
+              # Only the table rows, with HTML, mentions and links defused, since sample-apps code wrote them
+              { grep '^|' "${summary}" || true; } | sed -e 's/</\&lt;/g' -e 's/@/\&#64;/g' -e 's/\[/\\[/g'
+            done
+            if [[ ${#images[@]} -gt 0 && -z "${base}" ]]; then
+              echo
+              echo "The images couldn't be stored for display here. They're in the run's artifacts."
+            elif [[ ${#images[@]} -gt 0 ]]; then
+              for group in $(printf '%s\n' "${images[@]}" | cut -d/ -f1,3 | sort -u); do
+                echo
+                echo "<details open><summary>${group#*/} · ${group%%/*} sample-app</summary>"
+                for image in "${images[@]}"; do
+                  if [[ "$(cut -d/ -f1,3 <<< "${image}")" != "${group}" ]]; then continue; fi
+                  name=$(basename "${image}" .png)
+                  echo
+                  echo "<details><summary>${name}</summary>"
+                  echo
+                  echo "![${name}](${base}/${image})"
+                  echo
+                  echo "</details>"
+                done
+                echo
+                echo "</details>"
+              done
+            fi
+          } > comment.md
+
+          # Other workflows comment as github-actions[bot] too, so the comment is found by its marker
+          comment=$(gh api --paginate "repos/${GITHUB_REPOSITORY}/issues/${PR}/comments?per_page=100" \
+            --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"${marker}\"))) | .id" | tail -n 1)
+          if [[ -n "${comment}" ]]; then
+            gh api --silent --method PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${comment}" -F body=@comment.md
+          else
+            gh api --silent --method POST "repos/${GITHUB_REPOSITORY}/issues/${PR}/comments" -F body=@comment.md
+          fi
