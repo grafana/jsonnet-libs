@@ -1,31 +1,30 @@
-// grafana-databases-lib: shared dashboard panels and rows for the Mimir, Loki,
-// Tempo and Pyroscope mixins, built on grafonnet-latest. It builds dashboard v2
-// (dashboard.grafana.app/v2) panels and rows; see dashboard.libsonnet.
-//
-//   local dblib = import 'grafana-databases-lib/main.libsonnet';
-//   local databases =
-//     dblib.new()
-//     + dblib.withConfigMixin({ clusterLabel: 'cluster' })
-//     + dblib.autoscaling.withConfigMixin({ components: { ... } });
-//
-//   databases.autoscaling.panels.querier.replicas
-//   databases.autoscaling.rows.querier
-//
-// Everything reads `config` through `self`, so a config mixin added at any
-// point re-derives every panel and row. Each area keeps its own portion of the
-// config under config.<area>.
+// grafana-databases-lib: dashboard panels and rows shared by the database mixins. See README.md.
 local autoscaling = import './autoscaling.libsonnet';
 local dashboard = import './dashboard.libsonnet';
 
 {
+  // new returns a library instance. Configure it with config mixins, and use
+  // its named panels and rows:
+  //
+  //   local databases =
+  //     dblib.new()
+  //     + dblib.withConfigMixin({ clusterLabel: 'cluster' })
+  //     + dblib.autoscaling.withConfigMixin({ components: { querier: { hpaName: 'keda-hpa-querier' } } });
+  //
+  //   databases.autoscaling.panels.querier.replicas
+  //   databases.autoscaling.rows.querier
+  //
+  // Panels and rows are dashboard v2 elements and rows: assemble them with
+  // elements() and layout(), or convert them with legacy for grafana-builder.
   new():: {
     local this = self,
 
+    // Areas read `config` through `self`, so a config mixin added after new()
+    // still reaches every panel and row.
     config: {
       local shared = self,
       // Dashboard datasource variable, or a datasource uid.
       datasource: '$datasource',
-      // Labels identifying a cluster and a namespace.
       clusterLabel: 'cluster',
       namespaceLabel: 'namespace',
       // Matcher applied to kube-state-metrics series.
@@ -47,18 +46,12 @@ local dashboard = import './dashboard.libsonnet';
     withConfigMixin(config):: { config+: { autoscaling+: config } },
   },
 
-  // Assembling rows into a dashboard: `spec.elements` and `spec.layout` from a
-  // list of rows, and custom rows from named panels.
   elements:: dashboard.elements,
   layout:: dashboard.layout,
   row:: dashboard.row,
-
-  // Building custom panels.
   panel:: dashboard.panel,
   query:: dashboard.query,
   withViz:: dashboard.withViz,
 
-  // legacy converts the library's panels and rows for dashboards still built
-  // with grafana-builder, while they are migrated.
   legacy:: import './legacy.libsonnet',
 }

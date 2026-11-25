@@ -1,10 +1,5 @@
-// legacy: a migration step for dashboards still built with grafana-builder.
-//
-// The library's panels and rows are dashboard v2 elements and rows (see
-// dashboard.libsonnet). These helpers convert them to the classic panels that
-// grafana-builder rows hold, laid out by `span`. Once a dashboard is built as a
-// v2 dashboard, it uses the library's panels and rows as they are, and these
-// helpers go.
+// legacy: converts the library's v2 panels to classic panels for dashboards
+// still built with grafana-builder. See README.md.
 {
   // panel returns a library panel element as a classic panel, ready for a
   // grafana-builder row's addPanel().
@@ -19,7 +14,9 @@
       title: spec.title,
       description: spec.description,
       [if std.length(queries) > 0 then 'datasource']: datasource(queries[0]),
-      // Classic panels leave refIds to Grafana, so they are dropped here.
+      // grafana-builder's time series targets have no refId (Grafana assigns one
+      // on load), so dropping them keeps converted panels identical to the ones
+      // they replace.
       targets: [{ datasource: datasource(q) } + q.spec.query.spec for q in queries],
       fieldConfig: { defaults: fieldConfig.defaults }
                    + (if std.length(fieldConfig.overrides) > 0 then { overrides: fieldConfig.overrides } else {}),

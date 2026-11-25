@@ -1,23 +1,4 @@
-// autoscaling: shared HPA / KEDA autoscaling panels and rows for the Mimir,
-// Loki and Tempo dashboards, built on grafonnet-latest.
-//
-// Configured through config.autoscaling (see main.libsonnet), and exposed on a
-// library instance as:
-//   autoscaling.panels.<component>.replicas
-//   autoscaling.panels.<component>.desiredReplicas
-//   autoscaling.panels.<component>.desiredReplicasByScaler.<scaler>
-//   autoscaling.panels.<component>.failures
-//   autoscaling.rows.<component>
-//
-// Panels are Panel elements, named after their path (e.g.
-// "autoscaling-querier-replicas"), and rows refer to them by name; see
-// dashboard.libsonnet. Dashboards still built with grafana-builder convert them with
-// the helpers in legacy.libsonnet.
-//
-// Rows are built from the named panels through `self`, so overriding a panel
-// (e.g. `autoscaling+: { panels+: { querier+: { replicas+: { spec+: { title: 'X' } } } } }`)
-// also changes it in its row. The panel constructors (replicasPanel, ...) are
-// exposed too, for panels a mixin needs to build differently.
+// autoscaling: HPA and KEDA autoscaling panels and rows. See README.md.
 local dashboard = import './dashboard.libsonnet';
 local g = import './g.libsonnet';
 
@@ -29,28 +10,18 @@ local ts = g.panel.timeSeries;
   defaults(shared):: {
     // Prefix KEDA adds to the ScaledObject name when creating its HPA.
     hpaPrefix: 'keda-hpa-',
-    // Legend of the per-trigger series (desired replicas, failures). KEDA
-    // triggers are told apart by `metric` (s0-prometheus, ...) and, when the
-    // ScaledObject names them, by `scaler`, so set '{{ scaler }}' for named triggers.
+    // Unnamed KEDA triggers have no `scaler` label, only `metric`
+    // (s0-prometheus, ...), so the default legend relies on `metric`. Set
+    // '{{ scaler }}' when the ScaledObjects name their triggers.
     triggerLegend: '{{ scaledObject }} {{ metric }}',
-    // Y-axis minimum of the panels; null lets Grafana fit the axis to the data.
+    // null lets Grafana fit the Y axis to the data.
     axisMin: null,
-    // Text shown instead of "No data" when a component has no HPA. Per-scaler
-    // desired replicas panels say "Not scaled on <scaler title>" instead, as
-    // their component is auto-scaled, just not on that scaler. null shows "No data".
+    // Shown when a component has no HPA. null shows "No data".
     noValue: 'Not auto-scaled',
-    // Matcher applied to KEDA series. KEDA exports the scaled object's
-    // namespace as `exported_namespace`, as `namespace` is the KEDA operator's own.
+    // KEDA exports the scaled object's namespace as `exported_namespace`, as
+    // `namespace` is the KEDA operator's own.
     kedaSelector: '%s=~"$cluster", exported_namespace=~"$namespace"' % shared.clusterLabel,
-    // Component key -> {
-    //   hpaName: regex matched against `horizontalpodautoscaler` (required),
-    //   title: shown in the row title (default: the key),
-    //   keda: whether the HPA has KEDA triggers (default true); rows of
-    //         components without leave out the KEDA-based panels,
-    //   scalers: name -> { title, match (default '.*<name>.*') }, one desired
-    //            replicas panel per KEDA scaler instead of a single one,
-    //   extraReplicaQueries: list of { expr, legend } added to the replicas panel,
-    // }
+    // Component key -> { hpaName, title, keda, scalers, extraReplicaQueries }; see README.md.
     components: {},
   },
 
@@ -59,7 +30,6 @@ local ts = g.panel.timeSeries;
     local area = self,
     local a = config.autoscaling,
     local groupBy = std.join(', ', config.groupBy),
-    // Values substituted into the queries below.
     local params = {
       selector: config.selector,
       kedaSelector: a.kedaSelector,
@@ -74,9 +44,8 @@ local ts = g.panel.timeSeries;
     local query(expr, legend) =
       dashboard.query('prometheus', config.datasource, { expr: expr, legendFormat: legend }),
 
-    // A time series panel element. The visualization options are built with
-    // grafonnet's timeSeries helpers, which produce the same options and
-    // fieldConfig objects as a panel's vizConfig.
+    // v2 vizConfig holds the same options and fieldConfig as a classic panel,
+    // so grafonnet's typed timeSeries helpers still build them.
     local base(name, title, description, queries, viz={}) =
       dashboard.panel(
         name,
@@ -96,7 +65,8 @@ local ts = g.panel.timeSeries;
         version=ts.new('').pluginVersion,
       ),
 
-    // Labels each HPA series with the name of the workload it scales.
+    // Only kube_horizontalpodautoscaler_info carries the scaled workload's name,
+    // so it is joined in for the legend.
     local hpaQuery(metric, hpaName) = |||
       max by (scaletargetref_name) (
         %(metric)s{%(selector)s, horizontalpodautoscaler=~"%(hpa)s"}
@@ -105,9 +75,7 @@ local ts = g.panel.timeSeries;
       )
     ||| % (params { metric: metric, hpa: hpaName }),
 
-    // Min/max/current/desired replicas reported by the HPA. `extraQueries` is a
-    // list of {expr, legend} added as extra series (e.g. a ReplicaTemplate).
-    // `name` is the panel's element name.
+    // `extraQueries` is a list of { expr, legend } added as series (e.g. a ReplicaTemplate).
     replicasPanel(componentKey, extraQueries=[], name='autoscaling-%s-replicas' % componentKey)::
       local hpaName = component(componentKey).hpaName;
       local line(name, dashed) = ts.standardOptions.withOverridesMixin([
@@ -130,13 +98,9 @@ local ts = g.panel.timeSeries;
         viz=line('Min', true) + line('Current', false) + line('Desired', false) + line('Max', true),
       ),
 
-    // Replicas each KEDA trigger asks for, before the HPA min/max are applied.
-    // AverageValue triggers want value / target; Value triggers want
-    // value / target * current replicas. Grouped by scaledObject, trigger
-    // metric and scaler, as triggers are not always named.
-    //
-    // `scaler` optionally restricts the panel to the KEDA scalers whose name
-    // matches the regex (e.g. '.*cpu.*'), and `title` renames the panel.
+    // AverageValue triggers want value / target replicas; Value triggers want
+    // value / target * current replicas. Grouped by metric as well as scaler,
+    // as triggers are not always named. `scaler` is a regex on the scaler name.
     desiredReplicasPanel(componentKey, scaler='', title='Desired replicas', name='autoscaling-%s-desired-replicas' % componentKey)::
       local p = params {
         hpa: component(componentKey).hpaName,
@@ -180,9 +144,8 @@ local ts = g.panel.timeSeries;
         [query('(\n%s)\nor\n(\n%s)' % [desired('average', ''), desired('value', timesCurrent)], a.triggerLegend)]
       ),
 
-    // Rate at which KEDA fails to read a scaling metric; the autoscaler cannot
-    // work while this is non-zero. KEDA 2.16 renamed keda_scaler_errors to
-    // keda_scaler_detail_errors_total, so match both.
+    // KEDA 2.16 renamed keda_scaler_errors to keda_scaler_detail_errors_total,
+    // so match both. The `* 0` HPA join only restricts the series to the component.
     failuresPanel(componentKey, name='autoscaling-%s-failures' % componentKey)::
       local p = params { hpa: component(componentKey).hpaName };
       base(
@@ -212,7 +175,6 @@ local ts = g.panel.timeSeries;
         ||| % p, '%s failures' % a.triggerLegend)]
       ),
 
-    // Named panels, one set per configured component.
     panels: {
       [name]: {
         local comp = a.components[name],
@@ -236,9 +198,8 @@ local ts = g.panel.timeSeries;
       for name in std.objectFields(a.components)
     },
 
-    // Named "<title> - autoscaling" rows, one per configured component: replicas,
-    // then (for KEDA components) desired replicas, per scaler if scalers are
-    // configured, and failures.
+    // Rows take their panels from `area.panels` (self) rather than building
+    // them, so overriding a named panel also changes it in its row.
     rows: {
       [name]:
         local comp = a.components[name];

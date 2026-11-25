@@ -1,22 +1,13 @@
-// dashboard: the building blocks the library's panels and rows are made of,
-// and the helpers to assemble rows into a dashboard. The library builds
-// dashboard v2 (dashboard.grafana.app/v2) dashboards.
+// dashboard: dashboard v2 (dashboard.grafana.app/v2) panels and rows, and the
+// helpers that assemble rows into `spec.elements` and `spec.layout`.
 //
-// A dashboard keeps panels in `spec.elements`, keyed by name, and their
-// placement in `spec.layout`, which refers to them by name. So every library
-// panel carries its element name in the hidden `name` field, and every row
-// carries its panels in the hidden `panels` field: `elements(rows)` and
-// `layout(rows)` turn a list of rows into the two halves of the spec.
-//
-// grafonnet has no typed builder for these panels, so the structure follows
-// Grafana's types (apps/dashboard/pkg/apis/dashboard/v2). Visualization
-// options and field config are the same objects as in a classic panel, so they
-// are still built with grafonnet's typed panel helpers.
+// grafonnet has no typed builder for v2 panels, so the structure follows
+// Grafana's types (apps/dashboard/pkg/apis/dashboard/v2).
 {
-  // panel returns a Panel element. `viz` holds the visualization's
-  // `options` and `fieldConfig`, e.g. built from grafonnet's timeSeries option
-  // helpers; `version` is the panel plugin version.
+  // panel returns a Panel element. `viz` holds the visualization's `options`
+  // and `fieldConfig`; `version` is the panel plugin version.
   panel(name, type, title, description='', queries=[], viz={}, version=''):: {
+    // Hidden, as the element name is its key in `spec.elements`, not a field.
     name:: name,
     kind: 'Panel',
     spec: {
@@ -67,6 +58,7 @@
   // to `columns` panels per line (default: all of them, up to 4).
   row(title, panels, columns=null):: {
     local row = self,
+    // Kept (hidden) so elements() can collect the panels the layout refers to.
     panels:: panels,
     kind: 'RowsLayoutRow',
     spec: {
