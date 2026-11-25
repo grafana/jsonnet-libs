@@ -1,8 +1,8 @@
 name: Sample apps
 
 # Runs the sample-apps of the mixins a pull request changes, from
-# grafana/integration-sample-apps, and comments the pull request's dashboards
-# rendered with each sample-app's data.
+# grafana/integration-sample-apps, and comments their metric results and the
+# pull request's dashboards rendered with each sample-app's data.
 
 permissions: {}
 
@@ -56,9 +56,9 @@ jobs:
       ref: 68df8f0badaad92794ef018a707a0cfe283b6408
 
   comment:
-    name: Comment screenshots
+    name: Comment results
     needs: [sample-apps]
-    # Fork pull requests get a read-only token, so their screenshots stay in the run's artifacts
+    # Fork pull requests get a read-only token, so their results stay in the run's artifacts
     if: >-
       !cancelled() && needs.sample-apps.result != 'skipped'
       && github.event.pull_request.head.repo.full_name == github.repository
@@ -85,43 +85,56 @@ jobs:
           # The download creates no directory when no sample-app produced screenshots
           mkdir -p screenshots && cd screenshots
           shopt -s nullglob
-          # <app>/<ref>/<mixin>/<dashboard>.png. The names come from sample-apps code, so skip any others
+          # <app>/summary.md and <app>/<ref>/<mixin>/<dashboard>.png. The names come from sample-apps code, so skip any others
           segment='[A-Za-z0-9][A-Za-z0-9_.-]*'
+          summaries=()
+          for summary in */summary.md; do
+            if [[ "${summary}" =~ ^${segment}/summary\.md$ ]]; then summaries+=("${summary}"); fi
+          done
           images=()
           for image in */*/*/*.png; do
             if [[ "${image}" =~ ^${segment}/${segment}/${segment}/[A-Za-z0-9_-]+\.png$ ]]; then images+=("${image}"); fi
           done
-          if [[ ${#images[@]} -eq 0 ]]; then
-            echo "No sample-app produced screenshots"
+          if [[ ${#summaries[@]} -eq 0 && ${#images[@]} -eq 0 ]]; then
+            echo "No sample-app produced results or screenshots"
             exit 0
           fi
 
-          git init --quiet
-          git add -- "${images[@]}"
-          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-            commit --quiet --message "Sample-app screenshots for #${PR}"
           base=""
-          if git push --quiet "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}" \
-            "HEAD:refs/screenshots/pr-${PR}/run-${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ATTEMPT}"; then
-            url="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/$(git rev-parse HEAD)"
-            # The links take a moment to work
-            for _ in 1 2 3 4 5; do
-              if curl --silent --fail --head --output /dev/null "${url}/${images[0]}"; then base="${url}"; break; fi
-              sleep 3
-            done
+          if [[ ${#images[@]} -gt 0 ]]; then
+            git init --quiet
+            git add -- "${images[@]}"
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit --quiet --message "Sample-app screenshots for #${PR}"
+            if git push --quiet "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}" \
+              "HEAD:refs/screenshots/pr-${PR}/run-${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ATTEMPT}"; then
+              url="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/$(git rev-parse HEAD)"
+              # The links take a moment to work
+              for _ in 1 2 3 4 5; do
+                if curl --silent --fail --head --output /dev/null "${url}/${images[0]}"; then base="${url}"; break; fi
+                sleep 3
+              done
+            fi
           fi
 
           run="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
           marker="<!-- sample-apps-screenshots -->"
           {
             echo "${marker}"
-            echo "### Sample-app screenshots"
+            echo "### Sample apps"
             echo
-            echo "The dashboards at ${SHA::7}, rendered from the data each sample-app produced in [run ${GITHUB_RUN_NUMBER}](${run}), covering its last 5 minutes. The run's summary has each sample-app's metric results."
-            if [[ -z "${base}" ]]; then
+            echo "Results at ${SHA::7} from [run ${GITHUB_RUN_NUMBER}](${run}). The dashboards are rendered from the data each sample-app produced, covering its last 5 minutes."
+            for summary in "${summaries[@]}"; do
+              echo
+              echo "**${summary%/summary.md} sample-app**"
+              echo
+              # Only the table rows, with HTML, mentions and links defused, since sample-apps code wrote them
+              { grep '^|' "${summary}" || true; } | sed -e 's/</\&lt;/g' -e 's/@/\&#64;/g' -e 's/\[/\\[/g'
+            done
+            if [[ ${#images[@]} -gt 0 && -z "${base}" ]]; then
               echo
               echo "The images couldn't be stored for display here. They're in the run's artifacts."
-            else
+            elif [[ ${#images[@]} -gt 0 ]]; then
               for group in $(printf '%s\n' "${images[@]}" | cut -d/ -f1,3 | sort -u); do
                 echo
                 echo "<details open><summary>${group#*/} · ${group%%/*} sample-app</summary>"
