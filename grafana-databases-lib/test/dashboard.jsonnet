@@ -20,7 +20,7 @@ local databases =
     },
   })
   // Overriding a named panel changes it in its row too.
-  + { autoscaling+: { panels+: { querier+: { replicas+: { spec+: { title: 'Querier replicas' } } } } } };
+  + dblib.autoscaling.withPanelMixin('querier', 'replicas', { spec+: { title: 'Querier replicas' } });
 
 local rows = databases.autoscaling.rows;
 local panels = databases.autoscaling.panels;

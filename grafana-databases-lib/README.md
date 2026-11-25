@@ -16,8 +16,7 @@ classic panels; once a dashboard no longer needs `legacy`, it is a v2 dashboard.
 local dblib = import 'github.com/grafana/jsonnet-libs/grafana-databases-lib/main.libsonnet';
 
 local databases =
-  dblib.new()
-  + dblib.withConfigMixin({ clusterLabel: 'cluster', namespaceLabel: 'namespace' })
+  dblib.new({ clusterLabel: 'cluster', namespaceLabel: 'namespace' })
   + dblib.autoscaling.withConfigMixin({
     components: {
       distributor: { title: 'Distributor', hpaName: 'keda-hpa-distributor', keda: false },
@@ -52,7 +51,12 @@ Everything reads `config` through `self`, so a config mixin applies wherever it
 is added, and overriding a named panel also changes it in its rows:
 
 ```jsonnet
-databases + { autoscaling+: { panels+: { querier+: { replicas+: { spec+: { title: 'Querier replicas' } } } } } }
+databases
++ dblib.autoscaling.withPanelMixin(
+  component='querier',
+  panel='replicas',
+  patch={ spec+: { title: 'Querier replicas' } },
+)
 ```
 
 In a mixin, build the instance in a hidden field from `$._config`, so that later
@@ -60,7 +64,7 @@ In a mixin, build the instance in a hidden field from `$._config`, so that later
 
 ## Config
 
-Library-wide, through `dblib.withConfigMixin`:
+Library-wide, through `dblib.new(config)` or `dblib.withConfigMixin`:
 
 | Field                             | Default                          | Purpose                                      |
 | --------------------------------- | -------------------------------- | -------------------------------------------- |

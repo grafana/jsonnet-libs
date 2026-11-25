@@ -76,6 +76,16 @@ test.new(std.thisFile)
   ),
 )
 + test.case.new(
+  name='withPanelMixin patches a named panel and its row',
+  test=test.expect.eq(
+    actual=(
+      local patched = databases + dblib.autoscaling.withPanelMixin('querier', 'replicas', { spec+: { title: 'X' } });
+      [patched.autoscaling.panels.querier.replicas.spec.title, titles(patched.autoscaling.rows.querier)[0]]
+    ),
+    expected=['X', 'X'],
+  ),
+)
++ test.case.new(
   name='Overriding a row leaves its panels alone',
   test=test.expect.eq(
     actual=(databases { autoscaling+: { rows+: { querier+: { spec+: { title: 'Y' } } } } }).autoscaling.panels.querier.replicas.spec.title,
@@ -84,6 +94,18 @@ test.new(std.thisFile)
 )
 
 // Config mixins apply wherever they are added.
++ test.case.new(
+  name='new() takes the library-wide config',
+  test=test.expect.eq(
+    actual=std.length(std.findSubstr(
+      'k8s_cluster=~"$cluster"',
+      queries((dblib.new({ clusterLabel: 'k8s_cluster' }) + dblib.autoscaling.withConfigMixin({
+                 components: { querier: { hpaName: 'keda-hpa-querier' } },
+               })).autoscaling.panels.querier.replicas)[0].expr,
+    )) > 0,
+    expected=true,
+  ),
+)
 + test.case.new(
   name='A config mixin added last re-derives the selectors',
   test=test.expect.eq(
