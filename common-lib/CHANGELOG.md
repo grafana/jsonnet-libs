@@ -1,3 +1,6 @@
+# 0.6.6
+- [Panels] feat: add `percentageUnit` styles for generic timeSeries, stat and table panels (0-1 ratios).
+
 # 0.6.5
 - [Signal] fix: Info signal table columns show the label's text instead of 1 when `nameShort` equals the signal's name.
 
