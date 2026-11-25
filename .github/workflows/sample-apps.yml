@@ -48,12 +48,12 @@ jobs:
     if: needs.changed.outputs.mixins != ''
     permissions: {}
     # TODO: pin a commit of grafana/integration-sample-apps main once this is merged there
-    uses: grafana/integration-sample-apps/.github/workflows/sample-app.yml@68df8f0badaad92794ef018a707a0cfe283b6408 # sample-app-workflow
+    uses: grafana/integration-sample-apps/.github/workflows/sample-app.yml@4ba71a9bdee0d1e684b59d3ad787d0f957529df5 # sample-app-workflow
     with:
       mixins: ${{ needs.changed.outputs.mixins }}
       jsonnet-libs-ref: ${{ github.event.pull_request.head.sha }}
       # TODO: drop once sample-apps' Go control plane is on its main
-      ref: 68df8f0badaad92794ef018a707a0cfe283b6408
+      ref: 4ba71a9bdee0d1e684b59d3ad787d0f957529df5
 
   comment:
     name: Comment results
