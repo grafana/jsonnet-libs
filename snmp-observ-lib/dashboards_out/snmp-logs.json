@@ -4,6 +4,7 @@
       },
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Back to network fleet",
             "type": "link",
@@ -216,7 +217,7 @@
             "type": "logs"
          }
       ],
-      "refresh": "5m",
+      "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
          "snmp"
@@ -336,7 +337,7 @@
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-1h",
          "to": "now"
       },
       "timezone": "",

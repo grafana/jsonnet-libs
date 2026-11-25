@@ -9,7 +9,7 @@
                "enable": true,
                "expr": "count by (job,instance,alertname) (max_over_time(ALERTS{alertstate=\"firing\", severity=\"critical\", job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n  * on(job,instance) group_left group by (job,instance) (sysUpTime{job=~\"$job\",instance=~\"$instance\"})\n",
                "hide": true,
-               "iconColor": "light-purple",
+               "iconColor": "#ff7383",
                "name": "Critical alert",
                "tagKeys": "job,instance",
                "textFormat": "{{alertname}}",
@@ -23,7 +23,7 @@
                "enable": true,
                "expr": "{job=\"syslog\",job=~\"$job\",instance=~\"$instance\", level=~\"critical|fatal|alert|error\"}\n",
                "hide": true,
-               "iconColor": "light-purple",
+               "iconColor": "#ff7383",
                "name": "Critical event logged",
                "tagKeys": "job,instance,sysname,syslog_app_name,level",
                "titleFormat": "Critical event logged"
@@ -45,6 +45,7 @@
       },
       "links": [
          {
+            "includeVars": true,
             "keepTime": true,
             "title": "Back to network fleet",
             "type": "link",
@@ -79,7 +80,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "System name.\n",
+            "description": "",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -94,7 +95,8 @@
                            "value": null
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -112,8 +114,8 @@
                ]
             },
             "gridPos": {
-               "h": 5,
-               "w": 3,
+               "h": 4,
+               "w": 8,
                "x": 0,
                "y": 1
             },
@@ -126,7 +128,7 @@
                   "fields": "/^(sysName)$/"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -148,7 +150,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "System version.\n",
+            "description": "",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -163,7 +165,8 @@
                            "value": null
                         }
                      ]
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -181,9 +184,9 @@
                ]
             },
             "gridPos": {
-               "h": 5,
-               "w": 3,
-               "x": 3,
+               "h": 4,
+               "w": 8,
+               "x": 8,
                "y": 1
             },
             "options": {
@@ -195,14 +198,14 @@
                   "fields": "/^(version)$/"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "sum by (job,instance,version) (\n  label_replace(\n  ciscoImageString{ciscoImageString=~\"CW_VERSION.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"ciscoImageString\", \"CW_VERSION\\\\$(.+)\\\\$\"\n)\n\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{sysDescr=~\".+JUNOS.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".+JUNOS (.+?) .+\")\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{sysDescr=~\".+Version.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".+Version (.+?) .+\")\n)",
+                  "expr": "sum by (job,instance,version) (\n  label_replace(\n  ciscoImageString{ciscoImageString=~\"CW_VERSION.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"ciscoImageString\", \"CW_VERSION\\\\$(.+)\\\\$\"\n)\n\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(mtxrLicVersion{job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"mtxrLicVersion\", \"(.+)\")\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{sysDescr=~\".+JUNOS.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".+JUNOS ([^ ,]+).*\")\n)\nor ignoring(version)\nsum by (job,instance,version) (\n  label_replace(sysDescr{sysDescr=~\".+Version.+\", job=~\"$job\",instance=~\"$instance\"}, \"version\", \"$1\", \"sysDescr\", \".+Version ([^ ,]+).*\")\n)",
                   "format": "table",
                   "instant": false,
                   "legendFormat": "{{instance}}: Version",
@@ -256,16 +259,16 @@
                ]
             },
             "gridPos": {
-               "h": 5,
-               "w": 3,
-               "x": 6,
+               "h": 4,
+               "w": 8,
+               "x": 16,
                "y": 1
             },
             "options": {
                "colorMode": "value",
                "graphMode": "none"
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -284,10 +287,30 @@
          },
          {
             "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Currently firing alerts.",
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 7
+            },
+            "options": {
+               "alertInstanceLabelFilter": "job=~\"${job:regex}\",instance=~\"${instance:regex}\",alertname=~\"SNMP.*\"",
+               "groupMode": "default"
+            },
+            "pluginVersion": "v11.4.0",
+            "title": "Alerts",
+            "type": "alertlist"
+         },
+         {
+            "datasource": {
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "CPU usage.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -327,9 +350,9 @@
             },
             "gridPos": {
                "h": 5,
-               "w": 7,
-               "x": 9,
-               "y": 1
+               "w": 12,
+               "x": 0,
+               "y": 12
             },
             "options": {
                "legend": {
@@ -341,14 +364,14 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  cpmCPUTotal1minRev{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  hrProcessorLoad{hrDeviceType=\"1.3.6.1.2.1.25.3.1.3\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  jnxOperatingCPU{jnxOperatingContentsIndex=\"9\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job,instance) (\n  cpmCPUTotal1minRev{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  hrProcessorLoad{hrDeviceType=\"1.3.6.1.2.1.25.3.1.3\",job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  max by (job,instance) (jnxOperatingCPU{jnxOperatingContentsIndex=\"9\", jnxOperatingL2Index=\"0\", job=~\"$job\",instance=~\"$instance\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: CPU utilization",
@@ -363,7 +386,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Memory utilization.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -403,9 +426,9 @@
             },
             "gridPos": {
                "h": 5,
-               "w": 8,
-               "x": 16,
-               "y": 1
+               "w": 12,
+               "x": 12,
+               "y": 12
             },
             "interval": "2m",
             "options": {
@@ -418,14 +441,14 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "avg by (job,instance) (\n  # NX-OS:\n(\n  cpmCPUMemoryUsed{job=~\"$job\",instance=~\"$instance\"}\n  /\n  (cpmCPUMemoryUsed{job=~\"$job\",instance=~\"$instance\"} + cpmCPUMemoryFree{job=~\"$job\",instance=~\"$instance\"}) * 100\n)\nor\n# cisco CISCO-ENHANCED-MEMPOOL-MIB\n# cempMemPoolType=\"10\" - virtual memory, i.e in ASA(v).\n(\n  (\n    cempMemPoolUsed{job=~\"$job\",instance=~\"$instance\"}\n    /\n    (cempMemPoolUsed{job=~\"$job\",instance=~\"$instance\"} + cempMemPoolFree{job=~\"$job\",instance=~\"$instance\"}) * 100\n  ) * on (instance, cempMemPoolIndex, entPhysicalIndex) group_left () \n        (cempMemPoolType{job=~\"$job\",instance=~\"$instance\"} == 10)/10\n)\nor\n# cisco firmwares that supports only CISCO-MEMORY-POOL-MIB\n# ciscoMemoryPoolType=\"1\" - Processor\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"}\n/\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"} + ciscoMemoryPoolFree{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"}) * 100)\n\n)\nor\navg by (job,instance) (\n  hrStorageUsed{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", job=~\"$job\",instance=~\"$instance\"}/hrStorageSize{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", job=~\"$job\",instance=~\"$instance\"}*100\n\n)\nor\navg by (job,instance) (\n  hrStorageUsed{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", job=~\"$job\",instance=~\"$instance\"}/hrStorageSize{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", job=~\"$job\",instance=~\"$instance\"}*100\n\n)\nor\navg by (job,instance) (\n  jnxOperatingBuffer{jnxOperatingContentsIndex=\"9\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "expr": "avg by (job,instance) (\n  # cisco CISCO-ENHANCED-MEMPOOL-MIB\n# cempMemPoolType=\"10\" - virtual memory, i.e in ASA(v).\n(\n  (\n    cempMemPoolUsed{job=~\"$job\",instance=~\"$instance\"}\n    /\n    (cempMemPoolUsed{job=~\"$job\",instance=~\"$instance\"} + cempMemPoolFree{job=~\"$job\",instance=~\"$instance\"}) * 100\n  ) * on (job,instance, cempMemPoolIndex, entPhysicalIndex) group_left ()\n        (cempMemPoolType{job=~\"$job\",instance=~\"$instance\"} == 10)/10\n)\nor\n# cisco firmwares that supports only CISCO-MEMORY-POOL-MIB\n# ciscoMemoryPoolType=\"1\" - Processor\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"}\n/\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"} + ciscoMemoryPoolFree{ciscoMemoryPoolType=\"1\", job=~\"$job\",instance=~\"$instance\"}) * 100)\n\n)\nor\navg by (job,instance) (\n  # net-snmp 5.9.1 and later:\navg by (job,instance) (\n  100 * (1 - hrStorageSize{hrStorageDescr=\"Available memory\", job=~\"$job\",instance=~\"$instance\"}\n  / on (job,instance) hrStorageSize{hrStorageDescr=\"Physical memory\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\n# earlier net-snmp: cached memory and buffers are subtracted\navg by (job,instance) (\n  100 * (hrStorageUsed{hrStorageDescr=\"Physical memory\", job=~\"$job\",instance=~\"$instance\"}\n  - on (job,instance) hrStorageUsed{hrStorageDescr=\"Cached memory\", job=~\"$job\",instance=~\"$instance\"}\n  - on (job,instance) hrStorageUsed{hrStorageDescr=\"Memory buffers\", job=~\"$job\",instance=~\"$instance\"})\n  / on (job,instance) hrStorageSize{hrStorageDescr=\"Physical memory\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  hrStorageUsed{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", job=~\"$job\",instance=~\"$instance\"}/hrStorageSize{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", job=~\"$job\",instance=~\"$instance\"}*100\n)\n\n)\nor\navg by (job,instance) (\n  hrStorageUsed{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", job=~\"$job\",instance=~\"$instance\"}/hrStorageSize{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", job=~\"$job\",instance=~\"$instance\"}*100\n\n)\nor\navg by (job,instance) (\n  max by (job,instance) (jnxOperatingBuffer{jnxOperatingContentsIndex=\"9\", jnxOperatingL2Index=\"0\", job=~\"$job\",instance=~\"$instance\"})\n)",
                   "format": "time_series",
                   "instant": false,
                   "legendFormat": "{{instance}}: Memory utilization",
@@ -441,7 +464,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 6
+               "y": 18
             },
             "panels": [ ],
             "title": "Network interfaces",
@@ -452,12 +475,13 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interfaces overview.",
+            "description": "",
             "fieldConfig": {
                "defaults": {
                   "custom": {
                      "filterable": true
-                  }
+                  },
+                  "unit": "short"
                },
                "overrides": [
                   {
@@ -593,26 +617,6 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Interface type"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hidden",
-                           "value": true
-                        },
-                        {
-                           "id": "displayName",
-                           "value": "Type"
-                        },
-                        {
-                           "id": "unit",
-                           "value": "short"
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
                         "options": "ifType"
                      },
                      "properties": [
@@ -741,26 +745,6 @@
                   {
                      "matcher": {
                         "id": "byName",
-                        "options": "Interface physical address"
-                     },
-                     "properties": [
-                        {
-                           "id": "custom.hidden",
-                           "value": true
-                        },
-                        {
-                           "id": "displayName",
-                           "value": "MAC"
-                        },
-                        {
-                           "id": "unit",
-                           "value": "short"
-                        }
-                     ]
-                  },
-                  {
-                     "matcher": {
-                        "id": "byName",
                         "options": "ifPhysAddress"
                      },
                      "properties": [
@@ -820,7 +804,7 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 7
+               "y": 19
             },
             "options": {
                "sortBy": [
@@ -830,7 +814,7 @@
                   }
                ]
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -840,7 +824,7 @@
                   "expr": "sum by (job,instance,ifName,ifAlias,ifDescr) (\n  ifOperStatus{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{ifDescr}}: status",
+                  "legendFormat": "{{ifName}}: status ({{ifAlias}} {{ifDescr}})",
                   "refId": "Interface operational status"
                },
                {
@@ -851,7 +835,7 @@
                   "expr": "sum by (job,instance,ifName,ifAlias,ifDescr) (\n  ifAdminStatus{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{ifDescr}}: admin status",
+                  "legendFormat": "{{ifName}}: admin status ({{ifAlias}} {{ifDescr}})",
                   "refId": "Interface admin status"
                },
                {
@@ -862,7 +846,7 @@
                   "expr": "(\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  ifHighSpeed{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}\n)\n)*1000000",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{ifDescr}}: Speed",
+                  "legendFormat": "{{ifName}}: Speed ({{ifAlias}} {{ifDescr}})",
                   "refId": "Interface estimated bandwidth"
                },
                {
@@ -873,7 +857,7 @@
                   "expr": "sum by (job,instance,ifName,ifAlias,ifDescr,ifType) (\n  ifType_info{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{ifDescr}}: Type",
+                  "legendFormat": "{{ifName}}: Type ({{ifAlias}} {{ifDescr}})",
                   "refId": "Interface type"
                },
                {
@@ -884,7 +868,7 @@
                   "expr": "sum by (job,instance,ifName,ifAlias,ifDescr) (\n  ifPromiscuousMode{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{ifDescr}}: promiscuous mode",
+                  "legendFormat": "{{ifName}}: promiscuous mode ({{ifAlias}} {{ifDescr}})",
                   "refId": "Interface promiscuous mode"
                },
                {
@@ -895,7 +879,7 @@
                   "expr": "sum by (job,instance,ifName,ifAlias,ifDescr) (\n  ifConnectorPresent{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{ifDescr}}: connector",
+                  "legendFormat": "{{ifName}}: connector ({{ifAlias}} {{ifDescr}})",
                   "refId": "Interface connector present"
                },
                {
@@ -906,7 +890,7 @@
                   "expr": "sum by (job,instance,ifName,ifAlias,ifDescr) (\n  ifMtu{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{ifDescr}}: MTU",
+                  "legendFormat": "{{ifName}}: MTU ({{ifAlias}} {{ifDescr}})",
                   "refId": "Interface MTU"
                },
                {
@@ -914,10 +898,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "# ignore when ifLastCHange == 0 as invalid\nsum by (job,instance,ifName,ifAlias,ifDescr) (\n  (sysUpTime{job=~\"$job\",instance=~\"$instance\"} - on(job,instance) group_right () (ifLastChange{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"})!=0)\n)/100\n",
+                  "expr": "sum by (job,instance,ifName,ifAlias,ifDescr) (\n  # ignore when ifLastChange == 0 as invalid\n(sysUpTime{job=~\"$job\",instance=~\"$instance\"} - on(job,instance) group_right () (ifLastChange{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"})!=0)/100\n\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{ifDescr}}: Last change",
+                  "legendFormat": "{{ifName}}: Last change ({{ifAlias}} {{ifDescr}})",
                   "refId": "Interface last change"
                },
                {
@@ -928,7 +912,7 @@
                   "expr": "sum by (job,instance,ifName,ifAlias,ifDescr,ifPhysAddress) (\n  ifPhysAddress{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}\n)",
                   "format": "table",
                   "instant": true,
-                  "legendFormat": "{{ifDescr}}: MAC",
+                  "legendFormat": "{{ifName}}: MAC ({{ifAlias}} {{ifDescr}})",
                   "refId": "Interface physical address"
                }
             ],
@@ -973,6 +957,26 @@
                   }
                },
                {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "exclude": {
+                        "names": [
+                           "Interface type"
+                        ]
+                     }
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "exclude": {
+                        "names": [
+                           "Interface physical address"
+                        ]
+                     }
+                  }
+               },
+               {
                   "id": "organize",
                   "options": {
                      "excludeByName": {
@@ -989,7 +993,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface traffic out.\n",
+            "description": "transmitted (sum): Network interface traffic out.\n  \n\nreceived (sum): Network interface traffic in.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1017,7 +1021,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -1032,7 +1036,7 @@
                "h": 8,
                "w": 24,
                "x": 0,
-               "y": 15
+               "y": 27
             },
             "interval": "2m",
             "options": {
@@ -1053,17 +1057,17 @@
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,\n  \n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCOutOctets{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"} [$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<100*10^9\n)",
+                  "expr": "topk(25,\n  \n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCOutOctets{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"} [$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<10^12\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: transmitted",
+                  "legendFormat": "{{ifName}}: transmitted ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface traffic out"
                },
                {
@@ -1071,10 +1075,10 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "expr": "topk(25,\n  \n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCInOctets{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<100*10^9\n)",
+                  "expr": "topk(25,\n  \n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCInOctets{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)*8\n\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<10^12\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: received",
+                  "legendFormat": "{{ifName}}: received ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface traffic in"
                }
             ],
@@ -1086,7 +1090,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface errors in.\n",
+            "description": "errors in (sum): Network interface errors in.\n  \n\nerrors out (sum): Network interface errors out.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1114,7 +1118,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -1129,20 +1133,28 @@
                "h": 6,
                "w": 12,
                "x": 0,
-               "y": 21
+               "y": 33
             },
             "interval": "2m",
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Mean",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1152,7 +1164,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifInErrors{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)>0\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: errors in",
+                  "legendFormat": "{{ifName}}: errors in ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface errors in"
                },
                {
@@ -1163,7 +1175,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifOutErrors{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)>0\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: errors out",
+                  "legendFormat": "{{ifName}}: errors out ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface errors out"
                }
             ],
@@ -1175,7 +1187,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface discards in.\n",
+            "description": "dropped in (sum): Network interface discards in.\n  \n\ndropped out (sum): Network interface discards out.\n  \n\nunknown dropped in (sum): The number of packets received via the interface\nwhich were discarded because of an unknown or\nunsupported protocol.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1203,7 +1215,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -1218,20 +1230,28 @@
                "h": 6,
                "w": 12,
                "x": 12,
-               "y": 21
+               "y": 33
             },
             "interval": "2m",
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Mean",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1241,7 +1261,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifInDiscards{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)>0\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: dropped in",
+                  "legendFormat": "{{ifName}}: dropped in ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface discards in"
                },
                {
@@ -1252,7 +1272,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifOutDiscards{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)>0\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: dropped out",
+                  "legendFormat": "{{ifName}}: dropped out ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface discards out"
                },
                {
@@ -1263,7 +1283,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifInUnknownProtos{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)>0\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: unknown dropped in",
+                  "legendFormat": "{{ifName}}: unknown dropped in ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface unknown protocol in packets dropped"
                }
             ],
@@ -1275,7 +1295,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface unicast packets in.\n",
+            "description": "unicast in (sum): Network interface unicast packets in.\n  \n\nunicast out (sum): Network interface unicast packets out.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1303,7 +1323,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -1316,22 +1336,30 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
+               "w": 12,
                "x": 0,
-               "y": 29
+               "y": 41
             },
             "interval": "2m",
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Mean",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1341,7 +1369,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCInUcastPkts{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)>0\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: unicast in",
+                  "legendFormat": "{{ifName}}: unicast in ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface unicast packets in"
                },
                {
@@ -1352,7 +1380,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCOutUcastPkts{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)>0\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: unicast out",
+                  "legendFormat": "{{ifName}}: unicast out ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface unicast packets out"
                }
             ],
@@ -1364,7 +1392,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface broadcast packets in.\n",
+            "description": "broadcast in (sum): Network interface broadcast packets in.\n  \n\nbroadcast out (sum): Network interface broadcast packets out.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1392,7 +1420,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -1405,22 +1433,30 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 8,
-               "y": 29
+               "w": 12,
+               "x": 12,
+               "y": 41
             },
             "interval": "2m",
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Mean",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1430,7 +1466,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCInBroadcastPkts{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)>0\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: broadcast in",
+                  "legendFormat": "{{ifName}}: broadcast in ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface broadcast packets in"
                },
                {
@@ -1441,7 +1477,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCOutBroadcastPkts{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)>0\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: broadcast out",
+                  "legendFormat": "{{ifName}}: broadcast out ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface broadcast packets out"
                }
             ],
@@ -1453,7 +1489,7 @@
                "type": "prometheus",
                "uid": "${prometheus_datasource}"
             },
-            "description": "Network interface multicast packets in.\n",
+            "description": "multicast in (sum): Network interface multicast packets in.\n  \n\nmulticast out (sum): Network interface multicast packets out.\n",
             "fieldConfig": {
                "defaults": {
                   "color": {
@@ -1481,7 +1517,7 @@
                   {
                      "matcher": {
                         "id": "byRegexp",
-                        "options": "/transmit|tx|out/"
+                        "options": "/transmit|tx|Tx|out/"
                      },
                      "properties": [
                         {
@@ -1494,22 +1530,30 @@
             },
             "gridPos": {
                "h": 8,
-               "w": 8,
-               "x": 16,
-               "y": 29
+               "w": 24,
+               "x": 0,
+               "y": 49
             },
             "interval": "2m",
             "options": {
                "legend": {
-                  "calcs": [ ],
-                  "displayMode": "list"
+                  "calcs": [
+                     "min",
+                     "mean",
+                     "max",
+                     "lastNotNull"
+                  ],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "sortBy": "Mean",
+                  "sortDesc": true
                },
                "tooltip": {
                   "mode": "multi",
                   "sort": "desc"
                }
             },
-            "pluginVersion": "v11.0.0",
+            "pluginVersion": "v11.4.0",
             "targets": [
                {
                   "datasource": {
@@ -1519,7 +1563,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCInMulticastPkts{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)>0\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: multicast in",
+                  "legendFormat": "{{ifName}}: multicast in ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface multicast packets in"
                },
                {
@@ -1530,7 +1574,7 @@
                   "expr": "topk(25,\n  (\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(ifHCOutMulticastPkts{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)>0\n)",
                   "format": "time_series",
                   "instant": false,
-                  "legendFormat": "{{ifDescr}}: multicast out",
+                  "legendFormat": "{{ifName}}: multicast out ({{ifAlias}} {{ifDescr}})",
                   "refId": "Network interface multicast packets out"
                }
             ],
@@ -1543,7 +1587,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 37
+               "y": 57
             },
             "panels": [
                {
@@ -1551,30 +1595,15 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "description": "Field replaceable unit status",
+                  "description": "FRU status (sum): Field replaceable unit status.  \n",
                   "fieldConfig": {
                      "defaults": {
                         "custom": {
                            "filterable": false
-                        }
+                        },
+                        "unit": "short"
                      },
                      "overrides": [
-                        {
-                           "matcher": {
-                              "id": "byName",
-                              "options": "FRU status"
-                           },
-                           "properties": [
-                              {
-                                 "id": "custom.hidden",
-                                 "value": true
-                              },
-                              {
-                                 "id": "unit",
-                                 "value": "short"
-                              }
-                           ]
-                        },
                         {
                            "matcher": {
                               "id": "byName",
@@ -1593,7 +1622,7 @@
                      "h": 12,
                      "w": 24,
                      "x": 0,
-                     "y": 38
+                     "y": 58
                   },
                   "options": {
                      "sortBy": [
@@ -1603,7 +1632,7 @@
                         }
                      ]
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1613,7 +1642,7 @@
                         "expr": "(\n  sum by (job,instance,entPhysicalName,cefcFRUPowerOperStatus) (\n  cefcFRUPowerOperStatus{job=~\"$job\",instance=~\"$instance\"}\n)\n)!=0",
                         "format": "table",
                         "instant": true,
-                        "legendFormat": "{{entPhysicalName}}: FRU status",
+                        "legendFormat": "{{instance}}: FRU status ({{entPhysicalName}})",
                         "refId": "FRU status"
                      }
                   ],
@@ -1640,6 +1669,10 @@
                      {
                         "id": "organize",
                         "options": {
+                           "excludeByName": {
+                              "FRU status": true,
+                              "Value": true
+                           },
                            "indexByName": {
                               "cefcFRUPowerOperStatus": 3,
                               "entPhysicalName": 2,
@@ -1659,7 +1692,7 @@
                   "type": "table"
                }
             ],
-            "title": "FRU (Components)",
+            "title": "FRU (components)",
             "type": "row"
          },
          {
@@ -1668,7 +1701,7 @@
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 50
+               "y": 70
             },
             "panels": [
                {
@@ -1676,7 +1709,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "description": "The current value of receive buffer-to-buffer credits for this port.\n",
+                  "description": "credit receive (sum): The current value of receive buffer-to-buffer credits for this port.\n  \n\ncredit transmit (sum): The current value of transmit buffer-to-buffer credits for this port.\n",
                   "fieldConfig": {
                      "defaults": {
                         "color": {
@@ -1686,7 +1719,7 @@
                         "custom": {
                            "axisCenteredZero": false,
                            "axisLabel": "out(-) | in(+)",
-                           "fillOpacity": 0,
+                           "fillOpacity": 30,
                            "gradientMode": "opacity",
                            "lineInterpolation": "smooth",
                            "lineWidth": 2,
@@ -1704,7 +1737,7 @@
                         {
                            "matcher": {
                               "id": "byRegexp",
-                              "options": "/transmit|tx|out/"
+                              "options": "/transmit|tx|Tx|out/"
                            },
                            "properties": [
                               {
@@ -1719,7 +1752,7 @@
                      "h": 8,
                      "w": 12,
                      "x": 0,
-                     "y": 51
+                     "y": 71
                   },
                   "interval": "2m",
                   "options": {
@@ -1732,7 +1765,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1742,7 +1775,7 @@
                         "expr": "topk(25,\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  fcIfCurrRxBbCredit{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}\n)\n)",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": "{{ifDescr}}: credit receive",
+                        "legendFormat": "{{ifName}}: credit receive ({{ifAlias}} {{ifDescr}})",
                         "refId": "FC receive credits"
                      },
                      {
@@ -1753,7 +1786,7 @@
                         "expr": "topk(25,\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  fcIfCurrTxBbCredit{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}\n)\n)",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": "{{ifDescr}}: credit transmit",
+                        "legendFormat": "{{ifName}}: credit transmit ({{ifAlias}} {{ifDescr}})",
                         "refId": "FC transmit credits"
                      }
                   ],
@@ -1765,7 +1798,7 @@
                      "type": "prometheus",
                      "uid": "${prometheus_datasource}"
                   },
-                  "description": "-TxWaitCount: The number of times the FC-port waited due to lack of transmit credits.\n\n-FramesDiscard: The number of frames discarded by the FC-port.\n\n-TxWtAvgBBCreditTransitionToZero: increments if the credit available is zero for 100 ms.\n\n-BBCreditTransistionFromZero: increments if the transmit b2b credit is zero.\n\n-BBCreditTransistionToZero: increments if the receive b2b credit is zero.\n\n-InvalidTxWords: The number of invalid transmission words detected by the FC-Port.\n\n-InvalidCrcs: The number of invalid CRCs detected by the FC-Port.\n",
+                  "description": "fcIfTxWaitCount (sum): The number of times the FC-port waited due to lack of transmit credits.\n  \n\nfcIfFramesDiscard (sum): The number of frames discarded by the FC-port.\n  \n\nfcIfTxWtAvgBBCreditTransitionToZero (sum): fcIfTxWtAvgBBCreditTransitionToZero increments if the credit\navailable is zero for 100 ms.\n  \n\nfcHCIfBBCreditTransistionFromZero (sum): fcHCIfBBCreditTransistionFromZero increments if the transmit b2b\ncredit is zero.\n  \n\nfcHCIfBBCreditTransistionToZero (sum): fcHCIfBBCreditTransistionToZero increments if the receive b2b\ncredit is zero.\n  \n\nfcIfInvalidCrcs (sum): The number of invalid CRCs detected by the FC-Port.\n  \n\nfcIfInvalidTxWords (sum): The number of invalid transmission words detected by the FC-Port.\n",
                   "fieldConfig": {
                      "defaults": {
                         "color": {
@@ -1793,7 +1826,7 @@
                         {
                            "matcher": {
                               "id": "byRegexp",
-                              "options": "/transmit|tx|out/"
+                              "options": "/transmit|tx|Tx|out/"
                            },
                            "properties": [
                               {
@@ -1808,7 +1841,7 @@
                      "h": 8,
                      "w": 12,
                      "x": 12,
-                     "y": 51
+                     "y": 71
                   },
                   "interval": "2m",
                   "options": {
@@ -1821,7 +1854,7 @@
                         "sort": "desc"
                      }
                   },
-                  "pluginVersion": "v11.0.0",
+                  "pluginVersion": "v11.4.0",
                   "targets": [
                      {
                         "datasource": {
@@ -1831,8 +1864,8 @@
                         "expr": "topk(25,\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(fcIfTxWaitCount{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": "{{ifDescr}}: fcIfTxWaitCount",
-                        "refId": "FC wait due to lack of transmit credits."
+                        "legendFormat": "{{ifName}}: fcIfTxWaitCount ({{ifAlias}} {{ifDescr}})",
+                        "refId": "FC wait due to lack of transmit credits"
                      },
                      {
                         "datasource": {
@@ -1842,7 +1875,7 @@
                         "expr": "topk(25,\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(fcIfFramesDiscard{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": "{{ifDescr}}: fcIfFramesDiscard",
+                        "legendFormat": "{{ifName}}: fcIfFramesDiscard ({{ifAlias}} {{ifDescr}})",
                         "refId": "Frames discarded"
                      },
                      {
@@ -1853,7 +1886,7 @@
                         "expr": "topk(25,\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(fcIfTxWtAvgBBCreditTransitionToZero{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": "{{ifDescr}}: fcIfTxWtAvgBBCreditTransitionToZero",
+                        "legendFormat": "{{ifName}}: fcIfTxWtAvgBBCreditTransitionToZero ({{ifAlias}} {{ifDescr}})",
                         "refId": "Zero credit available"
                      },
                      {
@@ -1864,7 +1897,7 @@
                         "expr": "topk(25,\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(fcHCIfBBCreditTransistionFromZero{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": "{{ifDescr}}: fcHCIfBBCreditTransistionFromZero",
+                        "legendFormat": "{{ifName}}: fcHCIfBBCreditTransistionFromZero ({{ifAlias}} {{ifDescr}})",
                         "refId": "Zero credit available (transmit)"
                      },
                      {
@@ -1875,7 +1908,7 @@
                         "expr": "topk(25,\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(fcHCIfBBCreditTransistionToZero{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": "{{ifDescr}}: fcHCIfBBCreditTransistionToZero",
+                        "legendFormat": "{{ifName}}: fcHCIfBBCreditTransistionToZero ({{ifAlias}} {{ifDescr}})",
                         "refId": "Zero credit available (receive)"
                      },
                      {
@@ -1886,8 +1919,8 @@
                         "expr": "topk(25,\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(fcIfInvalidCrcs{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": "{{ifDescr}}: fcIfInvalidCrcs",
-                        "refId": "FC invalid CRCc detected"
+                        "legendFormat": "{{ifName}}: fcIfInvalidCrcs ({{ifAlias}} {{ifDescr}})",
+                        "refId": "FC invalid CRCs detected"
                      },
                      {
                         "datasource": {
@@ -1897,7 +1930,7 @@
                         "expr": "topk(25,\n  sum by (job,instance,ifName,ifAlias,ifDescr) (\n  irate(fcIfInvalidTxWords{job=~\"$job\",instance=~\"$instance\",ifName=~\"$ifName\"}[$__rate_interval])\n)\n)",
                         "format": "time_series",
                         "instant": false,
-                        "legendFormat": "{{ifDescr}}: fcIfInvalidTxWords",
+                        "legendFormat": "{{ifName}}: fcIfInvalidTxWords ({{ifAlias}} {{ifDescr}})",
                         "refId": "FC invalid TX words"
                      }
                   ],
@@ -1909,384 +1942,387 @@
             "type": "row"
          },
          {
-            "collapsed": true,
+            "collapsed": false,
             "gridPos": {
                "h": 1,
                "w": 0,
                "x": 0,
-               "y": 59
+               "y": 79
             },
-            "panels": [
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "description": "Temperature sensor.\n",
-                  "fieldConfig": {
-                     "defaults": {
-                        "color": {
-                           "fixedColor": "#5794f2",
-                           "mode": "continuous-BlYlRd"
-                        },
-                        "custom": {
-                           "axisSoftMax": 100,
-                           "axisSoftMin": 0,
-                           "fillOpacity": 0,
-                           "gradientMode": "scheme",
-                           "lineInterpolation": "smooth",
-                           "lineWidth": 2,
-                           "showPoints": "never"
-                        },
-                        "decimals": 1,
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        },
-                        "unit": "celsius"
-                     },
-                     "overrides": [
-                        {
-                           "matcher": {
-                              "id": "byFrameRefID",
-                              "options": "Temperature"
-                           },
-                           "properties": [
-                              {
-                                 "id": "unit",
-                                 "value": "celsius"
-                              }
-                           ]
-                        }
-                     ]
-                  },
-                  "gridPos": {
-                     "h": 8,
-                     "w": 12,
-                     "x": 0,
-                     "y": 60
-                  },
-                  "options": {
-                     "legend": {
-                        "calcs": [ ],
-                        "displayMode": "list"
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "pluginVersion": "v11.0.0",
-                  "targets": [
-                     {
-                        "datasource": {
-                           "type": "prometheus",
-                           "uid": "${prometheus_datasource}"
-                        },
-                        "expr": "(\n  avg by (job,instance) (\n  mtxrHlTemperature{job=~\"$job\",instance=~\"$instance\"}\n)\n)/10\nor\n(\n  avg by (job,instance,jnxOperatingDescr) (\n  jnxOperatingTemp{job=~\"$job\",instance=~\"$instance\"}\n)\n)!=0\nor\navg by (job,instance,entPhysicalName) (\n  # https://www.ietf.org/rfc/rfc3433.html\n# entSensorPrecision:\n# If an object of this type contains a value in the range 1 to\n# 9, it represents the number of decimal places in the\n# fractional part of an associated EntitySensorValue fixed-\n# point number.\n# If an object of this type contains a value in the range -8\n# to -1, it represents the number of accurate digits in the\n# associated EntitySensorValue fixed-point number.\n# entSensorScale\n#     SYNTAX INTEGER {\n#         yocto(1),   -- 10^-24\n#         zepto(2),   -- 10^-21\n#         atto(3),    -- 10^-18\n#         femto(4),   -- 10^-15\n#         pico(5),    -- 10^-12\n#         nano(6),    -- 10^-9\n#         micro(7),   -- 10^-6\n#         milli(8),   -- 10^-3\n#         units(9),   -- 10^0\n#         kilo(10),   -- 10^3\n#         mega(11),   -- 10^6\n#         giga(12),   -- 10^9\n#         tera(13),   -- 10^12\n#         exa(14),    -- 10^15\n#         peta(15),   -- 10^18\n#         zetta(16),  -- 10^21\n#         yotta(17)   -- 10^24\n#     }\n(\n  entSensorValue{entSensorScale=\"9\", entSensorType=\"8\", entPhysicalName!~\".+(\\\\d+/\\\\d+(/\\\\d+)?).*\", job=~\"$job\",instance=~\"$instance\"}\n  *10^-entSensorPrecision{job=~\"$job\",instance=~\"$instance\"}\n  or\n  entSensorValue{entSensorScale=\"8\", entSensorType=\"8\", entPhysicalName!~\".+(\\\\d+/\\\\d+(/\\\\d+)?).*\", job=~\"$job\",instance=~\"$instance\"}\n  *10^-3\n  *10^-entSensorPrecision{job=~\"$job\",instance=~\"$instance\"}\n  or \n  entSensorValue{entSensorScale=\"7\", entSensorType=\"8\", entPhysicalName!~\".+(\\\\d+/\\\\d+(/\\\\d+)?).*\", job=~\"$job\",instance=~\"$instance\"}\n  *10^-6\n  *10^-entSensorPrecision{job=~\"$job\",instance=~\"$instance\"}\n)\n\n)",
-                        "format": "time_series",
-                        "instant": false,
-                        "legendFormat": "{{entPhysicalName}}{{jnxOperatingDescr}}",
-                        "refId": "Temperature"
-                     }
-                  ],
-                  "title": "Temperature",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "description": "DC voltage sensor.\n",
-                  "fieldConfig": {
-                     "defaults": {
-                        "color": {
-                           "fixedColor": "#5794f2",
-                           "mode": "palette-classic"
-                        },
-                        "custom": {
-                           "fillOpacity": 0,
-                           "gradientMode": "opacity",
-                           "lineInterpolation": "smooth",
-                           "lineWidth": 2,
-                           "showPoints": "never"
-                        },
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        }
-                     },
-                     "overrides": [
-                        {
-                           "matcher": {
-                              "id": "byFrameRefID",
-                              "options": "DC voltage"
-                           },
-                           "properties": [
-                              {
-                                 "id": "unit",
-                                 "value": "volt"
-                              }
-                           ]
-                        }
-                     ]
-                  },
-                  "gridPos": {
-                     "h": 8,
-                     "w": 12,
-                     "x": 12,
-                     "y": 60
-                  },
-                  "options": {
-                     "legend": {
-                        "calcs": [ ],
-                        "displayMode": "list"
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "pluginVersion": "v11.0.0",
-                  "targets": [
-                     {
-                        "datasource": {
-                           "type": "prometheus",
-                           "uid": "${prometheus_datasource}"
-                        },
-                        "expr": "(\n  avg by (job,instance) (\n  mtxrHlVoltage{job=~\"$job\",instance=~\"$instance\"}\n)\n)/10\nor\navg by (job,instance,entPhysicalName) (\n  (entSensorValue{entSensorType=\"4\", entSensorScale=\"9\", job=~\"$job\",instance=~\"$instance\"}\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"4\", entSensorScale=\"8\", job=~\"$job\",instance=~\"$instance\"}\n*10^-3\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"4\", entSensorScale=\"7\", job=~\"$job\",instance=~\"$instance\"}\n*10^-6\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"})\n\n)",
-                        "format": "time_series",
-                        "instant": false,
-                        "legendFormat": "{{entPhysicalName}}",
-                        "refId": "DC voltage"
-                     }
-                  ],
-                  "title": "DC voltage",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "description": "Power used in Watts.\n",
-                  "fieldConfig": {
-                     "defaults": {
-                        "color": {
-                           "fixedColor": "#5794f2",
-                           "mode": "palette-classic"
-                        },
-                        "custom": {
-                           "fillOpacity": 0,
-                           "gradientMode": "opacity",
-                           "lineInterpolation": "smooth",
-                           "lineWidth": 2,
-                           "showPoints": "never"
-                        },
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        }
-                     },
-                     "overrides": [
-                        {
-                           "matcher": {
-                              "id": "byFrameRefID",
-                              "options": "Power"
-                           },
-                           "properties": [
-                              {
-                                 "id": "unit",
-                                 "value": "watt"
-                              }
-                           ]
-                        }
-                     ]
-                  },
-                  "gridPos": {
-                     "h": 8,
-                     "w": 12,
-                     "x": 0,
-                     "y": 68
-                  },
-                  "options": {
-                     "legend": {
-                        "calcs": [ ],
-                        "displayMode": "list"
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "pluginVersion": "v11.0.0",
-                  "targets": [
-                     {
-                        "datasource": {
-                           "type": "prometheus",
-                           "uid": "${prometheus_datasource}"
-                        },
-                        "expr": "avg by (job,instance) (\n  mtxrHlPower{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance,entPhysicalName) (\n  (entSensorValue{entSensorType=\"6\", entSensorScale=\"9\", job=~\"$job\",instance=~\"$instance\"}\n*10^-entSensorPrecision{entSensorType=\"6\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"6\", entSensorScale=\"8\", job=~\"$job\",instance=~\"$instance\"}\n*10^-3\n*10^-entSensorPrecision{entSensorType=\"6\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"6\", entSensorScale=\"7\", job=~\"$job\",instance=~\"$instance\"}\n*10^-6\n*10^-entSensorPrecision{entSensorType=\"6\", job=~\"$job\",instance=~\"$instance\"})\n\n)",
-                        "format": "time_series",
-                        "instant": false,
-                        "legendFormat": "{{entPhysicalName}}",
-                        "refId": "Power"
-                     }
-                  ],
-                  "title": "Power",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "description": "Receive/Transmit power.\n",
-                  "fieldConfig": {
-                     "defaults": {
-                        "color": {
-                           "fixedColor": "#5794f2",
-                           "mode": "palette-classic"
-                        },
-                        "custom": {
-                           "fillOpacity": 0,
-                           "gradientMode": "opacity",
-                           "lineInterpolation": "smooth",
-                           "lineWidth": 2,
-                           "showPoints": "never"
-                        },
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        }
-                     },
-                     "overrides": [
-                        {
-                           "matcher": {
-                              "id": "byFrameRefID",
-                              "options": "Receive/Transmit power"
-                           },
-                           "properties": [
-                              {
-                                 "id": "unit",
-                                 "value": "dBm"
-                              }
-                           ]
-                        }
-                     ]
-                  },
-                  "gridPos": {
-                     "h": 8,
-                     "w": 12,
-                     "x": 12,
-                     "y": 68
-                  },
-                  "options": {
-                     "legend": {
-                        "calcs": [ ],
-                        "displayMode": "list"
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "pluginVersion": "v11.0.0",
-                  "targets": [
-                     {
-                        "datasource": {
-                           "type": "prometheus",
-                           "uid": "${prometheus_datasource}"
-                        },
-                        "expr": "avg by (job,instance,entPhysicalName) (\n  (entSensorValue{entSensorType=\"14\", entSensorScale=\"9\", job=~\"$job\",instance=~\"$instance\"}\n*10^-entSensorPrecision{entSensorType=\"14\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"14\", entSensorScale=\"8\", job=~\"$job\",instance=~\"$instance\"}\n*10^-3\n*10^-entSensorPrecision{entSensorType=\"14\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"14\", entSensorScale=\"7\", job=~\"$job\",instance=~\"$instance\"}\n*10^-6\n*10^-entSensorPrecision{entSensorType=\"14\", job=~\"$job\",instance=~\"$instance\"})\n\n)",
-                        "format": "time_series",
-                        "instant": false,
-                        "legendFormat": "{{entPhysicalName}}",
-                        "refId": "Receive/Transmit power"
-                     }
-                  ],
-                  "title": "Receive/Transmit power",
-                  "type": "timeseries"
-               },
-               {
-                  "datasource": {
-                     "type": "prometheus",
-                     "uid": "${prometheus_datasource}"
-                  },
-                  "description": "Fan speed.\n",
-                  "fieldConfig": {
-                     "defaults": {
-                        "color": {
-                           "fixedColor": "#5794f2",
-                           "mode": "palette-classic"
-                        },
-                        "custom": {
-                           "fillOpacity": 0,
-                           "gradientMode": "opacity",
-                           "lineInterpolation": "smooth",
-                           "lineWidth": 2,
-                           "showPoints": "never"
-                        },
-                        "thresholds": {
-                           "mode": "absolute",
-                           "steps": [ ]
-                        }
-                     },
-                     "overrides": [
-                        {
-                           "matcher": {
-                              "id": "byFrameRefID",
-                              "options": "Fan speed"
-                           },
-                           "properties": [
-                              {
-                                 "id": "unit",
-                                 "value": "rotrpm"
-                              }
-                           ]
-                        }
-                     ]
-                  },
-                  "gridPos": {
-                     "h": 8,
-                     "w": 12,
-                     "x": 0,
-                     "y": 76
-                  },
-                  "options": {
-                     "legend": {
-                        "calcs": [ ],
-                        "displayMode": "list"
-                     },
-                     "tooltip": {
-                        "mode": "multi",
-                        "sort": "desc"
-                     }
-                  },
-                  "pluginVersion": "v11.0.0",
-                  "targets": [
-                     {
-                        "datasource": {
-                           "type": "prometheus",
-                           "uid": "${prometheus_datasource}"
-                        },
-                        "expr": "avg by (job,instance,entPhysicalName) (\n  (entSensorValue{entSensorType=\"10\", entSensorScale=\"9\", job=~\"$job\",instance=~\"$instance\"}\n*10^-entSensorPrecision{entSensorType=\"10\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"10\", entSensorScale=\"8\", job=~\"$job\",instance=~\"$instance\"}\n*10^-3\n*10^-entSensorPrecision{entSensorType=\"10\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"10\", entSensorScale=\"7\", job=~\"$job\",instance=~\"$instance\"}\n*10^-6\n*10^-entSensorPrecision{entSensorType=\"10\", job=~\"$job\",instance=~\"$instance\"})\n\n)",
-                        "format": "time_series",
-                        "instant": false,
-                        "legendFormat": "{{entPhysicalName}}",
-                        "refId": "Fan speed"
-                     }
-                  ],
-                  "title": "Fan speed",
-                  "type": "timeseries"
-               }
-            ],
+            "panels": [ ],
             "title": "Sensors",
             "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Temperature sensor.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "axisSoftMax": 100,
+                     "axisSoftMin": 0,
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "celsius"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Temperature"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "celsius"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 80
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "(\n  avg by (job,instance) (\n  mtxrHlTemperature{job=~\"$job\",instance=~\"$instance\"}\n)\n)/10\nor\n(\n  avg by (job,instance,jnxOperatingDescr) (\n  jnxOperatingTemp{job=~\"$job\",instance=~\"$instance\"}\n)\n)!=0\nor\navg by (job,instance,entPhysicalName) (\n  # https://www.ietf.org/rfc/rfc3433.html\n# entSensorPrecision:\n# If an object of this type contains a value in the range 1 to\n# 9, it represents the number of decimal places in the\n# fractional part of an associated EntitySensorValue fixed-\n# point number.\n# If an object of this type contains a value in the range -8\n# to -1, it represents the number of accurate digits in the\n# associated EntitySensorValue fixed-point number.\n# entSensorScale\n#     SYNTAX INTEGER {\n#         yocto(1),   -- 10^-24\n#         zepto(2),   -- 10^-21\n#         atto(3),    -- 10^-18\n#         femto(4),   -- 10^-15\n#         pico(5),    -- 10^-12\n#         nano(6),    -- 10^-9\n#         micro(7),   -- 10^-6\n#         milli(8),   -- 10^-3\n#         units(9),   -- 10^0\n#         kilo(10),   -- 10^3\n#         mega(11),   -- 10^6\n#         giga(12),   -- 10^9\n#         tera(13),   -- 10^12\n#         exa(14),    -- 10^15\n#         peta(15),   -- 10^18\n#         zetta(16),  -- 10^21\n#         yotta(17)   -- 10^24\n#     }\n(\n  entSensorValue{entSensorScale=\"9\", entSensorType=\"8\", entPhysicalName!~\".+(\\\\d+/\\\\d+(/\\\\d+)?).*\", job=~\"$job\",instance=~\"$instance\"}\n  *10^-entSensorPrecision{job=~\"$job\",instance=~\"$instance\"}\n  or\n  entSensorValue{entSensorScale=\"8\", entSensorType=\"8\", entPhysicalName!~\".+(\\\\d+/\\\\d+(/\\\\d+)?).*\", job=~\"$job\",instance=~\"$instance\"}\n  *10^-3\n  *10^-entSensorPrecision{job=~\"$job\",instance=~\"$instance\"}\n  or \n  entSensorValue{entSensorScale=\"7\", entSensorType=\"8\", entPhysicalName!~\".+(\\\\d+/\\\\d+(/\\\\d+)?).*\", job=~\"$job\",instance=~\"$instance\"}\n  *10^-6\n  *10^-entSensorPrecision{job=~\"$job\",instance=~\"$instance\"}\n)\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{entPhysicalName}}{{jnxOperatingDescr}}",
+                  "refId": "Temperature"
+               }
+            ],
+            "title": "Temperature",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "DC voltage sensor.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "volt"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "DC voltage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "volt"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 80
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "(\n  avg by (job,instance) (\n  mtxrHlVoltage{job=~\"$job\",instance=~\"$instance\"}\n)\n)/10\nor\navg by (job,instance,entPhysicalName) (\n  (entSensorValue{entSensorType=\"4\", entSensorScale=\"9\", job=~\"$job\",instance=~\"$instance\"}\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"4\", entSensorScale=\"8\", job=~\"$job\",instance=~\"$instance\"}\n*10^-3\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"4\", entSensorScale=\"7\", job=~\"$job\",instance=~\"$instance\"}\n*10^-6\n*10^-entSensorPrecision{entSensorType=\"4\", job=~\"$job\",instance=~\"$instance\"})\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{entPhysicalName}}",
+                  "refId": "DC voltage"
+               }
+            ],
+            "title": "DC voltage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Power used in Watts.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "watt"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Power"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "watt"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 88
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  mtxrHlPower{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance,entPhysicalName) (\n  (entSensorValue{entSensorType=\"6\", entSensorScale=\"9\", job=~\"$job\",instance=~\"$instance\"}\n*10^-entSensorPrecision{entSensorType=\"6\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"6\", entSensorScale=\"8\", job=~\"$job\",instance=~\"$instance\"}\n*10^-3\n*10^-entSensorPrecision{entSensorType=\"6\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"6\", entSensorScale=\"7\", job=~\"$job\",instance=~\"$instance\"}\n*10^-6\n*10^-entSensorPrecision{entSensorType=\"6\", job=~\"$job\",instance=~\"$instance\"})\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{entPhysicalName}}",
+                  "refId": "Power"
+               }
+            ],
+            "title": "Power",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "dBm"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Receive/transmit power"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "dBm"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 88
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,instance,entPhysicalName) (\n  (entSensorValue{entSensorType=\"14\", entSensorScale=\"9\", job=~\"$job\",instance=~\"$instance\"}\n*10^-entSensorPrecision{entSensorType=\"14\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"14\", entSensorScale=\"8\", job=~\"$job\",instance=~\"$instance\"}\n*10^-3\n*10^-entSensorPrecision{entSensorType=\"14\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"14\", entSensorScale=\"7\", job=~\"$job\",instance=~\"$instance\"}\n*10^-6\n*10^-entSensorPrecision{entSensorType=\"14\", job=~\"$job\",instance=~\"$instance\"})\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{entPhysicalName}}",
+                  "refId": "Receive/transmit power"
+               }
+            ],
+            "title": "Receive/transmit power",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "#5794f2",
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [ ]
+                  },
+                  "unit": "rotrpm"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Fan speed"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "rotrpm"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 24,
+               "x": 0,
+               "y": 96
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.4.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "avg by (job,instance,entPhysicalName) (\n  (entSensorValue{entSensorType=\"10\", entSensorScale=\"9\", job=~\"$job\",instance=~\"$instance\"}\n*10^-entSensorPrecision{entSensorType=\"10\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"10\", entSensorScale=\"8\", job=~\"$job\",instance=~\"$instance\"}\n*10^-3\n*10^-entSensorPrecision{entSensorType=\"10\", job=~\"$job\",instance=~\"$instance\"}\nor \nentSensorValue{entSensorType=\"10\", entSensorScale=\"7\", job=~\"$job\",instance=~\"$instance\"}\n*10^-6\n*10^-entSensorPrecision{entSensorType=\"10\", job=~\"$job\",instance=~\"$instance\"})\n\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{entPhysicalName}}",
+                  "refId": "Fan speed"
+               }
+            ],
+            "title": "Fan speed",
+            "type": "timeseries"
          }
       ],
-      "refresh": "5m",
+      "refresh": "1m",
       "schemaVersion": 39,
       "tags": [
          "snmp"
@@ -2376,7 +2412,7 @@
          ]
       },
       "time": {
-         "from": "now-6h",
+         "from": "now-1h",
          "to": "now"
       },
       "timezone": "",

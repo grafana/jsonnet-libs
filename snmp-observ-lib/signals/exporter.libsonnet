@@ -1,0 +1,57 @@
+function(this)
+  local vendors = [
+    'arista_sw',
+    'brocade_fc',
+    'brocade_foundry',
+    'cisco',
+    'dell_network',
+    'dlink_des',
+    'extreme',
+    'eltex_mes',
+    'f5_bigip',
+    'fortigate',
+    'hpe',
+    'huawei',
+    'juniper',
+    'mikrotik',
+    'netgear',
+    'qtech',
+    'tplink',
+    'ubiquiti_airos',
+  ];
+  local everySource(source) = { generic: source } + { [vendor]: source for vendor in vendors };
+  {
+    filteringSelector: this.filteringSelector,
+    groupLabels: this.groupLabels,
+    instanceLabels: this.instanceLabels,
+    aggLevel: 'instance',
+    aggFunction: 'max',
+    enableLokiLogs: this.enableLokiLogs,
+    discoveryMetric: everySource('snmp_scrape_pdus_returned'),
+    signals: {
+      pdusReturned: {
+        name: 'PDUs returned',
+        nameShort: 'PDUs',
+        description: 'PDUs returned by the SNMP walk of a module.',
+        type: 'gauge',
+        unit: 'short',
+        sources: everySource({ expr: 'snmp_scrape_pdus_returned{%(queriesSelector)s}' }),
+      },
+      scrapeDuration: {
+        name: 'Scrape duration',
+        nameShort: 'Duration',
+        description: 'Time the SNMP exporter took to walk a module.',
+        type: 'gauge',
+        unit: 's',
+        sources: everySource({ expr: 'snmp_scrape_duration_seconds{%(queriesSelector)s}' }),
+      },
+      up: {
+        name: 'Target up',
+        nameShort: 'Up',
+        description: 'Whether the last scrape of the target succeeded.',
+        type: 'gauge',
+        unit: 'short',
+        sources: everySource({ expr: 'up{%(queriesSelector)s}' }),
+      },
+    },
+  }

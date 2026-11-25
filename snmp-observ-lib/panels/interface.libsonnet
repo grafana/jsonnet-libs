@@ -1,10 +1,10 @@
 local g = import '../g.libsonnet';
+local legend = import './legend.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(signals, this):: {
     interfacesTable:
       signals.interface.ifOperStatus.asTable(name='Interfaces', format='table', filterable=true)
-      + g.panel.table.panelOptions.withDescription('Network interfaces overview.')
       + signals.interface.ifAdminStatus.asTableColumn(format='table')
       + signals.interface.ifHighSpeed.asTableColumn(format='table')
       + signals.interface.ifType_info.asTableColumn(format='table')
@@ -14,6 +14,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.interface.ifLastChange.asTableColumn(format='table')
       + signals.interface.ifPhysAddress.asTableColumn(format='table')
       + commonlib.panels.system.table.uptime.stylizeByName('Interface last change')
+      // asTableColumn() appends each column's description to the table's. These columns' descriptions only repeated their titles.
+      + g.panel.table.panelOptions.withDescription('')
       + {
         options+: {
           sortBy: [
@@ -40,12 +42,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.interface.networkInBitPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.traffic.stylize()
       + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
-      //set legend table
-      + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max', 'lastNotNull'])
-      + g.panel.timeSeries.options.legend.withDisplayMode('table')
-      + g.panel.timeSeries.options.legend.withPlacement('right')
-      + g.panel.timeSeries.options.legend.withSortBy('Mean')
-      + g.panel.timeSeries.options.legend.withSortDesc(true)
+      + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
     errors:
@@ -53,6 +50,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.interface.networkOutErrorsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.errors.stylize()
       + commonlib.panels.network.timeSeries.errors.withNegateOutPackets()
+      + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
     dropped:
@@ -61,6 +59,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.interface.ifInUnknownProtos.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.dropped.stylize()
       + commonlib.panels.network.timeSeries.dropped.withNegateOutPackets()
+      + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
     packetsUnicast:
@@ -68,6 +67,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.interface.networkOutUnicastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.unicast.stylize()
       + commonlib.panels.network.timeSeries.unicast.withNegateOutPackets()
+      + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
     packetsBroadcast:
@@ -75,6 +75,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.interface.networkOutBroadcastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.broadcast.stylize()
       + commonlib.panels.network.timeSeries.broadcast.withNegateOutPackets()
+      + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
     packetsMulticast:
@@ -82,6 +83,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.interface.networkOutMulticastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.multicast.stylize()
       + commonlib.panels.network.timeSeries.multicast.withNegateOutPackets()
+      + legend.table
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
   },

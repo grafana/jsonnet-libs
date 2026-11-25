@@ -111,17 +111,23 @@ function(this, level='interface')
         networkAllErrorsPerSec: {
           name: 'Network interface errors and drops',
           nameShort: 'errors and drops',
+          // raw: a counter over several metric names fails once irate drops __name__, as the in and out series share a label set.
           type: 'raw',
           unit: 'pps',
           sources: {
             generic:
               {
+                // The Cisco MDS 9148S doesn't report ifInUnknownProtos, so that term falls back to 0.
                 expr: |||
                   %(aggFunction)s by (%(agg)s) (irate(ifOutErrors{%(queriesSelector)s}[%(interval)s])) +
                   %(aggFunction)s by (%(agg)s) (irate(ifInErrors{%(queriesSelector)s}[%(interval)s])) +
                   %(aggFunction)s by (%(agg)s) (irate(ifInDiscards{%(queriesSelector)s}[%(interval)s])) +
-                  %(aggFunction)s by (%(agg)s) (irate(ifOutDiscards{%(queriesSelector)s}[%(interval)s]))+ 
-                  %(aggFunction)s by (%(agg)s) (irate(ifInUnknownProtos{%(queriesSelector)s}[%(interval)s]))
+                  %(aggFunction)s by (%(agg)s) (irate(ifOutDiscards{%(queriesSelector)s}[%(interval)s])) +
+                  (
+                    %(aggFunction)s by (%(agg)s) (irate(ifInUnknownProtos{%(queriesSelector)s}[%(interval)s]))
+                    or
+                    %(aggFunction)s by (%(agg)s) (irate(ifInErrors{%(queriesSelector)s}[%(interval)s])) * 0
+                  )
                 |||,
               },
             arista_sw: self.generic,
@@ -498,7 +504,7 @@ function(this, level='interface')
           name: 'Network interface broadcast packets out',
           nameShort: 'broadcast out',
           description: |||
-            'Network interface broadcast packets out.',
+            Network interface broadcast packets out.
           |||,
           type: 'counter',
           unit: 'pps',
@@ -861,10 +867,7 @@ function(this, level='interface')
             ifLastChange: {
               name: 'Interface last change',
               nameShort: 'Last change',
-              description: |||
-                Interface last change.
-              |||,
-              type: 'raw',
+              type: 'gauge',
               unit: 'dtdurations',
               sources: {
                 generic:
@@ -872,10 +875,8 @@ function(this, level='interface')
 
                     expr:
                       |||
-                        # ignore when ifLastCHange == 0 as invalid
-                        sum by (%%(agg)s) (
-                          (sysUpTime{%s} - on(%s) group_right () (ifLastChange{%%(queriesSelector)s})!=0)
-                        )/100
+                        # ignore when ifLastChange == 0 as invalid
+                        (sysUpTime{%s} - on(%s) group_right () (ifLastChange{%%(queriesSelector)s})!=0)/100
                       |||
                       %
                       [
@@ -939,9 +940,6 @@ function(this, level='interface')
             ifPhysAddress: {
               name: 'Interface physical address',
               nameShort: 'MAC',
-              description: |||
-                MAC.
-              |||,
               type: 'info',
 
               sources: {

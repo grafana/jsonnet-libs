@@ -15,9 +15,6 @@ function(this)
     signals: {
       fanSpeed: {
         name: 'Fan speed',
-        description: |||
-          Fan speed.
-        |||,
         type: 'gauge',
         unit: 'rotrpm',
         optional: true,

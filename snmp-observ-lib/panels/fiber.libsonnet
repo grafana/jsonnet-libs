@@ -7,8 +7,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.fiber.fcIfCurrTxBbCredit.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.base.stylize()
       + commonlib.panels.network.timeSeries.base.withNegateOutPackets()
-      + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval)
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0),
+      + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
     errors:
       signals.fiber.fcIfTxWaitCount.withTopK().asTimeSeries('FC errors')
       + g.panel.timeSeries.panelOptions.withDescription(

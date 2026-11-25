@@ -76,10 +76,7 @@ function(this)
         },
       },
       rxtxPower: {
-        name: 'Receive/Transmit power',
-        description: |||
-          Receive/Transmit power.
-        |||,
+        name: 'Receive/transmit power',
         type: 'gauge',
         unit: 'dBm',
         optional: true,

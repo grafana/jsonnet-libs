@@ -32,14 +32,30 @@ function(this)
     signals: {
       memoryUsage: {
         name: 'Memory utilization',
-        description: 'Memory utilization.',
         type: 'gauge',
         unit: 'percent',
         sources: {
           generic: {
+            // net-snmp's Physical memory row counts page cache as used. Its Available memory row, from net-snmp 5.9.1, is the kernel's MemAvailable.
             expr: |||
-              hrStorageUsed{%(memorySelector)s, %%(queriesSelector)s}/hrStorageSize{%(memorySelector)s, %%(queriesSelector)s}*100
-            ||| % { memorySelector: this.memorySelector },
+              # net-snmp 5.9.1 and later:
+              avg by (%(agg)s) (
+                100 * (1 - hrStorageSize{hrStorageDescr="Available memory", %%(queriesSelector)s}
+                / on (%(agg)s) hrStorageSize{hrStorageDescr="Physical memory", %%(queriesSelector)s})
+              )
+              or
+              # earlier net-snmp: cached memory and buffers are subtracted
+              avg by (%(agg)s) (
+                100 * (hrStorageUsed{hrStorageDescr="Physical memory", %%(queriesSelector)s}
+                - on (%(agg)s) hrStorageUsed{hrStorageDescr="Cached memory", %%(queriesSelector)s}
+                - on (%(agg)s) hrStorageUsed{hrStorageDescr="Memory buffers", %%(queriesSelector)s})
+                / on (%(agg)s) hrStorageSize{hrStorageDescr="Physical memory", %%(queriesSelector)s}
+              )
+              or
+              avg by (%(agg)s) (
+                hrStorageUsed{%(memorySelector)s, %%(queriesSelector)s}/hrStorageSize{%(memorySelector)s, %%(queriesSelector)s}*100
+              )
+            ||| % { memorySelector: this.memorySelector, agg: std.join(',', this.groupLabels + this.instanceLabels) },
           },
           arista_sw: self.generic,
           brocade_fc: {
@@ -50,32 +66,23 @@ function(this)
           },
           cisco: {
             expr: |||
-              # NX-OS:
-              (
-                cpmCPUMemoryUsed{%(queriesSelector)s}
-                /
-                (cpmCPUMemoryUsed{%(queriesSelector)s} + cpmCPUMemoryFree{%(queriesSelector)s}) * 100
-              )
-              or
               # cisco CISCO-ENHANCED-MEMPOOL-MIB
               # cempMemPoolType="10" - virtual memory, i.e in ASA(v).
               (
                 (
-                  cempMemPoolUsed{%(queriesSelector)s}
+                  cempMemPoolUsed{%%(queriesSelector)s}
                   /
-                  (cempMemPoolUsed{%(queriesSelector)s} + cempMemPoolFree{%(queriesSelector)s}) * 100
-                ) * on (instance, cempMemPoolIndex, entPhysicalIndex) group_left () 
-                      (cempMemPoolType{%(queriesSelector)s} == 10)/10
+                  (cempMemPoolUsed{%%(queriesSelector)s} + cempMemPoolFree{%%(queriesSelector)s}) * 100
+                ) * on (%(joinLabels)s, cempMemPoolIndex, entPhysicalIndex) group_left ()
+                      (cempMemPoolType{%%(queriesSelector)s} == 10)/10
               )
               or
               # cisco firmwares that supports only CISCO-MEMORY-POOL-MIB
               # ciscoMemoryPoolType="1" - Processor
-              (ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %(queriesSelector)s}
+              (ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %%(queriesSelector)s}
               /
-              (ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %(queriesSelector)s} + ciscoMemoryPoolFree{ciscoMemoryPoolType="1", %(queriesSelector)s}) * 100)
-            |||,
-            // keeping this label for now for future improvements
-            // aggKeepLabels: ['ciscoMemoryPoolName', 'cempMemPoolName'],
+              (ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %%(queriesSelector)s} + ciscoMemoryPoolFree{ciscoMemoryPoolType="1", %%(queriesSelector)s}) * 100)
+            ||| % { joinLabels: std.join(',', this.groupLabels + this.instanceLabels) },
           },
           dell_network: {
             expr: 'dellNetCpuUtilMemUsage{%(queriesSelector)s}',
@@ -100,9 +107,7 @@ function(this)
               (sysGlobalTmmStatMemoryTotal{%(queriesSelector)s} + sysGlobalHostOtherMemoryTotal{%(queriesSelector)s}) * 100
             |||,
           },
-          fortigate: {
-            expr: self.generic,
-          },
+          fortigate: self.generic,
           hpe: {
             expr: |||
               # hpe
@@ -115,9 +120,10 @@ function(this)
             expr: 'hwEntityMemUsage{%(queriesSelector)s}',
           },
           juniper: {
-            expr: 'jnxOperatingBuffer{jnxOperatingContentsIndex="9", %(queriesSelector)s}',
-            // keeping this label for now for future improvements
-            // aggKeepLabels: ['jnxOperatingDescr'],
+            // Category 9 also lists routing engine components, such as a "USB Hub" at level two index 1, that report 0.
+            // With two routing engines, max takes the master's: on the EX4200 and MX240 recordings, the master reports the higher memory use.
+            expr: 'max by (%(agg)s) (jnxOperatingBuffer{jnxOperatingContentsIndex="9", jnxOperatingL2Index="0", %%(queriesSelector)s})'
+                  % { agg: std.join(',', this.groupLabels + this.instanceLabels) },
           },
           mikrotik: {
             expr: |||
@@ -127,7 +133,7 @@ function(this)
           netgear: {
             expr: |||
               # netgear
-              (agentSwitchCpuProcessMemAvailable{%(queriesSelector)s}-agentSwitchCpuProcessMemFree{%(queriesSelector)s}{%(queriesSelector)s})
+              (agentSwitchCpuProcessMemAvailable{%(queriesSelector)s}-agentSwitchCpuProcessMemFree{%(queriesSelector)s})
               /
               agentSwitchCpuProcessMemAvailable{%(queriesSelector)s} * 100
             |||,

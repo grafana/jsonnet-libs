@@ -4,73 +4,102 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
   new(this): {
     local instanceLabel = xtd.array.slice(this.config.instanceLabels, -1)[0],
     local groupLabel = xtd.array.slice(this.config.groupLabels, -1)[0],
-    groups+: [
-      {
-        name: this.config.uid + '-fc-alerts',
-        rules:
-          [
-            {
-              alert: 'SNMPInterfaceFCerrors',
-              expr: |||
-                      (%s) > 0
-                    |||
-                    % [
-                      this.signals.fiber.fcIfFramesDiscard.asRuleExpression(),
-                    ],
-              labels: {
-                severity: 'warning',
-              },
-              annotations: {
-                summary: 'Too many packets with errors (fcIfFramesDiscard) on the FC network interface.',
-                description: |||
-                  Too many packets with errors (fcIfFramesDiscard) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-                ||| % [instanceLabel],
-              },
-              'for': '15m',
-              keep_firing_for: '5m',
-            },
-            {
-              alert: 'SNMPInterfaceFCerrors',
-              expr: |||
-                      (%s) > 0
-                    |||
-                    % [
-                      this.signals.fiber.fcIfInvalidCrcs.asRuleExpression(),
-                    ],
-              labels: {
-                severity: 'warning',
-              },
-              annotations: {
-                summary: 'Too many packets with errors (fcIfInvalidCrcs) on the FC network interface.',
-                description: |||
-                  Too many packets with errors (fcIfInvalidCrcs) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-                ||| % [instanceLabel],
-              },
-              'for': '15m',
-              keep_firing_for: '5m',
-            },
-            {
-              alert: 'SNMPInterfaceFCerrors',
-              expr: |||
-                      (%s) > 0
-                    |||
-                    % [
-                      this.signals.fiber.fcIfInvalidTxWords.asRuleExpression(),
-                    ],
-              labels: {
-                severity: 'warning',
-              },
-              annotations: {
-                summary: 'Too many packets with errors (fcIfInvalidTxWords) on the FC network interface.',
-                description: |||
-                  Too many packets with errors (fcIfInvalidTxWords) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-                ||| % [instanceLabel],
-              },
-              'for': '15m',
-              keep_firing_for: '5m',
-            },
-          ],
+    local interface = this.signals.interface,
+    // Inbound packet counts leave out errored and discarded packets, and outbound counts include them (RFC 2863).
+    // An interface that reports no inbound packet counts would read 100% on its first inbound error.
+    local percentOfPackets(counter, unicast, multicast, broadcast, inbound) =
+      local rated(signal) = '(%s)' % signal.withRangeFunction('rate').asRuleExpression();
+      '100 * %(c)s / (((%(u)s or %(c)s * 0) + (%(m)s or %(c)s * 0) + (%(b)s or %(c)s * 0)%(total)s) > 0)%(reported)s' % {
+        total: if inbound then ' + %s' % rated(counter) else '',
+        reported: if inbound then ' and (%s)' % std.join(' or ', [
+          '%s{%s}' % [metric, this.config.filteringSelector]
+          for metric in ['ifHCInUcastPkts', 'ifHCInMulticastPkts', 'ifHCInBroadcastPkts']
+        ]) else '',
+        c: rated(counter),
+        u: rated(unicast),
+        m: rated(multicast),
+        b: rated(broadcast),
       },
+    // A signal with no source in metricsSource is a stub, whose rule expression is an empty object.
+    local hasSource(signal) = std.isString(signal.asRuleExpression()),
+    local fiber = this.signals.fiber,
+    local fruOperStatus = this.signals.system.fruOperStatus,
+    groups+: (
+      if std.all(std.map(hasSource, [fiber.fcIfFramesDiscard, fiber.fcIfInvalidCrcs, fiber.fcIfInvalidTxWords])) then [
+        {
+          name: this.config.uid + '-fc-alerts',
+          rules:
+            [
+              {
+                local rule = self,
+                alert: 'SNMPInterfaceFCerrors',
+                expr: |||
+                        (%s) > %s
+                      |||
+                      % [
+                        fiber.fcIfFramesDiscard.asRuleExpression(),
+                        this.config.alertsInterfaceFCErrorsWarning,
+                      ],
+                labels: {
+                  severity: 'warning',
+                },
+                annotations: {
+                  summary: 'Too many packets with errors (fcIfFramesDiscard) on the FC network interface.',
+                  description: |||
+                    Too many packets with errors (fcIfFramesDiscard) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above %s per second for extended period of time (%s).
+                  ||| % [instanceLabel, this.config.alertsInterfaceFCErrorsWarning, rule['for']],
+                },
+                'for': '15m',
+                keep_firing_for: '5m',
+              },
+              {
+                local rule = self,
+                alert: 'SNMPInterfaceFCerrors',
+                expr: |||
+                        (%s) > %s
+                      |||
+                      % [
+                        fiber.fcIfInvalidCrcs.asRuleExpression(),
+                        this.config.alertsInterfaceFCErrorsWarning,
+                      ],
+                labels: {
+                  severity: 'warning',
+                },
+                annotations: {
+                  summary: 'Too many packets with errors (fcIfInvalidCrcs) on the FC network interface.',
+                  description: |||
+                    Too many packets with errors (fcIfInvalidCrcs) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above %s per second for extended period of time (%s).
+                  ||| % [instanceLabel, this.config.alertsInterfaceFCErrorsWarning, rule['for']],
+                },
+                'for': '15m',
+                keep_firing_for: '5m',
+              },
+              {
+                local rule = self,
+                alert: 'SNMPInterfaceFCerrors',
+                expr: |||
+                        (%s) > %s
+                      |||
+                      % [
+                        fiber.fcIfInvalidTxWords.asRuleExpression(),
+                        this.config.alertsInterfaceFCErrorsWarning,
+                      ],
+                labels: {
+                  severity: 'warning',
+                },
+                annotations: {
+                  summary: 'Too many packets with errors (fcIfInvalidTxWords) on the FC network interface.',
+                  description: |||
+                    Too many packets with errors (fcIfInvalidTxWords) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above %s per second for extended period of time (%s).
+                  ||| % [instanceLabel, this.config.alertsInterfaceFCErrorsWarning, rule['for']],
+                },
+                'for': '15m',
+                keep_firing_for: '5m',
+              },
+            ],
+        },
+      ] else []
+    ) + [
       {
         name: this.config.uid + '-alerts',
         rules:
@@ -91,23 +120,27 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 description: 'SNMP node {{ $labels.%(instanceLabel)s }} has rebooted {{ $value | humanize }} seconds ago.'
                              % this.config { instanceLabel: instanceLabel },
               },
+              'for': '5m',
             },
-            {
-              alert: 'SNMPFRUComponentProblem',
-              expr: |||
-                (%s) == 1
-              ||| % [
-                this.signals.system.fruOperStatus.withFilteringSelectorMixin('cefcFRUPowerOperStatus!="on"').asRuleExpression(),
-              ],
-              labels: {
-                severity: 'warning',
-              },
-              annotations: {
-                summary: 'SNMP FRU component is not on.',
-                description: 'SNMP field replaceable unit is in {{ $labels.cefcFRUPowerOperStatus }} status on {{ $labels.%(instanceLabel)s }}.'
-                             % this.config { instanceLabel: instanceLabel },
-              },
-            },
+          ] + (if hasSource(fruOperStatus) then [
+                 {
+                   alert: 'SNMPFRUComponentProblem',
+                   expr: |||
+                     (%s) == 1
+                   ||| % [
+                     fruOperStatus.withFilteringSelectorMixin('cefcFRUPowerOperStatus!="on"').asRuleExpression(),
+                   ],
+                   labels: {
+                     severity: 'warning',
+                   },
+                   annotations: {
+                     summary: 'SNMP FRU component is not on.',
+                     description: 'SNMP field replaceable unit is in {{ $labels.cefcFRUPowerOperStatus }} status on {{ $labels.%(instanceLabel)s }}.'
+                                  % this.config { instanceLabel: instanceLabel },
+                   },
+                   'for': '5m',
+                 },
+               ] else []) + [
             {
               alert: 'SNMPNodeCPUHighUsage',
               expr: |||
@@ -115,7 +148,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               ||| % [
                 std.join(',', this.config.groupLabels + this.config.instanceLabels),
                 this.signals.cpu.cpuUsage.asRuleExpression(),
-                this.config.alertsCPUThresholdWarning,
+                this.config.alertsNodeCPUHighUsageWarning,
               ],
               'for': '15m',
               keep_firing_for: '5m',
@@ -125,7 +158,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'High CPU usage on SNMP node.',
                 description: |||
-                  CPU usage on SNMP node {{ $labels.%(instanceLabel)s }} is above %(alertsCPUThresholdWarning)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
+                  CPU usage on SNMP node {{ $labels.%(instanceLabel)s }} is above %(alertsNodeCPUHighUsageWarning)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
                 ||| % this.config { instanceLabel: instanceLabel },
               },
             },
@@ -136,7 +169,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               ||| % [
                 std.join(',', this.config.groupLabels + this.config.instanceLabels),
                 this.signals.memory.memoryUsage.asRuleExpression(),
-                this.config.alertMemoryUsageThresholdCritical,
+                this.config.alertsNodeMemoryUtilizationInfo,
               ],
               labels: {
                 severity: 'info',
@@ -144,15 +177,16 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'High memory usage on SNMP node.',
                 description: |||
-                  Memory usage on SNMP node {{ $labels.%(instanceLabel)s }} is above %(alertMemoryUsageThresholdCritical)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
+                  Memory usage on SNMP node {{ $labels.%(instanceLabel)s }} is above %(alertsNodeMemoryUtilizationInfo)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
                 ||| % this.config { instanceLabel: instanceLabel },
               },
+              'for': '15m',
             },
             {
               alert: 'SNMPInterfaceDown',
               expr: |||
                       (%s) == 2
-                      # only alert if interface is adminatratively up:
+                      # only alert if interface is administratively up:
                       and (%s) != 2
                     |||
                     % [
@@ -176,7 +210,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               alert: 'SNMPInterfaceDown',
               expr: |||
                       (%s) == 2
-                      # only alert if interface is adminatratively up:
+                      # only alert if interface is administratively up:
                       and (%s) != 2
                     |||
                     % [
@@ -197,6 +231,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               keep_firing_for: '5m',
             },
             {
+              local rule = self,
               alert: 'SNMPInterfaceDrops',
               expr: |||
                       (%s) > %s
@@ -204,10 +239,10 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                       (%s) > %s
                     |||
                     % [
-                      this.signals.interface.networkInDroppedPerSec.asRuleExpression(),
-                      this.config.alertsPacketsDroppedPerSecThresholdWarning,
-                      this.signals.interface.networkOutDroppedPerSec.asRuleExpression(),
-                      this.config.alertsPacketsDroppedPerSecThresholdWarning,
+                      percentOfPackets(interface.networkInDroppedPerSec, interface.networkInUnicastPacketsPerSec, interface.networkInMulticastPacketsPerSec, interface.networkInBroadcastPacketsPerSec, inbound=true),
+                      this.config.alertsInterfaceDropsWarning,
+                      percentOfPackets(interface.networkOutDroppedPerSec, interface.networkOutUnicastPacketsPerSec, interface.networkOutMulticastPacketsPerSec, interface.networkOutBroadcastPacketsPerSec, inbound=false),
+                      this.config.alertsInterfaceDropsWarning,
                     ],
               labels: {
                 severity: 'warning',
@@ -215,13 +250,14 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'Too many packets discarded on the network interface.',
                 description: |||
-                  Too many packets discarded on {{ $labels.%s }}, interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (30m).
-                ||| % [instanceLabel],
+                  Too many packets discarded on {{ $labels.%s }}, interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above %s%% of packets for extended period of time (%s).
+                ||| % [instanceLabel, this.config.alertsInterfaceDropsWarning, rule['for']],
               },
               'for': '30m',
               keep_firing_for: '5m',
             },
             {
+              local rule = self,
               alert: 'SNMPInterfaceErrors',
               expr: |||
                       (%s) > %s
@@ -229,10 +265,10 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                       (%s) > %s
                     |||
                     % [
-                      this.signals.interface.networkInErrorsPerSec.asRuleExpression(),
-                      this.config.alertsErrorsPerSecThresholdWarning,
-                      this.signals.interface.networkOutErrorsPerSec.asRuleExpression(),
-                      this.config.alertsErrorsPerSecThresholdWarning,
+                      percentOfPackets(interface.networkInErrorsPerSec, interface.networkInUnicastPacketsPerSec, interface.networkInMulticastPacketsPerSec, interface.networkInBroadcastPacketsPerSec, inbound=true),
+                      this.config.alertsInterfaceErrorsWarning,
+                      percentOfPackets(interface.networkOutErrorsPerSec, interface.networkOutUnicastPacketsPerSec, interface.networkOutMulticastPacketsPerSec, interface.networkOutBroadcastPacketsPerSec, inbound=false),
+                      this.config.alertsInterfaceErrorsWarning,
                     ],
               labels: {
                 severity: 'warning',
@@ -240,19 +276,21 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'Too many packets with errors on the network interface.',
                 description: |||
-                  Too many packets with errors on {{ $labels.%s }}, interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
-                ||| % [instanceLabel],
+                  Too many packets with errors on {{ $labels.%s }}, interface {{ $labels.ifName }} ({{$labels.ifAlias}}): above %s%% of packets for extended period of time (%s).
+                ||| % [instanceLabel, this.config.alertsInterfaceErrorsWarning, rule['for']],
               },
               'for': '15m',
               keep_firing_for: '5m',
             },
             {
+              local windowMinutes = 15,
               alert: 'SNMPInterfaceIsFlapping',
               expr: |||
-                      changes(%s[5m]) > 5
+                      changes(%s[%dm]) > 5
                     |||
                     % [
                       this.signals.interface.ifOperStatus.asRuleExpression(),
+                      windowMinutes,
                     ],
               labels: {
                 severity: 'warning',
@@ -260,9 +298,10 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'Network interface is flapping.',
                 description: |||
-                  Network interface {{ $labels.ifName }} ({{$labels.ifAlias}}) is flapping on {{ $labels.%s }}. It has changed its status more than 5 times in the last 5 minutes.
-                ||| % [instanceLabel],
+                  Network interface {{ $labels.ifName }} ({{$labels.ifAlias}}) is flapping on {{ $labels.%s }}. It has changed its status more than 5 times in the last %d minutes.
+                ||| % [instanceLabel, windowMinutes],
               },
+              'for': '5m',
               keep_firing_for: '5m',
             },
           ],
@@ -273,14 +312,14 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           [
             {
               alert: 'SNMPExporterEmptyResponse',
-              expr: 'snmp_scrape_pdus_returned{%s} <= 1' % this.config.filteringSelector,
+              expr: '%s <= 1' % this.signals.exporter.pdusReturned.asRuleExpression(),
               labels: {
                 severity: 'warning',
               },
               annotations: {
                 summary: 'SNMP exporter returns an empty response.',
                 description: |||
-                  SNMP exporter returns an empty response for node {{ $labels.%s }} and module {{ $labels.module}}. Please check that target support {{ $labels.module }} module as well as authentication and other SNMP settings.
+                  SNMP exporter returns an empty response for node {{ $labels.%s }} and module {{ $labels.module}}. Please check that the target supports the {{ $labels.module }} module, and check its authentication and other SNMP settings.
                 ||| % instanceLabel,
               },
               'for': '10m',
@@ -288,7 +327,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             },
             {
               alert: 'SNMPExporterSlowScrape',
-              expr: 'min_over_time(snmp_scrape_duration_seconds{%s}[5m]) > %s' % [this.config.filteringSelector, this.config.alertsSlowScrapeThresholdInfo],
+              expr: 'min_over_time(%s[5m]) > %s' % [this.signals.exporter.scrapeDuration.asRuleExpression(), this.config.alertsExporterSlowScrapeInfo],
               labels: {
                 severity: 'info',
               },
@@ -296,7 +335,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 summary: 'SNMP exporter scrape is slow.',
                 description: |||
                   SNMP exporter scrape of {{ $labels.%s }} is taking more than %s seconds. Please check SNMP modules polled and that snmp_exporter is located on the same network as the SNMP target.
-                ||| % [instanceLabel, this.config.alertsSlowScrapeThresholdInfo],
+                ||| % [instanceLabel, this.config.alertsExporterSlowScrapeInfo],
               },
               'for': '10m',
               keep_firing_for: '5m',
@@ -307,7 +346,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               [
                 {
                   alert: 'SNMPExporterNoResponse',
-                  expr: 'up{%s} == 0' % this.config.filteringSelector,
+                  expr: '%s == 0' % this.signals.exporter.up.asRuleExpression(),
                   labels: {
                     severity: 'warning',
                   },

@@ -1,0 +1,549 @@
+rule_files:
+  - ../prometheus_rules_out/prometheus_alerts.yaml
+  - no_response_rules.json
+evaluation_interval: 1m
+tests:
+  - name: SNMPInterfaceFCerrors on discarded frames
+    interval: 1m
+    input_series:
+      - series: fcIfFramesDiscard{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",ifName="fc1/1",ifAlias="esx01 hba0",ifDescr="fc1/1",ifIndex="16777216"}
+        values: 0+60x30
+      - series: fcIfFramesDiscard{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",ifName="fc1/2",ifAlias="esx02 hba0",ifDescr="fc1/2",ifIndex="16781312"}
+        values: 4x30
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: SNMPInterfaceFCerrors
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.mds9148s
+              instance: net.cisco.mds9148s
+              ifName: fc1/1
+              ifAlias: esx01 hba0
+              ifDescr: fc1/1
+              ifIndex: "16777216"
+              severity: warning
+            exp_annotations:
+              summary: Too many packets with errors (fcIfFramesDiscard) on the FC network interface.
+              description: |
+                Too many packets with errors (fcIfFramesDiscard) on net.cisco.mds9148s, FC interface fc1/1 (esx01 hba0): above 0 per second for extended period of time (15m).
+
+  - name: SNMPInterfaceFCerrors on invalid CRCs
+    interval: 1m
+    input_series:
+      - series: fcIfInvalidCrcs{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",ifName="fc1/1",ifAlias="esx01 hba0",ifDescr="fc1/1",ifIndex="16777216"}
+        values: 0+60x30
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: SNMPInterfaceFCerrors
+        exp_alerts: []
+      - eval_time: 20m
+        alertname: SNMPInterfaceFCerrors
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.mds9148s
+              instance: net.cisco.mds9148s
+              ifName: fc1/1
+              ifAlias: esx01 hba0
+              ifDescr: fc1/1
+              ifIndex: "16777216"
+              severity: warning
+            exp_annotations:
+              summary: Too many packets with errors (fcIfInvalidCrcs) on the FC network interface.
+              description: |
+                Too many packets with errors (fcIfInvalidCrcs) on net.cisco.mds9148s, FC interface fc1/1 (esx01 hba0): above 0 per second for extended period of time (15m).
+
+  - name: SNMPInterfaceFCerrors on invalid transmission words
+    interval: 1m
+    input_series:
+      - series: fcIfInvalidTxWords{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",ifName="fc1/4",ifAlias="isl mds9148s-02 fc1/4",ifDescr="fc1/4",ifIndex="16789504"}
+        values: 0+60x30
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: SNMPInterfaceFCerrors
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.mds9148s
+              instance: net.cisco.mds9148s
+              ifName: fc1/4
+              ifAlias: isl mds9148s-02 fc1/4
+              ifDescr: fc1/4
+              ifIndex: "16789504"
+              severity: warning
+            exp_annotations:
+              summary: Too many packets with errors (fcIfInvalidTxWords) on the FC network interface.
+              description: |
+                Too many packets with errors (fcIfInvalidTxWords) on net.cisco.mds9148s, FC interface fc1/4 (isl mds9148s-02 fc1/4): above 0 per second for extended period of time (15m).
+
+  - name: SNMPNodeHasRebooted
+    interval: 1m
+    input_series:
+      # sysUpTime is in hundredths of a second. The device restarts at 20m.
+      - series: sysUpTime{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600"}
+        values: 1000000+6000x19 0+6000x10
+    alert_rule_test:
+      - eval_time: 19m
+        alertname: SNMPNodeHasRebooted
+        exp_alerts: []
+      - eval_time: 25m
+        alertname: SNMPNodeHasRebooted
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              severity: info
+            exp_annotations:
+              summary: SNMP node has rebooted.
+              description: SNMP node net.cisco.c7600 has rebooted 300 seconds ago.
+
+  - name: SNMPFRUComponentProblem
+    interval: 1m
+    input_series:
+      - series: cefcFRUPowerOperStatus{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",entPhysicalIndex="470",entPhysicalName="PowerSupply-1",cefcFRUPowerOperStatus="on"}
+        values: 0x10
+      - series: cefcFRUPowerOperStatus{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",entPhysicalIndex="470",entPhysicalName="PowerSupply-1",cefcFRUPowerOperStatus="failed"}
+        values: 1x10
+      - series: cefcFRUPowerOperStatus{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",entPhysicalIndex="471",entPhysicalName="PowerSupply-2",cefcFRUPowerOperStatus="on"}
+        values: 1x10
+      - series: cefcFRUPowerOperStatus{job="integrations/snmp/net.cisco.mds9148s",instance="net.cisco.mds9148s",entPhysicalIndex="471",entPhysicalName="PowerSupply-2",cefcFRUPowerOperStatus="failed"}
+        values: 0x10
+    alert_rule_test:
+      - eval_time: 2m
+        alertname: SNMPFRUComponentProblem
+        exp_alerts: []
+      - eval_time: 7m
+        alertname: SNMPFRUComponentProblem
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.mds9148s
+              instance: net.cisco.mds9148s
+              entPhysicalIndex: "470"
+              entPhysicalName: PowerSupply-1
+              cefcFRUPowerOperStatus: failed
+              severity: warning
+            exp_annotations:
+              summary: SNMP FRU component is not on.
+              description: SNMP field replaceable unit is in failed status on net.cisco.mds9148s.
+
+  - name: SNMPNodeCPUHighUsage
+    interval: 1m
+    input_series:
+      - series: cpmCPUTotal1minRev{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",cpmCPUTotalIndex="1"}
+        values: 95x20
+      - series: cpmCPUTotal1minRev{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",cpmCPUTotalIndex="2"}
+        values: 93x20
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: SNMPNodeCPUHighUsage
+        exp_alerts: []
+      - eval_time: 20m
+        alertname: SNMPNodeCPUHighUsage
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              severity: warning
+            exp_annotations:
+              summary: High CPU usage on SNMP node.
+              description: |
+                CPU usage on SNMP node net.cisco.c7600 is above 90%. The current value is 94.00%.
+
+  - name: SNMPNodeCPUHighUsage and SNMPNodeMemoryUtilization on a Juniper routing engine
+    interval: 1m
+    input_series:
+      - series: jnxOperatingCPU{job="integrations/snmp/net.juniper.srx",instance="net.juniper.srx",jnxOperatingContentsIndex="9",jnxOperatingL1Index="1",jnxOperatingL3Index="0",jnxOperatingL2Index="0",jnxOperatingDescr="Routing Engine"}
+        values: 95x20
+      # Listed under the routing engine category and always 0.
+      - series: jnxOperatingCPU{job="integrations/snmp/net.juniper.srx",instance="net.juniper.srx",jnxOperatingContentsIndex="9",jnxOperatingL1Index="1",jnxOperatingL3Index="0",jnxOperatingL2Index="1",jnxOperatingDescr="USB Hub"}
+        values: 0x20
+      - series: jnxOperatingBuffer{job="integrations/snmp/net.juniper.srx",instance="net.juniper.srx",jnxOperatingContentsIndex="9",jnxOperatingL1Index="1",jnxOperatingL3Index="0",jnxOperatingL2Index="0",jnxOperatingDescr="Routing Engine"}
+        values: 93x20
+      - series: jnxOperatingBuffer{job="integrations/snmp/net.juniper.srx",instance="net.juniper.srx",jnxOperatingContentsIndex="9",jnxOperatingL1Index="1",jnxOperatingL3Index="0",jnxOperatingL2Index="1",jnxOperatingDescr="USB Hub"}
+        values: 0x20
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: SNMPNodeCPUHighUsage
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.juniper.srx
+              instance: net.juniper.srx
+              severity: warning
+            exp_annotations:
+              summary: High CPU usage on SNMP node.
+              description: |
+                CPU usage on SNMP node net.juniper.srx is above 90%. The current value is 95.00%.
+      - eval_time: 17m
+        alertname: SNMPNodeMemoryUtilization
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.juniper.srx
+              instance: net.juniper.srx
+              severity: info
+            exp_annotations:
+              summary: High memory usage on SNMP node.
+              description: |
+                Memory usage on SNMP node net.juniper.srx is above 90%. The current value is 93.00%.
+
+  - name: SNMPNodeMemoryUtilization
+    interval: 1m
+    input_series:
+      - series: ciscoMemoryPoolUsed{job="integrations/snmp/net.cisco.c2911",instance="net.cisco.c2911",ciscoMemoryPoolType="1"}
+        values: 95x20
+      - series: ciscoMemoryPoolFree{job="integrations/snmp/net.cisco.c2911",instance="net.cisco.c2911",ciscoMemoryPoolType="1"}
+        values: 5x20
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: SNMPNodeMemoryUtilization
+        exp_alerts: []
+      - eval_time: 17m
+        alertname: SNMPNodeMemoryUtilization
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c2911
+              instance: net.cisco.c2911
+              severity: info
+            exp_annotations:
+              summary: High memory usage on SNMP node.
+              description: |
+                Memory usage on SNMP node net.cisco.c2911 is above 90%. The current value is 95.00%.
+
+  - name: SNMPNodeMemoryUtilization on net-snmp
+    interval: 1m
+    input_series:
+      # Mostly page cache: the kernel reports 90% of memory available.
+      - series: hrStorageSize{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
+        values: 4000000x20
+      - series: hrStorageUsed{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
+        values: 3900000x20
+      - series: hrStorageSize{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Available memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="11"}
+        values: 3600000x20
+      - series: hrStorageUsed{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Available memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="11"}
+        values: 0x20
+      - series: hrStorageSize{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Cached memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="7"}
+        values: 3000000x20
+      - series: hrStorageUsed{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Cached memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="7"}
+        values: 3000000x20
+      - series: hrStorageSize{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Memory buffers",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="6"}
+        values: 4000000x20
+      - series: hrStorageUsed{job="integrations/snmp/linux-1",instance="linux-1",hrStorageDescr="Memory buffers",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="6"}
+        values: 100000x20
+      # 4% of memory available.
+      - series: hrStorageSize{job="integrations/snmp/linux-2",instance="linux-2",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
+        values: 4000000x20
+      - series: hrStorageUsed{job="integrations/snmp/linux-2",instance="linux-2",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
+        values: 3950000x20
+      - series: hrStorageSize{job="integrations/snmp/linux-2",instance="linux-2",hrStorageDescr="Available memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="11"}
+        values: 160000x20
+      - series: hrStorageUsed{job="integrations/snmp/linux-2",instance="linux-2",hrStorageDescr="Available memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="11"}
+        values: 0x20
+      # Before net-snmp 5.9.1, no Available memory row: 3,900,000 used less 100,000 cached and 100,000 buffers is 92.5%.
+      - series: hrStorageSize{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
+        values: 4000000x20
+      - series: hrStorageUsed{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Physical memory",hrStorageType="1.3.6.1.2.1.25.2.1.2",hrStorageIndex="1"}
+        values: 3900000x20
+      - series: hrStorageSize{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Cached memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="7"}
+        values: 100000x20
+      - series: hrStorageUsed{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Cached memory",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="7"}
+        values: 100000x20
+      - series: hrStorageSize{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Memory buffers",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="6"}
+        values: 4000000x20
+      - series: hrStorageUsed{job="integrations/snmp/linux-3",instance="linux-3",hrStorageDescr="Memory buffers",hrStorageType="1.3.6.1.2.1.25.2.1.1",hrStorageIndex="6"}
+        values: 100000x20
+    alert_rule_test:
+      - eval_time: 17m
+        alertname: SNMPNodeMemoryUtilization
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/linux-2
+              instance: linux-2
+              severity: info
+            exp_annotations:
+              summary: High memory usage on SNMP node.
+              description: |
+                Memory usage on SNMP node linux-2 is above 90%. The current value is 96.00%.
+          - exp_labels:
+              job: integrations/snmp/linux-3
+              instance: linux-3
+              severity: info
+            exp_annotations:
+              summary: High memory usage on SNMP node.
+              description: |
+                Memory usage on SNMP node linux-3 is above 90%. The current value is 92.50%.
+
+  - name: SNMPInterfaceDown
+    interval: 1m
+    input_series:
+      - series: ifOperStatus{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/1",ifAlias="core critical",ifDescr="GigabitEthernet1/1",ifIndex="1"}
+        values: 2x10
+      - series: ifAdminStatus{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/1",ifAlias="core critical",ifDescr="GigabitEthernet1/1",ifIndex="1"}
+        values: 1x10
+      - series: ifOperStatus{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/2",ifAlias="WAN to ISP",ifDescr="GigabitEthernet1/2",ifIndex="2"}
+        values: 2x10
+      - series: ifAdminStatus{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/2",ifAlias="WAN to ISP",ifDescr="GigabitEthernet1/2",ifIndex="2"}
+        values: 1x10
+      # Administratively down, so not alerted.
+      - series: ifOperStatus{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/3",ifAlias="uplink spare",ifDescr="GigabitEthernet1/3",ifIndex="3"}
+        values: 2x10
+      - series: ifAdminStatus{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/3",ifAlias="uplink spare",ifDescr="GigabitEthernet1/3",ifIndex="3"}
+        values: 2x10
+      - series: ifOperStatus{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/4",ifAlias="critical spare",ifDescr="GigabitEthernet1/4",ifIndex="4"}
+        values: 2x10
+      - series: ifAdminStatus{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/4",ifAlias="critical spare",ifDescr="GigabitEthernet1/4",ifIndex="4"}
+        values: 2x10
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: SNMPInterfaceDown
+        exp_alerts: []
+      - eval_time: 6m
+        alertname: SNMPInterfaceDown
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              ifName: Gi1/1
+              ifAlias: core critical
+              ifDescr: GigabitEthernet1/1
+              ifIndex: "1"
+              severity: critical
+            exp_annotations:
+              summary: Critical network interface is down on SNMP device.
+              description: "A critical network interface Gi1/1 (core critical) on net.cisco.c7600 is down. \nNote that only interfaces with ifAdminStatus = `up` and matching `ifAlias=~\".*(?i:(critical)).*\"` are being checked and considered critical.\n"
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              ifName: Gi1/2
+              ifAlias: WAN to ISP
+              ifDescr: GigabitEthernet1/2
+              ifIndex: "2"
+              severity: warning
+            exp_annotations:
+              summary: Network interface is down on SNMP device.
+              description: "Network interface Gi1/2 (WAN to ISP) on net.cisco.c7600 is down. \nOnly interfaces with ifAdminStatus = `up` and matching `ifAlias=~\".*(?i:(uplink|internet|WAN|ISP)).*\"` are being checked.\n"
+
+  - name: SNMPInterfaceDrops
+    interval: 1m
+    input_series:
+      # 3 discards per second against 50 packets per second: 5.7%.
+      - series: ifInDiscards{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/24",ifAlias="WAN to ISP",ifDescr="GigabitEthernet1/24",ifIndex="24"}
+        values: 0+180x40
+      - series: ifHCInUcastPkts{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/24",ifAlias="WAN to ISP",ifDescr="GigabitEthernet1/24",ifIndex="24"}
+        values: 0+3000x40
+      # 2 discards per second against 50 packets per second: 3.8%.
+      - series: ifInDiscards{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/25",ifAlias="WAN to ISP 2",ifDescr="GigabitEthernet1/25",ifIndex="25"}
+        values: 0+120x40
+      - series: ifHCInUcastPkts{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/25",ifAlias="WAN to ISP 2",ifDescr="GigabitEthernet1/25",ifIndex="25"}
+        values: 0+3000x40
+      # 5.1 outbound discards per second against 100 packets per second, which include them: 5.1%.
+      - series: ifOutDiscards{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/30",ifAlias="WAN to ISP 3",ifDescr="GigabitEthernet1/30",ifIndex="30"}
+        values: 0+306x40
+      - series: ifHCOutUcastPkts{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/30",ifAlias="WAN to ISP 3",ifDescr="GigabitEthernet1/30",ifIndex="30"}
+        values: 0+6000x40
+    alert_rule_test:
+      - eval_time: 25m
+        alertname: SNMPInterfaceDrops
+        exp_alerts: []
+      - eval_time: 35m
+        alertname: SNMPInterfaceDrops
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              ifName: Gi1/24
+              ifAlias: WAN to ISP
+              ifDescr: GigabitEthernet1/24
+              ifIndex: "24"
+              severity: warning
+            exp_annotations:
+              summary: Too many packets discarded on the network interface.
+              description: |
+                Too many packets discarded on net.cisco.c7600, interface Gi1/24 (WAN to ISP): above 5% of packets for extended period of time (30m).
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              ifName: Gi1/30
+              ifAlias: WAN to ISP 3
+              ifDescr: GigabitEthernet1/30
+              ifIndex: "30"
+              severity: warning
+            exp_annotations:
+              summary: Too many packets discarded on the network interface.
+              description: |
+                Too many packets discarded on net.cisco.c7600, interface Gi1/30 (WAN to ISP 3): above 5% of packets for extended period of time (30m).
+
+  - name: SNMPInterfaceErrors
+    interval: 1m
+    input_series:
+      # 1 error per second against 50 packets per second: 2%.
+      - series: ifOutErrors{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/24",ifAlias="WAN to ISP",ifDescr="GigabitEthernet1/24",ifIndex="24"}
+        values: 0+60x30
+      - series: ifHCOutUcastPkts{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/24",ifAlias="WAN to ISP",ifDescr="GigabitEthernet1/24",ifIndex="24"}
+        values: 0+3000x30
+      # Errors only in every other minute, 3 per second on average: 5.7% over 5 minutes.
+      - series: ifInErrors{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/26",ifAlias="uplink 2",ifDescr="GigabitEthernet1/26",ifIndex="26"}
+        values: 0 360 360 720 720 1080 1080 1440 1440 1800 1800 2160 2160 2520 2520 2880 2880 3240 3240 3600 3600 3960 3960 4320 4320 4680 4680 5040 5040 5400 5400
+      - series: ifHCInUcastPkts{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/26",ifAlias="uplink 2",ifDescr="GigabitEthernet1/26",ifIndex="26"}
+        values: 0+3000x30
+      # Every packet errored; the unicast counter doesn't move.
+      - series: ifInErrors{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/27",ifAlias="uplink 3",ifDescr="GigabitEthernet1/27",ifIndex="27"}
+        values: 0+600x30
+      - series: ifHCInUcastPkts{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/27",ifAlias="uplink 3",ifDescr="GigabitEthernet1/27",ifIndex="27"}
+        values: 5000x30
+      # 5 errors per second on a link carrying a million packets per second: 0.0005%.
+      - series: ifInErrors{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/28",ifAlias="core",ifDescr="GigabitEthernet1/28",ifIndex="28"}
+        values: 0+300x30
+      - series: ifHCInUcastPkts{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/28",ifAlias="core",ifDescr="GigabitEthernet1/28",ifIndex="28"}
+        values: 0+60000000x30
+      # Idle: no packets and no errors.
+      - series: ifInErrors{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/29",ifAlias="spare",ifDescr="GigabitEthernet1/29",ifIndex="29"}
+        values: 0x30
+      - series: ifHCInUcastPkts{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/29",ifAlias="spare",ifDescr="GigabitEthernet1/29",ifIndex="29"}
+        values: 0x30
+      # Outbound errors on an interface that reports no outbound packet counters.
+      - series: ifOutErrors{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/30",ifAlias="no counters",ifDescr="GigabitEthernet1/30",ifIndex="30"}
+        values: 0+60x30
+      # Inbound errors on an interface that reports no inbound packet counters.
+      - series: ifInErrors{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/31",ifAlias="no counters",ifDescr="GigabitEthernet1/31",ifIndex="31"}
+        values: 0+60x30
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: SNMPInterfaceErrors
+        exp_alerts: []
+      - eval_time: 20m
+        alertname: SNMPInterfaceErrors
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              ifName: Gi1/24
+              ifAlias: WAN to ISP
+              ifDescr: GigabitEthernet1/24
+              ifIndex: "24"
+              severity: warning
+            exp_annotations:
+              summary: Too many packets with errors on the network interface.
+              description: |
+                Too many packets with errors on net.cisco.c7600, interface Gi1/24 (WAN to ISP): above 1% of packets for extended period of time (15m).
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              ifName: Gi1/26
+              ifAlias: uplink 2
+              ifDescr: GigabitEthernet1/26
+              ifIndex: "26"
+              severity: warning
+            exp_annotations:
+              summary: Too many packets with errors on the network interface.
+              description: |
+                Too many packets with errors on net.cisco.c7600, interface Gi1/26 (uplink 2): above 1% of packets for extended period of time (15m).
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              ifName: Gi1/27
+              ifAlias: uplink 3
+              ifDescr: GigabitEthernet1/27
+              ifIndex: "27"
+              severity: warning
+            exp_annotations:
+              summary: Too many packets with errors on the network interface.
+              description: |
+                Too many packets with errors on net.cisco.c7600, interface Gi1/27 (uplink 3): above 1% of packets for extended period of time (15m).
+
+  - name: SNMPExporterEmptyResponse
+    interval: 1m
+    input_series:
+      - series: snmp_scrape_pdus_returned{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",module="cisco_device"}
+        values: 1x15
+      - series: snmp_scrape_pdus_returned{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",module="system"}
+        values: 8x15
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: SNMPExporterEmptyResponse
+        exp_alerts: []
+      - eval_time: 15m
+        alertname: SNMPExporterEmptyResponse
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              module: cisco_device
+              severity: warning
+            exp_annotations:
+              summary: SNMP exporter returns an empty response.
+              description: |
+                SNMP exporter returns an empty response for node net.cisco.c7600 and module cisco_device. Please check that the target supports the cisco_device module, and check its authentication and other SNMP settings.
+
+  - name: SNMPInterfaceIsFlapping
+    interval: 1m
+    input_series:
+      - series: ifOperStatus{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/24",ifAlias="WAN to ISP",ifDescr="GigabitEthernet1/24",ifIndex="24"}
+        values: 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2
+      # Down once and back up.
+      - series: ifOperStatus{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",ifName="Gi1/25",ifAlias="",ifDescr="GigabitEthernet1/25",ifIndex="25"}
+        values: 1 1 1 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: SNMPInterfaceIsFlapping
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              ifName: Gi1/24
+              ifAlias: WAN to ISP
+              ifDescr: GigabitEthernet1/24
+              ifIndex: "24"
+              severity: warning
+            exp_annotations:
+              summary: Network interface is flapping.
+              description: |
+                Network interface Gi1/24 (WAN to ISP) is flapping on net.cisco.c7600. It has changed its status more than 5 times in the last 15 minutes.
+
+  - name: SNMPExporterSlowScrape
+    interval: 1m
+    input_series:
+      # Under the snippets' 30s scrape timeout.
+      - series: snmp_scrape_duration_seconds{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",module="if_mib"}
+        values: 28x20
+      - series: snmp_scrape_duration_seconds{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600",module="system"}
+        values: 2x20
+    alert_rule_test:
+      - eval_time: 9m
+        alertname: SNMPExporterSlowScrape
+        exp_alerts: []
+      - eval_time: 16m
+        alertname: SNMPExporterSlowScrape
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              module: if_mib
+              severity: info
+            exp_annotations:
+              summary: SNMP exporter scrape is slow.
+              description: |
+                SNMP exporter scrape of net.cisco.c7600 is taking more than 25 seconds. Please check SNMP modules polled and that snmp_exporter is located on the same network as the SNMP target.
+
+  - name: SNMPExporterNoResponse
+    interval: 1m
+    input_series:
+      - series: up{job="integrations/snmp/net.cisco.c7600",instance="net.cisco.c7600"}
+        values: 1 1 0x15
+      - series: up{job="integrations/snmp/net.juniper.mx240",instance="net.juniper.mx240"}
+        values: 1x16
+      # Outside filteringSelector.
+      - series: up{job="integrations/node_exporter",instance="host-1"}
+        values: 0x16
+    alert_rule_test:
+      - eval_time: 8m
+        alertname: SNMPExporterNoResponse
+        exp_alerts: []
+      - eval_time: 15m
+        alertname: SNMPExporterNoResponse
+        exp_alerts:
+          - exp_labels:
+              job: integrations/snmp/net.cisco.c7600
+              instance: net.cisco.c7600
+              severity: warning
+            exp_annotations:
+              summary: SNMP node is down.
+              description: |
+                SNMP exporter scrape of node net.cisco.c7600 is not responding to SNMP walk.
+                Please check network connectivity and SNMP authentication settings.

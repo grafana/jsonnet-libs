@@ -32,7 +32,6 @@ function(this)
     signals: {
       cpuUsage: {
         name: 'CPU utilization',
-        description: 'CPU usage.',
         type: 'gauge',
         unit: 'percent',
         sources: {
@@ -56,7 +55,7 @@ function(this)
             expr: 'agentCPUutilizationIn1min{%(queriesSelector)s}',
           },
           extreme: {
-            expr: 'extremeCpuMonitorTotalUtilization(%(queriesSelector)s)',
+            expr: 'extremeCpuMonitorTotalUtilization{%(queriesSelector)s}',
           },
           eltex_mes: {
             expr: 'eltMesIssCpuUtilLastMinute{%(queriesSelector)s}',
@@ -74,9 +73,10 @@ function(this)
             expr: 'hwEntityCpuUsage{%(queriesSelector)s}',
           },
           juniper: {
-            expr: 'jnxOperatingCPU{jnxOperatingContentsIndex="9", %(queriesSelector)s}',
-            // keeping this label for now for future improvements
-            //aggKeepLabels: ['jnxOperatingDescr'],
+            // Category 9 also lists routing engine components, such as a "USB Hub" at level two index 1, that report 0.
+            // With two routing engines, max takes the master's: on the EX4200 and MX240 recordings, the master reports the higher CPU.
+            expr: 'max by (%(agg)s) (jnxOperatingCPU{jnxOperatingContentsIndex="9", jnxOperatingL2Index="0", %%(queriesSelector)s})'
+                  % { agg: std.join(',', this.groupLabels + this.instanceLabels) },
           },
           mikrotik: self.generic,
           netgear: {
