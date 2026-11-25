@@ -1,0 +1,58 @@
+name: Sample apps
+
+# Runs the sample-apps of the mixins a pull request changes, from
+# grafana/integration-sample-apps, and captures the pull request's dashboards
+# with each sample-app's data.
+
+permissions: {}
+
+on:
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: sample-apps-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  changed:
+    name: Find changed mixins
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      mixins: ${{ steps.changed.outputs.mixins }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # A mixin is a top-level directory with built dashboards
+      - name: Find changed mixins
+        id: changed
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          set -euo pipefail
+          mixins=""
+          for dir in $(git diff --name-only "origin/${BASE_REF}...HEAD" | { grep / || true; } | cut -d/ -f1 | sort -u); do
+            if [[ -d "${dir}/dashboards_out" ]]; then mixins="${mixins:+${mixins},}${dir}"; fi
+          done
+          echo "Changed mixins: ${mixins:-none}"
+          echo "mixins=${mixins}" >> "${GITHUB_OUTPUT}"
+
+  sample-apps:
+    name: Sample apps
+    needs: [changed]
+    if: needs.changed.outputs.mixins != ''
+    permissions: {}
+    # TODO: pin a commit of grafana/integration-sample-apps main if this is merged there
+    uses: grafana/integration-sample-apps/.github/workflows/sample-app.yml@jsonnet-libs-trigger
+    with:
+      mixins: ${{ needs.changed.outputs.mixins }}
+      jsonnet-libs-ref: ${{ github.event.pull_request.head.sha }}
+      # TODO: drop once sample-apps' Go control plane is on its main
+      ref: jsonnet-libs-trigger
