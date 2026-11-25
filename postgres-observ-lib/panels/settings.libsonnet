@@ -1,27 +1,13 @@
 local g = import '../g.libsonnet';
 
 {
-  new(signals):: {
-    local queriesSelector = signals.health.templatingVariables.queriesSelector,
-
+  new(signals, config):: {
     // Settings table - shows all pg_settings_* metrics in a searchable table
     settingsTable:
-      g.panel.table.new('PostgreSQL settings')
+      signals.settings.allSettings.asTable()
       + g.panel.table.panelOptions.withDescription(
-        'PostgreSQL configuration settings. Use the Settings Filter variable above to search by setting name (regex). Default .* shows all settings.'
+        'PostgreSQL configuration settings. Use the Settings filter variable above to search by setting name (regex). Default .* shows all settings.'
       )
-      + g.panel.table.queryOptions.withTargets([
-        {
-          datasource: {
-            type: 'prometheus',
-            uid: '${datasource}',
-          },
-          expr: std.format('{__name__=~"pg_settings_.*${settingsFilter}.*",%(queriesSelector)s}', { queriesSelector: queriesSelector }),
-          format: 'table',
-          instant: true,
-          refId: 'Settings',
-        },
-      ])
       + g.panel.table.queryOptions.withTransformations([
         {
           id: 'organize',
@@ -29,13 +15,9 @@ local g = import '../g.libsonnet';
             excludeByName: {
               Time: true,
               __name__: false,
-              job: true,
-              cluster: true,
-              instance: true,
+              // postgres_exporter adds a server label to pg_settings_* and the other built-in metrics.
               server: true,
-              server_id: true,
-              environment: true,
-            },
+            } + { [label]: true for label in config.groupLabels + config.instanceLabels },
             indexByName: {
               __name__: 0,
               Value: 1,
@@ -64,50 +46,6 @@ local g = import '../g.libsonnet';
           matcher: {
             id: 'byName',
             options: 'Setting',
-          },
-          properties: [
-            {
-              id: 'custom.filterable',
-              value: true,
-            },
-          ],
-        },
-        {
-          matcher: {
-            id: 'byName',
-            options: 'Job',
-          },
-          properties: [
-            {
-              id: 'custom.width',
-              value: 150,
-            },
-            {
-              id: 'custom.filterable',
-              value: true,
-            },
-          ],
-        },
-        {
-          matcher: {
-            id: 'byName',
-            options: 'Cluster',
-          },
-          properties: [
-            {
-              id: 'custom.width',
-              value: 150,
-            },
-            {
-              id: 'custom.filterable',
-              value: true,
-            },
-          ],
-        },
-        {
-          matcher: {
-            id: 'byName',
-            options: 'Instance',
           },
           properties: [
             {

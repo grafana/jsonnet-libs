@@ -1,17 +1,27 @@
 local g = import '../g.libsonnet';
+local alertsOverviewlib = import 'alerts-observ-lib/main.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
 {
-  new(signals, config):: {
-    // Helper to convert stat panel queries to instant queries for current status
+  new(signals, config, dashboards):: {
+    local instanceLabel = xtd.array.slice(config.instanceLabels, -1)[0],
+    local instanceColumn = commonlib.utils.toSentenceCase(instanceLabel),
+    local groupQueryParams = std.join('&', ['${%s:queryparam}' % label for label in config.groupLabels]),
+    local instanceUrl = '/d/%s?var-%s=${__data.fields.%s}&${__url_time_range}&${%s:queryparam}&%s' % [
+      dashboards['postgres-overview.json'].uid,
+      instanceLabel,
+      instanceColumn,
+      signals.cluster.datasource,
+      groupQueryParams,
+    ],
+
     local withInstantQuery = {
       targets: std.map(function(t) t { instant: true }, super.targets),
     },
 
-    // No data mappings by severity
     local noDataRed = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'red' } } },
-    local noDataOrange = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'orange' } } },
-    local noDataYellow = { type: 'special', options: { match: 'null', result: { text: 'No data', color: 'yellow' } } },
+    local noDataTextColor = { type: 'special', options: { match: 'null', result: { color: 'text', index: 0 } } },
 
     local statWithThresholds =
       commonlib.panels.generic.stat.base.stylize()
@@ -19,11 +29,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.options.withReduceOptions({ calcs: ['lastNotNull'] })
       + g.panel.stat.standardOptions.color.withMode('thresholds')
       + g.panel.stat.options.withColorMode('value'),
-
-    // Helper to convert gauge panel queries to instant queries
-    local withInstantQueryGauge = {
-      targets: std.map(function(t) t { instant: true }, super.targets),
-    },
 
     clusterStatus:
       signals.cluster.clusterStatus.asStat()
@@ -51,7 +56,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.cluster.totalInstances.asStat()
       + withInstantQuery
       + commonlib.panels.generic.stat.info.stylize()
-      + g.panel.stat.standardOptions.withMappings([noDataOrange])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Total number of PostgreSQL instances in the cluster.'
       ),
@@ -61,7 +67,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.cluster.upInstances.asStat()
       + withInstantQuery
       + statWithThresholds
-      + g.panel.stat.standardOptions.withMappings([noDataRed])
+      + g.panel.stat.options.withColorMode('none')
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Number of instances currently up and responding.'
       ),
@@ -76,7 +84,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 1, color: 'green' },  // Exactly 1 = healthy
         { value: 2, color: 'yellow' },  // Multiple primaries = split brain warning
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataRed])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Number of primary instances. Should be exactly 1 for a healthy cluster.'
       ),
@@ -90,7 +99,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0, color: 'yellow' },  // No replicas = warning
         { value: 1, color: 'green' },  // At least 1 = good
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataOrange])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Number of replica instances in the cluster.'
       ),
@@ -107,14 +117,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 30, color: 'orange' },
         { value: 60, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Maximum replication lag in seconds across all replicas.'
       ),
 
     worstCacheHitRatio:
       signals.cluster.worstCacheHitRatio.asGauge()
-      + withInstantQueryGauge
+      + withInstantQuery
       + g.panel.gauge.standardOptions.withUnit('percentunit')
       + g.panel.gauge.standardOptions.withMin(0)
       + g.panel.gauge.standardOptions.withMax(1)
@@ -124,7 +135,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.9, color: 'yellow' },
         { value: 0.95, color: 'green' },
       ])
-      + g.panel.gauge.standardOptions.withMappings([noDataYellow])
+      + g.panel.gauge.standardOptions.withNoValue('No data')
+      + g.panel.gauge.standardOptions.withMappings([noDataTextColor])
       + g.panel.gauge.options.withMinVizHeight(200)
       + g.panel.gauge.options.withMinVizWidth(200)
       + g.panel.gauge.options.withShowThresholdLabels(false)
@@ -134,7 +146,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     worstConnectionUtilization:
       signals.cluster.worstConnectionUtilization.asGauge()
-      + withInstantQueryGauge
+      + withInstantQuery
       + g.panel.gauge.standardOptions.withUnit('percentunit')
       + g.panel.gauge.standardOptions.withMin(0)
       + g.panel.gauge.standardOptions.withMax(1)
@@ -144,7 +156,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.85, color: 'orange' },
         { value: 0.95, color: 'red' },
       ])
-      + g.panel.gauge.standardOptions.withMappings([noDataOrange])
+      + g.panel.gauge.standardOptions.withNoValue('No data')
+      + g.panel.gauge.standardOptions.withMappings([noDataTextColor])
       + g.panel.gauge.options.withMinVizHeight(200)
       + g.panel.gauge.options.withMinVizWidth(200)
       + g.panel.gauge.options.withShowThresholdLabels(false)
@@ -152,103 +165,66 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Highest connection utilization across all instances.'
       ),
 
+    alerts:
+      (alertsOverviewlib.new() + alertsOverviewlib.withConfigMixin({
+         filteringSelector: config.filteringSelector,
+         groupLabels: config.groupLabels,
+         instanceLabels: config.instanceLabels,
+       })).grafana.panels.alertsOverview
+      + g.panel.alertList.panelOptions.withTitle('PostgreSQL alerts')
+      // The library's filter also lists other integrations' alerts on the same job.
+      + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(signals.cluster.getVariables().queriesSelectorAdvancedSyntax + ',alertname=~"PostgreSQL.*"'),
+
     // Total deadlocks
     totalDeadlocks:
-      signals.cluster.totalDeadlocks.asStat()
+      signals.cluster.totalDeadlocks.withInterval('$__range').asStat()
       + withInstantQuery
       + statWithThresholds
-      + g.panel.stat.options.withReduceOptions({ calcs: ['diff'] })
+      + g.panel.stat.standardOptions.withDecimals(0)
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Total deadlocks detected across all instances in the selected time range.'
       ),
 
     instanceTable:
-      g.panel.table.new('Cluster instances')
+      signals.cluster.instanceRole.asTable(name='Cluster instances')
+      + signals.cluster.instanceStatus.asTableColumn()
+      + signals.cluster.instanceUptime.asTableColumn()
+      + signals.cluster.instanceConnectionUtilization.asTableColumn()
+      + signals.cluster.cacheHitRatioByInstance.asTableColumn()
+      + signals.cluster.replicationLagByInstance.asTableColumn()
       + g.panel.table.panelOptions.withDescription(
         'All PostgreSQL instances in the cluster. Click a row to view instance details.'
       )
-      + g.panel.table.queryOptions.withTargets([
-        // Instance status
-        signals.cluster.instanceStatus.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-        // Instance role
-        signals.cluster.instanceRole.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-        // Instance uptime
-        signals.cluster.instanceUptime.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-        // Instance connection utilization
-        signals.cluster.instanceConnectionUtilization.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-        // Instance cache hit ratio
-        signals.cluster.instanceCacheHitRatio.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-        // Instance replication lag
-        signals.cluster.instanceReplicationLag.asTarget()
-        + g.query.prometheus.withFormat('table')
-        + g.query.prometheus.withInstant(true),
-      ])
-      + g.panel.table.queryOptions.withTransformations([
-        // Merge all queries by instance
-        g.panel.table.transformation.withId('merge'),
-        // Organize fields
-        g.panel.table.transformation.withId('organize')
-        + g.panel.table.transformation.withOptions({
-          excludeByName: {
-            Time: true,
-            __name__: true,
-            job: true,
-            cluster: true,
-            server_id: true,
-            environment: true,
-          },
-          renameByName: {
-            instance: 'Instance',
-            'Value #Instance status': 'Status',
-            'Value #Instance role': 'Role',
-            'Value #Instance uptime': 'Uptime',
-            'Value #Instance connection utilization': 'Conn %',
-            'Value #Instance cache hit ratio': 'Cache %',
-            'Value #Instance replication lag': 'Lag',
-          },
-          indexByName: {
-            instance: 0,
-            'Value #Instance role': 1,
-            'Value #Instance status': 2,
-            'Value #Instance uptime': 3,
-            'Value #Instance connection utilization': 4,
-            'Value #Instance cache hit ratio': 5,
-            'Value #Instance replication lag': 6,
-          },
+      + g.panel.table.queryOptions.withTransformationsMixin([
+        g.panel.table.queryOptions.transformation.withId('organize')
+        + g.panel.table.queryOptions.transformation.withOptions({
+          excludeByName: { [commonlib.utils.toSentenceCase(label)]: true for label in config.groupLabels },
         }),
       ])
-      + g.panel.table.standardOptions.withOverrides([
+      + g.panel.table.standardOptions.withOverridesMixin([
         {
-          matcher: { id: 'byName', options: 'Instance' },
+          matcher: { id: 'byName', options: instanceColumn },
           properties: [
             { id: 'custom.minWidth', value: 350 },
             { id: 'links', value: [
               {
-                title: 'View Instance',
-                url: '/d/postgres-overview?var-instance=${__data.fields.Instance}&${datasource:queryparam}&${job:queryparam}&${cluster:queryparam}',
+                title: 'View instance',
+                url: instanceUrl,
               },
             ] },
           ],
         },
         // Status column
         {
-          matcher: { id: 'byName', options: 'Status' },
+          matcher: { id: 'byName', options: 'Instance status' },
           properties: [
+            { id: 'displayName', value: 'Status' },
             { id: 'mappings', value: [
               { type: 'value', options: { '0': { text: '🔴 DOWN', color: 'red' }, '1': { text: '🟢 UP', color: 'green' } } },
             ] },
@@ -258,8 +234,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
         // Role column
         {
-          matcher: { id: 'byName', options: 'Role' },
+          matcher: { id: 'byName', options: 'Instance role' },
           properties: [
+            { id: 'displayName', value: 'Role' },
             { id: 'mappings', value: [
               { type: 'value', options: { '0': { text: 'PRIMARY', color: 'blue' }, '1': { text: 'REPLICA', color: 'purple' } } },
             ] },
@@ -269,15 +246,17 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
         // Uptime column
         {
-          matcher: { id: 'byName', options: 'Uptime' },
+          matcher: { id: 'byName', options: 'Instance uptime' },
           properties: [
+            { id: 'displayName', value: 'Uptime' },
             { id: 'unit', value: 'dtdurations' },
             { id: 'custom.width', value: 120 },
           ],
         },
         {
-          matcher: { id: 'byName', options: 'Conn %' },
+          matcher: { id: 'byName', options: 'Instance connection utilization' },
           properties: [
+            { id: 'displayName', value: 'Conn %' },
             { id: 'custom.width', value: 150 },
             { id: 'unit', value: 'percentunit' },
             { id: 'custom.cellOptions', value: { type: 'gauge', mode: 'lcd', valueDisplayMode: 'color' } },
@@ -292,8 +271,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
         },
         {
-          matcher: { id: 'byName', options: 'Cache %' },
+          matcher: { id: 'byName', options: 'Cache hit ratio by instance' },
           properties: [
+            { id: 'displayName', value: 'Cache %' },
             { id: 'custom.width', value: 150 },
             { id: 'unit', value: 'percentunit' },
             { id: 'custom.cellOptions', value: { type: 'gauge', mode: 'lcd', valueDisplayMode: 'color' } },
@@ -309,8 +289,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
         // Lag column
         {
-          matcher: { id: 'byName', options: 'Lag' },
+          matcher: { id: 'byName', options: 'Replication lag by instance' },
           properties: [
+            { id: 'displayName', value: 'Lag' },
             { id: 'custom.width', value: 80 },
             { id: 'unit', value: 's' },
             { id: 'custom.cellOptions', value: { type: 'color-text' } },
@@ -329,8 +310,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           defaults+: {
             links: [
               {
-                title: 'View Instance Details',
-                url: '/d/' + config.uid + '-overview?var-instance=${__data.fields.Instance}&${__url_time_range}',
+                title: 'View instance details',
+                url: instanceUrl,
               },
             ],
           },
@@ -370,7 +351,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       )
       + g.panel.timeSeries.standardOptions.withUnit('short')
       + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars')
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(80)
       + g.panel.timeSeries.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
@@ -428,7 +408,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 1, color: 'yellow' },
         { value: 3, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Total queries running longer than threshold across all instances.'
       ),
@@ -444,7 +425,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 1, color: 'yellow' },
         { value: 5, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Total queries waiting for locks across all instances.'
       ),
@@ -460,29 +442,31 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 5, color: 'yellow' },
         { value: 20, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataYellow])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Total connections idle in transaction across all instances.'
       ),
 
     // Total WAL archive failures
     totalWalArchiveFailures:
-      signals.cluster.totalWalArchiveFailures.asStat()
+      signals.cluster.totalWalArchiveFailures.withInterval('$__range').asStat()
       + withInstantQuery
       + statWithThresholds
-      + g.panel.stat.options.withReduceOptions({ calcs: ['diff'] })
+      + g.panel.stat.standardOptions.withDecimals(0)
       + g.panel.stat.standardOptions.thresholds.withSteps([
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataOrange])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Total WAL archive failures across all instances.'
       ),
 
     worstLockUtilization:
       signals.cluster.worstLockUtilization.asGauge()
-      + withInstantQueryGauge
+      + withInstantQuery
       + g.panel.gauge.standardOptions.withUnit('percentunit')
       + g.panel.gauge.standardOptions.withMin(0)
       + g.panel.gauge.standardOptions.withMax(1)
@@ -493,7 +477,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0.1, color: 'orange' },
         { value: 0.2, color: 'red' },
       ])
-      + g.panel.gauge.standardOptions.withMappings([noDataYellow])
+      + g.panel.gauge.standardOptions.withNoValue('No data')
+      + g.panel.gauge.standardOptions.withMappings([noDataTextColor])
       + g.panel.gauge.options.withMinVizHeight(150)
       + g.panel.gauge.options.withMinVizWidth(150)
       + g.panel.gauge.options.withShowThresholdLabels(false)
@@ -510,23 +495,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         { value: 0, color: 'green' },
         { value: 1, color: 'red' },
       ])
-      + g.panel.stat.standardOptions.withMappings([noDataRed])
+      + g.panel.stat.standardOptions.withNoValue('No data')
+      + g.panel.stat.standardOptions.withMappings([noDataTextColor])
       + g.panel.stat.panelOptions.withDescription(
         'Total exporter scrape errors across all instances.'
       ),
 
     writeOperations:
-      g.panel.timeSeries.new('Write operations (primary)')
+      signals.cluster.primaryInserts.asTimeSeries('Write operations (primary)')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.panelOptions.withDescription(
         'Write operations (INSERT, UPDATE, DELETE) from the primary instance only.'
       )
-      + signals.cluster.primaryInserts.asPanelMixin()
       + signals.cluster.primaryUpdates.asPanelMixin()
       + signals.cluster.primaryDeletes.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withUnit('rows/s')
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' })
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(50),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' }),
 
     // Read operations per instance
     readOperations:
@@ -561,6 +545,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Read/Write ratio pie chart
     readWriteRatio:
       g.panel.pieChart.new('Read/write ratio')
+      + g.panel.pieChart.queryOptions.withDatasource('prometheus', '${%s}' % signals.cluster.datasource)
       + g.panel.pieChart.panelOptions.withDescription(
         'Ratio of read operations to write operations cluster-wide.'
       )
@@ -575,12 +560,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.pieChart.standardOptions.withUnit('rows/s'),
 
     totalConnectionsTimeSeries:
-      g.panel.timeSeries.new('Total connections')
+      signals.cluster.totalConnections.asTimeSeries('Total connections')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.panelOptions.withDescription(
         'Total connections across all instances vs total max connections.'
       )
-      + signals.cluster.totalConnections.asPanelMixin()
       + signals.cluster.totalMaxConnections.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withUnit('short')
       + g.panel.timeSeries.standardOptions.withOverrides([
@@ -615,18 +599,5 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withDisplayMode('table')
       + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withCalcs(['lastNotNull', 'min', 'max', 'mean']),
-
-    totalDatabaseSize:
-      signals.cluster.totalDatabaseSize.asStat()
-      + withInstantQuery
-      + commonlib.panels.disk.stat.total.stylize()
-      + g.panel.stat.options.withGraphMode('area')
-      + g.panel.stat.standardOptions.withMappings([noDataOrange])
-      + g.panel.stat.panelOptions.withDescription(
-        'Total size of all databases on the primary.'
-      ),
-
-    // WAL position time series (already defined above, reuse)
-    // walPositionTimeSeries is defined in Row 4
   },
 }

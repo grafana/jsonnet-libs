@@ -1,0 +1,81 @@
+rule_files:
+- ../prometheus_rules_out/prometheus_alerts.yaml
+evaluation_interval: 1m
+tests:
+- name: CPU load is a fraction; preserve grouping, strict threshold, duration and percentage annotations
+  interval: 1m
+  input_series:
+  - series: jvm_process_cpu_load{job="tomcat",cluster="prod",instance="high",exported_label="ignored"}
+    values: 0.95x12
+  - series: jvm_process_cpu_load{job="tomcat",cluster="prod",instance="full",exported_label="ignored"}
+    values: 1x12
+  - series: jvm_process_cpu_load{job="tomcat",cluster="prod",instance="below",exported_label="ignored"}
+    values: 0.79x12
+  - series: jvm_process_cpu_load{job="tomcat",cluster="prod",instance="boundary",exported_label="ignored"}
+    values: 0.8x12
+  - series: jvm_process_cpu_load{job="tomcat",cluster="prod",instance="unavailable",exported_label="ignored"}
+    values: -1x12
+  - series: jvm_process_cpu_load{job="tomcat",cluster="prod",instance="idle",exported_label="ignored"}
+    values: '0x12'
+  alert_rule_test:
+  - eval_time: 4m
+    alertname: ApacheTomcatAlertsHighCpuUsage
+    exp_alerts: []
+  - eval_time: 5m
+    alertname: ApacheTomcatAlertsHighCpuUsage
+    exp_alerts:
+    - exp_labels:
+        job: tomcat
+        cluster: prod
+        instance: high
+        severity: critical
+      exp_annotations:
+        summary: The instance has a CPU usage higher than the configured threshold.
+        description: The CPU usage has been at 95 percent over the last 5 minutes on high, which is above
+          the threshold of 80 percent.
+    - exp_labels:
+        job: tomcat
+        cluster: prod
+        instance: full
+        severity: critical
+      exp_annotations:
+        summary: The instance has a CPU usage higher than the configured threshold.
+        description: The CPU usage has been at 100 percent over the last 5 minutes on full, which is above
+          the threshold of 80 percent.
+- name: CPU usage resolves when it falls to the threshold
+  interval: 1m
+  input_series:
+  - series: jvm_process_cpu_load{job="tomcat",cluster="prod",instance="recovery"}
+    values: 0.95x5 0.8x6
+  alert_rule_test:
+  - eval_time: 5m
+    alertname: ApacheTomcatAlertsHighCpuUsage
+    exp_alerts:
+    - exp_labels:
+        job: tomcat
+        cluster: prod
+        instance: recovery
+        severity: critical
+      exp_annotations:
+        summary: The instance has a CPU usage higher than the configured threshold.
+        description: The CPU usage has been at 95 percent over the last 5 minutes on recovery, which is
+          above the threshold of 80 percent.
+  - eval_time: 6m
+    alertname: ApacheTomcatAlertsHighCpuUsage
+    exp_alerts: []
+- name: A brief CPU spike does not fire
+  interval: 1m
+  input_series:
+  - series: jvm_process_cpu_load{job="tomcat",cluster="prod",instance="brief"}
+    values: 0.95x3 0x8
+  alert_rule_test:
+  - eval_time: 5m
+    alertname: ApacheTomcatAlertsHighCpuUsage
+    exp_alerts: []
+- name: Missing CPU metrics do not fire
+  interval: 1m
+  input_series: []
+  alert_rule_test:
+  - eval_time: 10m
+    alertname: ApacheTomcatAlertsHighCpuUsage
+    exp_alerts: []
