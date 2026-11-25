@@ -30,18 +30,15 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      # A mixin is a top-level directory with built dashboards
+      # sample-apps ignores directories its mixins.yaml doesn't list
       - name: Find changed mixins
         id: changed
         env:
           BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: |
           set -euo pipefail
-          mixins=""
-          for dir in $(git diff --name-only "origin/${BASE_REF}...HEAD" | { grep / || true; } | cut -d/ -f1 | sort -u); do
-            if [[ -d "${dir}/dashboards_out" ]]; then mixins="${mixins:+${mixins},}${dir}"; fi
-          done
-          echo "Changed mixins: ${mixins:-none}"
+          mixins=$(git diff --name-only "origin/${BASE_REF}...HEAD" | { grep / || true; } | cut -d/ -f1 | sort -u | paste -sd, -)
+          echo "Changed: ${mixins:-nothing}"
           echo "mixins=${mixins}" >> "${GITHUB_OUTPUT}"
 
   sample-apps:
@@ -50,9 +47,9 @@ jobs:
     if: needs.changed.outputs.mixins != ''
     permissions: {}
     # TODO: pin a commit of grafana/integration-sample-apps main if this is merged there
-    uses: grafana/integration-sample-apps/.github/workflows/sample-app.yml@jsonnet-libs-trigger
+    uses: grafana/integration-sample-apps/.github/workflows/sample-app.yml@sample-app-workflow
     with:
       mixins: ${{ needs.changed.outputs.mixins }}
       jsonnet-libs-ref: ${{ github.event.pull_request.head.sha }}
       # TODO: drop once sample-apps' Go control plane is on its main
-      ref: jsonnet-libs-trigger
+      ref: sample-app-workflow
