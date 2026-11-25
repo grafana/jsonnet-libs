@@ -43,6 +43,8 @@ local k = import 'ksonnet-util/kausal.libsonnet';
               # Parse HTTP method and path
               local method=$(echo "$request_line" | cut -d' ' -f1)
               local path=$(echo "$request_line" | cut -d' ' -f2)
+              # Drop the query string, such as Prometheus' name[] filter
+              path="${path%%\?*}"
 
               # Read and discard headers
               while IFS= read -r line && [ "$line" != $'\r' ]; do
