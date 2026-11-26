@@ -1,7 +1,7 @@
 rule_files:
   - ../prometheus_rules_out/prometheus_alerts.yaml
 
-evaluation_interval: 15m
+evaluation_interval: 1m
 
 tests:
   - interval: 1m
@@ -47,3 +47,113 @@ tests:
                 Total disk size: 1G.
                 Consider cleaning up unnecessary files or increasing disk capacity.
               summary: 'Disk is almost full on Windows host.'
+
+  - name: 'One-hot disk status: failing disk alerts, healthy disk on the same host does not'
+    interval: 1m
+    input_series:
+    - series: windows_diskdrive_status{job="windows",instance="host1",name="PHYSICALDRIVE0",status="OK"}
+      values: '0x12'
+    - series: windows_diskdrive_status{job="windows",instance="host1",name="PHYSICALDRIVE0",status="Pred Fail"}
+      values: 1x12
+    - series: windows_diskdrive_status{job="windows",instance="host1",name="PHYSICALDRIVE0",status="Error"}
+      values: '0x12'
+    - series: windows_diskdrive_status{job="windows",instance="host1",name="PHYSICALDRIVE1",status="OK"}
+      values: 1x12
+    - series: windows_diskdrive_status{job="windows",instance="host1",name="PHYSICALDRIVE1",status="Pred Fail"}
+      values: '0x12'
+    - series: windows_diskdrive_status{job="windows",instance="host2",name="PHYSICALDRIVE0",status="OK"}
+      values: '0x12'
+    - series: windows_diskdrive_status{job="windows",instance="host2",name="PHYSICALDRIVE0",status="Error"}
+      values: 1x12
+    alert_rule_test:
+    - eval_time: 4m
+      alertname: WindowsDiskDriveNotHealthy
+      exp_alerts: []
+    - eval_time: 5m
+      alertname: WindowsDiskDriveNotHealthy
+      exp_alerts:
+      - exp_labels:
+          job: windows
+          instance: host1
+          name: PHYSICALDRIVE0
+          status: OK
+          severity: critical
+        exp_annotations:
+          summary: Windows physical disk is not healthy.
+          description: Windows disk PHYSICALDRIVE0 is not in healthy state.
+      - exp_labels:
+          job: windows
+          instance: host2
+          name: PHYSICALDRIVE0
+          status: OK
+          severity: critical
+        exp_annotations:
+          summary: Windows physical disk is not healthy.
+          description: Windows disk PHYSICALDRIVE0 is not in healthy state.
+  - name: Disk recovers when the OK status becomes one
+    interval: 1m
+    input_series:
+    - series: windows_diskdrive_status{job="windows",instance="host1",name="PHYSICALDRIVE0",status="OK"}
+      values: 0x5 1x6
+    - series: windows_diskdrive_status{job="windows",instance="host1",name="PHYSICALDRIVE0",status="Pred Fail"}
+      values: 1x5 0x6
+    alert_rule_test:
+    - eval_time: 5m
+      alertname: WindowsDiskDriveNotHealthy
+      exp_alerts:
+      - exp_labels:
+          job: windows
+          instance: host1
+          name: PHYSICALDRIVE0
+          status: OK
+          severity: critical
+        exp_annotations:
+          summary: Windows physical disk is not healthy.
+          description: Windows disk PHYSICALDRIVE0 is not in healthy state.
+    - eval_time: 6m
+      alertname: WindowsDiskDriveNotHealthy
+      exp_alerts: []
+  - name: Brief disk failure does not fire
+    interval: 1m
+    input_series:
+    - series: windows_diskdrive_status{job="windows",instance="host1",name="PHYSICALDRIVE0",status="OK"}
+      values: 0x3 1x8
+    - series: windows_diskdrive_status{job="windows",instance="host1",name="PHYSICALDRIVE0",status="Pred Fail"}
+      values: 1x3 0x8
+    alert_rule_test:
+    - eval_time: 5m
+      alertname: WindowsDiskDriveNotHealthy
+      exp_alerts: []
+  - name: No disk metrics means no disk health alert
+    interval: 1m
+    input_series: []
+    alert_rule_test:
+    - eval_time: 10m
+      alertname: WindowsDiskDriveNotHealthy
+      exp_alerts: []
+  - name: A disappearing unhealthy disk resolves the alert
+    interval: 1m
+    input_series:
+    - series: windows_diskdrive_status{job="windows",instance="host1",name="PHYSICALDRIVE0",status="OK"}
+      values: 0x5 stale _x6
+    - series: windows_diskdrive_status{job="windows",instance="host1",name="PHYSICALDRIVE0",status="Pred Fail"}
+      values: 1x5 stale _x6
+    alert_rule_test:
+    - eval_time: 5m
+      alertname: WindowsDiskDriveNotHealthy
+      exp_alerts:
+      - exp_labels:
+          job: windows
+          instance: host1
+          name: PHYSICALDRIVE0
+          status: OK
+          severity: critical
+        exp_annotations:
+          summary: Windows physical disk is not healthy.
+          description: Windows disk PHYSICALDRIVE0 is not in healthy state.
+    - eval_time: 6m
+      alertname: WindowsDiskDriveNotHealthy
+      exp_alerts: []
+    - eval_time: 12m
+      alertname: WindowsDiskDriveNotHealthy
+      exp_alerts: []
